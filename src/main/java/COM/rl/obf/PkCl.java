@@ -181,7 +181,7 @@ abstract public class PkCl extends TreeItem
             TreeItem ti = (TreeItem)enm.nextElement();
             if (!ti.isFixed())
             {
-                ti.setOutName(nm.nextName(null));
+                ti.setOutName(nm.nextName(ti.getInName(), null));
             }
         }
     }

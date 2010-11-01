@@ -494,8 +494,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
 
             // Create new name-makers for the namespace
-            methodNameMaker = new KeywordNameMaker(methodNames);
-            fieldNameMaker = new KeywordNameMaker(fieldNames);
+            methodNameMaker = new VerbNameMaker(methodNames);
+            fieldNameMaker = new NounNameMaker(fieldNames);
 
             // Resolve a full name space
             resolveNameSpaceExcept(null);
@@ -759,7 +759,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
                 // If no other restrictions, obfuscate it
-                md.setOutName(methodNameMaker.nextName(md.getDescriptor()));
+                md.setOutName(methodNameMaker.nextName(md.getInName(), md.getDescriptor()));
             }
         }
     nextField:
@@ -790,7 +790,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
                 // If no other restrictions, obfuscate it
-                fd.setOutName(fieldNameMaker.nextName(null));
+                fd.setOutName(fieldNameMaker.nextName(fd.getInName(), null));
             }
         }
     }

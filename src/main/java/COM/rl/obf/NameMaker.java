@@ -49,11 +49,12 @@ abstract public class NameMaker
 
 
     // Instance Methods ------------------------------------------------------
-    /** Return the next unique name for this namespace, differing only for identical arg-lists. */
-    public String nextName(String descriptor) throws Exception
+    /** Return the next unique name for this namespace, differing only for identical arg-lists. 
+     * @param oldName TODO*/
+    public String nextName(String oldName, String descriptor) throws Exception
     {
         // Log the name usage globally across all namespaces
-        String name = getNextName(descriptor);
+        String name = getNextName(oldName, descriptor);
         Integer intCount = (Integer)frequency.get(name);
         if (intCount == null)
         {
@@ -67,6 +68,7 @@ abstract public class NameMaker
         return name;
     }
 
-    /** Return the next unique name for this namespace, differing only for identical arg-lists. */
-    abstract protected String getNextName(String descriptor) throws Exception;
+    /** Return the next unique name for this namespace, differing only for identical arg-lists. 
+     * @param oldName TODO*/
+    abstract protected String getNextName(String oldName, String descriptor) throws Exception;
 }

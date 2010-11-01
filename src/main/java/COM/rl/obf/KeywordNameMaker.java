@@ -155,8 +155,9 @@ public class KeywordNameMaker extends NameMaker
     }
 
     /** Return the next unique name for this namespace. */
-    protected String getNextName(String descriptor) throws Exception
+    protected String getNextName(String oldName, String descriptor) throws Exception
     {
+    	System.out.println("other: " + oldName + "|" + descriptor);
         // Check for arg-list in hashtable
         String argList = DUMMY_ARG_LIST;
         if (descriptor != null) 

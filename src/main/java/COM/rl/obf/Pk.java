@@ -163,7 +163,7 @@ public class Pk extends PkCl
     {
         if (!isFixed())
         {
-            setRepackageName(nm.nextName(null));
+            setRepackageName(nm.nextName(getInName(), null));
             setOutName(getInName());
         }
     }
