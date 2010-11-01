@@ -549,8 +549,11 @@ public class GuardDB implements ClassConstants
         try
         {
             outJar = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(out)));
-            // NOTE - no comment to reduce output jar size
-            //outJar.setComment(Version.getJarComment());
+            // No comment in Pro, to reduce output jar size
+            if (Version.isLite)
+            {
+                outJar.setComment(Version.getJarComment());
+            }
             while (entries.hasMoreElements())
             {
                 // Get the next entry from the input Jar
@@ -575,8 +578,11 @@ public class GuardDB implements ClassConstants
                     {
                         // Write obfuscated class to the output Jar
                         ClassFile cf = ClassFile.create(inStream);
-                        // NOTE - to reduce output jar size, no class ID string
-                        // cf.setIdString(Version.getClassIdString());
+                        // To reduce output jar size in Pro, no class ID string
+                        if (Version.isLite)
+                        {
+                            cf.setIdString(Version.getClassIdString());
+                        }
                         Cl cl = classTree.getCl(cf.getName());
                         // Trim entire class if requested
                         if (cl != null && !cl.isTrimmed())
