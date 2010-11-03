@@ -73,7 +73,14 @@ public class Pk extends PkCl
     /** Set the repackage name of the entry. */
     public void setRepackageName(String repackageName) 
     {
-        this.repackageName = repackageName;
+        if (repackageName.equals("default"))
+        {
+            this.repackageName = "";
+        }
+        else
+        {
+            this.repackageName = repackageName;
+        }
     }
 
     /** Return the repackage name of the entry. */
