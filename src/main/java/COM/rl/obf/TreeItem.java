@@ -264,7 +264,10 @@ public class TreeItem
         }
         else
         {
-            return parent.getFullInName() + sep + getInName();
+        	String s = parent.getFullInName();
+        	if(s.equals(""))
+        		return getInName();
+            return s + sep + getInName();
         }
     }
 
@@ -281,7 +284,10 @@ public class TreeItem
         }
         else
         {
-            return parent.getFullOutName() + sep + getOutName();
+        	String s = parent.getFullOutName();
+        	if(s.equals(""))
+        		return getOutName();
+            return s + sep + getOutName();
         }
     }
 
