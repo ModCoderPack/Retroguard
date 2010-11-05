@@ -461,6 +461,10 @@ public class ClassTree implements NameMapper
             item.setOutName(obfName);
             item.setFromScriptMap();
         }
+        else
+        {
+        	System.out.println("Trying to map fixed " + item.getInName() + " = " + item.getOutName()+ " to " + obfName);
+        }
     }
 
     /** Traverse the class tree, generating obfuscated names within each namespace. */
