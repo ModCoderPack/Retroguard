@@ -105,7 +105,7 @@ public class NounNameMaker extends NameMaker
     }
 
     /** Return the next unique name for this namespace. */
-    private static int num = 0;
+    private static int num = 4000;
     protected String getNextName(String oldName, String descriptor) throws Exception
     {
     	System.out.println("field: " + oldName + "|" + descriptor);
