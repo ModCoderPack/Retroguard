@@ -22,6 +22,8 @@ package COM.rl.obf;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import COM.rl.NameProvider;
 import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 
@@ -179,9 +181,19 @@ abstract public class PkCl extends TreeItem
         for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
         {
             TreeItem ti = (TreeItem)enm.nextElement();
-            if (!ti.isFixed())
+        	//replaced by Searge:
+            if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
             {
-                ti.setOutName(nm.nextName(ti.getInName(), null));
+                if (!ti.isFixed())
+                {
+                    ti.setOutName(nm.nextName(ti.getInName(), null));
+                }
+            }
+            else
+            {
+            	String s = NameProvider.GetNewTreeItemName(ti);
+            	if(s != null)
+            		ti.setOutName(s);
             }
         }
     }

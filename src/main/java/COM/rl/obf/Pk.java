@@ -22,6 +22,8 @@ package COM.rl.obf;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import COM.rl.NameProvider;
 import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 
@@ -168,10 +170,23 @@ public class Pk extends PkCl
     /** Generate unique-across-run obfuscated repackage name. */
     public void repackageName(NameMaker nm) throws Exception
     {
-        if (!isFixed())
+    	//replaced by Searge:
+        if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
-            setRepackageName(nm.nextName(getInName(), null));
-            setOutName(getInName());
+            if (!isFixed())
+            {
+                setRepackageName(nm.nextName(getInName(), null));
+                setOutName(getInName());
+            }
+        }
+        else
+        {
+        	String s = NameProvider.GetNewPackageName(this);
+        	if(s != null)
+        	{
+                setRepackageName(s);
+                setOutName(getInName());
+        	}
         }
     }
 
