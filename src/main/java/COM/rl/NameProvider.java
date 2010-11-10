@@ -12,7 +12,9 @@ public class NameProvider
 	public static final int CHANGE_NOTHING_MODE = 1;
 	public static final int NAMESHEET_MODE = 2;
 
-	public static int currentMode = CHANGE_NOTHING_MODE;
+	public static int classicModeUniqueStart = 6000;
+	
+	public static int currentMode = CLASSIC_MODE;
 	
 	public static String GetNewTreeItemName( TreeItem ti )
 	{

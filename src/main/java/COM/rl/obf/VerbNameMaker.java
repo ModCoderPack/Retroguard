@@ -28,6 +28,8 @@ package COM.rl.obf;
 
 import java.io.*;
 import java.util.*;
+
+import COM.rl.NameProvider;
 import COM.rl.util.*;
 
 /**
@@ -106,11 +108,10 @@ public class VerbNameMaker extends NameMaker
     }
 
     /** Return the next unique name for this namespace. */
-    private static int num = 4000;
     protected String getNextName(String oldName, String descriptor) throws Exception
     {
     	System.out.println("func: " + oldName + "|" + descriptor);
-    	return "func_" + (++num) + "_" + oldName;
+    	return "func_" + (++NameProvider.classicModeUniqueStart) + "_" + oldName;
         //return getName(theCount++);
     }
 
