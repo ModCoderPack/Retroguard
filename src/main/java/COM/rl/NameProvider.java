@@ -12,7 +12,7 @@ public class NameProvider
 	public static final int CHANGE_NOTHING_MODE = 1;
 	public static final int NAMESHEET_MODE = 2;
 
-	public static int classicModeUniqueStart = 6000;
+	public static int classicModeUniqueStart = 9000;
 	
 	public static int currentMode = CLASSIC_MODE;
 	
