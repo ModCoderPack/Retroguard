@@ -12,9 +12,39 @@ public class NameProvider
 	public static final int CHANGE_NOTHING_MODE = 1;
 	public static final int NAMESHEET_MODE = 2;
 
-	public static int classicModeUniqueStart = 9000;
+	public static int classicModeUniqueStart = 100000;
 	
 	public static int currentMode = CLASSIC_MODE;
+	
+	public static String[] parseCommandLine( String[] args )
+	{
+		System.out.println( "Parsing " + args.length + " parameters" );
+		
+		if( args.length < 5 )
+			return args;
+		
+		int idx;
+		try
+		{
+			idx = Integer.parseInt(args[4]);
+		}
+		catch( NumberFormatException up )
+		{
+			System.out.println("Invalid start index: " + args[4]);
+			throw up;
+		}
+		
+		System.out.println( "New start index is " + idx );
+		
+		classicModeUniqueStart = idx;
+		
+		String[] newArgs = new String[4];
+		
+		for( int i = 0; i < 4; ++i )
+			newArgs[i] = args[i];
+		
+		return newArgs;
+	}
 	
 	public static String GetNewTreeItemName( TreeItem ti )
 	{

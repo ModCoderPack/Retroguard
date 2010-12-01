@@ -19,6 +19,8 @@
 
 import java.io.*;
 import java.util.*;
+
+import COM.rl.NameProvider;
 import COM.rl.obf.*;
 import COM.rl.obf.classfile.ClassFile;
 
@@ -56,6 +58,9 @@ public class RetroGuard
         // Check arg-list for validity
         try
         {
+        	// hook into the command line parameters
+        	args = NameProvider.parseCommandLine(args);
+        	
             // Get the arguments, or set their default values
             if (args.length < 0 || args.length > 4)
             {
