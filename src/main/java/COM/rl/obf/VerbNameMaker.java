@@ -111,7 +111,7 @@ public class VerbNameMaker extends NameMaker
     protected String getNextName(String oldName, String descriptor) throws Exception
     {
     	System.out.println("func: " + oldName + "|" + descriptor);
-    	return "func_" + (++NameProvider.classicModeUniqueStart) + "_" + oldName;
+    	return "func_" + (++NameProvider.uniqueStart) + "_" + oldName;
         //return getName(theCount++);
     }
 

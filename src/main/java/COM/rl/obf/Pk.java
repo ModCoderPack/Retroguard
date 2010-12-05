@@ -181,7 +181,7 @@ public class Pk extends PkCl
         }
         else
         {
-        	String s = NameProvider.GetNewPackageName(this);
+        	String s = NameProvider.getNewPackageName(this);
         	if(s != null)
         	{
                 setRepackageName(s);

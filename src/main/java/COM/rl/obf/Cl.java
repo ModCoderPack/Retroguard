@@ -773,7 +773,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 else
                 {
-                	String s = NameProvider.GetNewMethodName(md);
+                	String s = NameProvider.getNewMethodName(md);
                 	if(s != null)
                 		md.setOutName(s);
                 }
@@ -819,7 +819,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 else
                 {
-                	String s = NameProvider.GetNewFieldName(fd);
+                	String s = NameProvider.getNewFieldName(fd);
                 	if(s != null)
                 		fd.setOutName(s);
                 }

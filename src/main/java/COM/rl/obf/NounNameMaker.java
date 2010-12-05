@@ -110,7 +110,7 @@ public class NounNameMaker extends NameMaker
     protected String getNextName(String oldName, String descriptor) throws Exception
     {
     	System.out.println("field: " + oldName + "|" + descriptor);
-    	return "field_" + (++NameProvider.classicModeUniqueStart) + "_" + oldName;
+    	return "field_" + (++NameProvider.uniqueStart) + "_" + oldName;
         //return getName(theCount++);
     }
 

@@ -191,7 +191,7 @@ abstract public class PkCl extends TreeItem
             }
             else
             {
-            	String s = NameProvider.GetNewTreeItemName(ti);
+            	String s = NameProvider.getNewTreeItemName(ti);
             	if(s != null)
             		ti.setOutName(s);
             }

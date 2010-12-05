@@ -38,6 +38,7 @@ public class RetroGuard
     public static final String DEFAULT_OUT_FILE_NAME = RetroGuardImpl.DEFAULT_OUT_FILE_NAME;
     public static final String DEFAULT_RGS_FILE_NAME = RetroGuardImpl.DEFAULT_RGS_FILE_NAME;
     public static final String DEFAULT_LOG_FILE_NAME = RetroGuardImpl.DEFAULT_LOG_FILE_NAME;
+    public static final String DEFAULT_CFG_FILE_NAME = NameProvider.DEFAULT_CFG_FILE_NAME;
 
 
     // Class Methods ---------------------------------------------------------
@@ -58,8 +59,19 @@ public class RetroGuard
         // Check arg-list for validity
         try
         {
+            if((args.length > 0) && (args[0].equalsIgnoreCase("-help") || args[0].equalsIgnoreCase("--help")))
+            {
+                showUsage();
+                System.exit(-1);
+            }
+            
         	// hook into the command line parameters
         	args = NameProvider.parseCommandLine(args);
+        	if(args == null)
+        	{
+        	    showUsage();
+                System.exit(-1);
+        	}
         	
             // Get the arguments, or set their default values
             if (args.length < 0 || args.length > 4)
@@ -80,11 +92,7 @@ public class RetroGuard
         {
             System.err.println(Version.getVersionComment());
             System.err.println("Problem: " + (e.getMessage() != null ? e.getMessage() : ""));
-            System.err.println("Usage: java RetroGuard [INPUT-FILE [OUTPUT-FILE [SCRIPT-FILE [LOG-FILE]]]]");
-            System.err.println("  where INPUT-FILE is the JAR to be obfuscated (default: '" + DEFAULT_IN_FILE_NAME + "')");
-            System.err.println("        OUTPUT-FILE is name for the obfuscated JAR (default: '" + DEFAULT_OUT_FILE_NAME + "')");
-            System.err.println("        SCRIPT-FILE is a valid RetroGuard script (default: '" + DEFAULT_RGS_FILE_NAME + "').");
-            System.err.println("        LOG-FILE is the name for the log file (default: '" + DEFAULT_LOG_FILE_NAME + "').");
+            showUsage();
             System.exit(-1);
         }
         catch (Exception e)
@@ -92,5 +100,17 @@ public class RetroGuard
             System.err.println("RetroGuard error: " + e.toString());
             System.exit(-1);
         }
+    }
+
+    private static void showUsage()
+    {
+        System.err.println("Usage: java RetroGuard [INPUT-FILE [OUTPUT-FILE [SCRIPT-FILE [LOG-FILE]]]]");
+        System.err.println("  where INPUT-FILE is the JAR to be obfuscated (default: '" + DEFAULT_IN_FILE_NAME + "')");
+        System.err.println("        OUTPUT-FILE is name for the obfuscated JAR (default: '" + DEFAULT_OUT_FILE_NAME + "')");
+        System.err.println("        SCRIPT-FILE is a valid RetroGuard script (default: '" + DEFAULT_RGS_FILE_NAME + "').");
+        System.err.println("        LOG-FILE is the name for the log file (default: '" + DEFAULT_LOG_FILE_NAME + "').");
+        System.err.println("or");
+        System.err.println("Usage: java RetroGuard -searge [CONFIG-FILE]");
+        System.err.println("  where CONFIG-FILE is the config file (default: '" + DEFAULT_CFG_FILE_NAME + "')");
     }
 }
