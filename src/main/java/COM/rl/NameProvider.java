@@ -424,7 +424,10 @@ public class NameProvider
             }
         }
         
-        return (String[]) lines.toArray();
+        String[] result = new String[lines.size()];
+        lines.toArray( result );
+        
+        return result;
     }
     
 	////////////////////////////////////////////////////////////////////////////////
@@ -517,9 +520,9 @@ public class NameProvider
 		
 		if(currentMode == DEOBFUSCATION_MODE)
 		{
-		    if(packagesObf2Deobf.containsKey( packageName ))
+		    if(packagesObf2Deobf.containsKey( pk.getFullInName() ))
 		    {
-		        String deobfName = packagesObf2Deobf.get( packageName ).deobfName;
+		        String deobfName = packagesObf2Deobf.get( pk.getFullInName() ).deobfName;
 		        if(deobfName.contains( "/" ))
 		            packageName = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
 		        else
@@ -552,9 +555,9 @@ public class NameProvider
 
         if(currentMode == DEOBFUSCATION_MODE)
         {
-            if(classesObf2Deobf.containsKey( className ))
+            if(classesObf2Deobf.containsKey( cl.getFullInName() ))
             {
-                String deobfName = classesObf2Deobf.get( className ).deobfName;
+                String deobfName = classesObf2Deobf.get( cl.getFullInName() ).deobfName;
                 if(deobfName.contains( "/" ))
                     className = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
                 else
@@ -596,9 +599,9 @@ public class NameProvider
         
         if(currentMode == DEOBFUSCATION_MODE)
         {
-            if(methodsObf2Deobf.containsKey( methodName + desc ))
+            if(methodsObf2Deobf.containsKey( md.getFullInName() + desc ))
             {
-                String deobfName = methodsObf2Deobf.get( methodName ).deobfName;
+                String deobfName = methodsObf2Deobf.get( md.getFullInName() + desc ).deobfName;
                 if(deobfName.contains( "/" ))
                     methodName = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
                 else
@@ -660,9 +663,9 @@ public class NameProvider
 
         if(currentMode == DEOBFUSCATION_MODE)
         {
-            if(fieldsObf2Deobf.containsKey( fieldName ))
+            if(fieldsObf2Deobf.containsKey( fd.getFullInName() ))
             {
-                String deobfName = fieldsObf2Deobf.get( fieldName ).deobfName;
+                String deobfName = fieldsObf2Deobf.get( fd.getFullInName() ).deobfName;
                 if(deobfName.contains( "/" ))
                     fieldName = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
                 else
