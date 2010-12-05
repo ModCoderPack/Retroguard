@@ -109,8 +109,11 @@ public class RetroGuard
         System.err.println("        OUTPUT-FILE is name for the obfuscated JAR (default: '" + DEFAULT_OUT_FILE_NAME + "')");
         System.err.println("        SCRIPT-FILE is a valid RetroGuard script (default: '" + DEFAULT_RGS_FILE_NAME + "').");
         System.err.println("        LOG-FILE is the name for the log file (default: '" + DEFAULT_LOG_FILE_NAME + "').");
-        System.err.println("or");
+        System.err.println("or for de-obfuscation");
         System.err.println("Usage: java RetroGuard -searge [CONFIG-FILE]");
+        System.err.println("  where CONFIG-FILE is the config file (default: '" + DEFAULT_CFG_FILE_NAME + "')");
+        System.err.println("or for re-obfuscation");
+        System.err.println("Usage: java RetroGuard -notch [CONFIG-FILE]");
         System.err.println("  where CONFIG-FILE is the config file (default: '" + DEFAULT_CFG_FILE_NAME + "')");
     }
 }

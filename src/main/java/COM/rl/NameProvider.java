@@ -59,7 +59,7 @@ public class NameProvider
 	{
 		System.out.println( "Parsing " + args.length + " parameters" );
 		
-		if( (args.length > 0) && args[0].equalsIgnoreCase("-searge"))
+		if( (args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
 			return parseNameSheetModeArgs( args );
 		
 		if( args.length < 5 )
@@ -532,6 +532,10 @@ public class NameProvider
 		    {
 		    }
 		}
+        else if(currentMode == REOBFUSCATION_MODE)
+        {
+            //TODO:
+        }
 
         pk.setOutName( packageName );
 		
@@ -572,6 +576,10 @@ public class NameProvider
                     classNameLookup.put( cl.getInName(), className );
                 }
             }
+        }
+        else if(currentMode == REOBFUSCATION_MODE)
+        {
+            //TODO:
         }
 
         cl.setOutName( className );
@@ -640,6 +648,10 @@ public class NameProvider
                     methodName = "m_" + (uniqueStart++); // + "_" + methodName;
             }
         }
+        else if(currentMode == REOBFUSCATION_MODE)
+        {
+            //TODO:
+        }
         
         md.setOutName( methodName );
 
@@ -676,6 +688,10 @@ public class NameProvider
                 if(!isInProtectedPackage(fd.getFullInName()))
                     fieldName = "f_" + (uniqueStart++); // + "_" + fieldName;
             }
+        }
+        else if(currentMode == REOBFUSCATION_MODE)
+        {
+            //TODO:
         }
         
         fd.setOutName( fieldName );
