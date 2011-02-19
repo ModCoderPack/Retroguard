@@ -22,6 +22,8 @@ package COM.rl.obf;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import COM.rl.NameProvider;
 import COM.rl.obf.classfile.*;
 
 /**
@@ -475,6 +477,12 @@ public class ClassTree implements NameMapper
         if (enableRepackage) {
             // Exclude package names already fixed at the root level
             String[] noObfNames = getRootPackageNames();
+        	// changed by Searge:
+            if(NameProvider.currentMode != NameProvider.CLASSIC_MODE)
+            {
+            	// only exclude root level packages in classic mode 
+            	noObfNames = new String[0];
+            }
             final NameMaker nm = new KeywordNameMaker(noObfNames, false, true);
             // Generate single-level package names, unique across jar
             walkTree(new TreeAction() {
