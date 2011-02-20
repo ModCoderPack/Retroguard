@@ -659,8 +659,9 @@ public class NameProvider
         	inName = ".";
         if(outName.equals(""))
         	outName = ".";
-        
-        log("PK: " + inName + " " + outName);
+
+        if(!isInProtectedPackage(inName + "/"))
+        	log("PK: " + inName + " " + outName);
         
 		return packageName;
 	}
@@ -731,7 +732,8 @@ public class NameProvider
 
         cl.setOutName( className );
         
-        log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
+        if(!isInProtectedPackage(cl.getFullInName()))
+        	log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
 		
 		return className;
 	}
@@ -870,7 +872,8 @@ public class NameProvider
         
         md.setOutName( methodName );
 
-        log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
+        if(!isInProtectedPackage(md.getFullInName()))
+        	log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
         
         return methodName;
 	}
@@ -918,7 +921,8 @@ public class NameProvider
         
         fd.setOutName( fieldName );
 
-        log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
+        if(!isInProtectedPackage(fd.getFullInName()))
+        	log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
         
         return fieldName;
 	}
