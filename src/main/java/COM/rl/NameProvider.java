@@ -597,6 +597,7 @@ public class NameProvider
 		}
 		
 		String packageName = pk.getFullInName();
+		boolean known = packageNameLookup.containsKey(packageName);
 		
 		if(!isInProtectedPackage(packageName))
 		{
@@ -605,10 +606,7 @@ public class NameProvider
 			    if(packagesObf2Deobf.containsKey( pk.getFullInName() ))
 			    {
 			        String deobfName = packagesObf2Deobf.get( pk.getFullInName() ).deobfName;
-			        /*if(deobfName.contains( "/" ))
-			            packageName = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
-			        else //*/
-			            packageName = deobfName;
+			        packageName = deobfName;
 				    pk.setRepackageName(deobfName);
 				    packageNameLookup.put(pk.getFullInName(), deobfName);
 			    }
@@ -620,8 +618,8 @@ public class NameProvider
 			    	{
 			    		packageName = getNewPackageName(parent.getFullOutName()) + pk.getOutName();
 			    		pk.setRepackageName(packageName);
-					    packageNameLookup.put(pk.getFullInName(), packageName);
 			    	}
+				    packageNameLookup.put(pk.getFullInName(), packageName);
 			    }
 			}
 	        else if(currentMode == REOBFUSCATION_MODE)
@@ -629,10 +627,7 @@ public class NameProvider
 			    if(packagesDeobf2Obf.containsKey( pk.getFullInName() ))
 			    {
 			        String obfName = packagesDeobf2Obf.get( pk.getFullInName() ).obfName;
-			        /*if(deobfName.contains( "/" ))
-			            packageName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
-			        else //*/
-			            packageName = obfName;
+		            packageName = obfName;
 			        pk.setRepackageName(obfName);
 				    packageNameLookup.put(pk.getFullInName(), obfName);
 			    }
@@ -644,8 +639,8 @@ public class NameProvider
 			    	{
 			    		packageName = getNewPackageName(parent.getFullOutName()) + pk.getOutName();
 			    		pk.setRepackageName(packageName);
-					    packageNameLookup.put(pk.getFullInName(), packageName);
 			    	}
+				    packageNameLookup.put(pk.getFullInName(), packageName);
 			    }
 	        }
 		}
@@ -660,7 +655,7 @@ public class NameProvider
         if(outName.equals(""))
         	outName = ".";
 
-        if(!isInProtectedPackage(inName + "/"))
+        if(!isInProtectedPackage(inName + "/") && !known)
         	log("PK: " + inName + " " + outName);
         
 		return packageName;
