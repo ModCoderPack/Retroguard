@@ -703,7 +703,7 @@ public class NameProvider
             }
             else
             {
-                if(!isInProtectedPackage(cl.getFullInName()))
+                if(!isInProtectedPackage(cl.getFullInName()) && uniqueStart > 0)
                 {
                     className = "c_" + (uniqueStart++) + "_" + className;
 
@@ -761,7 +761,7 @@ public class NameProvider
             }
             else
             {
-                if(!isInProtectedPackage(md.getFullInName()))
+                if(!isInProtectedPackage(md.getFullInName()) && uniqueStart > 0)
                     methodName = "m_" + (uniqueStart++); // + "_" + methodName;
             }
 
@@ -898,7 +898,7 @@ public class NameProvider
             }
             else
             {
-                if(!isInProtectedPackage(fd.getFullInName()))
+                if(!isInProtectedPackage(fd.getFullInName()) && uniqueStart > 0)
                     fieldName = "f_" + (uniqueStart++); // + "_" + fieldName;
             }
         }
