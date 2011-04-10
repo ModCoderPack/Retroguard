@@ -706,7 +706,7 @@ public class NameProvider
                 else
                     className = deobfName;
                 
-                classNameLookup.put( cl.getInName(), deobfName );
+                classNameLookup.put( cl.getInName(), className );
             }
             else
             {
@@ -728,7 +728,7 @@ public class NameProvider
                 else
                     className = obfName;
                 
-                classNameLookup.put( cl.getInName(), obfName );
+                classNameLookup.put( cl.getInName(), className );
             }
         }
 
