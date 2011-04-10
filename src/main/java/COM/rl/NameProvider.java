@@ -33,6 +33,7 @@ public class NameProvider
     private static File classesFile = null;
     private static File methodsFile = null;
     private static File fieldsFile = null;
+    private static File reobFile = null;
     private static File npLog = null;
     private static File roLog = null;
     
@@ -151,6 +152,12 @@ public class NameProvider
                         fieldsFile = new File(defines[1]);
                         if(!fieldsFile.exists() || !fieldsFile.isFile())
                             fieldsFile = null;
+                    }
+                    else if(defines[0].equalsIgnoreCase("reob"))
+                    {
+                        reobFile = new File(defines[1]);
+                        if(!reobFile.exists() || !reobFile.isFile())
+                        	reobFile = null;
                     }
                     else if(defines[0].equalsIgnoreCase("input"))
                     {
@@ -311,10 +318,10 @@ public class NameProvider
 	{
 		if(currentMode == REOBFUSCATION_MODE)
 		{
-			packagesFile = npLog;
-			classesFile = npLog;
-			methodsFile = npLog;
-			fieldsFile = npLog;
+			packagesFile = reobFile;
+			classesFile = reobFile;
+			methodsFile = reobFile;
+			fieldsFile = reobFile;
 		}
 		
 	    readPackagesSRG();
