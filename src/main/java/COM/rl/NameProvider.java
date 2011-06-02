@@ -872,7 +872,10 @@ public class NameProvider
             }
         }
         
-        md.setOutName( methodName );
+        if(!methodName.equals(md.getOutName()))
+        	md.setOutName( methodName );
+        else
+        	return null;
 
         if(!isInProtectedPackage(md.getFullInName()))
         	log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
