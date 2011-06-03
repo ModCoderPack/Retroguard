@@ -1326,5 +1326,24 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         
         return super.getFullOutName();
 	}
+
+    // added by Searge
+	public Enumeration getDownClasses()
+	{
+		Vector clsList = new Vector();
+        for (Enumeration enm = nameListDowns.elements(); enm.hasMoreElements(); )
+        {
+            try
+            {
+				Cl cl = (Cl) enm.nextElement();
+				clsList.addElement(cl);
+			}
+            catch (Exception e)
+            {
+            	continue;
+			}
+        }
+		return clsList.elements();
+	}
 }
 

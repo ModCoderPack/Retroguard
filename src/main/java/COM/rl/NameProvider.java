@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
@@ -712,7 +713,7 @@ public class NameProvider
             {
                 if(!isInProtectedPackage(cl.getFullInName()) && uniqueStart > 0)
                 {
-                    className = "c_" + (uniqueStart++) + "_" + className;
+                    className = "C_" + (uniqueStart++) + "_" + className;
 
                     classNameLookup.put( cl.getInName(), className );
                 }
@@ -743,6 +744,7 @@ public class NameProvider
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
+	@SuppressWarnings("rawtypes")
 	public static String getNewMethodName( Md md )
 	{
 		if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
@@ -769,7 +771,7 @@ public class NameProvider
             else
             {
                 if(!isInProtectedPackage(md.getFullInName()) && uniqueStart > 0)
-                    methodName = "m_" + (uniqueStart++); // + "_" + methodName;
+                    methodName = "func_" + (uniqueStart++) + "_" + methodName;
             }
 
             int i = 0;
@@ -826,7 +828,118 @@ public class NameProvider
                 else
                     methodName = obfName;
             }
+            else
+            {
+            	Cl cls = (Cl) md.getParent();
+            	
+            	
+            	Md tmpMd;
+            	try
+            	{
+					tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
+				}
+            	catch (Exception e2)
+            	{
+            		tmpMd = null;
+				}
+            	
+            	Enumeration children = cls.getDownClasses();
+            	//log("Children: " + children.hasMoreElements());
+            	
+            	boolean goingDown = false;
+            	do
+            	{
+            		tmpMd.setParent(cls);
+            		//log("CHECKING: " + tmpMd.getFullInName() + desc);
+                    if(methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
+                    {
+                        String obfName = methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
+                        if(obfName.contains( "/" ))
+                            methodName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                        else
+                            methodName = obfName;
+                        break;
+                    }
+            		
 
+            		Enumeration en;
+            		try
+            		{
+						en = cls.getSuperInterfaces();
+						//log("Interfaces: " + en.hasMoreElements());
+					}
+            		catch (Exception e1)
+            		{
+            			en = new Enumeration()
+            			{
+
+							@Override
+							public boolean hasMoreElements()
+							{
+								return false;
+							}
+
+							@Override
+							public Object nextElement()
+							{
+								return null;
+							}
+						};
+					}
+            		
+                    boolean found = false;
+            		while(en.hasMoreElements())
+            		{
+            			Cl iface = (Cl) en.nextElement();
+            			
+                		tmpMd.setParent(iface);
+                		//log("CHECKING: " + tmpMd.getFullInName() + desc);
+                        if(methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
+                        {
+                            String obfName = methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
+                            if(obfName.contains( "/" ))
+                                methodName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                            else
+                                methodName = obfName;
+                            found = true;
+                        }
+            		}
+            		
+            		if(found)
+            			break;
+            		
+            		if(!goingDown)
+            		{
+                		try
+                		{
+    						cls = cls.getSuperCl();
+    						if(cls == null)
+    							goingDown = true;
+    						//else
+    							//log("Parent: " + cls.getFullInName());
+    					}
+                		catch (Exception e)
+                		{
+                			goingDown = true;
+    					}
+            		}
+            		
+            		if(goingDown)
+            		{
+            			if(children.hasMoreElements())
+            			{
+            				cls = (Cl) children.nextElement();
+            				//log("Child: " + cls.getFullInName());
+            			}
+            			else
+            			{
+            				cls = null;
+            			}
+            		}
+            	}
+            	while(cls != null);
+            }
+            
             int i = 0;
             while(i < desc.length())
             {
@@ -872,10 +985,7 @@ public class NameProvider
             }
         }
         
-        if(!methodName.equals(md.getOutName()))
-        	md.setOutName( methodName );
-        else
-        	return null;
+    	md.setOutName( methodName );
 
         if(!isInProtectedPackage(md.getFullInName()))
         	log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
@@ -909,7 +1019,7 @@ public class NameProvider
             else
             {
                 if(!isInProtectedPackage(fd.getFullInName()) && uniqueStart > 0)
-                    fieldName = "f_" + (uniqueStart++); // + "_" + fieldName;
+                    fieldName = "field_" + (uniqueStart++) + "_" + fieldName;
             }
         }
         else if(currentMode == REOBFUSCATION_MODE)

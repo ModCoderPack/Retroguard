@@ -438,6 +438,13 @@ public class GuardDB implements ClassConstants
             buildClassTree(log);
         }
 
+        classTree.walkTree(new TreeAction() {
+            public void classAction(Cl cl) throws Exception {cl.resetResolve();}
+        });
+        classTree.walkTree(new TreeAction() {
+            public void classAction(Cl cl) throws Exception {cl.setupNameListDowns();}
+        });
+        
         // Traverse the class tree, generating obfuscated names within
         // package and class namespaces
         classTree.generateNames(enableRepackage);
