@@ -438,6 +438,7 @@ public class GuardDB implements ClassConstants
             buildClassTree(log);
         }
 
+        //TODO: Searge: check if those two walks are obsolete
         classTree.walkTree(new TreeAction() {
             public void classAction(Cl cl) throws Exception {cl.resetResolve();}
         });
