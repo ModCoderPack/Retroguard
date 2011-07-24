@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -1315,21 +1315,21 @@ public class Gui extends Frame implements Runnable, GuiConstants
         if (vec.size() > 0)
         {
             // Sort the methods by name
-            Md[] methods = new Md[vec.size()];        
+            Md[] methods = new Md[vec.size()];
             for (int i = 0; i < methods.length; i++)
             {
                 methods[i] = (Md)vec.elementAt(i);
             }
             Sort.quicksort(methods, new Compare() {public boolean isLess(Object o1, Object o2)
                 {return ((Md)o1).getInName().compareTo(((Md)o2).getInName()) < 0;}});
-                
+
             // Copy the sorted methods into the list
             for (int i = 0; i < methods.length; i++)
             {
                 vecMethods.addElement(methods[i]);
                 listMethods.add(methods[i].toString());
             }
-            
+
             // Select the first method as though the user had done so
             listMethods.select(0);
             listMethodsAction();
@@ -1378,10 +1378,10 @@ public class Gui extends Frame implements Runnable, GuiConstants
                         if (!fd.isSynthetic())
                         {
                             int modifiers = fd.getModifiers();
-                            if (checkboxAllFields.getState() 
-                                || !(Modifier.isPrivate(modifiers) 
-                                     || ((currentClPreserve.isKeepProtected() 
-                                          || (currentClPreserve.isKeepPublic() 
+                            if (checkboxAllFields.getState()
+                                || !(Modifier.isPrivate(modifiers)
+                                     || ((currentClPreserve.isKeepProtected()
+                                          || (currentClPreserve.isKeepPublic()
                                               && Modifier.isPublic(modifiers)))
                                          && !currentClPreserve.isKeepMethodsOnly())))
                             {
@@ -1400,21 +1400,21 @@ public class Gui extends Frame implements Runnable, GuiConstants
         if (vec.size() > 0)
         {
             // Sort the fields by name
-            Fd[] fields = new Fd[vec.size()];        
+            Fd[] fields = new Fd[vec.size()];
             for (int i = 0; i < fields.length; i++)
             {
                 fields[i] = (Fd)vec.elementAt(i);
             }
             Sort.quicksort(fields, new Compare() {public boolean isLess(Object o1, Object o2)
                 {return ((Fd)o1).getInName().compareTo(((Fd)o2).getInName()) < 0;}});
-                
+
             // Copy the sorted fields into the list
             for (int i = 0; i < fields.length; i++)
             {
                 vecFields.addElement(fields[i]);
                 listFields.add(fields[i].toString());
             }
-            
+
             // Select the first field as though the user had done so
             listFields.select(0);
             listFieldsAction();
@@ -1540,8 +1540,8 @@ public class Gui extends Frame implements Runnable, GuiConstants
             {
                 imageWidth = image.getWidth(this) * 6 / 5;
                 imageHeight = image.getHeight(this);
-                g.drawImage(image, 
-                            (d.width - imageWidth - maxLogoWidth) / 2, 
+                g.drawImage(image,
+                            (d.width - imageWidth - maxLogoWidth) / 2,
                             (d.height - imageHeight) / 2,
                             this);
             }

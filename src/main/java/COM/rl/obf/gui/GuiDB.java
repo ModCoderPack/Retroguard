@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -251,19 +251,19 @@ public class GuiDB implements GuiConstants
                 });
                 // Sort app list
                 Object[] sortApps = new Object[appList.size()];
-                for (int i = 0; i < sortApps.length; i++) 
+                for (int i = 0; i < sortApps.length; i++)
                 {
                     sortApps[i] = appList.elementAt(i);
                 }
-                Sort.quicksort(sortApps, 
+                Sort.quicksort(sortApps,
                                new Compare() {
-                                   public boolean isLess(Object o1, Object o2) 
+                                   public boolean isLess(Object o1, Object o2)
                                    {
                                        return ((ClPreserve)((Cons)o1).car).getPkCl().getInName().compareTo(((ClPreserve)((Cons)o2).car).getPkCl().getInName()) < 0;
                                    }
                                });
                 appList = new Vector();
-                for (int i = 0; i < sortApps.length; i++) 
+                for (int i = 0; i < sortApps.length; i++)
                 {
                     appList.addElement(sortApps[i]);
                 }
@@ -286,19 +286,19 @@ public class GuiDB implements GuiConstants
                 });
                 // Sort applet list
                 Object[] sortApplets = new Object[appletList.size()];
-                for (int i = 0; i < sortApplets.length; i++) 
+                for (int i = 0; i < sortApplets.length; i++)
                 {
                     sortApplets[i] = appletList.elementAt(i);
                 }
-                Sort.quicksort(sortApplets, 
+                Sort.quicksort(sortApplets,
                                new Compare() {
-                                   public boolean isLess(Object o1, Object o2) 
+                                   public boolean isLess(Object o1, Object o2)
                                    {
                                        return ((ClPreserve)o1).getPkCl().getInName().compareTo(((ClPreserve)o1).getPkCl().getInName()) < 0;
                                    }
                                });
                 appletList = new Vector();
-                for (int i = 0; i < sortApplets.length; i++) 
+                for (int i = 0; i < sortApplets.length; i++)
                 {
                     appletList.addElement(sortApplets[i]);
                 }
@@ -389,19 +389,19 @@ public class GuiDB implements GuiConstants
                 }
                 // Sort bean list
                 Object[] sortBeans = new Object[beanList.size()];
-                for (int i = 0; i < sortBeans.length; i++) 
+                for (int i = 0; i < sortBeans.length; i++)
                 {
                     sortBeans[i] = beanList.elementAt(i);
                 }
-                Sort.quicksort(sortBeans, 
+                Sort.quicksort(sortBeans,
                                new Compare() {
-                                   public boolean isLess(Object o1, Object o2) 
+                                   public boolean isLess(Object o1, Object o2)
                                    {
                                        return ((ClPreserve)o1).getPkCl().getInName().compareTo(((ClPreserve)o2).getPkCl().getInName()) < 0;
                                    }
                                });
                 beanList = new Vector();
-                for (int i = 0; i < sortBeans.length; i++) 
+                for (int i = 0; i < sortBeans.length; i++)
                 {
                     beanList.addElement(sortBeans[i]);
                 }

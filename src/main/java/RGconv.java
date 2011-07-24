@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -23,27 +23,27 @@ import COM.rl.obf.*;
 
 /**
  * Main class for conversion utility. Converts from normal to obfuscated
- * class filenames. 
+ * class filenames.
  *
  * @author      Mark Welsh
  */
-public class RGconv 
+public class RGconv
 {
     // Class Methods ---------------------------------------------------------
     /**
-     * Main entry point for RGconv. 
+     * Main entry point for RGconv.
      *
      * Run as: java RGconv retroguard.log in.list out.list
      *  or as: java RGconv retroguard.log in.list > out.list
      *  or as: cat in.list | java RGconv retroguard.log > out.list
      */
-    public static void main(String args[]) 
+    public static void main(String args[])
     {
         // Check arg-list for validity
-        try 
+        try
         {
             // Get the arguments, or set their default values
-            if (args.length < 1 || args.length > 3) 
+            if (args.length < 1 || args.length > 3)
             {
                 throw new IllegalArgumentException("Invalid number of arguments.");
             }
@@ -53,8 +53,8 @@ public class RGconv
 
             // Call the main entry point
             RGconvImpl.convert(rgsFile, inListFile, outListFile);
-        } 
-        catch (IllegalArgumentException e) 
+        }
+        catch (IllegalArgumentException e)
         {
             System.err.println(Version.getVersionComment());
             System.err.println("Problem: " + (e.getMessage() != null ? e.getMessage() : ""));
@@ -63,8 +63,8 @@ public class RGconv
             System.err.println("        INPUT-FILE is a list of unobfuscated class filenames");
             System.err.println("        OUTPUT-FILE is name for the list of obfuscated class filenames");
             System.exit(-1);
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             System.err.println("RGconv error: " + e.toString());
             System.exit(-1);

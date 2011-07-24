@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -25,7 +25,7 @@ import COM.rl.obf.patch.*;
 
 /**
  * Main class for stacktrace utility. Converts from obfuscated to normal
- * method names in stack traces (multi-valued due to method overloading). 
+ * method names in stack traces (multi-valued due to method overloading).
  *
  * @author      Mark Welsh
  */
@@ -39,48 +39,48 @@ public class RGtraceImpl
      * @param inTraceFilename obfuscated stack trace file
      * @param outTraceFilename file for unobfuscated stacktrace
      */
-    public static void convert(String rgsFilename, String inTraceFilename, 
-                               String outTraceFilename) throws Exception 
+    public static void convert(String rgsFilename, String inTraceFilename,
+                               String outTraceFilename) throws Exception
     {
         File rgsFile = rgsFilename == null ? null : new File(rgsFilename);
         File inTraceFile = inTraceFilename == null ? null : new File(inTraceFilename);
         File outTraceFile = outTraceFilename == null ? null : new File(outTraceFilename);
-        
+
         // Script/log file must exist and be readable
-        if (rgsFile == null) 
+        if (rgsFile == null)
         {
             throw new IllegalArgumentException("No log file specified.");
         }
-        if (!rgsFile.exists()) 
+        if (!rgsFile.exists())
         {
             throw new IllegalArgumentException("Log file specified does not exist.");
         }
-        if (!rgsFile.canRead()) 
+        if (!rgsFile.canRead())
         {
             throw new IllegalArgumentException("Log file specified exists but cannot be read.");
         }
-        
+
         // Input stacktrace file must be readable if it exists
-        if (inTraceFile != null && !inTraceFile.exists()) 
+        if (inTraceFile != null && !inTraceFile.exists())
         {
             throw new IllegalArgumentException("Input stacktrace file specified does not exist.");
         }
-        if (inTraceFile != null && !inTraceFile.canRead()) 
+        if (inTraceFile != null && !inTraceFile.canRead())
         {
             throw new IllegalArgumentException("Input stacktrace file specified exists but cannot be read.");
         }
-        
+
         // Output stacktrace file must be writable if it exists
-        if (outTraceFile != null 
-            && outTraceFile.exists() && !outTraceFile.canWrite()) 
+        if (outTraceFile != null
+            && outTraceFile.exists() && !outTraceFile.canWrite())
         {
             throw new IllegalArgumentException("Output stacktrace file cannot be written to.");
         }
-        
+
         // Call the main entry point
         RGtraceImpl.convert(rgsFile, inTraceFile, outTraceFile);
     }
-    
+
     /**
      * Main entry point for the converter.
      *
@@ -88,27 +88,27 @@ public class RGtraceImpl
      * @param inTraceFile obfuscated stacktrace file
      * @param outTraceFile file for unobfuscated stacktrace
      */
-    public static void convert(File rgsFile, File inTraceFile, 
-                               File outTraceFile) throws Exception 
+    public static void convert(File rgsFile, File inTraceFile,
+                               File outTraceFile) throws Exception
     {
         // Create the name mapping database, using the log file
         ClassDB db = new ClassDB(rgsFile);
 
         // Open the output file
         PrintStream out = null;
-        try 
+        try
         {
             out = outTraceFile == null ? System.out :
                 new PrintStream(
                     new BufferedOutputStream(
                         new FileOutputStream(outTraceFile)));
-	    // Convert the trace file to unobfuscated form
-	    db.fromObfForTrace(inTraceFile, out);
+            // Convert the trace file to unobfuscated form
+            db.fromObfForTrace(inTraceFile, out);
             out.flush();
-        } 
-        finally 
+        }
+        finally
         {
-            if (out != null) 
+            if (out != null)
             {
                 out.close();
             }

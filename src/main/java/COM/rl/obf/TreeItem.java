@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -54,54 +54,54 @@ public class TreeItem
 
     // Class Methods ---------------------------------------------------------
     /** Do a wildcard String match. */
-    public static boolean isMatch(String pattern, String string) 
+    public static boolean isMatch(String pattern, String string)
     {
         // Sanity check
-        if (pattern == null || string == null) 
+        if (pattern == null || string == null)
         {
             return false;
         }
 
         // Not really a wildcard, then check for exact match
-        if (pattern.indexOf('*') == -1) 
+        if (pattern.indexOf('*') == -1)
         {
             return pattern.equals(string);
         }
 
         // Check for match of head
         int pos = -1;
-        if (pattern.charAt(0) != '*') 
+        if (pattern.charAt(0) != '*')
         {
             pos = pattern.indexOf('*');
             String head = pattern.substring(0, pos);
-            if (string.length() < head.length()) 
+            if (string.length() < head.length())
             {
                 return false;
             }
-            if (!string.substring(0, head.length()).equals(head)) 
+            if (!string.substring(0, head.length()).equals(head))
             {
                 return false;
-            } 
-            else 
+            }
+            else
             {
                 pattern = pattern.substring(pos);
                 string = string.substring(pos);
             }
         }
         // Check for match of tail
-        if (pattern.charAt(pattern.length() - 1) != '*') 
+        if (pattern.charAt(pattern.length() - 1) != '*')
         {
             pos = pattern.lastIndexOf('*');
             String tail = pattern.substring(pos + 1);
-            if (string.length() < tail.length()) 
+            if (string.length() < tail.length())
             {
                 return false;
             }
-            if (!string.substring(string.length() - tail.length()).equals(tail)) 
+            if (!string.substring(string.length() - tail.length()).equals(tail))
             {
                 return false;
-            } 
-            else 
+            }
+            else
             {
                 pattern = pattern.substring(0, pos + 1);
                 string = string.substring(0, string.length() - tail.length());
@@ -111,20 +111,20 @@ public class TreeItem
         Vector section = new Vector();
         pos = pattern.indexOf('*');
         int rpos = -1;
-        while ((rpos = pattern.indexOf('*', pos+1)) != -1) 
+        while ((rpos = pattern.indexOf('*', pos+1)) != -1)
         {
-            if (rpos != pos + 1) 
+            if (rpos != pos + 1)
             {
                 section.addElement(pattern.substring(pos + 1, rpos));
             }
             pos = rpos;
         }
         // Check each section for a non-overlapping match in the string
-        for (Enumeration enm = section.elements(); enm.hasMoreElements(); ) 
+        for (Enumeration enm = section.elements(); enm.hasMoreElements(); )
         {
             String chunk = (String)enm.nextElement();
             pos = string.indexOf(chunk);
-            if (pos == -1) 
+            if (pos == -1)
             {
                 return false;
             }
@@ -136,49 +136,49 @@ public class TreeItem
 
     /** Do a generalized wildcard String match - handles '**' wildcard
      *  that matches across package boundaries. */
-    public static boolean isGMatch(String pattern, String string) 
+    public static boolean isGMatch(String pattern, String string)
     {
         PatternList pl, sl;
-        try 
+        try
         {
             pl = PatternList.create(pattern);
             sl = PatternList.create(string);
-            if (!pl.scExists()) 
+            if (!pl.scExists())
             {
                 if (pl.length() != sl.length()) return false;
                 // check each string identifier against the non-** pattern
-                for (int i = 0; i < pl.length(); i++) 
+                for (int i = 0; i < pl.length(); i++)
                 {
                     if (!isMatch(pl.getSub(i), sl.getSub(i))) return false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 if (pl.length() > sl.length()) return false;
                 // check the head identifiers (pre-** segment)
-                for (int i = 0; i < pl.scIndex(); i++) 
+                for (int i = 0; i < pl.scIndex(); i++)
                 {
                     if (!isMatch(pl.getSub(i), sl.getSub(i))) return false;
                 }
                 // check the tail identifiers (post-** segment)
-                for (int i = pl.scIndex() + 1; i < pl.length(); i++) 
+                for (int i = pl.scIndex() + 1; i < pl.length(); i++)
                 {
                     int j = i + sl.length() - pl.length();
                     if (!isMatch(pl.getSub(i), sl.getSub(j))) return false;
                 }
                 // check the merged central identifiers against the ** segment
                 int j = pl.scIndex() + sl.length() - pl.length();
-                if (!isMatch(pl.getSub(pl.scIndex()), 
+                if (!isMatch(pl.getSub(pl.scIndex()),
                              sl.getSub(pl.scIndex(), j))) return false;
             }
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             return false;
         }
         return true;
     }
-    
+
 
     // Instance Methods ------------------------------------------------------
     /** Ctor. */
@@ -205,7 +205,7 @@ public class TreeItem
     public String getInName() {return inName;}
 
     /** Set the output name of the entry. */
-    public void setOutName(String outName) 
+    public void setOutName(String outName)
     {
         this.outName = outName;
         isFixed = true;
@@ -221,9 +221,9 @@ public class TreeItem
     public void setFromScript() {isFromScript = true;}
 
     /** Clear the signal that this constraint came from a user script line. */
-    public void clearFromScript() 
+    public void clearFromScript()
     {
-        if (isFromScript) 
+        if (isFromScript)
         {
             isFixed = false;
             isFromScript = false;
@@ -264,9 +264,9 @@ public class TreeItem
         }
         else
         {
-        	String s = parent.getFullInName();
-        	if(s.equals(""))
-        		return getInName();
+            String s = parent.getFullInName();
+            if(s.equals(""))
+                return getInName();
             return s + sep + getInName();
         }
     }
@@ -284,21 +284,21 @@ public class TreeItem
         }
         else
         {
-        	String s = parent.getFullOutName();
-        	if(s.equals("") || this instanceof Pk)
-        		return getOutName();
+                String s = parent.getFullOutName();
+                if(s.equals("") || this instanceof Pk)
+                        return getOutName();
             return s + sep + getOutName();
         }
     }
 
     /** Does this name match the wildcard pattern? (compatibility mode) */
-    public boolean isOldStyleMatch(String pattern) 
+    public boolean isOldStyleMatch(String pattern)
     {
         return isMatch(pattern, getFullInName());
     }
 
     /** Does this name match the wildcard pattern? (** and * supported) */
-    public boolean isWildcardMatch(String pattern) 
+    public boolean isWildcardMatch(String pattern)
     {
         return isGMatch(pattern, getFullInName());
     }
@@ -316,35 +316,35 @@ public class TreeItem
     public boolean isTrimCheck() {return isTrimCheck; }
 
     /** Add a TreeItem references. */
-    public void addRef(Object ref) 
+    public void addRef(Object ref)
     {
-	if (treeItemRefs == null)
-	{
-	    treeItemRefs = new Vector();
-	}
-	treeItemRefs.addElement(ref);
+        if (treeItemRefs == null)
+        {
+            treeItemRefs = new Vector();
+        }
+        treeItemRefs.addElement(ref);
     }
 
     /** Push internal references from this item to the stack as TreeItems. */
     public void pushRefs(Stack stack) throws Exception
-    { 
-	if (treeItemRefs != null)
-	{
-	    for (Enumeration enm = treeItemRefs.elements(); 
-		 enm.hasMoreElements(); )
-	    {
-		TreeItem ti = null;
-		Object o = enm.nextElement();
-		if (o instanceof TreeItem) 
-		{
-		    ti = (TreeItem)o;
-		}
-		else if (o instanceof TreeItemRef) 
-		{
-		    ti = ((TreeItemRef)o).toTreeItem(classTree);
-		}
-		stack.push(ti);
-	    }
-	}
+    {
+        if (treeItemRefs != null)
+        {
+            for (Enumeration enm = treeItemRefs.elements();
+                 enm.hasMoreElements(); )
+            {
+                TreeItem ti = null;
+                Object o = enm.nextElement();
+                if (o instanceof TreeItem)
+                {
+                    ti = (TreeItem)o;
+                }
+                else if (o instanceof TreeItemRef)
+                {
+                    ti = ((TreeItemRef)o).toTreeItem(classTree);
+                }
+                stack.push(ti);
+            }
+        }
     }
 }

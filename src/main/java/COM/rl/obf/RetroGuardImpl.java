@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -64,18 +64,18 @@ public class RetroGuardImpl
      * @param rgsFilename valid RetroGuard Script data file name, or null (which implies default settings)
      * @param logFilename name for the log data file
      */
-    public static void obfuscate(String inFilename, 
-                                 String outFilename, 
-                                 String rgsFilename, 
+    public static void obfuscate(String inFilename,
+                                 String outFilename,
+                                 String rgsFilename,
                                  String logFilename) throws Exception
     {
-        File inFile = new File(inFilename == null ? 
+        File inFile = new File(inFilename == null ?
                                DEFAULT_IN_FILE_NAME : inFilename);
-        File outFile = new File(outFilename == null ? 
+        File outFile = new File(outFilename == null ?
                                 DEFAULT_OUT_FILE_NAME : outFilename);
-        File rgsFile = new File(rgsFilename == null ? 
+        File rgsFile = new File(rgsFilename == null ?
                                 DEFAULT_RGS_FILE_NAME : rgsFilename);
-        File logFile = new File(logFilename == null ? 
+        File logFile = new File(logFilename == null ?
                                 DEFAULT_LOG_FILE_NAME : logFilename);
 
         // Input JAR file must exist and be readable
@@ -87,14 +87,14 @@ public class RetroGuardImpl
         {
             throw new IllegalArgumentException("JAR specified for obfuscation exists but cannot be read.");
         }
-        
+
         // Output JAR file must be writable if it exists
         if (outFile.exists() && !outFile.canWrite())
         {
             throw new IllegalArgumentException("Output JAR file cannot be written to.");
         }
-        
-        // Script file must be readable if it exists, but need not exist 
+
+        // Script file must be readable if it exists, but need not exist
         // (revert to default obfuscation settings in that case)
         if (rgsFile.exists())
         {
@@ -109,7 +109,7 @@ public class RetroGuardImpl
         {
             throw new IllegalArgumentException("Logfile cannot be written to.");
         }
-        
+
         // Call the main entry point on the obfuscator.
         RetroGuardImpl.obfuscate(inFile, outFile, rgsFile, logFile);
     }
@@ -150,14 +150,14 @@ public class RetroGuardImpl
             // Write out the log header
             writeLogHeader(log);
 
-            // Create the name mapping database for the input JAR, constrained 
+            // Create the name mapping database for the input JAR, constrained
             // by the options in the rgs script
-	    boolean enableTrim = RgsEnum.hasOptionTrim(rgsFile);
+            boolean enableTrim = RgsEnum.hasOptionTrim(rgsFile);
             GuardDB db = new GuardDB(inFile, enableTrim);
             try
             {
-		InputStream rgsInputStream = 
-		    (rgsFile.exists() ? new FileInputStream(rgsFile) : null);
+                InputStream rgsInputStream =
+                    (rgsFile.exists() ? new FileInputStream(rgsFile) : null);
                 db.retain(new RgsEnum(rgsInputStream), log);
                 db.logWarnings(log);
                 if (rgsInputStream != null)
@@ -165,10 +165,10 @@ public class RetroGuardImpl
                     rgsInputStream.close();
                 }
                 // If requested in script, trim unused methods, fields, classes
-		if (enableTrim) 
-		{
-		    db.trim(log);
-		}
+                if (enableTrim)
+                {
+                    db.trim(log);
+                }
                 db.remapTo(outFile, log);
             }
             finally

@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -36,20 +36,20 @@ abstract public class NameMaker
 
     // Class Methods ---------------------------------------------------------
     /** Get an enumeration of distinct obfuscated names for all namespaces. */
-    public static Enumeration getNames() 
+    public static Enumeration getNames()
     {
         return frequency.keys();
     }
 
     /** Get an enumeration of use count for distinct obfuscated names for all namespaces. */
-    public static Enumeration getUseCounts() 
+    public static Enumeration getUseCounts()
     {
         return frequency.elements();
     }
 
 
     // Instance Methods ------------------------------------------------------
-    /** Return the next unique name for this namespace, differing only for identical arg-lists. 
+    /** Return the next unique name for this namespace, differing only for identical arg-lists.
      * @param oldName TODO*/
     public String nextName(String oldName, String descriptor) throws Exception
     {
@@ -68,7 +68,7 @@ abstract public class NameMaker
         return name;
     }
 
-    /** Return the next unique name for this namespace, differing only for identical arg-lists. 
+    /** Return the next unique name for this namespace, differing only for identical arg-lists.
      * @param oldName TODO*/
     abstract protected String getNextName(String oldName, String descriptor) throws Exception;
 }

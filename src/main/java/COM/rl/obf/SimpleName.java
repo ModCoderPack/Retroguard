@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Java 'simple name' -- a class name or a component of a package name, 
+ * Java 'simple name' -- a class name or a component of a package name,
  * along with the type of this simple name.
  *
  * @author      Mark Welsh
@@ -50,15 +50,15 @@ public class SimpleName
     }
 
     /** Set simple name as package level. */
-    public SimpleName setAsPackage() 
-    { 
+    public SimpleName setAsPackage()
+    {
         isAsPackage = true;
         return this;
     }
 
     /** Set simple name as class level. */
-    public SimpleName setAsClass() 
-    { 
+    public SimpleName setAsClass()
+    {
         isAsPackage = false;
         return this;
     }

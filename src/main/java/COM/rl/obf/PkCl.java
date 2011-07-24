@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -53,33 +53,33 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Get a class by name. */
-    public Cl getClass(String name) throws Exception 
+    public Cl getClass(String name) throws Exception
     {
         return (Cl)cls.get(name);
     }
 
     /** Get a class by obfuscated name. */
-    public Cl getObfClass(String name) throws Exception 
+    public Cl getObfClass(String name) throws Exception
     {
-	for (Enumeration enm = cls.elements(); enm.hasMoreElements(); )
-	{
-	    Cl cl = (Cl)enm.nextElement();
-	    if (name.equals(cl.getOutName())) 
-	    {
-		return cl;
-	    }
-	}
+        for (Enumeration enm = cls.elements(); enm.hasMoreElements(); )
+        {
+            Cl cl = (Cl)enm.nextElement();
+            if (name.equals(cl.getOutName()))
+            {
+                return cl;
+            }
+        }
         return null;
     }
 
     /** Get an Enumeration of classes directly beneath this PkCl. */
-    public Enumeration getClassEnum() 
+    public Enumeration getClassEnum()
     {
         return cls.elements();
     }
 
     /** Get an Enumeration of all classes (outer and inner) in the tree beneath this PkCl. */
-    public Enumeration getAllClassEnum() 
+    public Enumeration getAllClassEnum()
     {
         Vector allClasses = new Vector();
         addAllClasses(allClasses);
@@ -97,7 +97,7 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Return number of classes. */
-    public int getClassCount() 
+    public int getClassCount()
     {
         return cls.size();
     }
@@ -181,7 +181,7 @@ abstract public class PkCl extends TreeItem
         for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
         {
             TreeItem ti = (TreeItem)enm.nextElement();
-        	//replaced by Searge:
+            //replaced by Searge:
             if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
             {
                 if (!ti.isFixed())
@@ -191,9 +191,9 @@ abstract public class PkCl extends TreeItem
             }
             else
             {
-            	String s = NameProvider.getNewTreeItemName(ti);
-            	if(s != null)
-            		ti.setOutName(s);
+                String s = NameProvider.getNewTreeItemName(ti);
+                if(s != null)
+                    ti.setOutName(s);
             }
         }
     }

@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -27,7 +27,7 @@ import java.util.*;
  *
  * @author      Mark Welsh
  */
-public class PatternList 
+public class PatternList
 {
     // Constants -------------------------------------------------------------
 
@@ -62,41 +62,41 @@ public class PatternList
                 sc = length();
                 pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast+2);
                 if (pos == -1) pos = pattern.length();
-            }   
+            }
             subs.addElement(pattern.substring(oldpos+1, pos));
         }
     }
 
     /** Number of segments in the list. */
-    public int length() 
-    { 
-        return subs.size(); 
+    public int length()
+    {
+        return subs.size();
     }
 
     /** Does a '**' wildcard segment exist? */
-    public boolean scExists() 
+    public boolean scExists()
     {
         return sc >= 0;
     }
 
     /** Index of the '**' wildcard segment. */
-    public int scIndex() 
+    public int scIndex()
     {
         return sc;
     }
-    
+
     /** Return the i'th segment. */
-    public String getSub(int i) 
+    public String getSub(int i)
     {
         return (String)subs.elementAt(i);
     }
-    
+
     /** Return the i'th through j'th segments, joined by package separators. */
-    public String getSub(int i, int j) 
+    public String getSub(int i, int j)
     {
         if (i < 0 || i > j || j >= length()) throw new IllegalArgumentException();
         StringBuffer sb = new StringBuffer();
-        for (int k = i; k <= j; k++) 
+        for (int k = i; k <= j; k++)
         {
             sb.append(getSub(k));
             if (k < j) sb.append(ClassTree.PACKAGE_LEVEL);

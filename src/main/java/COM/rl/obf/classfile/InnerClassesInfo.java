@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -64,7 +64,7 @@ public class InnerClassesInfo
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
         // BUGFIX: a Swing1.1beta3 class has name index of zero - this is valid
-        if (u2innerNameIndex != 0) 
+        if (u2innerNameIndex != 0)
         {
             pool.incRefCount(u2innerNameIndex);
         }
@@ -88,12 +88,12 @@ public class InnerClassesInfo
     }
 
     /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception 
-    { 
+    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    {
         if (u2innerNameIndex != 0)
         {
             // Get the full inner class name
-            ClassCpInfo innerClassInfo = 
+            ClassCpInfo innerClassInfo =
                 (ClassCpInfo)cf.getCpEntry(u2innerClassInfoIndex);
             String innerClassName = ((Utf8CpInfo)cf.getCpEntry(innerClassInfo.getNameIndex())).getString();
             // It is the remapped simple name that must be stored, so truncate

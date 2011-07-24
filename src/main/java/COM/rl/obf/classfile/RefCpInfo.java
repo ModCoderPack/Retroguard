@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -58,23 +58,23 @@ abstract public class RefCpInfo extends CpInfo
     /** Return the method's class string name. */
     public String getClassName(ClassFile cf) throws Exception
     {
-	return ((ClassCpInfo)cf.getCpEntry(u2classIndex)).getName(cf);
+        return ((ClassCpInfo)cf.getCpEntry(u2classIndex)).getName(cf);
     }
 
     /** Return the method's string name. */
     public String getName(ClassFile cf) throws Exception
     {
-	NameAndTypeCpInfo ntCpInfo = 
-	    (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
-	return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getNameIndex())).getString();
+        NameAndTypeCpInfo ntCpInfo =
+            (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
+        return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getNameIndex())).getString();
     }
 
     /** Return the method's string descriptor. */
     public String getDescriptor(ClassFile cf) throws Exception
     {
-	NameAndTypeCpInfo ntCpInfo = 
-	    (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
-	return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getDescriptorIndex())).getString();
+        NameAndTypeCpInfo ntCpInfo =
+            (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
+        return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getDescriptorIndex())).getString();
     }
 
     /** Check for N+T references to constant pool and mark them. */

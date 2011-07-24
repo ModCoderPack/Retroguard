@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -104,7 +104,7 @@ public class RgsEnum
                                                  ACCESS_TRANSIENT,
                                                  ACCESS_ENUM};
 
-    private static final String DEFAULT_RGS = 
+    private static final String DEFAULT_RGS =
     ".option Applet\n" +
     ".option Application\n" +
     ".option Serializable\n" +
@@ -129,39 +129,39 @@ public class RgsEnum
     /** Translate a string access modifier from the script to bit flag */
     private static int toAccessFlag(String accessString) throws Exception
     {
-        if      (ACCESS_PUBLIC.equals(accessString)) 
+        if      (ACCESS_PUBLIC.equals(accessString))
             return ClassConstants.ACC_PUBLIC;
-        else if (ACCESS_PRIVATE.equals(accessString)) 
+        else if (ACCESS_PRIVATE.equals(accessString))
             return ClassConstants.ACC_PRIVATE;
-        else if (ACCESS_PROTECTED.equals(accessString)) 
+        else if (ACCESS_PROTECTED.equals(accessString))
             return ClassConstants.ACC_PROTECTED;
-        else if (ACCESS_STATIC.equals(accessString)) 
+        else if (ACCESS_STATIC.equals(accessString))
             return ClassConstants.ACC_STATIC;
-        else if (ACCESS_FINAL.equals(accessString)) 
+        else if (ACCESS_FINAL.equals(accessString))
             return ClassConstants.ACC_FINAL;
-        else if (ACCESS_SYNCHRONIZED.equals(accessString)) 
+        else if (ACCESS_SYNCHRONIZED.equals(accessString))
             return ClassConstants.ACC_SYNCHRONIZED;
-        else if (ACCESS_BRIDGE.equals(accessString)) 
+        else if (ACCESS_BRIDGE.equals(accessString))
             return ClassConstants.ACC_BRIDGE;
-        else if (ACCESS_VOLATILE.equals(accessString)) 
+        else if (ACCESS_VOLATILE.equals(accessString))
             return ClassConstants.ACC_VOLATILE;
-        else if (ACCESS_VARARGS.equals(accessString)) 
+        else if (ACCESS_VARARGS.equals(accessString))
             return ClassConstants.ACC_VARARGS;
-        else if (ACCESS_TRANSIENT.equals(accessString)) 
+        else if (ACCESS_TRANSIENT.equals(accessString))
             return ClassConstants.ACC_TRANSIENT;
-        else if (ACCESS_NATIVE.equals(accessString)) 
+        else if (ACCESS_NATIVE.equals(accessString))
             return ClassConstants.ACC_NATIVE;
-        else if (ACCESS_INTERFACE.equals(accessString)) 
+        else if (ACCESS_INTERFACE.equals(accessString))
             return ClassConstants.ACC_INTERFACE;
-        else if (ACCESS_ABSTRACT.equals(accessString)) 
+        else if (ACCESS_ABSTRACT.equals(accessString))
             return ClassConstants.ACC_ABSTRACT;
-        else if (ACCESS_STRICT.equals(accessString)) 
+        else if (ACCESS_STRICT.equals(accessString))
             return ClassConstants.ACC_STRICT;
-        else if (ACCESS_SYNTHETIC.equals(accessString)) 
+        else if (ACCESS_SYNTHETIC.equals(accessString))
             return ClassConstants.ACC_SYNTHETIC;
-        else if (ACCESS_ANNOTATION.equals(accessString)) 
+        else if (ACCESS_ANNOTATION.equals(accessString))
             return ClassConstants.ACC_ANNOTATION;
-        else if (ACCESS_ENUM.equals(accessString)) 
+        else if (ACCESS_ENUM.equals(accessString))
             return ClassConstants.ACC_ENUM;
         else throw new Exception();
     }
@@ -177,20 +177,20 @@ public class RgsEnum
             boolean invert = false;
             if (accessString.charAt(0) != ';') throw new Exception();
             int startIndex = 1;
-            if (accessString.charAt(1) == '!') 
+            if (accessString.charAt(1) == '!')
             {
                 invert = true;
                 startIndex = 2;
             }
             int endIndex = accessString.indexOf(';', startIndex);
-            String flagString = (endIndex == -1 ? 
+            String flagString = (endIndex == -1 ?
                                  accessString.substring(startIndex) :
                                  accessString.substring(startIndex, endIndex));
             if (endIndex == -1)
             {
                 accessString = null;
-            } 
-            else 
+            }
+            else
             {
                 accessString = accessString.substring(endIndex);
             }
@@ -202,7 +202,7 @@ public class RgsEnum
                  !Tools.isInArray(flagString, METHOD_ACCESS)) ||
                 ((entryType == RgsEntry.TYPE_FIELD ||
                   entryType == RgsEntry.TYPE_NOT_FIELD) &&
-                 !Tools.isInArray(flagString, FIELD_ACCESS))) 
+                 !Tools.isInArray(flagString, FIELD_ACCESS)))
             {
                 throw new Exception();
             }
@@ -216,30 +216,30 @@ public class RgsEnum
     /** Does this RGS file have an '.option Trim' line? (expensive) */
     public static boolean hasOptionTrim(File rgsFile) throws Exception
     {
-	InputStream rgsInputStream = null;
-	try 
-	{
-	    rgsInputStream = rgsFile.exists() ? 
-		new FileInputStream(rgsFile) : null;
-	    RgsEnum rgsEnum = new RgsEnum(rgsInputStream);
-	    while (rgsEnum.hasMoreEntries())
-	    {
-		RgsEntry entry = rgsEnum.nextEntry();
-		if (entry.type == RgsEntry.TYPE_OPTION &&
-		    ClassConstants.OPTION_Trim.equals(entry.name))
-		{
-		    return true;
-		}
-	    }
-	    return false;
-	}
-	finally
-	{
-	    if (rgsInputStream != null)
-	    {
-		rgsInputStream.close();
-	    }
-	}
+        InputStream rgsInputStream = null;
+        try
+        {
+            rgsInputStream = rgsFile.exists() ?
+                new FileInputStream(rgsFile) : null;
+            RgsEnum rgsEnum = new RgsEnum(rgsInputStream);
+            while (rgsEnum.hasMoreEntries())
+            {
+                RgsEntry entry = rgsEnum.nextEntry();
+                if (entry.type == RgsEntry.TYPE_OPTION &&
+                    ClassConstants.OPTION_Trim.equals(entry.name))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        finally
+        {
+            if (rgsInputStream != null)
+            {
+                rgsInputStream.close();
+            }
+        }
     }
 
 
@@ -249,8 +249,8 @@ public class RgsEnum
     {
         tk = new StreamTokenizer(
             new BufferedReader(
-                rgs != null ? 
-                (Reader)new InputStreamReader(rgs) : 
+                rgs != null ?
+                (Reader)new InputStreamReader(rgs) :
                 (Reader)new StringReader(DEFAULT_RGS)));
         tk.resetSyntax();
         tk.whitespaceChars(0x00, 0x20);
@@ -295,13 +295,13 @@ public class RgsEnum
     }
 
     // Read the next entry, returning true if one is available.
-    private void readNext() 
+    private void readNext()
     {
         // Reset the 'next error' state
         nextException = null;
         RgsEntry entry = null;
         int ttype;
-        try 
+        try
         {
             int directive = -1;
             int accessMask = 0;
@@ -310,45 +310,45 @@ public class RgsEnum
             String descriptor = null;
             boolean hasExtends = false;
             String extendsName = null;
-            while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF) 
+            while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF)
             {
-                if (ttype == StreamTokenizer.TT_WORD) 
+                if (ttype == StreamTokenizer.TT_WORD)
                 {
-                    if (directive == -1) 
+                    if (directive == -1)
                     {
-                        if (tk.sval.equals(DIRECTIVE_OPTION)) 
+                        if (tk.sval.equals(DIRECTIVE_OPTION))
                         {
                             directive = RgsEntry.TYPE_OPTION;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_ATTR)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_ATTR))
                         {
                             directive = RgsEntry.TYPE_ATTR;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_NOWARN)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_NOWARN))
                         {
                             directive = RgsEntry.TYPE_NOWARN;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_PACKAGE_MAP)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_PACKAGE_MAP))
                         {
                             directive = RgsEntry.TYPE_PACKAGE_MAP;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_REPACKAGE_MAP)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_REPACKAGE_MAP))
                         {
                             directive = RgsEntry.TYPE_REPACKAGE_MAP;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_CLASS_MAP)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_CLASS_MAP))
                         {
                             directive = RgsEntry.TYPE_CLASS_MAP;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_METHOD_MAP)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_METHOD_MAP))
                         {
                             directive = RgsEntry.TYPE_METHOD_MAP;
-                        } 
-                        else if (tk.sval.equals(DIRECTIVE_FIELD_MAP)) 
+                        }
+                        else if (tk.sval.equals(DIRECTIVE_FIELD_MAP))
                         {
                             directive = RgsEntry.TYPE_FIELD_MAP;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_CLASS)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_CLASS))
                         {
                             directive = RgsEntry.TYPE_CLASS;
                             accessMask = decodeAccessFlags
@@ -356,8 +356,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_CLASS.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_NOTRIM_CLASS)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_NOTRIM_CLASS))
                         {
                             directive = RgsEntry.TYPE_NOTRIM_CLASS;
                             accessMask = decodeAccessFlags
@@ -365,8 +365,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_NOTRIM_CLASS.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_NOT_CLASS)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_NOT_CLASS))
                         {
                             directive = RgsEntry.TYPE_NOT_CLASS;
                             accessMask = decodeAccessFlags
@@ -374,8 +374,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_NOT_CLASS.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_METHOD)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_METHOD))
                         {
                             directive = RgsEntry.TYPE_METHOD;
                             accessMask = decodeAccessFlags
@@ -383,8 +383,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_METHOD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_NOTRIM_METHOD)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_NOTRIM_METHOD))
                         {
                             directive = RgsEntry.TYPE_NOTRIM_METHOD;
                             accessMask = decodeAccessFlags
@@ -392,8 +392,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_NOTRIM_METHOD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_NOT_METHOD)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_NOT_METHOD))
                         {
                             directive = RgsEntry.TYPE_NOT_METHOD;
                             accessMask = decodeAccessFlags
@@ -401,8 +401,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_NOT_METHOD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_FIELD)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_FIELD))
                         {
                             directive = RgsEntry.TYPE_FIELD;
                             accessMask = decodeAccessFlags
@@ -410,8 +410,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_NOTRIM_FIELD)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_NOTRIM_FIELD))
                         {
                             directive = RgsEntry.TYPE_NOTRIM_FIELD;
                             accessMask = decodeAccessFlags
@@ -419,8 +419,8 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_NOTRIM_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else if (tk.sval.startsWith(DIRECTIVE_NOT_FIELD)) 
+                        }
+                        else if (tk.sval.startsWith(DIRECTIVE_NOT_FIELD))
                         {
                             directive = RgsEntry.TYPE_NOT_FIELD;
                             accessMask = decodeAccessFlags
@@ -428,25 +428,25 @@ public class RgsEnum
                                  tk.sval.substring(DIRECTIVE_NOT_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
-                        } 
-                        else 
+                        }
+                        else
                         {
                             throw new Exception();
                         }
-                    } 
-                    else if (entry == null) 
+                    }
+                    else if (entry == null)
                     {
                         switch (directive)
                         {
                         case RgsEntry.TYPE_OPTION:
-                            if (!Tools.isInArray(tk.sval, ClassConstants.KNOWN_OPTIONS)) 
+                            if (!Tools.isInArray(tk.sval, ClassConstants.KNOWN_OPTIONS))
                             {
                                 throw new Exception();
                             }
                             entry = new RgsEntry(directive, tk.sval);
                             break;
                         case RgsEntry.TYPE_ATTR:
-                            if (!Tools.isInArray(tk.sval, ClassConstants.KNOWN_ATTRS)) 
+                            if (!Tools.isInArray(tk.sval, ClassConstants.KNOWN_ATTRS))
                             {
                                 throw new Exception();
                             }
@@ -467,11 +467,11 @@ public class RgsEnum
                         case RgsEntry.TYPE_METHOD:
                         case RgsEntry.TYPE_NOTRIM_METHOD:
                         case RgsEntry.TYPE_NOT_METHOD:
-                            if (name == null) 
+                            if (name == null)
                             {
                                 name = tk.sval;
                                 //checkMethodOrFieldSpec(name);
-                            } 
+                            }
                             else if (descriptor == null)
                             {
                                 descriptor = tk.sval;
@@ -484,12 +484,12 @@ public class RgsEnum
                         case RgsEntry.TYPE_FIELD:
                         case RgsEntry.TYPE_NOTRIM_FIELD:
                         case RgsEntry.TYPE_NOT_FIELD:
-                            if (name == null) 
+                            if (name == null)
                             {
                                 name = tk.sval;
                                 //checkMethodOrFieldSpec(name);
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 descriptor = tk.sval;
                                 //checkJavaType(descriptor);
@@ -500,12 +500,12 @@ public class RgsEnum
                             break;
                         case RgsEntry.TYPE_PACKAGE_MAP:
                         case RgsEntry.TYPE_REPACKAGE_MAP:
-                            if (name == null) 
+                            if (name == null)
                             {
                                 name = tk.sval;
                                 checkClassSpec(name);
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 String obfName = tk.sval;
                                 checkJavaIdentifier(obfName);
@@ -514,12 +514,12 @@ public class RgsEnum
                             }
                             break;
                         case RgsEntry.TYPE_CLASS_MAP:
-                            if (name == null) 
+                            if (name == null)
                             {
                                 name = tk.sval;
                                 checkClassSpec(name);
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 String obfName = tk.sval;
                                 checkJavaInnerIdentifier(obfName);
@@ -528,17 +528,17 @@ public class RgsEnum
                             }
                             break;
                         case RgsEntry.TYPE_METHOD_MAP:
-                            if (name == null) 
+                            if (name == null)
                             {
                                 name = tk.sval;
                                 checkMethodOrFieldSpec(name);
-                            } 
-                            else if (descriptor == null) 
+                            }
+                            else if (descriptor == null)
                             {
                                 descriptor = tk.sval;
                                 checkMethodDescriptor(descriptor);
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 String obfName = tk.sval;
                                 checkJavaIdentifier(obfName);
@@ -547,12 +547,12 @@ public class RgsEnum
                             }
                             break;
                         case RgsEntry.TYPE_FIELD_MAP:
-                            if (name == null) 
+                            if (name == null)
                             {
                                 name = tk.sval;
                                 checkMethodOrFieldSpec(name);
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 String obfName = tk.sval;
                                 checkJavaIdentifier(obfName);
@@ -561,100 +561,100 @@ public class RgsEnum
                             }
                             break;
                         }
-                    } 
+                    }
                     else if (directive == RgsEntry.TYPE_CLASS ||
                              directive == RgsEntry.TYPE_NOTRIM_CLASS ||
-                             directive == RgsEntry.TYPE_NOT_CLASS) 
+                             directive == RgsEntry.TYPE_NOT_CLASS)
                     {
-                        if (tk.sval.equals(OPTION_PUBLIC)) 
+                        if (tk.sval.equals(OPTION_PUBLIC))
                         {
-                            if (entry.retainToPublic || 
-                                entry.retainToProtected || 
-                                entry.retainPubProtOnly) 
+                            if (entry.retainToPublic ||
+                                entry.retainToProtected ||
+                                entry.retainPubProtOnly)
                             {
                                 throw new Exception();
                             }
                             entry.retainToPublic = true;
-                        } 
-                        else if (tk.sval.equals(OPTION_PUB_PROT_ONLY)) 
+                        }
+                        else if (tk.sval.equals(OPTION_PUB_PROT_ONLY))
                         {
-                            if (entry.retainToPublic || 
-                                entry.retainToProtected || 
-                                entry.retainPubProtOnly) 
+                            if (entry.retainToPublic ||
+                                entry.retainToProtected ||
+                                entry.retainPubProtOnly)
                             {
                                 throw new Exception();
                             }
                             entry.retainPubProtOnly = true;
-                        } 
-                        else if (tk.sval.equals(OPTION_PROTECTED)) 
+                        }
+                        else if (tk.sval.equals(OPTION_PROTECTED))
                         {
-                            if (entry.retainToPublic || 
-                                entry.retainToProtected || 
-                                entry.retainPubProtOnly) 
+                            if (entry.retainToPublic ||
+                                entry.retainToProtected ||
+                                entry.retainPubProtOnly)
                             {
                                 throw new Exception();
                             }
                             entry.retainToProtected = true;
-                        } 
-                        else if (tk.sval.equals(OPTION_FIELD)) 
+                        }
+                        else if (tk.sval.equals(OPTION_FIELD))
                         {
-                            if ((!entry.retainToPublic && 
-                                 !entry.retainPubProtOnly && 
-                                 !entry.retainToProtected) || 
-                                entry.retainMethodsOnly) 
+                            if ((!entry.retainToPublic &&
+                                 !entry.retainPubProtOnly &&
+                                 !entry.retainToProtected) ||
+                                entry.retainMethodsOnly)
                             {
                                 throw new Exception();
                             }
                             entry.retainFieldsOnly = true;
-                        } 
-                        else if (tk.sval.equals(OPTION_METHOD)) 
+                        }
+                        else if (tk.sval.equals(OPTION_METHOD))
                         {
-                            if ((!entry.retainToPublic && 
-                                 !entry.retainPubProtOnly && 
-                                 !entry.retainToProtected) || 
-                                entry.retainFieldsOnly) 
+                            if ((!entry.retainToPublic &&
+                                 !entry.retainPubProtOnly &&
+                                 !entry.retainToProtected) ||
+                                entry.retainFieldsOnly)
                             {
                                 throw new Exception();
                             }
                             entry.retainMethodsOnly = true;
-                        } 
-                        else if (tk.sval.equals(OPTION_EXTENDS)) 
+                        }
+                        else if (tk.sval.equals(OPTION_EXTENDS))
                         {
                             hasExtends = true;
-                        } 
-                        else if (hasExtends) 
+                        }
+                        else if (hasExtends)
                         {
                             extendsName = tk.sval;
                             checkClassSpec(extendsName);
                             entry.extendsName = extendsName;
-                        } 
-                        else 
+                        }
+                        else
                         {
                             throw new Exception();
                         }
-                    } 
+                    }
                     else if (directive == RgsEntry.TYPE_METHOD ||
                              directive == RgsEntry.TYPE_NOTRIM_METHOD ||
                              directive == RgsEntry.TYPE_NOT_METHOD ||
                              directive == RgsEntry.TYPE_FIELD ||
                              directive == RgsEntry.TYPE_NOTRIM_FIELD ||
-                             directive == RgsEntry.TYPE_NOT_FIELD) 
+                             directive == RgsEntry.TYPE_NOT_FIELD)
                     {
-                        if (tk.sval.equals(OPTION_AND_CLASS)) 
+                        if (tk.sval.equals(OPTION_AND_CLASS))
                         {
                             entry.retainAndClass = true;
-                        } 
-                        else if (tk.sval.equals(OPTION_EXTENDS)) 
+                        }
+                        else if (tk.sval.equals(OPTION_EXTENDS))
                         {
                             hasExtends = true;
-                        } 
-                        else if (hasExtends) 
+                        }
+                        else if (hasExtends)
                         {
                             extendsName = tk.sval;
                             checkClassSpec(extendsName);
                             entry.extendsName = extendsName;
-                        } 
-                        else 
+                        }
+                        else
                         {
                             throw new Exception();
                         }
@@ -663,35 +663,35 @@ public class RgsEnum
                     {
                         throw new Exception();
                     }
-                } 
-                else if (ttype == StreamTokenizer.TT_EOL) 
+                }
+                else if (ttype == StreamTokenizer.TT_EOL)
                 {
-                    if (entry != null) 
+                    if (entry != null)
                     {
                         break;
                     }
-                } 
-                else 
+                }
+                else
                 {
                     throw new Exception();
                 }
             }
             next = entry;
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             // Discard to end of erroneous line
-            try 
+            try
             {
-                while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF) 
+                while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF)
                 {
-                    if (ttype == StreamTokenizer.TT_EOL) 
+                    if (ttype == StreamTokenizer.TT_EOL)
                     {
                         break;
                     }
                 }
-            } 
-            catch (IOException ee) 
+            }
+            catch (IOException ee)
             {
                 // Take no action if StreamTokenizer fails here
             }

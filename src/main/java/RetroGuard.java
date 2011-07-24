@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -26,7 +26,7 @@ import COM.rl.obf.classfile.ClassFile;
 
 /**
  * Main class for obfuscator package. Calls through to packaged implementation
- * class. 
+ * class.
  *
  * @author      Mark Welsh
  */
@@ -64,15 +64,15 @@ public class RetroGuard
                 showUsage();
                 System.exit(-1);
             }
-            
-        	// hook into the command line parameters
-        	args = NameProvider.parseCommandLine(args);
-        	if(args == null)
-        	{
-        	    showUsage();
+
+            // hook into the command line parameters
+            args = NameProvider.parseCommandLine(args);
+            if(args == null)
+            {
+                showUsage();
                 System.exit(-1);
-        	}
-        	
+            }
+
             // Get the arguments, or set their default values
             if (args.length < 0 || args.length > 4)
             {
@@ -84,7 +84,7 @@ public class RetroGuard
             String logFilename = (args.length < 4 ? null : args[3]);
 
             // Call the main entry point on the obfuscator.
-            RetroGuardImpl.obfuscate(inFilename, outFilename, 
+            RetroGuardImpl.obfuscate(inFilename, outFilename,
                                      rgsFilename, logFilename);
             System.exit(0);
         }

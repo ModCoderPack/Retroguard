@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -47,25 +47,25 @@ public class KeywordNameMaker extends NameMaker
     private String[] nextLetter;
     private String[] noKeywords = {};
     private String[] someKeywords = {
-        "a", "if", "do", "for", "int", "new", "try", "byte", "case", "char", 
-        "else", "goto", "long", 
+        "a", "if", "do", "for", "int", "new", "try", "byte", "case", "char",
+        "else", "goto", "long",
         // "null", -- removed due to reported bug in JDK1.4 VM
         "void"
     };
     private String[] excSomeKeywords = {
-        "a", "if", "do", "for", "int", "new", "try", "byte", "case", "char", 
-        "else", "goto", "long", 
+        "a", "if", "do", "for", "int", "new", "try", "byte", "case", "char",
+        "else", "goto", "long",
         "null", // -- removed due to reported bug in JDK1.4 VM
         "void"
     };
     private String[] allKeywords = {
-        "if", "do", "for", "int", "new", "try", "byte", "case", "char", 
-        "else", "goto", "long", "null", "this", "void", "true", "false", 
-        "break", "catch", "class", "const", "float", "final", "short", 
-        "super", "throw", "while", "double", "import", "native", "public", 
-        "return", "static", "switch", "throws", "boolean", "default", 
-        "extends", "finally", "package", "private", "abstract", "continue", 
-        "volatile", "interface", "protected", "transient", "implements", 
+        "if", "do", "for", "int", "new", "try", "byte", "case", "char",
+        "else", "goto", "long", "null", "this", "void", "true", "false",
+        "break", "catch", "class", "const", "float", "final", "short",
+        "super", "throw", "while", "double", "import", "native", "public",
+        "return", "static", "switch", "throws", "boolean", "default",
+        "extends", "finally", "package", "private", "abstract", "continue",
+        "volatile", "interface", "protected", "transient", "implements",
         "instanceof", "synchronized"
     };
     private String[] firstLetterLower = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
@@ -132,7 +132,7 @@ public class KeywordNameMaker extends NameMaker
     public KeywordNameMaker(String[] noObfNames, boolean useKeywords, boolean lowerCaseOnly)
     {
         this.noObfNames = noObfNames == null ? new String[0] : noObfNames;
-        if (useKeywords) 
+        if (useKeywords)
         {
             keywordsToUse = someKeywords;
             keywordsToExclude = excSomeKeywords;
@@ -142,12 +142,12 @@ public class KeywordNameMaker extends NameMaker
             keywordsToUse = noKeywords;
             keywordsToExclude = allKeywords;
         }
-        if (lowerCaseOnly) 
+        if (lowerCaseOnly)
         {
             firstLetter = firstLetterLower;
             nextLetter = nextLetterLower;
-        } 
-        else 
+        }
+        else
         {
             firstLetter = firstLetterAll;
             nextLetter = nextLetterAll;
@@ -157,10 +157,10 @@ public class KeywordNameMaker extends NameMaker
     /** Return the next unique name for this namespace. */
     protected String getNextName(String oldName, String descriptor) throws Exception
     {
-    	System.out.println("other: " + oldName + "|" + descriptor);
+        System.out.println("other: " + oldName + "|" + descriptor);
         // Check for arg-list in hashtable
         String argList = DUMMY_ARG_LIST;
-        if (descriptor != null) 
+        if (descriptor != null)
         {
             argList = getArgList(descriptor);
         }
@@ -202,7 +202,7 @@ public class KeywordNameMaker extends NameMaker
             {
                 name = getNewName(index + skipped);
                 if (!Tools.isInArray(name, noObfNames) &&
-                    (index + skipped < keywordsToUse.length || 
+                    (index + skipped < keywordsToUse.length ||
                      !Tools.isInArray(name, keywordsToExclude)))
                 {
                     break;

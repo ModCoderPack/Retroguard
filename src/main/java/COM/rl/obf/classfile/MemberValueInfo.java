@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -63,7 +63,7 @@ public class MemberValueInfo
     {
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F': 
+        case 'B': case 'C': case 'D': case 'F':
         case 'I': case 'J': case 'S': case 'Z':
             break;
         case 's':
@@ -80,7 +80,7 @@ public class MemberValueInfo
             annotationValue.markUtf8Refs(pool);
             break;
         case '[':
-            for (int i = 0; i < u2numValues; i++) 
+            for (int i = 0; i < u2numValues; i++)
             {
                 values[i].markUtf8Refs(pool);
             }
@@ -95,7 +95,7 @@ public class MemberValueInfo
         u1tag = din.readUnsignedByte();
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F': 
+        case 'B': case 'C': case 'D': case 'F':
         case 'I': case 'J': case 'S': case 'Z':
         case 's':
             u2constValueIndex = din.readUnsignedShort();
@@ -129,7 +129,7 @@ public class MemberValueInfo
         dout.writeByte(u1tag);
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F': 
+        case 'B': case 'C': case 'D': case 'F':
         case 'I': case 'J': case 'S': case 'Z':
         case 's':
             dout.writeShort(u2constValueIndex);
@@ -146,7 +146,7 @@ public class MemberValueInfo
             break;
         case '[':
             dout.writeShort(u2numValues);
-            for (int i = 0; i < u2numValues; i++) 
+            for (int i = 0; i < u2numValues; i++)
             {
                 values[i].write(dout);
             }
@@ -157,11 +157,11 @@ public class MemberValueInfo
     }
 
     /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception 
-    { 
+    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    {
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F': 
+        case 'B': case 'C': case 'D': case 'F':
         case 'I': case 'J': case 'S': case 'Z':
         case 's':
             break;
@@ -176,7 +176,7 @@ public class MemberValueInfo
             annotationValue.remap(cf, nm);
             break;
         case '[':
-            for (int i = 0; i < u2numValues; i++) 
+            for (int i = 0; i < u2numValues; i++)
             {
                 values[i].remap(cf, nm);
             }

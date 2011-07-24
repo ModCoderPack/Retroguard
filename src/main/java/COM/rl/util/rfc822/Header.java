@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -44,12 +44,12 @@ public class Header
     public static Header parse(String line)
     {
         Header header = null;
-        if (line != null) 
+        if (line != null)
         {
             int pos = line.indexOf(':');
             if (pos != -1)
             {
-                header = new Header(line.substring(0, pos).trim(), 
+                header = new Header(line.substring(0, pos).trim(),
                                     line.substring(pos + 1).trim());
             }
         }
@@ -76,7 +76,7 @@ public class Header
         if (o instanceof Header)
         {
             Header header = (Header)o;
-            if (header.getTag().equals(getTag()) 
+            if (header.getTag().equals(getTag())
                 && header.getValue().equals(getValue()))
             {
                 return true;
@@ -90,7 +90,7 @@ public class Header
     {
         String prefix = getTag() + ": ";
         String value = getValue();
-        for (int index = 0; index < value.length(); 
+        for (int index = 0; index < value.length();
              prefix = " ") // continuation lines are prefixed with single space
         {
             int start = index;

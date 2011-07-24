@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -28,7 +28,7 @@ import COM.rl.obf.*;
  *
  * @author Mark Welsh
  */
-public class ClassDB 
+public class ClassDB
 {
     // Constants -------------------------------------------------------------
 
@@ -42,18 +42,18 @@ public class ClassDB
 
     // Instance Methods ------------------------------------------------------
     /** Ctor. */
-    public ClassDB(File rgsFile) throws Exception 
+    public ClassDB(File rgsFile) throws Exception
     {
-        try 
+        try
         {
-            if (rgsFile != null && rgsFile.exists()) 
+            if (rgsFile != null && rgsFile.exists())
             {
                 InputStream rgsInputStream = new FileInputStream(rgsFile);
                 createHierarchy(new RgsEnum(rgsInputStream));
                 rgsInputStream.close();
             }
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             // Reset the database
             root = null;
@@ -62,38 +62,38 @@ public class ClassDB
     }
 
     /** Convert entries in file to obfuscated versions. */
-    public Vector toObf(File listFile) throws Exception 
+    public Vector toObf(File listFile) throws Exception
     {
         Vector outNames = new Vector();
-        
+
         // Run through the listed names
-        for (Enumeration enm = getInNames(listFile); 
-             enm.hasMoreElements(); ) 
+        for (Enumeration enm = getInNames(listFile);
+             enm.hasMoreElements(); )
         {
             // Convert the obfuscated portions
             String inName = (String)enm.nextElement();
             String outName = null;
-            
+
             // Ignore inner class listings
-            if (inName.indexOf('$') == -1) 
+            if (inName.indexOf('$') == -1)
             {
                 // Split at first '.'
                 int pos = inName.indexOf('.');
                 String pre = (pos == -1 ? inName : inName.substring(0, pos));
                 String post = (pos == -1 ? null : inName.substring(pos + 1));
-                if (post != null && post.equals("class")) 
+                if (post != null && post.equals("class"))
                 {
                     // Convert class name
                     outName = getOutName(pre) + ".class";
-                } 
-                else 
+                }
+                else
                 {
                     // Convert resource name
                     outName = getOutName(inName);
                 }
-                
+
                 // Store the converted name
-                if (outName != null) 
+                if (outName != null)
                 {
                     outNames.addElement(outName);
                 }
@@ -103,23 +103,23 @@ public class ClassDB
     }
 
     // Map a name
-    private String getOutName(String inName) 
+    private String getOutName(String inName)
     {
-        try 
+        try
         {
             TreeItem ti = root;
             StringBuffer sb = new StringBuffer();
-            for (Enumeration nameEnum = ClassTree.getNameEnum(inName); 
-                 nameEnum.hasMoreElements(); ) 
+            for (Enumeration nameEnum = ClassTree.getNameEnum(inName);
+                 nameEnum.hasMoreElements(); )
             {
                 SimpleName simpleName = (SimpleName)nameEnum.nextElement();
                 String name = simpleName.getName();
-                if (simpleName.isAsPackage()) 
+                if (simpleName.isAsPackage())
                 {
-                    if (ti != null) 
+                    if (ti != null)
                     {
                         ti = ((Pk)ti).getPackage(name);
-                        if (ti != null) 
+                        if (ti != null)
                         {
                             String repackageName = ((Pk)ti).getRepackageName();
                             if (repackageName != null) {
@@ -127,33 +127,33 @@ public class ClassDB
                             } else {
                                 sb.append(ti.getOutName());
                             }
-                        } 
-                        else 
-                        {
-                            sb.append(name); 
                         }
-                    } 
-                    else 
+                        else
+                        {
+                            sb.append(name);
+                        }
+                    }
+                    else
                     {
                         sb.append(name);
                     }
                     sb.append(ClassTree.PACKAGE_LEVEL);
                 }
-                else if (simpleName.isAsClass()) 
+                else if (simpleName.isAsClass())
                 {
-                    if (ti != null) 
+                    if (ti != null)
                     {
                         ti = ((Pk)ti).getClass(name);
                         if (ti != null)
                         {
                             sb.append(ti.getOutName());
                         }
-                        else 
+                        else
                         {
-                            sb.append(name); 
+                            sb.append(name);
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
                         sb.append(name);
                     }
@@ -164,8 +164,8 @@ public class ClassDB
                     throw new Exception("Internal error: illegal package/class name tag");
                 }
             }
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             // Just drop through and return the original name
         }
@@ -173,35 +173,35 @@ public class ClassDB
     }
 
     /** Convert entries in file to obfuscated versions. */
-    public Vector toObfForConv(File listFile) throws Exception 
+    public Vector toObfForConv(File listFile) throws Exception
     {
         Vector outNames = new Vector();
-        
+
         // Run through the listed names
-        for (Enumeration enm = getInNames(listFile); 
-             enm.hasMoreElements(); ) 
+        for (Enumeration enm = getInNames(listFile);
+             enm.hasMoreElements(); )
         {
             // Convert the obfuscated portions
             String inName = (String)enm.nextElement();
             String outName = null;
-            
+
             // Split at first '.'
             int pos = inName.indexOf('.');
             String pre = (pos == -1 ? inName : inName.substring(0, pos));
             String post = (pos == -1 ? null : inName.substring(pos + 1));
-            if (post != null && post.equals("class")) 
+            if (post != null && post.equals("class"))
             {
                 // Convert class name
                 outName = getOutNameForConv(pre) + ".class";
-            } 
-            else 
+            }
+            else
             {
                 // Convert resource name
                 outName = getOutNameForConv(inName);
             }
-            
+
             // Store the converted name
-            if (outName != null) 
+            if (outName != null)
             {
                 outNames.addElement(outName);
             }
@@ -210,23 +210,23 @@ public class ClassDB
     }
 
     // Map a name
-    private String getOutNameForConv(String inName) 
+    private String getOutNameForConv(String inName)
     {
-        try 
+        try
         {
             TreeItem ti = root;
             StringBuffer sb = new StringBuffer();
-            for (Enumeration nameEnum = ClassTree.getNameEnum(inName); 
-                 nameEnum.hasMoreElements(); ) 
+            for (Enumeration nameEnum = ClassTree.getNameEnum(inName);
+                 nameEnum.hasMoreElements(); )
             {
                 SimpleName simpleName = (SimpleName)nameEnum.nextElement();
                 String name = simpleName.getName();
-                if (simpleName.isAsPackage()) 
+                if (simpleName.isAsPackage())
                 {
-                    if (ti != null) 
+                    if (ti != null)
                     {
                         ti = ((Pk)ti).getPackage(name);
-                        if (ti != null) 
+                        if (ti != null)
                         {
                             String repackageName = ((Pk)ti).getRepackageName();
                             if (repackageName != null) {
@@ -234,41 +234,41 @@ public class ClassDB
                             } else {
                                 sb.append(ti.getOutName());
                             }
-                        } 
-                        else 
-                        {
-                            sb.append(name); 
                         }
-                    } 
-                    else 
+                        else
+                        {
+                            sb.append(name);
+                        }
+                    }
+                    else
                     {
                         sb.append(name);
                     }
                     sb.append(ClassTree.PACKAGE_LEVEL);
                 }
-                else if (simpleName.isAsClass()) 
+                else if (simpleName.isAsClass())
                 {
-                    if (ti != null) 
+                    if (ti != null)
                     {
                         ti = ((PkCl)ti).getClass(name);
-                        if (ti != null) 
+                        if (ti != null)
                         {
                             sb.append(ti.getOutName());
                         }
-                        else 
+                        else
                         {
-                            sb.append(name); 
+                            sb.append(name);
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
                         sb.append(name);
                     }
-                    if (nameEnum.hasMoreElements()) 
+                    if (nameEnum.hasMoreElements())
                     {
                         sb.append(ClassTree.CLASS_LEVEL);
-                    } 
-                    else 
+                    }
+                    else
                     {
                         return sb.toString();
                     }
@@ -278,8 +278,8 @@ public class ClassDB
                     throw new Exception("Internal error: illegal package/class name tag");
                 }
             }
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             // Just drop through and return the original name
         }
@@ -287,10 +287,10 @@ public class ClassDB
     }
 
     // Parse the file names from the list
-    private Enumeration getInNames(File listFile) throws Exception 
+    private Enumeration getInNames(File listFile) throws Exception
     {
-        InputStream is = listFile == null ? 
-            System.in : 
+        InputStream is = listFile == null ?
+            System.in :
             new FileInputStream(listFile);
         StreamTokenizer tk = new StreamTokenizer(
             new BufferedReader(
@@ -310,65 +310,65 @@ public class ClassDB
         tk.commentChar('#');
         tk.eolIsSignificant(false);
         Vector inNames = new Vector();
-        try 
+        try
         {
             int ttype;
-            while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF) 
+            while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF)
             {
-                if (ttype == StreamTokenizer.TT_WORD) 
+                if (ttype == StreamTokenizer.TT_WORD)
                 {
                     inNames.addElement(tk.sval);
                 }
             }
-        } 
-        finally 
+        }
+        finally
         {
             return inNames.elements();
         }
     }
 
     // Create database from RGS log entries.
-    private void createHierarchy(RgsEnum rgsEnum) throws Exception 
+    private void createHierarchy(RgsEnum rgsEnum) throws Exception
     {
         // Create the root of the package hierarchy
         root = new Pk(null, "");
 
         // Enumerate the entries in the RGS script
-        while (rgsEnum.hasMoreEntries()) 
+        while (rgsEnum.hasMoreEntries())
         {
             RgsEntry entry = rgsEnum.nextEntry();
-            switch (entry.type) 
+            switch (entry.type)
             {
             case RgsEntry.TYPE_PACKAGE_MAP:
                 addPackage(entry.name, entry.obfName);
                 break;
-                
+
             case RgsEntry.TYPE_REPACKAGE_MAP:
                 addPackage(entry.name, null, entry.obfName);
                 break;
-                
+
             case RgsEntry.TYPE_CLASS:
                 addClass(entry.name, getLastIdentifier(entry.name));
                 break;
-                
+
             case RgsEntry.TYPE_CLASS_MAP:
                 addClass(entry.name, entry.obfName);
                 break;
-                
+
             case RgsEntry.TYPE_METHOD:
                 addMethod(entry.name, entry.descriptor, getLastIdentifier(entry.name));
                 break;
-                
+
             case RgsEntry.TYPE_METHOD_MAP:
                 addMethod(entry.name, entry.descriptor, entry.obfName);
                 break;
-                
+
             case RgsEntry.TYPE_ATTR:
             case RgsEntry.TYPE_FIELD:
             case RgsEntry.TYPE_FIELD_MAP:
                 // Ignore attribute and field entries
                 break;
-                
+
             default:
                 throw new Exception("Illegal type received from the .rgs script");
             }
@@ -376,17 +376,17 @@ public class ClassDB
     }
 
     // Add a package to the hierarchy
-    private void addPackage(String fullName, String obfName) throws Exception 
+    private void addPackage(String fullName, String obfName) throws Exception
     {
         addPackage(fullName, obfName, null);
     }
 
     // Add a package to the hierarchy
-    private void addPackage(String fullName, String obfName, String repackageName) throws Exception 
+    private void addPackage(String fullName, String obfName, String repackageName) throws Exception
     {
         TreeItem ti = root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); 
-             nameEnum.hasMoreElements(); ) 
+        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName);
+             nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -394,7 +394,7 @@ public class ClassDB
         }
 
         // Set the obfuscated name for the package
-        if (repackageName != null) 
+        if (repackageName != null)
         {
             ((Pk)ti).setRepackageName(repackageName);
             ti.setOutName(ti.getInName());
@@ -406,68 +406,68 @@ public class ClassDB
     }
 
     // Add a class to the hierarchy
-    private Cl addClass(String fullName, String obfName) throws Exception 
+    private Cl addClass(String fullName, String obfName) throws Exception
     {
         TreeItem ti = root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); 
-             nameEnum.hasMoreElements(); ) 
+        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName);
+             nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
-            if (simpleName.isAsPackage()) 
+            if (simpleName.isAsPackage())
             {
                 ti = ((Pk)ti).addPackage(name);
             }
-            else if (simpleName.isAsClass()) 
+            else if (simpleName.isAsClass())
             {
                 // If inner class, just add placeholder classes up the tree
-                if (nameEnum.hasMoreElements()) 
+                if (nameEnum.hasMoreElements())
                 {
                     ti = ((PkCl)ti).addPlaceholderClass(name);
-                } 
-                else 
+                }
+                else
                 {
                     ti = ((PkCl)ti).addClass(name, null, null, 0);
                 }
             }
-            else 
+            else
             {
                 throw new Exception("Internal error: illegal package/class name tag");
             }
         }
 
-        // Set the obfuscated name for the class (anonymous inner classes 
+        // Set the obfuscated name for the class (anonymous inner classes
         // are already set, so leave them be)
-        if (obfName != null && !Character.isDigit(obfName.charAt(0))) 
+        if (obfName != null && !Character.isDigit(obfName.charAt(0)))
         {
             ti.setOutName(obfName);
         }
-	return (Cl)ti;
+        return (Cl)ti;
     }
 
     // Add a method to the hierarchy
-    private void addMethod(String fullName, String descriptor, String obfName) throws Exception 
+    private void addMethod(String fullName, String descriptor, String obfName) throws Exception
     {
-	// Split at last '/' - method name
-	int pos = fullName.lastIndexOf('/');
-	String className = fullName.substring(0, pos);
-	String methodName = fullName.substring(pos + 1);
-	
-	// Add the packaged class and the method elements
-	Cl cl = addClass(className, null);
-	Md md = cl.addMethod(false, methodName, descriptor, 0);
-	md.setOutName(obfName);
+        // Split at last '/' - method name
+        int pos = fullName.lastIndexOf('/');
+        String className = fullName.substring(0, pos);
+        String methodName = fullName.substring(pos + 1);
+
+        // Add the packaged class and the method elements
+        Cl cl = addClass(className, null);
+        Md md = cl.addMethod(false, methodName, descriptor, 0);
+        md.setOutName(obfName);
     }
 
     // Return the last Java identifier from the passed String
-    private String getLastIdentifier(String name) 
+    private String getLastIdentifier(String name)
     {
         String result = null;
-        if (name != null) 
+        if (name != null)
         {
             int outer = name.lastIndexOf('/');
             int inner = name.lastIndexOf('$');
-            if (outer != -1 || inner != -1) 
+            if (outer != -1 || inner != -1)
             {
                 int pos = Math.max(inner, outer);
                 result = name.substring(pos + 1);
@@ -479,8 +479,8 @@ public class ClassDB
     /** Convert obfuscated stacktrace to ambiguous, original version. */
     public void fromObfForTrace(File traceFile, PrintStream out) throws Exception
     {
-        InputStream is = traceFile == null ? 
-            System.in : 
+        InputStream is = traceFile == null ?
+            System.in :
             new FileInputStream(traceFile);
         StreamTokenizer tk = new StreamTokenizer(
             new BufferedReader(
@@ -496,72 +496,72 @@ public class ClassDB
         tk.wordChars('A', 'Z');
         tk.wordChars('a', 'z');
         tk.eolIsSignificant(false);
-	int ttype;
-	while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF) 
-	{
-	    if (ttype == StreamTokenizer.TT_WORD) 
-	    {
-		String deobf = deobfTraceLine(tk.sval);
-		if (tk.sval.equals("at")) {
-		    out.println();
-		    out.print("\tat ");
-		} else if (deobf != null) {
-		    out.print(deobf + " ");
-		} else {
-		    out.print(tk.sval + " ");
-		}
-	    }
-	}
-	out.println();
+        int ttype;
+        while ((ttype = tk.nextToken()) != StreamTokenizer.TT_EOF)
+        {
+            if (ttype == StreamTokenizer.TT_WORD)
+            {
+                String deobf = deobfTraceLine(tk.sval);
+                if (tk.sval.equals("at")) {
+                    out.println();
+                    out.print("\tat ");
+                } else if (deobf != null) {
+                    out.print(deobf + " ");
+                } else {
+                    out.print(tk.sval + " ");
+                }
+            }
+        }
+        out.println();
     }
 
     // Deobfuscate a string containing an obfuscated method
     private String deobfTraceLine(String line)
-	{
-	// Split at first '(' if any
-	int pos = line.indexOf('(');
-	String obfFullMethod = (pos == -1) ? line : line.substring(0, pos);
-	String rest = (pos == -1) ? "" : line.substring(pos);
-	String deobfMethod = getDeobfMethod(obfFullMethod.replace('.', '/'));
-	if (deobfMethod == null)
-	{
-	    return null;
-	}
-	else 
-	{
-	    return deobfMethod.replace('/', '.') + rest;
-	}
+    {
+        // Split at first '(' if any
+        int pos = line.indexOf('(');
+        String obfFullMethod = (pos == -1) ? line : line.substring(0, pos);
+        String rest = (pos == -1) ? "" : line.substring(pos);
+        String deobfMethod = getDeobfMethod(obfFullMethod.replace('.', '/'));
+        if (deobfMethod == null)
+        {
+            return null;
+        }
+        else
+        {
+            return deobfMethod.replace('/', '.') + rest;
+        }
     }
 
     private String getDeobfMethod(String obfFullMethod)
     {
-	int pos = obfFullMethod.lastIndexOf('/');
-	if (pos == -1) return null;
-	String className = obfFullMethod.substring(0, pos);
-	String methodName = obfFullMethod.substring(pos + 1);
+        int pos = obfFullMethod.lastIndexOf('/');
+        if (pos == -1) return null;
+        String className = obfFullMethod.substring(0, pos);
+        String methodName = obfFullMethod.substring(pos + 1);
 
-	TreeItem ti = root;
-	StringBuffer sb = new StringBuffer();
-        try 
+        TreeItem ti = root;
+        StringBuffer sb = new StringBuffer();
+        try
         {
-            for (Enumeration nameEnum = ClassTree.getNameEnum(className); 
-                 nameEnum.hasMoreElements(); ) 
+            for (Enumeration nameEnum = ClassTree.getNameEnum(className);
+                 nameEnum.hasMoreElements(); )
             {
                 SimpleName simpleName = (SimpleName)nameEnum.nextElement();
                 String name = simpleName.getName();
-                if (simpleName.isAsPackage()) 
+                if (simpleName.isAsPackage())
                 {
-                    if (ti != null) 
+                    if (ti != null)
                     {
                         // Check regular obfuscated package names on this level
                         ti = ((Pk)ti).getObfPackage(name);
-                        // Not found, so check for obfuscated name among 
+                        // Not found, so check for obfuscated name among
                         // repackaged names through the package hierarchy
                         if (ti == null)
                         {
                             ti = root.getObfRepackage(name);
                         }
-                        if (ti != null) 
+                        if (ti != null)
                         {
                             String repackageName = ((Pk)ti).getRepackageName();
                             if (repackageName != null) {
@@ -569,69 +569,69 @@ public class ClassDB
                             } else {
                                 sb.append(ti.getInName());
                             }
-                        } 
-                        else 
-                        {
-                            sb.append(name); 
                         }
-                    } 
-                    else 
+                        else
+                        {
+                            sb.append(name);
+                        }
+                    }
+                    else
                     {
                         sb.append(name);
                     }
                     sb.append(ClassTree.PACKAGE_LEVEL);
                 }
-                else if (simpleName.isAsClass()) 
+                else if (simpleName.isAsClass())
                 {
-                    if (ti != null) 
+                    if (ti != null)
                     {
                         ti = ((PkCl)ti).getObfClass(name);
-                        if (ti != null) 
+                        if (ti != null)
                         {
                             sb.append(ti.getInName());
                         }
-                        else 
+                        else
                         {
-                            sb.append(name); 
+                            sb.append(name);
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
                         sb.append(name);
                     }
-                    if (nameEnum.hasMoreElements()) 
+                    if (nameEnum.hasMoreElements())
                     {
                         sb.append(ClassTree.CLASS_LEVEL);
-                    } 
-                    else 
+                    }
+                    else
                     {
-			// Deobf. method name (multi-valued due to overloading)
-			sb.append('/');
-			if (ti != null) 
-			{
-			    for (Enumeration mdEnum = 
-				     ((Cl)ti).getObfMethods(methodName);
-				 mdEnum.hasMoreElements(); )
-			    {
-				sb.append('{');
-				sb.append(((Md)mdEnum.nextElement()).getInName());
-				sb.append('}');
-			    }
-			}
-			else 
-			{
-			    sb.append(methodName);
-			}
-			return sb.toString();
+                        // Deobf. method name (multi-valued due to overloading)
+                        sb.append('/');
+                        if (ti != null)
+                        {
+                            for (Enumeration mdEnum =
+                                     ((Cl)ti).getObfMethods(methodName);
+                                 mdEnum.hasMoreElements(); )
+                            {
+                                sb.append('{');
+                                sb.append(((Md)mdEnum.nextElement()).getInName());
+                                sb.append('}');
+                            }
+                        }
+                        else
+                        {
+                            sb.append(methodName);
+                        }
+                        return sb.toString();
                     }
                 }
-                else 
+                else
                 {
                     throw new Exception("Internal error: illegal package/class name tag");
                 }
             }
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             // Just drop through and return the original name
         }

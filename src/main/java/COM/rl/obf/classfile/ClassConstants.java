@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -39,18 +39,18 @@ public interface ClassConstants
     public static final int ACC_PROTECTED   = 0x0004; //       X      X
     public static final int ACC_STATIC      = 0x0008; //       X      X
     public static final int ACC_FINAL       = 0x0010; // X     X      X
-    public static final int ACC_SUPER       = 0x0020; // X             
-    public static final int ACC_SYNCHRONIZED= 0x0020; //       X       
-    public static final int ACC_BRIDGE      = 0x0040; //       X       
+    public static final int ACC_SUPER       = 0x0020; // X
+    public static final int ACC_SYNCHRONIZED= 0x0020; //       X
+    public static final int ACC_BRIDGE      = 0x0040; //       X
     public static final int ACC_VOLATILE    = 0x0040; //              X
-    public static final int ACC_VARARGS     = 0x0080; //       X       
+    public static final int ACC_VARARGS     = 0x0080; //       X
     public static final int ACC_TRANSIENT   = 0x0080; //              X
-    public static final int ACC_NATIVE      = 0x0100; //       X       
-    public static final int ACC_INTERFACE   = 0x0200; // X             
-    public static final int ACC_ABSTRACT    = 0x0400; // X     X       
-    public static final int ACC_STRICT      = 0x0800; //       X       
-    public static final int ACC_SYNTHETIC   = 0x1000; //       X       
-    public static final int ACC_ANNOTATION  = 0x2000; // X             
+    public static final int ACC_NATIVE      = 0x0100; //       X
+    public static final int ACC_INTERFACE   = 0x0200; // X
+    public static final int ACC_ABSTRACT    = 0x0400; // X     X
+    public static final int ACC_STRICT      = 0x0800; //       X
+    public static final int ACC_SYNTHETIC   = 0x1000; //       X
+    public static final int ACC_ANNOTATION  = 0x2000; // X
     public static final int ACC_ENUM        = 0x4000; // X            X
 
     public static final int CONSTANT_Utf8               = 1;
@@ -86,7 +86,7 @@ public interface ClassConstants
     public static final String ATTR_StackMapTable       = "StackMapTable";
 
     // List of known attributes
-    public static final String[] KNOWN_ATTRS = 
+    public static final String[] KNOWN_ATTRS =
     {
         ATTR_Code,
         ATTR_ConstantValue,
@@ -109,7 +109,7 @@ public interface ClassConstants
     };
 
     // List of required attributes
-    public static final String[] REQUIRED_ATTRS = 
+    public static final String[] REQUIRED_ATTRS =
     {
         ATTR_Code,
         ATTR_ConstantValue,
@@ -146,9 +146,9 @@ public interface ClassConstants
                                                   OPTION_MapClassString,
                                                   OPTION_DigestSHA,
                                                   OPTION_DigestMD5,
-						  OPTION_LineNumberDebug,
-						  OPTION_Trim,
-						  OPTION_Repackage,
-						  OPTION_Generic,
+                                                  OPTION_LineNumberDebug,
+                                                  OPTION_Trim,
+                                                  OPTION_Repackage,
+                                                  OPTION_Generic,
     };
 }

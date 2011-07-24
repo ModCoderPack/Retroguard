@@ -19,17 +19,17 @@ import COM.rl.obf.TreeItem;
 
 public class NameProvider
 {
-	public static final int CLASSIC_MODE = 0;
-	public static final int CHANGE_NOTHING_MODE = 1;
+    public static final int CLASSIC_MODE = 0;
+    public static final int CHANGE_NOTHING_MODE = 1;
     public static final int DEOBFUSCATION_MODE = 2;
     public static final int REOBFUSCATION_MODE = 3;
 
     public static final String DEFAULT_CFG_FILE_NAME = "retroguard.cfg";
-	
-	public static int uniqueStart = 100000;
-	
-	public static int currentMode = CLASSIC_MODE;
-	
+
+    public static int uniqueStart = 100000;
+
+    public static int currentMode = CLASSIC_MODE;
+
     private static File packagesFile = null;
     private static File classesFile = null;
     private static File methodsFile = null;
@@ -37,7 +37,7 @@ public class NameProvider
     private static File reobFile = null;
     private static File npLog = null;
     private static File roLog = null;
-    
+
     private static List<String> protectedPackages = new ArrayList<String>();
     private static HashMap<String, String> classNameLookup = new HashMap<String, String>();
     private static HashMap<String, String> packageNameLookup = new HashMap<String, String>();
@@ -55,75 +55,75 @@ public class NameProvider
     private static HashMap<String, MethodEntry> methodsDeobf2Obf = new HashMap<String, MethodEntry>();
     private static HashMap<String, FieldEntry> fieldsObf2Deobf = new HashMap<String, FieldEntry>();
     private static HashMap<String, FieldEntry> fieldsDeobf2Obf = new HashMap<String, FieldEntry>();
-    
-	////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
-	public static String[] parseCommandLine( String[] args )
-	{
-		System.out.println( "Parsing " + args.length + " parameters" );
-		
-		if( (args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
-			return parseNameSheetModeArgs( args );
-		
-		if( args.length < 5 )
-			return args;
-		
-		int idx;
-		try
-		{
-			idx = Integer.parseInt(args[4]);
-		}
-		catch( NumberFormatException up )
-		{
-			System.out.println("Invalid start index: " + args[4]);
-			throw up;
-		}
-		
-		System.out.println( "New start index is " + idx );
-		
-		uniqueStart = idx;
-		
-		String[] newArgs = new String[4];
-		
-		for( int i = 0; i < 4; ++i )
-			newArgs[i] = args[i];
-		
-		return newArgs;
-	}
 
-	////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	private static String[] parseNameSheetModeArgs(String[] args)
-	{
-	    if(args.length < 2)
-	        return null;
-	    
-	    String configFileName = args[1];
-	    File configFile = new File(configFileName);
-	    if(!configFile.exists() || !configFile.isFile())
-	    {
-	        System.err.println("ERROR: could not find config file " + configFileName);
-	        return null;
-	    }
-	    
-	    String reobinput = null;
-	    String reoboutput = null;
+    public static String[] parseCommandLine( String[] args )
+    {
+        System.out.println( "Parsing " + args.length + " parameters" );
+
+        if( (args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
+            return parseNameSheetModeArgs( args );
+
+        if( args.length < 5 )
+            return args;
+
+        int idx;
+        try
+        {
+            idx = Integer.parseInt(args[4]);
+        }
+        catch( NumberFormatException up )
+        {
+            System.out.println("Invalid start index: " + args[4]);
+            throw up;
+        }
+
+        System.out.println( "New start index is " + idx );
+
+        uniqueStart = idx;
+
+        String[] newArgs = new String[4];
+
+        for( int i = 0; i < 4; ++i )
+            newArgs[i] = args[i];
+
+        return newArgs;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////
+    private static String[] parseNameSheetModeArgs(String[] args)
+    {
+        if(args.length < 2)
+            return null;
+
+        String configFileName = args[1];
+        File configFile = new File(configFileName);
+        if(!configFile.exists() || !configFile.isFile())
+        {
+            System.err.println("ERROR: could not find config file " + configFileName);
+            return null;
+        }
+
+        String reobinput = null;
+        String reoboutput = null;
         FileReader fileReader = null;
         BufferedReader reader = null;
-	    String[] newArgs = new String[4];
-	    try
+        String[] newArgs = new String[4];
+        try
         {
-	        fileReader = new FileReader( configFile );
-	        reader = new BufferedReader( fileReader );
+            fileReader = new FileReader( configFile );
+            reader = new BufferedReader( fileReader );
             String line = "";
             while(line != null)
             {
                 line = reader.readLine();
                 if(line == null || line.trim().startsWith( "#" ))
                     continue;
-                
+
                 String[] defines = line.split( "=" );
                 if(defines.length > 1)
                 {
@@ -158,7 +158,7 @@ public class NameProvider
                     {
                         reobFile = new File(defines[1]);
                         if(!reobFile.exists() || !reobFile.isFile())
-                        	reobFile = null;
+                            reobFile = null;
                     }
                     else if(defines[0].equalsIgnoreCase("input"))
                     {
@@ -194,7 +194,7 @@ public class NameProvider
                     {
                         roLog = new File(defines[1]);
                         if(roLog.exists() && !roLog.isFile())
-                        	roLog = null;
+                            roLog = null;
                     }
                     else if(defines[0].equalsIgnoreCase("startindex"))
                     {
@@ -233,7 +233,7 @@ public class NameProvider
                 e.printStackTrace();
             }
         }
-	    
+
         if(args[0].equalsIgnoreCase( "-searge" ))
             currentMode = DEOBFUSCATION_MODE;
         else if(args[0].equalsIgnoreCase( "-notch" ))
@@ -241,30 +241,30 @@ public class NameProvider
         else
             return null;
 
-    	if(currentMode == REOBFUSCATION_MODE)
-    	{
-    		newArgs[0] = reobinput;
-    		newArgs[1] = reoboutput;
-    	}
+        if(currentMode == REOBFUSCATION_MODE)
+        {
+            newArgs[0] = reobinput;
+            newArgs[1] = reoboutput;
+        }
 
         if(newArgs[0] == null || newArgs[1] == null || newArgs[2] == null || newArgs[3] == null)
             return null;
-    	
+
         initLogfiles();
         readSRGFiles();
-        
-	    return newArgs;
-	}
 
-	////////////////////////////////////////////////////////////////////////////////
+        return newArgs;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
     private static void initLogfiles()
     {
-    	try
-    	{
-        	if(currentMode == DEOBFUSCATION_MODE)
-        	{
+        try
+        {
+            if(currentMode == DEOBFUSCATION_MODE)
+            {
                 if(npLog != null)
                 {
                     FileWriter writer = null;
@@ -282,9 +282,9 @@ public class NameProvider
                             writer.close();
                     }
                 }
-        	}
-        	else if(currentMode == REOBFUSCATION_MODE)
-        	{
+            }
+            else if(currentMode == REOBFUSCATION_MODE)
+            {
                 if(roLog != null)
                 {
                     FileWriter writer = null;
@@ -302,36 +302,36 @@ public class NameProvider
                             writer.close();
                     }
                 }
-        	}
-    	}
-    	catch(IOException e)
-    	{
+            }
+        }
+        catch(IOException e)
+        {
             e.printStackTrace();
-    		npLog = null;
-    		roLog = null;
-    	}
-	}
+            npLog = null;
+            roLog = null;
+        }
+    }
 
-	////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	private static void readSRGFiles()
-	{
-		if(currentMode == REOBFUSCATION_MODE)
-		{
-			packagesFile = reobFile;
-			classesFile = reobFile;
-			methodsFile = reobFile;
-			fieldsFile = reobFile;
-		}
-		
-	    readPackagesSRG();
-	    readClassesSRG();
-	    readMethodsSRG();
-	    readFieldsSRG();
-	    
-	    updateAllXrefs();
-	}
+    private static void readSRGFiles()
+    {
+        if(currentMode == REOBFUSCATION_MODE)
+        {
+            packagesFile = reobFile;
+            classesFile = reobFile;
+            methodsFile = reobFile;
+            fieldsFile = reobFile;
+        }
+
+        readPackagesSRG();
+        readClassesSRG();
+        readMethodsSRG();
+        readFieldsSRG();
+
+        updateAllXrefs();
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     //
@@ -370,15 +370,15 @@ public class NameProvider
     {
         if(packagesFile == null)
             return;
-        
+
         String[] lines = readAllLines( packagesFile );
-        
+
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
             if(lineParts.length != 3 || !lineParts[0].startsWith( "PK:" ))
                 continue;
-            
+
             PackageEntry entry = new PackageEntry();
             if(lineParts[1].equals( "." ))
                 entry.obfName = "";
@@ -391,7 +391,7 @@ public class NameProvider
             packageDefs.add( entry );
         }
     }
-	
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
@@ -399,22 +399,22 @@ public class NameProvider
     {
         if(classesFile == null)
             return;
-        
+
         String[] lines = readAllLines( classesFile );
-        
+
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
             if(lineParts.length != 3 || !lineParts[0].startsWith( "CL:" ))
                 continue;
-            
+
             ClassEntry entry = new ClassEntry();
             entry.obfName = lineParts[1];
             entry.deobfName = lineParts[2];
             classDefs.add( entry );
         }
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
@@ -422,25 +422,25 @@ public class NameProvider
     {
         if(methodsFile == null)
             return;
-        
+
         String[] lines = readAllLines( methodsFile );
-        
+
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
             if(lineParts.length < 4 || !lineParts[0].startsWith( "MD:" ))
                 continue;
-            
+
             MethodEntry entry = new MethodEntry();
             entry.obfName = lineParts[1];
             entry.obfDesc = lineParts[2];
             entry.deobfName = lineParts[3];
             if(lineParts.length > 4)
-            	entry.deobfDesc = lineParts[4];
+                entry.deobfDesc = lineParts[4];
             methodDefs.add( entry );
         }
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
@@ -448,15 +448,15 @@ public class NameProvider
     {
         if(fieldsFile == null)
             return;
-        
+
         String[] lines = readAllLines( fieldsFile );
-        
+
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
             if(lineParts.length != 3 || !lineParts[0].startsWith( "FD:" ))
                 continue;
-            
+
             FieldEntry entry = new FieldEntry();
             entry.obfName = lineParts[1];
             entry.deobfName = lineParts[2];
@@ -470,14 +470,14 @@ public class NameProvider
     private static String[] readAllLines( File file )
     {
         List<String> lines = new ArrayList<String>();
-        
+
         FileReader fileReader = null;
         BufferedReader reader = null;
         try
         {
             fileReader = new FileReader( file );
             reader = new BufferedReader( fileReader );
-            
+
             String line = reader.readLine();
             while(line != null)
             {
@@ -505,40 +505,40 @@ public class NameProvider
                 return null;
             }
         }
-        
+
         String[] result = new String[lines.size()];
         lines.toArray( result );
-        
+
         return result;
     }
-    
-	////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	private static void log( String text )
-	{
-	    System.out.println(text);
-	    
-	    File log = null;
-	    if(currentMode == DEOBFUSCATION_MODE)
-	    	log = npLog;
-	    else if(currentMode == REOBFUSCATION_MODE)
-	    	log = roLog;
-	    
-	    if( log == null )
-	        return;
-	    
-	    FileWriter fileWriter = null;
-	    BufferedWriter writer = null;
-	    try
+    private static void log( String text )
+    {
+        System.out.println(text);
+
+        File log = null;
+        if(currentMode == DEOBFUSCATION_MODE)
+            log = npLog;
+        else if(currentMode == REOBFUSCATION_MODE)
+            log = roLog;
+
+        if( log == null )
+            return;
+
+        FileWriter fileWriter = null;
+        BufferedWriter writer = null;
+        try
         {
-	        fileWriter = new FileWriter( log, true );
-	        writer = new BufferedWriter( fileWriter );
-	        
-	        writer.write( text );
-	        writer.newLine();
-	        
-	        writer.flush();
+            fileWriter = new FileWriter( log, true );
+            writer = new BufferedWriter( fileWriter );
+
+            writer.write( text );
+            writer.newLine();
+
+            writer.flush();
         }
         catch( IOException e )
         {
@@ -559,143 +559,143 @@ public class NameProvider
                 e.printStackTrace();
             }
         }
-	}
-	
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	public static String getNewTreeItemName( TreeItem ti )
-	{
-		//log("TI: " + ti.getFullInName());
-		if( currentMode == CLASSIC_MODE )
-			return null;
-		
-		if( ti instanceof Pk)
-		{
-			return getNewPackageName((Pk)ti);
-		}
-		else if( ti instanceof Cl)
-		{
-			return getNewClassName((Cl)ti);
-		}
-		else if( ti instanceof Md)
-		{
-			return getNewMethodName((Md)ti);
-		}
-		else if( ti instanceof Fd)
-		{
-			return getNewFieldName((Fd)ti);
-		}
-		else
-		{
-			log("Warning: trying to rename unknown type " + ti.getFullInName());
-			return null;
-		}
-	}
-	
+    public static String getNewTreeItemName( TreeItem ti )
+    {
+        //log("TI: " + ti.getFullInName());
+        if( currentMode == CLASSIC_MODE )
+            return null;
+
+        if( ti instanceof Pk)
+        {
+            return getNewPackageName((Pk)ti);
+        }
+        else if( ti instanceof Cl)
+        {
+            return getNewClassName((Cl)ti);
+        }
+        else if( ti instanceof Md)
+        {
+            return getNewMethodName((Md)ti);
+        }
+        else if( ti instanceof Fd)
+        {
+            return getNewFieldName((Fd)ti);
+        }
+        else
+        {
+            log("Warning: trying to rename unknown type " + ti.getFullInName());
+            return null;
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	public static String getNewPackageName( Pk pk )
-	{
-		if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
-		{
-	        log("PK: " + pk.getFullInName());
-			return null;
-		}
-		
-		String packageName = pk.getFullInName();
-		boolean known = packageNameLookup.containsKey(packageName);
-		
-		if(!isInProtectedPackage(packageName))
-		{
-			if(currentMode == DEOBFUSCATION_MODE)
-			{
-			    if(packagesObf2Deobf.containsKey( pk.getFullInName() ))
-			    {
-			        String deobfName = packagesObf2Deobf.get( pk.getFullInName() ).deobfName;
-			        packageName = deobfName;
-				    pk.setRepackageName(deobfName);
-				    packageNameLookup.put(pk.getFullInName(), deobfName);
-			    }
-			    else
-			    {
-			    	// check if parent got remapped
-			    	TreeItem parent = pk.getParent();
-			    	if(parent != null && parent instanceof Pk && parent.getParent() != null)
-			    	{
-			    		packageName = getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-			    		pk.setRepackageName(packageName);
-			    	}
-				    packageNameLookup.put(pk.getFullInName(), packageName);
-			    }
-			}
-	        else if(currentMode == REOBFUSCATION_MODE)
-	        {
-			    if(packagesDeobf2Obf.containsKey( pk.getFullInName() ))
-			    {
-			        String obfName = packagesDeobf2Obf.get( pk.getFullInName() ).obfName;
-		            packageName = obfName;
-			        pk.setRepackageName(obfName);
-				    packageNameLookup.put(pk.getFullInName(), obfName);
-			    }
-			    else
-			    {
-			    	// check if parent got remapped
-			    	TreeItem parent = pk.getParent();
-			    	if(parent != null && parent instanceof Pk && parent.getParent() != null)
-			    	{
-			    		packageName = getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-			    		pk.setRepackageName(packageName);
-			    	}
-				    packageNameLookup.put(pk.getFullInName(), packageName);
-			    }
-	        }
-		}
+    public static String getNewPackageName( Pk pk )
+    {
+        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        {
+            log("PK: " + pk.getFullInName());
+            return null;
+        }
+
+        String packageName = pk.getFullInName();
+        boolean known = packageNameLookup.containsKey(packageName);
+
+        if(!isInProtectedPackage(packageName))
+        {
+            if(currentMode == DEOBFUSCATION_MODE)
+            {
+                if(packagesObf2Deobf.containsKey( pk.getFullInName() ))
+                {
+                    String deobfName = packagesObf2Deobf.get( pk.getFullInName() ).deobfName;
+                    packageName = deobfName;
+                    pk.setRepackageName(deobfName);
+                    packageNameLookup.put(pk.getFullInName(), deobfName);
+                }
+                else
+                {
+                    // check if parent got remapped
+                    TreeItem parent = pk.getParent();
+                    if(parent != null && parent instanceof Pk && parent.getParent() != null)
+                    {
+                        packageName = getNewPackageName(parent.getFullOutName()) + pk.getOutName();
+                        pk.setRepackageName(packageName);
+                    }
+                    packageNameLookup.put(pk.getFullInName(), packageName);
+                }
+            }
+            else if(currentMode == REOBFUSCATION_MODE)
+            {
+                if(packagesDeobf2Obf.containsKey( pk.getFullInName() ))
+                {
+                    String obfName = packagesDeobf2Obf.get( pk.getFullInName() ).obfName;
+                    packageName = obfName;
+                    pk.setRepackageName(obfName);
+                    packageNameLookup.put(pk.getFullInName(), obfName);
+                }
+                else
+                {
+                    // check if parent got remapped
+                    TreeItem parent = pk.getParent();
+                    if(parent != null && parent instanceof Pk && parent.getParent() != null)
+                    {
+                        packageName = getNewPackageName(parent.getFullOutName()) + pk.getOutName();
+                        pk.setRepackageName(packageName);
+                    }
+                    packageNameLookup.put(pk.getFullInName(), packageName);
+                }
+            }
+        }
 
         pk.setOutName( packageName );
 
         String inName = pk.getFullInName();
         String outName = pk.getFullOutName();
-        
+
         if(inName.equals(""))
-        	inName = ".";
+            inName = ".";
         if(outName.equals(""))
-        	outName = ".";
+            outName = ".";
 
         if(!isInProtectedPackage(inName + "/") && !known)
-        	log("PK: " + inName + " " + outName);
-        
-		return packageName;
-	}
+            log("PK: " + inName + " " + outName);
+
+        return packageName;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	private static String getNewPackageName(String pkgName)
-	{
-		String newPkg = "";
-		
-		if(packageNameLookup.containsKey(pkgName))
-			newPkg = packageNameLookup.get(pkgName);
-		else
-			newPkg = pkgName;
-		
-		return newPkg.equals("") ? newPkg : newPkg + "/";
-	}
-	
+    private static String getNewPackageName(String pkgName)
+    {
+        String newPkg = "";
+
+        if(packageNameLookup.containsKey(pkgName))
+            newPkg = packageNameLookup.get(pkgName);
+        else
+            newPkg = pkgName;
+
+        return newPkg.equals("") ? newPkg : newPkg + "/";
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	public static String getNewClassName( Cl cl )
-	{
-		if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
-		{
-	        log("CL: " + cl.getFullInName());
-			return null;
-		}
-		
-		String className = cl.getInName();
+    public static String getNewClassName( Cl cl )
+    {
+        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        {
+            log("CL: " + cl.getFullInName());
+            return null;
+        }
+
+        String className = cl.getInName();
 
         if(currentMode == DEOBFUSCATION_MODE)
         {
@@ -706,7 +706,7 @@ public class NameProvider
                     className = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
                 else
                     className = deobfName;
-                
+
                 classNameLookup.put( cl.getInName(), className );
             }
             else
@@ -728,36 +728,36 @@ public class NameProvider
                     className = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
                 else
                     className = obfName;
-                
+
                 classNameLookup.put( cl.getInName(), className );
             }
         }
 
         cl.setOutName( className );
-        
+
         if(!isInProtectedPackage(cl.getFullInName()))
-        	log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
-		
-		return className;
-	}
-	
+            log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
+
+        return className;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	@SuppressWarnings("rawtypes")
-	public static String getNewMethodName( Md md )
-	{
-		if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
-		{
-	        log("MD: " + md.getFullInName());
-			return null;
-		}
-		
+    @SuppressWarnings("rawtypes")
+    public static String getNewMethodName( Md md )
+    {
+        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        {
+            log("MD: " + md.getFullInName());
+            return null;
+        }
+
         String methodName = md.getInName();
-        
+
         String desc = md.getDescriptor();
         String newDesc = desc;
-        
+
         if(currentMode == DEOBFUSCATION_MODE)
         {
             if(methodsObf2Deobf.containsKey( md.getFullInName() + desc ))
@@ -786,18 +786,18 @@ public class NameProvider
                         {
                             String cls = desc.substring( i + 1, j );
 
-                    		String pkgName;
-                    		String clsName;
-                        	if(cls.contains("/"))
-                        	{
-                        		pkgName = cls.substring(0, cls.lastIndexOf('/'));
-                        		clsName = cls.substring(cls.lastIndexOf('/') + 1);
-                        	}
-                        	else
-                        	{
-                        		pkgName = "";
-                        		clsName = cls;
-                        	}
+                            String pkgName;
+                            String clsName;
+                            if(cls.contains("/"))
+                            {
+                                pkgName = cls.substring(0, cls.lastIndexOf('/'));
+                                clsName = cls.substring(cls.lastIndexOf('/') + 1);
+                            }
+                            else
+                            {
+                                pkgName = "";
+                                clsName = cls;
+                            }
 
                             String newCls = clsName;
                             if(classNameLookup.containsKey( clsName ))
@@ -805,14 +805,14 @@ public class NameProvider
 
                             String newPkg = getNewPackageName(pkgName);
                             if(pkgName.equals(""))
-                            	newDesc = newDesc.replaceFirst( "L" + clsName + ";", "L" + newPkg + newCls + ";" );
+                                newDesc = newDesc.replaceFirst( "L" + clsName + ";", "L" + newPkg + newCls + ";" );
                             else
-                            	newDesc = newDesc.replaceFirst( "L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";" );
-                            
+                                newDesc = newDesc.replaceFirst( "L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";" );
+
                             i = j;
                             break;
                         }
-                        ++j;                    
+                        ++j;
                     }
                 }
                 ++i;
@@ -830,27 +830,27 @@ public class NameProvider
             }
             else
             {
-            	Cl cls = (Cl) md.getParent();
-            	
-            	
-            	Md tmpMd;
-            	try
-            	{
-					tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
-				}
-            	catch (Exception e2)
-            	{
-            		tmpMd = null;
-				}
-            	
-            	Enumeration children = cls.getDownClasses();
-            	//log("Children: " + children.hasMoreElements());
-            	
-            	boolean goingDown = false;
-            	do
-            	{
-            		tmpMd.setParent(cls);
-            		//log("CHECKING: " + tmpMd.getFullInName() + desc);
+                Cl cls = (Cl) md.getParent();
+
+
+                Md tmpMd;
+                try
+                {
+                    tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
+                }
+                catch (Exception e2)
+                {
+                    tmpMd = null;
+                }
+
+                Enumeration children = cls.getDownClasses();
+                //log("Children: " + children.hasMoreElements());
+
+                boolean goingDown = false;
+                do
+                {
+                    tmpMd.setParent(cls);
+                    //log("CHECKING: " + tmpMd.getFullInName() + desc);
                     if(methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
                     {
                         String obfName = methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
@@ -860,40 +860,40 @@ public class NameProvider
                             methodName = obfName;
                         break;
                     }
-            		
 
-            		Enumeration en;
-            		try
-            		{
-						en = cls.getSuperInterfaces();
-						//log("Interfaces: " + en.hasMoreElements());
-					}
-            		catch (Exception e1)
-            		{
-            			en = new Enumeration()
-            			{
 
-							@Override
-							public boolean hasMoreElements()
-							{
-								return false;
-							}
+                    Enumeration en;
+                    try
+                    {
+                        en = cls.getSuperInterfaces();
+                        //log("Interfaces: " + en.hasMoreElements());
+                    }
+                    catch (Exception e1)
+                    {
+                        en = new Enumeration()
+                        {
 
-							@Override
-							public Object nextElement()
-							{
-								return null;
-							}
-						};
-					}
-            		
+                            @Override
+                            public boolean hasMoreElements()
+                            {
+                                return false;
+                            }
+
+                            @Override
+                            public Object nextElement()
+                            {
+                                return null;
+                            }
+                        };
+                    }
+
                     boolean found = false;
-            		while(en.hasMoreElements())
-            		{
-            			Cl iface = (Cl) en.nextElement();
-            			
-                		tmpMd.setParent(iface);
-                		//log("CHECKING: " + tmpMd.getFullInName() + desc);
+                    while(en.hasMoreElements())
+                    {
+                        Cl iface = (Cl) en.nextElement();
+
+                        tmpMd.setParent(iface);
+                        //log("CHECKING: " + tmpMd.getFullInName() + desc);
                         if(methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
                         {
                             String obfName = methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
@@ -903,43 +903,43 @@ public class NameProvider
                                 methodName = obfName;
                             found = true;
                         }
-            		}
-            		
-            		if(found)
-            			break;
-            		
-            		if(!goingDown)
-            		{
-                		try
-                		{
-    						cls = cls.getSuperCl();
-    						if(cls == null)
-    							goingDown = true;
-    						//else
-    							//log("Parent: " + cls.getFullInName());
-    					}
-                		catch (Exception e)
-                		{
-                			goingDown = true;
-    					}
-            		}
-            		
-            		if(goingDown)
-            		{
-            			if(children.hasMoreElements())
-            			{
-            				cls = (Cl) children.nextElement();
-            				//log("Child: " + cls.getFullInName());
-            			}
-            			else
-            			{
-            				cls = null;
-            			}
-            		}
-            	}
-            	while(cls != null);
+                    }
+
+                    if(found)
+                        break;
+
+                    if(!goingDown)
+                    {
+                        try
+                        {
+                            cls = cls.getSuperCl();
+                            if(cls == null)
+                                goingDown = true;
+                            //else
+                                //log("Parent: " + cls.getFullInName());
+                        }
+                        catch (Exception e)
+                        {
+                            goingDown = true;
+                        }
+                    }
+
+                    if(goingDown)
+                    {
+                        if(children.hasMoreElements())
+                        {
+                            cls = (Cl) children.nextElement();
+                            //log("Child: " + cls.getFullInName());
+                        }
+                        else
+                        {
+                            cls = null;
+                        }
+                    }
+                }
+                while(cls != null);
             }
-            
+
             int i = 0;
             while(i < desc.length())
             {
@@ -951,19 +951,19 @@ public class NameProvider
                         if(desc.charAt( j ) == ';')
                         {
                             String cls = desc.substring( i + 1, j );
-                            
-                    		String pkgName;
-                    		String clsName;
-                        	if(cls.contains("/"))
-                        	{
-                        		pkgName = cls.substring(0, cls.lastIndexOf('/'));
-                        		clsName = cls.substring(cls.lastIndexOf('/') + 1);
-                        	}
-                        	else
-                        	{
-                        		pkgName = "";
-                        		clsName = cls;
-                        	}
+
+                            String pkgName;
+                            String clsName;
+                            if(cls.contains("/"))
+                            {
+                                pkgName = cls.substring(0, cls.lastIndexOf('/'));
+                                clsName = cls.substring(cls.lastIndexOf('/') + 1);
+                            }
+                            else
+                            {
+                                pkgName = "";
+                                clsName = cls;
+                            }
 
                             String newCls = clsName;
                             if(classNameLookup.containsKey( clsName ))
@@ -971,39 +971,39 @@ public class NameProvider
 
                             String newPkg = getNewPackageName(pkgName);
                             if(pkgName.equals(""))
-                            	newDesc = newDesc.replaceFirst( "L" + clsName + ";", "L" + newPkg + newCls + ";" );
+                                newDesc = newDesc.replaceFirst( "L" + clsName + ";", "L" + newPkg + newCls + ";" );
                             else
-                            	newDesc = newDesc.replaceFirst( "L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";" );
-                            
+                                newDesc = newDesc.replaceFirst( "L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";" );
+
                             i = j;
                             break;
                         }
-                        ++j;                    
+                        ++j;
                     }
                 }
                 ++i;
             }
         }
-        
-    	md.setOutName( methodName );
+
+        md.setOutName( methodName );
 
         if(!isInProtectedPackage(md.getFullInName()))
-        	log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
-        
+            log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
+
         return methodName;
-	}
-	
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-	public static String getNewFieldName( Fd fd )
-	{
-		if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
-		{
-	        log("FD: " + fd.getFullInName());
-			return null;
-		}
-		
+    public static String getNewFieldName( Fd fd )
+    {
+        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        {
+            log("FD: " + fd.getFullInName());
+            return null;
+        }
+
         String fieldName = fd.getInName();
 
         if(currentMode == DEOBFUSCATION_MODE)
@@ -1033,14 +1033,14 @@ public class NameProvider
                     fieldName = obfName;
             }
         }
-        
+
         fd.setOutName( fieldName );
 
         if(!isInProtectedPackage(fd.getFullInName()))
-        	log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
-        
+            log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
+
         return fieldName;
-	}
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     //
@@ -1054,7 +1054,7 @@ public class NameProvider
         }
         return false;
     }
-	
+
 }
 
 class PackageEntry

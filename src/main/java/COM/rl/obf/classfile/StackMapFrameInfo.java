@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2007 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -66,12 +66,12 @@ public class StackMapFrameInfo
     private void read(DataInput din) throws Exception
     {
         u1frameType = din.readUnsignedByte();
-        if (SAME_MIN <= u1frameType && 
+        if (SAME_MIN <= u1frameType &&
             u1frameType <= SAME_MAX)
         {
             // nothing else to read
         }
-        else if (SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType && 
+        else if (SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
                  u1frameType <= SAME_LOCALS_1_STACK_ITEM_MAX)
         {
             u2numberOfStackItems = 1;
@@ -83,7 +83,7 @@ public class StackMapFrameInfo
             u2numberOfStackItems = 1;
             readStackItems(din);
         }
-        else if (CHOP_MIN <= u1frameType && 
+        else if (CHOP_MIN <= u1frameType &&
                  u1frameType <= CHOP_MAX)
         {
             u2offsetDelta = din.readUnsignedShort();
@@ -92,7 +92,7 @@ public class StackMapFrameInfo
         {
             u2offsetDelta = din.readUnsignedShort();
         }
-        else if (APPEND_MIN <= u1frameType && 
+        else if (APPEND_MIN <= u1frameType &&
                  u1frameType <= APPEND_MAX)
         {
             u2offsetDelta = din.readUnsignedShort();
@@ -126,12 +126,12 @@ public class StackMapFrameInfo
     public void write(DataOutput dout) throws Exception
     {
         dout.writeByte(u1frameType);
-        if (SAME_MIN <= u1frameType && 
+        if (SAME_MIN <= u1frameType &&
             u1frameType <= SAME_MAX)
         {
             // nothing else to write
         }
-        else if (SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType && 
+        else if (SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
                  u1frameType <= SAME_LOCALS_1_STACK_ITEM_MAX)
         {
             writeStackItems(dout);
@@ -141,7 +141,7 @@ public class StackMapFrameInfo
             dout.writeShort(u2offsetDelta);
             writeStackItems(dout);
         }
-        else if (CHOP_MIN <= u1frameType && 
+        else if (CHOP_MIN <= u1frameType &&
                  u1frameType <= CHOP_MAX)
         {
             dout.writeShort(u2offsetDelta);
@@ -150,7 +150,7 @@ public class StackMapFrameInfo
         {
             dout.writeShort(u2offsetDelta);
         }
-        else if (APPEND_MIN <= u1frameType && 
+        else if (APPEND_MIN <= u1frameType &&
                  u1frameType <= APPEND_MAX)
         {
             dout.writeShort(u2offsetDelta);

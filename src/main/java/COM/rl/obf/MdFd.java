@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -83,7 +83,7 @@ abstract public class MdFd extends TreeItem
     {
         StringBuffer sb = new StringBuffer();
         int modifiers = getModifiers();
-        // NOTE - could update with new JDK1.5 modifiers, but that 
+        // NOTE - could update with new JDK1.5 modifiers, but that
         //        would cause incompatibility with earlier systems for RG
         if (Modifier.isAbstract(modifiers))
         {
@@ -160,9 +160,9 @@ abstract public class MdFd extends TreeItem
     }
 
     /** Does this member match the wildcard pattern? (** and * supported) */
-    public boolean isWildcardMatch(String namePattern, String descPattern) 
+    public boolean isWildcardMatch(String namePattern, String descPattern)
     {
-        return 
+        return
             isWildcardMatch(namePattern) &&
             isMatch(descPattern, getDescriptor());
     }

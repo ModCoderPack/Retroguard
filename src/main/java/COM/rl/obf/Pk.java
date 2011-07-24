@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -44,7 +44,7 @@ public class Pk extends PkCl
 
     // Class Methods ---------------------------------------------------------
     /** Create the root entry for a tree. */
-    public static Pk createRoot(ClassTree classTree) 
+    public static Pk createRoot(ClassTree classTree)
     {
         return new Pk(classTree);
     }
@@ -73,7 +73,7 @@ public class Pk extends PkCl
     }
 
     /** Set the repackage name of the entry. */
-    public void setRepackageName(String repackageName) 
+    public void setRepackageName(String repackageName)
     {
         if (repackageName.equals("."))
         {
@@ -89,46 +89,46 @@ public class Pk extends PkCl
     public String getRepackageName() { return this.repackageName; }
 
     /** Get a package level by name. */
-    public Pk getPackage(String name) throws Exception 
+    public Pk getPackage(String name) throws Exception
     {
         return (Pk)pks.get(name);
     }
 
     /** Get a package level by obfuscated name. */
-    public Pk getObfPackage(String name) throws Exception 
+    public Pk getObfPackage(String name) throws Exception
     {
-	for (Enumeration enm = pks.elements(); enm.hasMoreElements(); )
-	{
-	    Pk pk = (Pk)enm.nextElement();
-	    if (name.equals(pk.getOutName())) 
-	    {
-		return pk;
-	    }
-	}
+        for (Enumeration enm = pks.elements(); enm.hasMoreElements(); )
+        {
+            Pk pk = (Pk)enm.nextElement();
+            if (name.equals(pk.getOutName()))
+            {
+                return pk;
+            }
+        }
         return null;
     }
 
     /** Get a package level by obfuscated repackage name. */
-    public Pk getObfRepackage(String name) throws Exception 
+    public Pk getObfRepackage(String name) throws Exception
     {
-	for (Enumeration enm = pks.elements(); enm.hasMoreElements(); )
-	{
-	    Pk pk = (Pk)enm.nextElement();
-	    if (name.equals(pk.getRepackageName())) 
-	    {
-		return pk;
-	    }
+        for (Enumeration enm = pks.elements(); enm.hasMoreElements(); )
+        {
+            Pk pk = (Pk)enm.nextElement();
+            if (name.equals(pk.getRepackageName()))
+            {
+                return pk;
+            }
             Pk sub = pk.getObfRepackage(name);
-            if (sub != null) 
+            if (sub != null)
             {
                 return sub;
             }
-	}
+        }
         return null;
     }
 
     /** Get an Enumeration of packages. */
-    public Enumeration getPackageEnum() throws Exception 
+    public Enumeration getPackageEnum() throws Exception
     {
         return pks.elements();
     }
@@ -170,7 +170,7 @@ public class Pk extends PkCl
     /** Generate unique-across-run obfuscated repackage name. */
     public void repackageName(NameMaker nm) throws Exception
     {
-    	//replaced by Searge:
+        //replaced by Searge:
         if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
             if (!isFixed())
@@ -181,12 +181,12 @@ public class Pk extends PkCl
         }
         else
         {
-        	String s = NameProvider.getNewPackageName(this);
-        	if(s != null)
-        	{
+            String s = NameProvider.getNewPackageName(this);
+            if(s != null)
+            {
                 setRepackageName(s);
                 setOutName(getInName());
-        	}
+            }
         }
     }
 

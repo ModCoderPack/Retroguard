@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -36,7 +36,7 @@ public class ClassFile implements ClassConstants
     // Constants -------------------------------------------------------------
     public static final String SEP_REGULAR = "/";
     public static final String SEP_INNER = "$";
-    private static final String CLASS_FORNAME_NAME_DESCRIPTOR = 
+    private static final String CLASS_FORNAME_NAME_DESCRIPTOR =
     "forName(Ljava/lang/String;)Ljava/lang/Class;";
     private static final String[] DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY = {
         "getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;",
@@ -182,7 +182,7 @@ public class ClassFile implements ClassConstants
                 translatedNames[i] = translateType(names[i], isDisplay);
             }
             return translatedNames;
-        } 
+        }
         else
         {
             return names;
@@ -271,13 +271,13 @@ public class ClassFile implements ClassConstants
     }
 
     /** Is this class in an unsupported version of the file format? */
-    public boolean hasIncompatibleVersion() 
+    public boolean hasIncompatibleVersion()
     {
         return (u2majorVersion > MAJOR_VERSION);
     }
 
     /** Return major version of this class's file format. */
-    public int getMajorVersion() 
+    public int getMajorVersion()
     {
         return u2majorVersion;
     }
@@ -353,13 +353,13 @@ public class ClassFile implements ClassConstants
     /**
      * Define a constant String to include in this output class file.
      */
-    public void setIdString(String id) throws Exception 
+    public void setIdString(String id) throws Exception
     {
-        if (id != null) 
+        if (id != null)
         {
             cpIdString = new Utf8CpInfo(id);
-        } 
-        else 
+        }
+        else
         {
             cpIdString = null;
         }
@@ -447,27 +447,27 @@ public class ClassFile implements ClassConstants
     }
 
     /** Return number of methods in class. */
-    public int getMethodCount() throws Exception 
+    public int getMethodCount() throws Exception
     {
         return methods.length;
     }
 
     /** Return i'th method in class. */
-    public MethodInfo getMethod(int i) throws Exception 
+    public MethodInfo getMethod(int i) throws Exception
     {
         return methods[i];
     }
 
     /** Remove i'th method from class. */
-    public void removeMethod(int i) throws Exception 
+    public void removeMethod(int i) throws Exception
     {
         // Trim the method
         MethodInfo newMethods[] = new MethodInfo[methods.length-1];
-        if (i > 0) 
+        if (i > 0)
         {
             System.arraycopy(methods, 0, newMethods, 0, i);
         }
-        if (i < methods.length-1) 
+        if (i < methods.length-1)
         {
             System.arraycopy(methods, i+1, newMethods, i, methods.length-i-1);
         }
@@ -476,27 +476,27 @@ public class ClassFile implements ClassConstants
     }
 
     /** Return number of fields in class. */
-    public int getFieldCount() throws Exception 
+    public int getFieldCount() throws Exception
     {
         return fields.length;
     }
 
     /** Return i'th field in class. */
-    public FieldInfo getField(int i) throws Exception 
+    public FieldInfo getField(int i) throws Exception
     {
         return fields[i];
     }
 
     /** Remove i'th field from class. */
-    public void removeField(int i) throws Exception 
+    public void removeField(int i) throws Exception
     {
         // Trim the field
         FieldInfo newFields[] = new FieldInfo[fields.length-1];
-        if (i > 0) 
+        if (i > 0)
         {
             System.arraycopy(fields, 0, newFields, 0, i);
         }
-        if (i < fields.length-1) 
+        if (i < fields.length-1)
         {
             System.arraycopy(fields, i+1, newFields, i, fields.length-i-1);
         }
@@ -520,7 +520,7 @@ public class ClassFile implements ClassConstants
     protected String getUtf8(int cpIndex) throws Exception
     {
         CpInfo i = getCpEntry(cpIndex);
-        if (i instanceof Utf8CpInfo) 
+        if (i instanceof Utf8CpInfo)
         {
             return ((Utf8CpInfo)i).getString();
         }
@@ -701,7 +701,7 @@ public class ClassFile implements ClassConstants
         // Signal that unknown attributes are gone
         isUnkAttrGone = true;
     }
-    
+
     /** Update the constant pool reference counts. */
     public void updateRefCount() throws Exception
     {
@@ -721,7 +721,7 @@ public class ClassFile implements ClassConstants
     {
         for (int i = 0; i < attributes.length; i++)
         {
-            if (ATTR_SourceFile.equals(attributes[i].getAttrName())) 
+            if (ATTR_SourceFile.equals(attributes[i].getAttrName()))
             {
                 ((SourceFileAttrInfo)attributes[i]).setAsDummy(constantPool);
             }
@@ -747,7 +747,7 @@ public class ClassFile implements ClassConstants
     {
         // If requested by '.option LineNumberDebug' make SourceFile attribute
         // into dummy constant string "SourceFile"
-        if (enableDummySourceFile) 
+        if (enableDummySourceFile)
         {
             setDummySourceFile();
         }
@@ -902,7 +902,7 @@ public class ClassFile implements ClassConstants
         // If reflection, attempt to remap all class string references
         // NOTE - hasReflection wasn't picking up reflection in inner classes
         //        because they call to the outer class to do forName(...).
-        //        Therefore removed. 
+        //        Therefore removed.
         //if (hasReflection && enableMapClassString)
         if (/* hasReflection && */ enableMapClassString)
         {
@@ -921,7 +921,7 @@ public class ClassFile implements ClassConstants
             for (int j = 0; j < methodInfo.attributes.length; j++)
             {
                 AttrInfo attrInfo = methodInfo.attributes[j];
-                if (attrInfo instanceof CodeAttrInfo) 
+                if (attrInfo instanceof CodeAttrInfo)
                 {
                     cpToFlag = ((CodeAttrInfo)attrInfo).walkFindClassStrings(cpToFlag);
                 }
@@ -932,7 +932,7 @@ public class ClassFile implements ClassConstants
         for (Enumeration enm = cpToFlag.keys(); enm.hasMoreElements(); )
         {
             StringCpInfo stringCpInfo = (StringCpInfo)enm.nextElement();
-            StringCpInfoFlags flags = 
+            StringCpInfoFlags flags =
                 (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
             String name = backTranslate(((Utf8CpInfo)getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
@@ -946,11 +946,11 @@ public class ClassFile implements ClassConstants
                     if (flags.otherFlag)
                     {
                         // Create a new String/Utf8 for remapped Class-name
-                        int remapUtf8Index = 
+                        int remapUtf8Index =
                             constantPool.addUtf8Entry(translate(remapName));
                         StringCpInfo remapStringInfo = new StringCpInfo();
                         remapStringInfo.setStringIndex(remapUtf8Index);
-                        int remapStringIndex = 
+                        int remapStringIndex =
                             constantPool.addEntry(remapStringInfo);
                         // Default to full remap if new String would require
                         // ldc_w to access - we can't cope with that yet
@@ -959,10 +959,10 @@ public class ClassFile implements ClassConstants
                             simpleRemap = true;
                             log.println("# WARNING MapClassString: non-.class/Class.forName() string remapped");
                         }
-                        else 
+                        else
                         {
-                            log.println("# MapClassString (partial) in class " 
-                                        + getName() + ": " 
+                            log.println("# MapClassString (partial) in class "
+                                        + getName() + ": "
                                         + name + " -> " + remapName);
                             // Add to cpUpdate hash for later remap in Code
                             cpUpdate.put(new Integer(flags.stringIndex),
@@ -975,11 +975,11 @@ public class ClassFile implements ClassConstants
                     }
                     if (simpleRemap)
                     {
-                        log.println("# MapClassString (full) in class " 
-                                    + getName() + ": " 
+                        log.println("# MapClassString (full) in class "
+                                    + getName() + ": "
                                     + name + " -> " + remapName);
-                        // Just remap the existing String/Utf8, since it is 
-                        // only used for Class.forName or .class, or maybe 
+                        // Just remap the existing String/Utf8, since it is
+                        // only used for Class.forName or .class, or maybe
                         // ldc_w was needed (which gives improper String remap)
                         int remapIndex = constantPool.remapUtf8To(translate(remapName), stringCpInfo.getStringIndex());
                         stringCpInfo.setStringIndex(remapIndex);
@@ -994,7 +994,7 @@ public class ClassFile implements ClassConstants
             for (int j = 0; j < methodInfo.attributes.length; j++)
             {
                 AttrInfo attrInfo = methodInfo.attributes[j];
-                if (attrInfo instanceof CodeAttrInfo) 
+                if (attrInfo instanceof CodeAttrInfo)
                 {
                     ((CodeAttrInfo)attrInfo).walkUpdateClassStrings(cpUpdate);
                 }

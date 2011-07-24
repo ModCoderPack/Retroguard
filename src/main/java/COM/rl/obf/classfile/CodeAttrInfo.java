@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -187,8 +187,8 @@ public class CodeAttrInfo extends AttrInfo
     }
 
     /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception 
-    { 
+    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    {
         for (int i = 0; i < u2attributesCount; i++)
         {
             attributes[i].remap(cf, nm);
@@ -196,28 +196,28 @@ public class CodeAttrInfo extends AttrInfo
     }
 
     /** Walk the code, finding .class and Class.forName to update. */
-    protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws Exception 
+    protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws Exception
     {
         return walkClassStrings(cpToFlag, null);
     }
 
     /** Walk the code, updating .class and Class.forName strings. */
-    protected void walkUpdateClassStrings(Hashtable cpUpdate) throws Exception 
+    protected void walkUpdateClassStrings(Hashtable cpUpdate) throws Exception
     {
         walkClassStrings(null, cpUpdate);
     }
 
     /** Walk the code, updating .class and Class.forName strings. */
-    // Note that class literals MyClass.class are stored directly in the 
+    // Note that class literals MyClass.class are stored directly in the
     // constant pool in 1.5 (change from 1.4), not referenced by Utf8 name,
-    // so .option MapClassString is not necessary for them. 
-    // Still needed for Class.forName("MyClass") though. 
-    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, 
-                                           Hashtable cpUpdate) throws Exception 
+    // so .option MapClassString is not necessary for them.
+    // Still needed for Class.forName("MyClass") though.
+    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag,
+                                           Hashtable cpUpdate) throws Exception
     {
         int opcodePrev = -1;
         int ldcIndex = -1;
-        for (int i = 0; i < code.length; i++) 
+        for (int i = 0; i < code.length; i++)
         {
             int opcode = code[i] & 0xFF;
             if ((opcode == 0x12) && (i+1 < code.length)) // ldc
@@ -244,7 +244,7 @@ public class CodeAttrInfo extends AttrInfo
                 boolean isClassForName = false;
                 if ((opcode == 0xB8) && (i+2 < code.length)) // invokestatic
                 {
-                    int invokeIndex = 
+                    int invokeIndex =
                         ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
                     CpInfo cpInfo = cf.getCpEntry(invokeIndex);
                     if (cpInfo instanceof MethodrefCpInfo)
@@ -255,7 +255,7 @@ public class CodeAttrInfo extends AttrInfo
                         NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)cf.getCpEntry(entry.getNameAndTypeIndex());
                         String name = ((Utf8CpInfo)cf.getCpEntry(ntEntry.getNameIndex())).getString();
                         String descriptor = ((Utf8CpInfo)cf.getCpEntry(ntEntry.getDescriptorIndex())).getString();
-                        if (("class$".equals(name) && 
+                        if (("class$".equals(name) &&
                              ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor) ||
                               "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor))) ||
                             ("java/lang/Class".equals(className) &&
@@ -267,7 +267,7 @@ public class CodeAttrInfo extends AttrInfo
                             {
                                 // Update StringCpInfo index in ldc to new one
                                 Object o = cpUpdate.get(new Integer(ldcIndex));
-                                if (o instanceof Integer) 
+                                if (o instanceof Integer)
                                 {
                                     int remapStringIndex = ((Integer)o).intValue();
                                     switch (opcodePrev)
@@ -288,8 +288,8 @@ public class CodeAttrInfo extends AttrInfo
                 }
                 if (cpToFlag != null)
                 {
-                    cpToFlag.updateFlag((StringCpInfo)cf.getCpEntry(ldcIndex), 
-                                        ldcIndex, isClassForName); 
+                    cpToFlag.updateFlag((StringCpInfo)cf.getCpEntry(ldcIndex),
+                                        ldcIndex, isClassForName);
                 }
             }
             int bytes = getOpcodeBytes(opcode, i);
@@ -300,60 +300,60 @@ public class CodeAttrInfo extends AttrInfo
     }
 
     /** Walk the code, adding pool references to Vector. */
-    protected void addCpRefs(Vector refs) throws Exception 
+    protected void addCpRefs(Vector refs) throws Exception
     {
-        for (int i = 0; i < code.length; i++) 
+        for (int i = 0; i < code.length; i++)
         {
             int opcode = code[i] & 0xFF;
             int index;
             switch (opcode)
-	    {
-		// .class reference
-	    case 0x12: // ldc
-		index = (code[i+1] & 0xFF);
+            {
+                // .class reference
+            case 0x12: // ldc
+                index = (code[i+1] & 0xFF);
                 CpInfo cpInfo = cf.getCpEntry(index);
                 if (cpInfo instanceof ClassCpInfo)
                 {
                     refs.addElement(cpInfo);
                 }
-		break;
+                break;
 
-		// .class reference
-	    case 0x13: // ldc_w
-		index = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
+                // .class reference
+            case 0x13: // ldc_w
+                index = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
                 cpInfo = cf.getCpEntry(index);
                 if (cpInfo instanceof ClassCpInfo)
                 {
                     refs.addElement(cpInfo);
                 }
-		break;
+                break;
 
-		// class, array, interface type
-	    case 0xBB: // new
-	    case 0xBD: // anewarray
-	    case 0xC0: // checkcast
-	    case 0xC1: // instanceof
-	    case 0xC5: // multianewarray
-		// static field
-	    case 0xB2: // getstatic
-	    case 0xB3: // putstatic
-		// non-static field
-	    case 0xB4: // getfield
-	    case 0xB5: // putfield
-		// static method
-	    case 0xB8: // invokestatic
-		// non-static method
-	    case 0xB6: // invokevirtual
-	    case 0xB7: // invokespecial
-	    case 0xB9: // invokeinterface
-		index = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
-		refs.addElement(cf.getCpEntry(index));
-		break;
+                // class, array, interface type
+            case 0xBB: // new
+            case 0xBD: // anewarray
+            case 0xC0: // checkcast
+            case 0xC1: // instanceof
+            case 0xC5: // multianewarray
+                // static field
+            case 0xB2: // getstatic
+            case 0xB3: // putstatic
+                // non-static field
+            case 0xB4: // getfield
+            case 0xB5: // putfield
+                // static method
+            case 0xB8: // invokestatic
+                // non-static method
+            case 0xB6: // invokevirtual
+            case 0xB7: // invokespecial
+            case 0xB9: // invokeinterface
+                index = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
+                refs.addElement(cf.getCpEntry(index));
+                break;
 
-	    default:
-		// skip
-		break;
-	    }
+            default:
+                // skip
+                break;
+            }
             int bytes = getOpcodeBytes(opcode, i);
             i += bytes;
         }
@@ -370,17 +370,17 @@ public class CodeAttrInfo extends AttrInfo
             case 0xAA: // tableswitch
                 bytes = 3 - (i % 4); // 0-3 byte pad
                 bytes += 4; // default value
-                int low = 
+                int low =
                     ((code[i+1+bytes] & 0xFF) << 24) +
                     ((code[i+1+bytes+1] & 0xFF) << 16) +
                     ((code[i+1+bytes+2] & 0xFF) << 8) +
-                    (code[i+1+bytes+3] & 0xFF); 
+                    (code[i+1+bytes+3] & 0xFF);
                 bytes += 4; // low value
-                int high = 
+                int high =
                     ((code[i+1+bytes] & 0xFF) << 24) +
                     ((code[i+1+bytes+1] & 0xFF) << 16) +
                     ((code[i+1+bytes+2] & 0xFF) << 8) +
-                    (code[i+1+bytes+3] & 0xFF); 
+                    (code[i+1+bytes+3] & 0xFF);
                 bytes += 4; // high value
                 if (high >= low)
                 {
@@ -390,11 +390,11 @@ public class CodeAttrInfo extends AttrInfo
             case 0xAB: // lookupswitch
                 bytes = 3 - (i % 4); // 0-3 byte pad
                 bytes += 4; // default value
-                int npairs = 
+                int npairs =
                     ((code[i+1+bytes] & 0xFF) << 24) +
                     ((code[i+1+bytes+1] & 0xFF) << 16) +
                     ((code[i+1+bytes+2] & 0xFF) << 8) +
-                    (code[i+1+bytes+3] & 0xFF); 
+                    (code[i+1+bytes+3] & 0xFF);
                 bytes += 4; // npairs value
                 if (npairs >= 0)
                 {
@@ -444,7 +444,7 @@ public class CodeAttrInfo extends AttrInfo
 /*
     private static final String OPCODE_UNUSED = "<unused>";
     private static final String OPCODE_RESERVED = "<reserved>";
-    private static final String[] opcodeName = 
+    private static final String[] opcodeName =
     {
         "nop", // 0x00
         "aconst_null", // 0x01

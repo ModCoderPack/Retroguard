@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -64,13 +64,13 @@ public class SectionList
                     add(section);
                     section = null;
                 }
-                
+
                 // If at start of section, skip non-header lines
                 if (section == null && line.indexOf(':') == -1)
                 {
                     continue;
                 }
-                
+
                 // Start or continue section
                 if (section == null)
                 {
@@ -79,10 +79,10 @@ public class SectionList
 
                 // Read header, potentially split over multiple lines
                 boolean done = false;
-                while (!done) 
+                while (!done)
                 {
                     // Mark for reset, read a line, and...
-                    reader.mark(80); 
+                    reader.mark(80);
                     String nextLine = reader.readLine();
                     if (nextLine == null) // stop on EOF, or...
                     {
@@ -93,7 +93,7 @@ public class SectionList
                         line = line.concat(nextLine.substring(1));
                     }
                     else // new section, so reset in preparation for read.
-                    { 
+                    {
                         reader.reset();
                         done = true;
                     }

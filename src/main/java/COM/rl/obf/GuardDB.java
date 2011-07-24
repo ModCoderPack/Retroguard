@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -74,7 +74,7 @@ public class GuardDB implements ClassConstants
     public GuardDB(File inFile, boolean enableTrim) throws Exception
     {
         inJar = new ZipFile(inFile);
-	this.enableTrim = enableTrim;
+        this.enableTrim = enableTrim;
         parseManifest();
     }
 
@@ -147,27 +147,27 @@ public class GuardDB implements ClassConstants
 
         // Always retain native methods and their classes, using script entry:
         // .method;native ** * and_class
-        classTree.retainMethod("**", "*", true, null, false, false, 
-                               ClassConstants.ACC_NATIVE, 
+        classTree.retainMethod("**", "*", true, null, false, false,
+                               ClassConstants.ACC_NATIVE,
                                ClassConstants.ACC_NATIVE);
 
-        // Always retain the auto-generated values() and valueOf(...) 
+        // Always retain the auto-generated values() and valueOf(...)
         // methods in Enums, using script entries:
         // .method;public;static;final **/values * extends java/lang/Enum
         // .method;public;static **/valueOf * extends java/lang/Enum
         classTree.retainMethod
-            ("**/values", "*", false, "java/lang/Enum", false, false, 
-             ClassConstants.ACC_PUBLIC | 
-             ClassConstants.ACC_STATIC | 
-             ClassConstants.ACC_FINAL, 
-             ClassConstants.ACC_PUBLIC | 
-             ClassConstants.ACC_STATIC | 
+            ("**/values", "*", false, "java/lang/Enum", false, false,
+             ClassConstants.ACC_PUBLIC |
+             ClassConstants.ACC_STATIC |
+             ClassConstants.ACC_FINAL,
+             ClassConstants.ACC_PUBLIC |
+             ClassConstants.ACC_STATIC |
              ClassConstants.ACC_FINAL);
         classTree.retainMethod
-            ("**/valueOf", "*", false, "java/lang/Enum", false, false, 
-             ClassConstants.ACC_PUBLIC | 
-             ClassConstants.ACC_STATIC, 
-             ClassConstants.ACC_PUBLIC | 
+            ("**/valueOf", "*", false, "java/lang/Enum", false, false,
+             ClassConstants.ACC_PUBLIC |
+             ClassConstants.ACC_STATIC,
+             ClassConstants.ACC_PUBLIC |
              ClassConstants.ACC_STATIC);
 
         // Enumerate the entries in the RGS script
@@ -193,7 +193,7 @@ public class GuardDB implements ClassConstants
                     }
                     else if (ClassConstants.OPTION_Trim.equals(entry.name))
                     {
-			// NOTE - already set in special RGS pass
+                        // NOTE - already set in special RGS pass
                         //enableTrim = true;
                     }
                     else if (ClassConstants.OPTION_Repackage.equals(entry.name))
@@ -228,27 +228,27 @@ public class GuardDB implements ClassConstants
                     {
 // .option Enumeration - translates into
 // .class ** public extends java/lang/Enum
-                        classTree.retainClass("**", true, false, 
+                        classTree.retainClass("**", true, false,
                                               false, false, false,
-                                              "java/lang/Enum", false, false, 
+                                              "java/lang/Enum", false, false,
                                               0, 0);
                     }
                     else if (ClassConstants.OPTION_Application.equals(entry.name))
                     {
 // .option Application - translates into
 // .method **/main ([Ljava/lang/String;)V and_class
-                        classTree.retainMethod("**/main", 
+                        classTree.retainMethod("**/main",
                                                "([Ljava/lang/String;)V",
-                                               true, null, false, false, 
+                                               true, null, false, false,
                                                0, 0);
                     }
                     else if (ClassConstants.OPTION_Applet.equals(entry.name))
                     {
 // .option Applet - translates into
 // .class ** extends java/applet/Applet
-                        classTree.retainClass("**", false, false, 
+                        classTree.retainClass("**", false, false,
                                               false, false, false,
-                                              "java/applet/Applet", false, false, 
+                                              "java/applet/Applet", false, false,
                                               0, 0);
                     }
                     else if (ClassConstants.OPTION_RMI.equals(entry.name))
@@ -259,20 +259,20 @@ public class GuardDB implements ClassConstants
 // .class **_Stub
 // .class **_Skel
                         classTree.retainClass
-                            ("**", false, 
+                            ("**", false,
                              true, // protected
                              false, false, false,
-                             "java/rmi/Remote", false, false, 
+                             "java/rmi/Remote", false, false,
                              0, 0);
                         classTree.retainClass
-                            ("**_Stub", false, false, 
+                            ("**_Stub", false, false,
                              false, false, false,
-                             null, false, false, 
+                             null, false, false,
                              0, 0);
                         classTree.retainClass
-                            ("**_Skel", false, false, 
+                            ("**_Skel", false, false,
                              false, false, false,
-                             null, false, false, 
+                             null, false, false,
                              0, 0);
                     }
                     if (ClassConstants.OPTION_Serializable.equals(entry.name) ||
@@ -288,54 +288,54 @@ public class GuardDB implements ClassConstants
 // .class ** extends java/io/Serializable
 // .field;!transient;!static ** * extends java/io/Serializable
                         classTree.retainMethod
-                            ("**/writeObject", 
+                            ("**/writeObject",
                              "(Ljava/io/ObjectOutputStream;)V",
-                             false, "java/io/Serializable", false, false, 
-                             ClassConstants.ACC_PRIVATE, 
+                             false, "java/io/Serializable", false, false,
+                             ClassConstants.ACC_PRIVATE,
                              ClassConstants.ACC_PRIVATE);
                         classTree.retainMethod
-                            ("**/readObject", 
+                            ("**/readObject",
                              "(Ljava/io/ObjectInputStream;)V",
-                             false, "java/io/Serializable", false, false, 
-                             ClassConstants.ACC_PRIVATE, 
+                             false, "java/io/Serializable", false, false,
+                             ClassConstants.ACC_PRIVATE,
                              ClassConstants.ACC_PRIVATE);
                         classTree.retainMethod
-                            ("**/writeReplace", 
+                            ("**/writeReplace",
                              "()Ljava/lang/Object;",
-                             false, "java/io/Serializable", false, false, 
+                             false, "java/io/Serializable", false, false,
                              0, 0);
                         classTree.retainMethod
-                            ("**/readResolve", 
+                            ("**/readResolve",
                              "()Ljava/lang/Object;",
-                             false, "java/io/Serializable", false, false, 
+                             false, "java/io/Serializable", false, false,
                              0, 0);
                         classTree.retainField
-                            ("**/serialVersionUID", 
-                             "J", 
-                             false, "java/io/Serializable", false, false, 
-                             ClassConstants.ACC_STATIC | 
-                             ClassConstants.ACC_FINAL, 
-                             ClassConstants.ACC_STATIC | 
+                            ("**/serialVersionUID",
+                             "J",
+                             false, "java/io/Serializable", false, false,
+                             ClassConstants.ACC_STATIC |
+                             ClassConstants.ACC_FINAL,
+                             ClassConstants.ACC_STATIC |
                              ClassConstants.ACC_FINAL);
                         classTree.retainField
-                            ("**/serialPersistentFields", 
+                            ("**/serialPersistentFields",
                              "[Ljava/io/ObjectStreamField;",
-                             false, "java/io/Serializable", false, false, 
-                             ClassConstants.ACC_PRIVATE | 
-                             ClassConstants.ACC_STATIC | 
-                             ClassConstants.ACC_FINAL, 
-                             ClassConstants.ACC_PRIVATE | 
-                             ClassConstants.ACC_STATIC | 
+                             false, "java/io/Serializable", false, false,
+                             ClassConstants.ACC_PRIVATE |
+                             ClassConstants.ACC_STATIC |
+                             ClassConstants.ACC_FINAL,
+                             ClassConstants.ACC_PRIVATE |
+                             ClassConstants.ACC_STATIC |
                              ClassConstants.ACC_FINAL);
                         classTree.retainClass
-                            ("**", false, false, 
+                            ("**", false, false,
                              false, false, false,
-                             "java/io/Serializable", false, false, 
+                             "java/io/Serializable", false, false,
                              0, 0);
                         classTree.retainField
-                            ("**", "*", 
-                             false, "java/io/Serializable", false, false, 
-                             ClassConstants.ACC_TRANSIENT | 
+                            ("**", "*",
+                             false, "java/io/Serializable", false, false,
+                             ClassConstants.ACC_TRANSIENT |
                              ClassConstants.ACC_STATIC,
                              0);
                     }
@@ -352,11 +352,11 @@ public class GuardDB implements ClassConstants
                 case RgsEntry.TYPE_CLASS:
                 case RgsEntry.TYPE_NOTRIM_CLASS:
                 case RgsEntry.TYPE_NOT_CLASS:
-                    classTree.retainClass(entry.name, 
-                                          entry.retainToPublic, 
-                                          entry.retainToProtected, 
+                    classTree.retainClass(entry.name,
+                                          entry.retainToPublic,
+                                          entry.retainToProtected,
                                           entry.retainPubProtOnly,
-                                          entry.retainFieldsOnly, 
+                                          entry.retainFieldsOnly,
                                           entry.retainMethodsOnly,
                                           entry.extendsName,
                                           entry.type == entry.TYPE_NOT_CLASS,
@@ -401,7 +401,7 @@ public class GuardDB implements ClassConstants
                     break;
 
                 case RgsEntry.TYPE_METHOD_MAP:
-                    classTree.retainMethodMap(entry.name, entry.descriptor, 
+                    classTree.retainMethodMap(entry.name, entry.descriptor,
                                               entry.obfName);
                     break;
 
@@ -423,7 +423,7 @@ public class GuardDB implements ClassConstants
     /** Write any non-suppressed warnings to the log. */
     public void logWarnings(PrintWriter log) throws Exception
     {
-        if (classTree != null) 
+        if (classTree != null)
         {
             classTree.logWarnings(log);
         }
@@ -445,7 +445,7 @@ public class GuardDB implements ClassConstants
         classTree.walkTree(new TreeAction() {
             public void classAction(Cl cl) throws Exception {cl.setupNameListDowns();}
         });
-        
+
         // Traverse the class tree, generating obfuscated names within
         // package and class namespaces
         classTree.generateNames(enableRepackage);
@@ -479,62 +479,62 @@ public class GuardDB implements ClassConstants
             createMap(log);
         }
 
-	if (enableTrim) {
-	    // Mark all for trimming
-	    classTree.walkTree(new TreeAction() 
-	    {
-		public void classAction(Cl cl) { 
-		    cl.setTrimCheck(false); 
-		    cl.setTrimmed(true); } 
-		public void methodAction(Md md) { 
-		    md.setTrimCheck(false);
-		    md.setTrimmed(true); }
-		public void fieldAction(Fd fd)  { 
-		    fd.setTrimCheck(false);
-		    fd.setTrimmed(true); }
-		public void packageAction(Pk pk) { }
-	    });
-	    // Add script-fixed and inheritance-fixed items to stack
-	    final TIStack stack = new TIStack();
-	    classTree.walkTree(new TreeAction() 
-	    {
-		public void classAction(Cl cl)  
-                { 
-		    if (cl.isFromScript()) stack.push(cl); 
+        if (enableTrim) {
+            // Mark all for trimming
+            classTree.walkTree(new TreeAction()
+            {
+                public void classAction(Cl cl) {
+                    cl.setTrimCheck(false);
+                    cl.setTrimmed(true); }
+                public void methodAction(Md md) {
+                    md.setTrimCheck(false);
+                    md.setTrimmed(true); }
+                public void fieldAction(Fd fd)  {
+                    fd.setTrimCheck(false);
+                    fd.setTrimmed(true); }
+                public void packageAction(Pk pk) { }
+            });
+            // Add script-fixed and inheritance-fixed items to stack
+            final TIStack stack = new TIStack();
+            classTree.walkTree(new TreeAction()
+            {
+                public void classAction(Cl cl)
+                {
+                    if (cl.isFromScript()) stack.push(cl);
                 }
-		public void methodAction(Md md)
-                { 
-		    if (md.isFromScript()) stack.push(md); 
+                public void methodAction(Md md)
+                {
+                    if (md.isFromScript()) stack.push(md);
                     // NOTE - Push all methods which are overrides indirectly
-                    // onto the stack via their parent class (only doing the 
+                    // onto the stack via their parent class (only doing the
                     // actual push later, if their class is referenced). This
                     // is still over-conservative, since the override method
-                    // could be safely trimmed if none of its super 
-                    // implementations is called. 
-                    if (md.isOverride()) 
+                    // could be safely trimmed if none of its super
+                    // implementations is called.
+                    if (md.isOverride())
                     {
                         md.getParent().addRef(md);
                     }
                 }
-		public void fieldAction(Fd fd) 
-                { 
-		    if (fd.isFromScript()) stack.push(fd); 
+                public void fieldAction(Fd fd)
+                {
+                    if (fd.isFromScript()) stack.push(fd);
                     // NOTE - See above
-                    if (fd.isOverride()) 
+                    if (fd.isOverride())
                     {
                         fd.getParent().addRef(fd);
                     }
                 }
-		public void packageAction(Pk pk) { }
-	    });
+                public void packageAction(Pk pk) { }
+            });
             // Process each, which will involve the addition and processing
             // of dependent references
-	    while (!stack.empty())
-	    {
-		TreeItem ti = (TreeItem)stack.pop();
-		ti.pushRefs(stack);
-	    }
-	}
+            while (!stack.empty())
+            {
+                TreeItem ti = (TreeItem)stack.pop();
+                ti.pushRefs(stack);
+            }
+        }
     }
 
     /** Remap each class based on the remap database, and remove attributes. */
@@ -572,7 +572,7 @@ public class GuardDB implements ClassConstants
                 {
                     continue;
                 }
-                
+
                 // Open the entry and prepare to process it
                 DataInputStream inStream = null;
                 try
@@ -598,12 +598,12 @@ public class GuardDB implements ClassConstants
                             cf.trimAttrs(classTree);
                             cl.trimClassFile(cf);
                             cf.updateRefCount();
-                            cf.remap(classTree, log, enableMapClassString, 
+                            cf.remap(classTree, log, enableMapClassString,
                                      enableDummySourceFile);
-                            ZipEntry outEntry = 
+                            ZipEntry outEntry =
                                 new ZipEntry(cf.getName() + CLASS_EXT);
                             outJar.putNextEntry(outEntry);
-                        
+
                             // Create an OutputStream piped through a number of digest generators for the manifest
                             MessageDigest shaDigest = null;
                             MessageDigest md5Digest = null;
@@ -611,34 +611,34 @@ public class GuardDB implements ClassConstants
                             if (enableDigestSHA)
                             {
                                 shaDigest = MessageDigest.getInstance("SHA-1");
-                                outputStream = 
-                                    new DigestOutputStream(outputStream, 
+                                outputStream =
+                                    new DigestOutputStream(outputStream,
                                                            shaDigest);
                             }
                             if (enableDigestMD5)
                             {
                                 md5Digest = MessageDigest.getInstance("MD5");
-                                outputStream = 
-                                    new DigestOutputStream(outputStream, 
+                                outputStream =
+                                    new DigestOutputStream(outputStream,
                                                            md5Digest);
                             }
-                            DataOutputStream dataOutputStream = 
+                            DataOutputStream dataOutputStream =
                                 new DataOutputStream(outputStream);
-                            
+
                             // Dump the classfile, while creating the digests
                             cf.write(dataOutputStream);
                             dataOutputStream.flush();
                             outJar.closeEntry();
-                            
+
                             // Now update the manifest entry for the class with new name and new digests
                             MessageDigest[] digests = {shaDigest, md5Digest};
-                            updateManifest(inName, cf.getName() + CLASS_EXT, 
+                            updateManifest(inName, cf.getName() + CLASS_EXT,
                                            digests);
                         }
                     }
                     else if (STREAM_NAME_MANIFEST.equals(inName.toUpperCase()) ||
                              (inName.length() > (SIGNATURE_PREFIX.length() + 1 + SIGNATURE_EXT.length()) &&
-                              inName.indexOf(SIGNATURE_PREFIX) != -1 && 
+                              inName.indexOf(SIGNATURE_PREFIX) != -1 &&
                               inName.substring(inName.length() - SIGNATURE_EXT.length(), inName.length()).equals(SIGNATURE_EXT)))
                     {
                         // Don't pass through the manifest or signature files
@@ -655,7 +655,7 @@ public class GuardDB implements ClassConstants
                             String outName = classTree.getOutName(inName);
                             ZipEntry outEntry = new ZipEntry(outName);
                             outJar.putNextEntry(outEntry);
-                            
+
                             // Create an OutputStream piped through a number of digest generators for the manifest
                             MessageDigest shaDigest = null;
                             MessageDigest md5Digest = null;
@@ -663,25 +663,25 @@ public class GuardDB implements ClassConstants
                             if (enableDigestSHA)
                             {
                                 shaDigest = MessageDigest.getInstance("SHA-1");
-                                outputStream = 
-                                    new DigestOutputStream(outputStream, 
+                                outputStream =
+                                    new DigestOutputStream(outputStream,
                                                            shaDigest);
                             }
                             if (enableDigestMD5)
                             {
                                 md5Digest = MessageDigest.getInstance("MD5");
-                                outputStream = 
-                                    new DigestOutputStream(outputStream, 
+                                outputStream =
+                                    new DigestOutputStream(outputStream,
                                                            md5Digest);
                             }
-                            DataOutputStream dataOutputStream = 
+                            DataOutputStream dataOutputStream =
                                 new DataOutputStream(outputStream);
 
                             // Dump the data, while creating the digests
                             dataOutputStream.write(bytes, 0, bytes.length);
                             dataOutputStream.flush();
                             outJar.closeEntry();
-                    
+
                             // Now update the manifest entry for the entry with new name and new digests
                             MessageDigest[] digests = {shaDigest, md5Digest};
                             updateManifest(inName, outName, digests);
@@ -696,7 +696,7 @@ public class GuardDB implements ClassConstants
                     }
                 }
             }
-            
+
             // Finally, write the new manifest file
             ZipEntry outEntry = new ZipEntry(STREAM_NAME_MANIFEST);
             outJar.putNextEntry(outEntry);
@@ -716,7 +716,7 @@ public class GuardDB implements ClassConstants
 
     /** Close input JAR file. */
     public void close() throws Exception {
-        if (inJar != null) 
+        if (inJar != null)
         {
             inJar.close();
             inJar = null;
@@ -730,12 +730,12 @@ public class GuardDB implements ClassConstants
         // (case insensitively) 'MANIFEST.MF'
         oldManifest = new SectionList();
         Enumeration entries = inJar.entries();
-        while (entries.hasMoreElements()) 
+        while (entries.hasMoreElements())
         {
             // Get the first entry only from the input Jar
             ZipEntry inEntry = (ZipEntry)entries.nextElement();
             String name = inEntry.getName();
-            if (STREAM_NAME_MANIFEST.equals(name.toUpperCase())) 
+            if (STREAM_NAME_MANIFEST.equals(name.toUpperCase()))
             {
                 oldManifest.parse(inJar.getInputStream(inEntry));
                 break;
@@ -744,9 +744,9 @@ public class GuardDB implements ClassConstants
 
         // Create a fresh manifest, with a version header
         newManifest = new SectionList();
-        Section version = oldManifest.find(MANIFEST_VERSION_TAG, 
+        Section version = oldManifest.find(MANIFEST_VERSION_TAG,
                                            MANIFEST_VERSION_VALUE);
-        if (version == null) 
+        if (version == null)
         {
             version = new Section();
             version.add(MANIFEST_VERSION_TAG, MANIFEST_VERSION_VALUE);
@@ -754,22 +754,22 @@ public class GuardDB implements ClassConstants
         newManifest.add(version);
 
         // copy through all the none-filename sections, apart from the version
-        for (Enumeration enm = oldManifest.elements(); 
-             enm.hasMoreElements(); ) 
+        for (Enumeration enm = oldManifest.elements();
+             enm.hasMoreElements(); )
         {
             Section section = (Section)enm.nextElement();
-            if (section != null && section != version) 
+            if (section != null && section != version)
             {
                 Header name = section.findTag(MANIFEST_NAME_TAG);
-                if (name == null) 
+                if (name == null)
                 {
                     newManifest.add(section);
-                } 
-                else 
+                }
+                else
                 {
                     String value = name.getValue();
-                    if (value.length() > 0 && 
-                        value.charAt(value.length() - 1) == '/') 
+                    if (value.length() > 0 &&
+                        value.charAt(value.length() - 1) == '/')
                     {
                         newManifest.add(section);
                     }
@@ -779,7 +779,7 @@ public class GuardDB implements ClassConstants
     }
 
     // Update an entry in the manifest file
-    private void updateManifest(String inName, String outName, 
+    private void updateManifest(String inName, String outName,
                                 MessageDigest[] digests)
     {
         // Check for section in old manifest
@@ -791,7 +791,7 @@ public class GuardDB implements ClassConstants
             newSection.add(MANIFEST_NAME_TAG, outName);
 
             // Copy over non-"Name", non-digest entries
-            for (Enumeration enm = oldSection.elements(); 
+            for (Enumeration enm = oldSection.elements();
                  enm.hasMoreElements(); )
             {
                 Header header = (Header)enm.nextElement();
@@ -815,22 +815,22 @@ public class GuardDB implements ClassConstants
                         sb.append(" ");
                     }
                 }
-                if (sb.length() > 0) 
+                if (sb.length() > 0)
                 {
                     newSection.add(MANIFEST_DIGESTALG_TAG, sb.toString());
                 }
-                
+
                 // *-Digest headers
                 for (int i = 0; i < digests.length; i++)
                 {
                     if (digests[i] != null)
                     {
-                        newSection.add(digests[i].getAlgorithm() + "-Digest", 
+                        newSection.add(digests[i].getAlgorithm() + "-Digest",
                                        Tools.toBase64(digests[i].digest()));
                     }
-                }            
+                }
             }
-            
+
             // Append the new section to the new manifest
             newManifest.add(newSection);
         }
@@ -925,9 +925,9 @@ class TIStack extends Stack
             final String fdesc = desc;
             cl.walkGroup(new TreeAction() {
                 public void classAction(Cl cl)
-                { 
+                {
                     try {
-                        MdFd mdfd = (fdesc == null ? 
+                        MdFd mdfd = (fdesc == null ?
                                      (MdFd)cl.getField(fname) :
                                      (MdFd)cl.getMethod(fname, fdesc));
                         pushItem(mdfd);

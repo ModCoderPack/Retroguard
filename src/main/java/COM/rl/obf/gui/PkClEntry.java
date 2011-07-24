@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -92,27 +92,27 @@ public class PkClEntry implements TreeEntry
     }
 
     /** Return the children TreeEntry's. */
-    public Enumeration elements() 
+    public Enumeration elements()
     {
         Vector vec = new Vector();
-        try 
+        try
         {
             // For a package, list sub-packages
-            if (pkcl instanceof Pk) 
+            if (pkcl instanceof Pk)
             {
                 PkClEntry[] sortPackages = new PkClEntry[((Pk)pkcl).getPackageCount()];
                 int i = 0;
                 for (Enumeration enm = ((Pk)pkcl).getPackageEnum(); enm.hasMoreElements(); i++) {
                     sortPackages[i] = new PkClEntry(depth + 1, (PkCl)enm.nextElement());
                 }
-                Sort.quicksort(sortPackages, 
+                Sort.quicksort(sortPackages,
                                new Compare() {
-                                   public boolean isLess(Object o1, Object o2) 
+                                   public boolean isLess(Object o1, Object o2)
                                    {
                                        return ((PkClEntry)o1).getPkCl().getInName().compareTo(((PkClEntry)o2).getPkCl().getInName()) < 0;
                                    }
                                });
-                for (i = 0; i < sortPackages.length; i++) 
+                for (i = 0; i < sortPackages.length; i++)
                 {
                     vec.addElement(sortPackages[i]);
                 }
@@ -120,24 +120,24 @@ public class PkClEntry implements TreeEntry
             // Now list class entries
             PkClEntry[] sortClasses = new PkClEntry[pkcl.getClassCount()];
             int i = 0;
-            for (Enumeration enm = pkcl.getClassEnum(); 
-                 enm.hasMoreElements(); i++) 
+            for (Enumeration enm = pkcl.getClassEnum();
+                 enm.hasMoreElements(); i++)
             {
                 sortClasses[i] = new PkClEntry(depth + 1, (PkCl)enm.nextElement());
             }
-            Sort.quicksort(sortClasses, 
+            Sort.quicksort(sortClasses,
                            new Compare() {
-                               public boolean isLess(Object o1, Object o2) 
+                               public boolean isLess(Object o1, Object o2)
                                {
                                    return ((PkClEntry)o1).getPkCl().getInName().compareTo(((PkClEntry)o2).getPkCl().getInName()) < 0;
                                }
                            });
-            for (i = 0; i < sortClasses.length; i++) 
+            for (i = 0; i < sortClasses.length; i++)
             {
                 vec.addElement(sortClasses[i]);
             }
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             vec = new Vector();
         }

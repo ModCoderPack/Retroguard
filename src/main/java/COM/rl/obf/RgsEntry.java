@@ -6,13 +6,13 @@
  *
  * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
  *
- * This program can be redistributed and/or modified under the terms of the 
- * Version 2 of the GNU General Public License as published by the Free 
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
  * Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  */
@@ -86,26 +86,26 @@ public class RgsEntry
 
     public String debugString()
     {
-        return 
+        return
             (type == TYPE_OPTION ? ".option " :
              (type == TYPE_ATTR ? ".attribute " :
               (type == TYPE_CLASS ? ".class " :
                (type == TYPE_NOTRIM_CLASS ? "^class " :
-		(type == TYPE_NOT_CLASS ? "!class " :
-		 (type == TYPE_METHOD ? ".method " :
-		  (type == TYPE_NOTRIM_METHOD ? "^method " :
-		   (type == TYPE_NOT_METHOD ? "!method " :
-		    (type == TYPE_FIELD ? ".field " :
-		     (type == TYPE_NOTRIM_FIELD ? "^field " :
-		      (type == TYPE_NOT_FIELD ? "!field " :
-		       (type == TYPE_PACKAGE_MAP ? ".package_map " :
+                (type == TYPE_NOT_CLASS ? "!class " :
+                 (type == TYPE_METHOD ? ".method " :
+                  (type == TYPE_NOTRIM_METHOD ? "^method " :
+                   (type == TYPE_NOT_METHOD ? "!method " :
+                    (type == TYPE_FIELD ? ".field " :
+                     (type == TYPE_NOTRIM_FIELD ? "^field " :
+                      (type == TYPE_NOT_FIELD ? "!field " :
+                       (type == TYPE_PACKAGE_MAP ? ".package_map " :
                         (type == TYPE_REPACKAGE_MAP ? ".repackage_map " :
                          (type == TYPE_CLASS_MAP ? ".class_map " :
                           (type == TYPE_METHOD_MAP ? ".method_map " :
                            (type == TYPE_FIELD_MAP ? ".field_map " :
                             (type == TYPE_NOWARN ? ".nowarn " : "")))))))))))))))))
-            + name + " " 
-            + (descriptor != null ? descriptor + " " : "") 
+            + name + " "
+            + (descriptor != null ? descriptor + " " : "")
             + (retainToPublic ? "public " : "")
             + (retainToProtected ? "protected " : "")
             + (retainPubProtOnly ? "pub_prot_only " : "")
