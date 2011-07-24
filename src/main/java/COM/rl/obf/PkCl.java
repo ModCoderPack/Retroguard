@@ -177,23 +177,18 @@ abstract public class PkCl extends TreeItem
         {
             noObfNames[i] = (String)vec.elementAt(i);
         }
-        NameMaker nm = new KeywordNameMaker(noObfNames, false, true);
         for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
         {
             TreeItem ti = (TreeItem)enm.nextElement();
             //replaced by Searge:
-            if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
-            {
-                if (!ti.isFixed())
-                {
-                    ti.setOutName(nm.nextName(ti.getInName(), null));
-                }
-            }
-            else
+            if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String s = NameProvider.getNewTreeItemName(ti);
                 if(s != null)
+                {
                     ti.setOutName(s);
+                    System.out.println("Misc " + ti.getFullInName() + " renamed to " + ti.getFullOutName() + " from name maker.");
+                }
             }
         }
     }

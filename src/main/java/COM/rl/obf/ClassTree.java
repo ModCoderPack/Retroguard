@@ -465,7 +465,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            System.out.println("Trying to map fixed " + item.getInName() + " = " + item.getOutName()+ " to " + obfName);
+            System.out.println("Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName()+ " to " + obfName);
         }
     }
 
@@ -483,10 +483,9 @@ public class ClassTree implements NameMapper
                 // only exclude root level packages in classic mode
                 noObfNames = new String[0];
             }
-            final NameMaker nm = new KeywordNameMaker(noObfNames, false, true);
             // Generate single-level package names, unique across jar
             walkTree(new TreeAction() {
-                    public void packageAction(Pk pk) throws Exception {pk.repackageName(nm);}
+                    public void packageAction(Pk pk) throws Exception {pk.repackageName();}
             });
         }
         // Now rename everything in the traditional way (no repackaging)
@@ -972,9 +971,6 @@ public class ClassTree implements NameMapper
     public void dump(final PrintWriter log) throws Exception
     {
         log.println("#");
-        log.println(LOG_FREQUENCY_TABLE);
-        dumpFrequencyCount(log);
-        log.println("#");
         log.println(LOG_PRE_UNOBFUSCATED);
         log.println("#");
         walkTree(new TreeAction()
@@ -1085,58 +1081,6 @@ public class ClassTree implements NameMapper
                 }
             }
         });
-    }
-
-    private void dumpFrequencyCount(PrintWriter log)
-    {
-        // Compute total use count
-        int totalUseCount = 0;
-        for (Enumeration useCountEnum = NameMaker.getUseCounts(); useCountEnum.hasMoreElements(); )
-        {
-            totalUseCount += ((Integer)useCountEnum.nextElement()).intValue() + 1;
-        }
-
-        // Log the individual use counts for names
-        if (totalUseCount != 0)
-        {
-            int sumPercent = 0;
-            int sumUseCount = 0;
-            Vector sort = new Vector();
-            for (Enumeration nameEnum = NameMaker.getNames(), useCountEnum = NameMaker.getUseCounts(); nameEnum.hasMoreElements(); )
-            {
-                String name = (String)nameEnum.nextElement();
-                int useCount = ((Integer)useCountEnum.nextElement()).intValue() + 1;
-                int percent = 100 * useCount / totalUseCount;
-                if (percent != 0)
-                {
-                    sort.addElement(new SortElement(name, useCount));
-                    sumUseCount += useCount;
-                    sumPercent += percent;
-                }
-            }
-            while (sort.size() != 0)
-            {
-                SortElement se = null;
-                int largestUseCount = 0;
-                for (Enumeration enm = sort.elements(); enm.hasMoreElements(); )
-                {
-                    SortElement thisSe = (SortElement)enm.nextElement();
-                    if (thisSe.useCount >= largestUseCount)
-                    {
-                        se = thisSe;
-                        largestUseCount = se.useCount;
-                    }
-                }
-                sort.removeElement(se);
-                log.println("#  '" + se.name + "'   \tused " + se.useCount + " times\t(" + Integer.toString(100 * se.useCount / totalUseCount) + "%)");
-            }
-
-            // Log the remainder percentage
-            log.println("#  Other names (each used in <1% of mappings) used a total of " +
-                        Integer.toString(totalUseCount - sumUseCount) +
-                        " times (" + Integer.toString(100 - sumPercent) + "%)");
-            log.println("#");
-        }
     }
 
     class SortElement

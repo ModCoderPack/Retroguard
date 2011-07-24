@@ -52,8 +52,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     private Vector warningList = null; // Danger-method warnings
 
     public static int nameSpace = 0;
-    private static NameMaker methodNameMaker;
-    private static NameMaker fieldNameMaker;
 
 
     // Class Methods ---------------------------------------------------------
@@ -495,10 +493,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 fieldNames[i] = (String)fields.elementAt(i);
             }
 
-            // Create new name-makers for the namespace
-            methodNameMaker = new VerbNameMaker(methodNames);
-            fieldNameMaker = new NounNameMaker(fieldNames);
-
             // Resolve a full name space
             resolveNameSpaceExcept(null);
 
@@ -766,16 +760,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 // If no other restrictions, obfuscate it
                 //replaced by Searge:
-                if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
+                String s = NameProvider.getNewMethodName(md);
+                if(s != null)
                 {
-                    md.setOutName(methodNameMaker.nextName(md.getInName(), md.getDescriptor()));
+                    md.setOutName(s);
                     System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
-                }
-                else
-                {
-                    String s = NameProvider.getNewMethodName(md);
-                    if(s != null)
-                        md.setOutName(s);
                 }
             }
         }
@@ -812,16 +801,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 // If no other restrictions, obfuscate it
                 //replaced by Searge:
-                if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
+                String s = NameProvider.getNewFieldName(fd);
+                if(s != null)
                 {
-                    fd.setOutName(fieldNameMaker.nextName(fd.getInName(), null));
+                    fd.setOutName(s);
                     System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
-                }
-                else
-                {
-                    String s = NameProvider.getNewFieldName(fd);
-                    if(s != null)
-                        fd.setOutName(s);
                 }
             }
         }

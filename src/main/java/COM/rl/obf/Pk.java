@@ -168,24 +168,17 @@ public class Pk extends PkCl
     }
 
     /** Generate unique-across-run obfuscated repackage name. */
-    public void repackageName(NameMaker nm) throws Exception
+    public void repackageName() throws Exception
     {
         //replaced by Searge:
-        if(NameProvider.currentMode == NameProvider.CLASSIC_MODE)
-        {
-            if (!isFixed())
-            {
-                setRepackageName(nm.nextName(getInName(), null));
-                setOutName(getInName());
-            }
-        }
-        else
+        if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
         {
             String s = NameProvider.getNewPackageName(this);
             if(s != null)
             {
                 setRepackageName(s);
                 setOutName(getInName());
+                System.out.println("Package " + this.getFullInName() + " renamed to " + this.getFullOutName() + " from name maker.");
             }
         }
     }

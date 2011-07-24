@@ -567,9 +567,6 @@ public class NameProvider
     public static String getNewTreeItemName( TreeItem ti )
     {
         //log("TI: " + ti.getFullInName());
-        if( currentMode == CLASSIC_MODE )
-            return null;
-
         if( ti instanceof Pk)
         {
             return getNewPackageName((Pk)ti);
@@ -598,10 +595,16 @@ public class NameProvider
     ////////////////////////////////////////////////////////////////////////////////
     public static String getNewPackageName( Pk pk )
     {
-        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        if( currentMode == CHANGE_NOTHING_MODE )
         {
             log("PK: " + pk.getFullInName());
             return null;
+        }
+
+        if( currentMode == CLASSIC_MODE )
+        {
+            log("PK: " + pk.getFullInName());
+            return "p_" + (++uniqueStart) + "_" + pk.getInName();
         }
 
         String packageName = pk.getFullInName();
@@ -689,10 +692,16 @@ public class NameProvider
     ////////////////////////////////////////////////////////////////////////////////
     public static String getNewClassName( Cl cl )
     {
-        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        if( currentMode == CHANGE_NOTHING_MODE )
         {
             log("CL: " + cl.getFullInName());
             return null;
+        }
+
+        if( currentMode == CLASSIC_MODE )
+        {
+            log("CL: " + cl.getFullInName());
+            return "C_" + (++uniqueStart) + "_" + cl.getInName();
         }
 
         String className = cl.getInName();
@@ -747,10 +756,16 @@ public class NameProvider
     @SuppressWarnings("rawtypes")
     public static String getNewMethodName( Md md )
     {
-        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        if( currentMode == CHANGE_NOTHING_MODE )
         {
             log("MD: " + md.getFullInName());
             return null;
+        }
+
+        if( currentMode == CLASSIC_MODE )
+        {
+            log("MD: " + md.getFullInName());
+            return "func_" + (++uniqueStart) + "_" + md.getInName();
         }
 
         String methodName = md.getInName();
@@ -998,10 +1013,16 @@ public class NameProvider
     ////////////////////////////////////////////////////////////////////////////////
     public static String getNewFieldName( Fd fd )
     {
-        if( currentMode == CLASSIC_MODE || currentMode == CHANGE_NOTHING_MODE )
+        if( currentMode == CHANGE_NOTHING_MODE )
         {
             log("FD: " + fd.getFullInName());
             return null;
+        }
+
+        if( currentMode == CLASSIC_MODE )
+        {
+            log("FD: " + fd.getFullInName());
+            return "field_" + (++uniqueStart) + "_" + fd.getInName();
         }
 
         String fieldName = fd.getInName();
