@@ -22,7 +22,6 @@ package COM.rl.obf;
 import java.io.*;
 import java.util.*;
 import COM.rl.obf.classfile.ClassFile;
-import COM.rl.obf.gui.*;
 
 /**
  * Main implementation class for obfuscator package.
