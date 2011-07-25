@@ -284,9 +284,9 @@ public class TreeItem
         }
         else
         {
-                String s = parent.getFullOutName();
-                if(s.equals("") || this instanceof Pk)
-                        return getOutName();
+            String s = parent.getFullOutName();
+            if(s.equals("") || this instanceof Pk)
+                return getOutName();
             return s + sep + getOutName();
         }
     }

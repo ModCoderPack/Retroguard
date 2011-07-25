@@ -183,10 +183,10 @@ abstract public class PkCl extends TreeItem
             //replaced by Searge:
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
-                String s = NameProvider.getNewTreeItemName(ti);
-                if(s != null)
+                String theOutName = NameProvider.getNewTreeItemName(ti);
+                if(theOutName != null)
                 {
-                    ti.setOutName(s);
+                    ti.setOutName(theOutName);
                     System.out.println("Misc " + ti.getFullInName() + " renamed to " + ti.getFullOutName() + " from name maker.");
                 }
             }

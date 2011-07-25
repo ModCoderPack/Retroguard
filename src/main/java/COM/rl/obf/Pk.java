@@ -173,10 +173,10 @@ public class Pk extends PkCl
         //replaced by Searge:
         if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
         {
-            String s = NameProvider.getNewPackageName(this);
-            if(s != null)
+            String theOutName = NameProvider.getNewPackageName(this);
+            if (theOutName != null)
             {
-                setRepackageName(s);
+                setRepackageName(theOutName);
                 setOutName(getInName());
                 System.out.println("Package " + this.getFullInName() + " renamed to " + this.getFullOutName() + " from name maker.");
             }

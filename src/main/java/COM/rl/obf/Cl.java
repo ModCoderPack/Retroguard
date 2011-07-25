@@ -741,7 +741,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         md.setOutName(theOutName);
                         //Added by Searge;
-                        System.out.println("Method " + md.getFullInName() + " renamed to " + theOutName + " because of derived class.");
+                        System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of derived class.");
                         continue nextMethod;
                     }
                 }
@@ -754,16 +754,16 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         md.setOutName(theOutName);
                         md.setIsOverride();
                         //Added by Searge;
-                        System.out.println("Method " + md.getFullInName() + " renamed to " + theOutName + " because of super class.");
+                        System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of super class.");
                         continue nextMethod;
                     }
                 }
                 // If no other restrictions, obfuscate it
                 //replaced by Searge:
-                String s = NameProvider.getNewMethodName(md);
-                if(s != null)
+                String theOutName = NameProvider.getNewMethodName(md);
+                if (theOutName != null)
                 {
-                    md.setOutName(s);
+                    md.setOutName(theOutName);
                     System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
                 }
             }
@@ -782,29 +782,29 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         fd.setOutName(theOutName);
                         //Added by Searge;
-                        System.out.println("Field " + fd.getFullInName() + " renamed to " + theOutName + " because of derived class.");
+                        System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of derived class.");
                         continue nextField;
                     }
                 }
                 // Check for name reservation via super classes
                 for (Enumeration nlEnum = nameListUps.elements(); nlEnum.hasMoreElements(); )
                 {
-                    String superOutName = ((NameListUp)nlEnum.nextElement()).getFieldOutNameUp(fd.getInName());
-                    if (superOutName != null)
+                    String theOutName = ((NameListUp)nlEnum.nextElement()).getFieldOutNameUp(fd.getInName());
+                    if (theOutName != null)
                     {
-                        fd.setOutName(superOutName);
+                        fd.setOutName(theOutName);
                         fd.setIsOverride();
                         //Added by Searge;
-                        System.out.println("Field " + fd.getFullInName() + " renamed to " + superOutName + " because of super class.");
+                        System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of super class.");
                         continue nextField;
                     }
                 }
                 // If no other restrictions, obfuscate it
                 //replaced by Searge:
-                String s = NameProvider.getNewFieldName(fd);
-                if(s != null)
+                String theOutName = NameProvider.getNewFieldName(fd);
+                if (theOutName != null)
                 {
-                    fd.setOutName(s);
+                    fd.setOutName(theOutName);
                     System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
                 }
             }
@@ -1297,18 +1297,25 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     // added by Searge
     public String getFullOutName()
     {
-        if(this.parent != null && this.parent.parent == null && this.parent instanceof Pk)
+        String clName = super.getFullOutName();
+
+        if (this.parent != null) 
         {
-            String clName = super.getFullOutName();
-            String pkName = this.parent.getFullOutName();
-
-            if("".equals(pkName))
-                return clName;
-
-            return pkName + "/" + clName;
+            if (this.parent.parent == null)
+            {
+                if (this.parent instanceof Pk)
+                {
+                    String pkName = this.parent.getFullOutName();
+        
+                    if (pkName.equals(""))
+                        return clName;
+        
+                    return pkName + sep + clName;
+                }
+            }
         }
 
-        return super.getFullOutName();
+        return clName;
     }
 
     // added by Searge
