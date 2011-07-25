@@ -35,8 +35,8 @@ public class RetroGuardImpl
     public static final String DEFAULT_OUT_FILE_NAME = "out.jar";
     public static final String DEFAULT_RGS_FILE_NAME = "script.rgs";
     public static final String DEFAULT_LOG_FILE_NAME = "retroguard.log";
-    private static final String LOG_TITLE_PRE_VERSION = "# RetroGuard v";
-    private static final String LOG_TITLE_POST_VERSION = ", by Retrologic Systems - www.retrologic.com";
+    private static final String LOG_TITLE_PRE_VERSION = "# RetroGuard MCP v";
+    private static final String LOG_TITLE_POST_VERSION = "";
     private static final String LOG_CREATED = "# Logfile created on ";
     private static final String LOG_INPUT_FILE =  "# Jar file to be obfuscated:           ";
     private static final String LOG_OUTPUT_FILE = "# Target Jar file for obfuscated code: ";

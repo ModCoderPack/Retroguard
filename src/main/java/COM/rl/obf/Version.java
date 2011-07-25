@@ -28,12 +28,14 @@ package COM.rl.obf;
 public class Version
 {
     // Constants -------------------------------------------------------------
-    private static final String REL_VERSION = "2.3.1";
-    private static final String RETROGUARD_CLASS_ID = "RGLite";
+    private static final String REL_VERSION = "3.0.0";
+    private static final String ORIG_VERSION = "2.3.1";
+    private static final String RETROGUARD_CLASS_ID = "RGMCP";
     private static final String RETROGUARD_REL_JAR_COMMENT =
-    "Obfuscation by RetroGuard Lite - Academic / Not-For-Profit License - www.retrologic.com";
+        "Obfuscation by RetroGuard MCP";
     private static final String RETROGUARD_FULL_VERSION_COMMENT =
-    "RetroGuard v" + REL_VERSION + " by Retrologic Systems - www.retrologic.com";
+        "RetroGuard MCP v" + REL_VERSION +"\n" + 
+        "based on RetroGuard v" + ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
 
     public static final boolean isLite = true;
 
