@@ -209,9 +209,6 @@ public class ClassTree implements NameMapper
                 Fd fd = cl.addField(cf, cf.getField(i));
             }
 
-            // Construct class's reference list
-            cl.findRefs(cf);
-
             // Add warnings about class
             cl.setWarnings(cf);
         }

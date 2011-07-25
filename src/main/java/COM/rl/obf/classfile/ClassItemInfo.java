@@ -128,9 +128,6 @@ abstract public class ClassItemInfo implements ClassConstants
         }
     }
 
-    /** List the constant pool entries references from this method or field. */
-    public Enumeration listCpRefs() throws Exception {return null;}
-
     /** Import the field or method data to internal representation. */
     protected void read(DataInput din) throws Exception
     {

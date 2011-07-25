@@ -53,11 +53,5 @@ public class Fd extends MdFd
     {
         return ";";
     }
-
-    /** Find and add TreeItem references. */
-    public void findRefs(ClassFile cf, FieldInfo fieldInfo) throws Exception
-    {
-        // NOTE - no references from fields
-    }
 }
 

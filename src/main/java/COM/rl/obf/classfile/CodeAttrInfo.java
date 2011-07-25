@@ -299,66 +299,6 @@ public class CodeAttrInfo extends AttrInfo
         return cpToFlag;
     }
 
-    /** Walk the code, adding pool references to Vector. */
-    protected void addCpRefs(Vector refs) throws Exception
-    {
-        for (int i = 0; i < code.length; i++)
-        {
-            int opcode = code[i] & 0xFF;
-            int index;
-            switch (opcode)
-            {
-                // .class reference
-            case 0x12: // ldc
-                index = (code[i+1] & 0xFF);
-                CpInfo cpInfo = cf.getCpEntry(index);
-                if (cpInfo instanceof ClassCpInfo)
-                {
-                    refs.addElement(cpInfo);
-                }
-                break;
-
-                // .class reference
-            case 0x13: // ldc_w
-                index = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
-                cpInfo = cf.getCpEntry(index);
-                if (cpInfo instanceof ClassCpInfo)
-                {
-                    refs.addElement(cpInfo);
-                }
-                break;
-
-                // class, array, interface type
-            case 0xBB: // new
-            case 0xBD: // anewarray
-            case 0xC0: // checkcast
-            case 0xC1: // instanceof
-            case 0xC5: // multianewarray
-                // static field
-            case 0xB2: // getstatic
-            case 0xB3: // putstatic
-                // non-static field
-            case 0xB4: // getfield
-            case 0xB5: // putfield
-                // static method
-            case 0xB8: // invokestatic
-                // non-static method
-            case 0xB6: // invokevirtual
-            case 0xB7: // invokespecial
-            case 0xB9: // invokeinterface
-                index = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
-                refs.addElement(cf.getCpEntry(index));
-                break;
-
-            default:
-                // skip
-                break;
-            }
-            int bytes = getOpcodeBytes(opcode, i);
-            i += bytes;
-        }
-    }
-
     // Compute length of opcode arguments at offset
     private int getOpcodeBytes(int opcode, int i) throws Exception
     {

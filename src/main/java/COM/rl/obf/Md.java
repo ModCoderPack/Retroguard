@@ -76,46 +76,5 @@ public class Md extends MdFd
             isOldStyleMatch(namePattern) &&
             isMatch(descPattern, getDescriptor());
     }
-
-    /** Find and add TreeItem references. */
-    public void findRefs(ClassFile cf, MethodInfo methodInfo) throws Exception
-    {
-        // References from method Code and Exceptions attributes
-        for (Enumeration enm = methodInfo.listCpRefs();
-             enm.hasMoreElements(); )
-        {
-            CpInfo cpInfo = (CpInfo)enm.nextElement();
-            if (cpInfo instanceof ClassCpInfo)
-            {
-                String name = ((ClassCpInfo)cpInfo).getName(cf);
-                if (name.charAt(0) == '[')
-                {
-                    // Pull the class ref from an array ref
-                    name = name.substring(name.indexOf('L') + 1,
-                                          name.length() - 1);
-                }
-                addRef(new ClRef(name));
-            }
-            else if (cpInfo instanceof RefCpInfo)
-            {
-                RefCpInfo refCpInfo = (RefCpInfo)cpInfo;
-                if ((cpInfo instanceof MethodrefCpInfo) ||
-                    (cpInfo instanceof InterfaceMethodrefCpInfo))
-                {
-                    // addRef to method
-                    addRef(new MdRef(refCpInfo.getClassName(cf),
-                                     refCpInfo.getName(cf),
-                                     refCpInfo.getDescriptor(cf)));
-                }
-                else if (cpInfo instanceof FieldrefCpInfo)
-                {
-                    // addRef to field
-                    addRef(new FdRef(refCpInfo.getClassName(cf),
-                                     refCpInfo.getName(cf),
-                                     refCpInfo.getDescriptor(cf)));
-                }
-            }
-        }
-    }
 }
 

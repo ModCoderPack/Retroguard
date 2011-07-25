@@ -1203,16 +1203,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    /** Find and add TreeItem references. */
-    public void findRefs(ClassFile cf) throws Exception
-    {
-        // Reference all <init> and <clinit> special methods
-        for (Enumeration enm = mdsSpecial.elements(); enm.hasMoreElements(); )
-        {
-            addRef((Md)enm.nextElement());
-        }
-    }
-
     /** Walk class inheritance group taking action once only on each class.
         Must be called after setupNameListDowns() called for all classes. */
     public void walkGroup(TreeAction ta) throws Exception

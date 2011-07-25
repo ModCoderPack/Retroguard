@@ -52,30 +52,4 @@ public class MethodInfo extends ClassItemInfo
 
     // Instance Methods ------------------------------------------------------
     protected MethodInfo(ClassFile cf) {super(cf);}
-
-    /** List the constant pool entries references from this method or field. */
-    public Enumeration listCpRefs() throws Exception
-    {
-        Vector refs = new Vector();
-        for (int i = 0; i < attributes.length; i++)
-        {
-            if (attributes[i].getAttrName().equals(ATTR_Exceptions))
-            {
-                // List references from method's Exceptions attribute
-                ExceptionsAttrInfo exceptions =
-                    (ExceptionsAttrInfo)attributes[i];
-                for (int j = 0; j < exceptions.count(); j++)
-                {
-                    refs.addElement(cf.getCpEntry(exceptions.getIndex(j)));
-                }
-            }
-            else if (attributes[i].getAttrName().equals(ATTR_Code))
-            {
-                // List references from method's Code attribute
-                CodeAttrInfo code = (CodeAttrInfo)attributes[i];
-                code.addCpRefs(refs);
-            }
-        }
-        return refs.elements();
-    }
 }

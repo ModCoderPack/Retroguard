@@ -48,7 +48,6 @@ public class TreeItem
     private boolean isFromScript = false; // Is this script constrained?
     private boolean isFromScriptMap = false; // Is this script_map constrained?
     private boolean isTrimCheck = false; // Has this been checked for trimming?
-    private Vector treeItemRefs = null; // List of referenced Cl/Md/Fd placeholders
 
 
     // Class Methods ---------------------------------------------------------
@@ -307,37 +306,4 @@ public class TreeItem
 
     /** Has this been checked for trimming? */
     public boolean isTrimCheck() {return isTrimCheck; }
-
-    /** Add a TreeItem references. */
-    public void addRef(Object ref)
-    {
-        if (treeItemRefs == null)
-        {
-            treeItemRefs = new Vector();
-        }
-        treeItemRefs.addElement(ref);
-    }
-
-    /** Push internal references from this item to the stack as TreeItems. */
-    public void pushRefs(Stack stack) throws Exception
-    {
-        if (treeItemRefs != null)
-        {
-            for (Enumeration enm = treeItemRefs.elements();
-                 enm.hasMoreElements(); )
-            {
-                TreeItem ti = null;
-                Object o = enm.nextElement();
-                if (o instanceof TreeItem)
-                {
-                    ti = (TreeItem)o;
-                }
-                else if (o instanceof TreeItemRef)
-                {
-                    ti = ((TreeItemRef)o).toTreeItem(classTree);
-                }
-                stack.push(ti);
-            }
-        }
-    }
 }
