@@ -151,8 +151,7 @@ public class RetroGuardImpl
 
             // Create the name mapping database for the input JAR, constrained
             // by the options in the rgs script
-            boolean enableTrim = RgsEnum.hasOptionTrim(rgsFile);
-            GuardDB db = new GuardDB(inFile, enableTrim);
+            GuardDB db = new GuardDB(inFile);
             try
             {
                 InputStream rgsInputStream =
@@ -162,11 +161,6 @@ public class RetroGuardImpl
                 if (rgsInputStream != null)
                 {
                     rgsInputStream.close();
-                }
-                // If requested in script, trim unused methods, fields, classes
-                if (enableTrim)
-                {
-                    db.trim(log);
                 }
                 db.remapTo(outFile, log);
             }

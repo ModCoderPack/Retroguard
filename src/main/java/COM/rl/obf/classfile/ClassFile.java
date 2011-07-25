@@ -458,23 +458,6 @@ public class ClassFile implements ClassConstants
         return methods[i];
     }
 
-    /** Remove i'th method from class. */
-    public void removeMethod(int i) throws Exception
-    {
-        // Trim the method
-        MethodInfo newMethods[] = new MethodInfo[methods.length-1];
-        if (i > 0)
-        {
-            System.arraycopy(methods, 0, newMethods, 0, i);
-        }
-        if (i < methods.length-1)
-        {
-            System.arraycopy(methods, i+1, newMethods, i, methods.length-i-1);
-        }
-        methods = newMethods;
-        --u2methodsCount;
-    }
-
     /** Return number of fields in class. */
     public int getFieldCount() throws Exception
     {
@@ -485,23 +468,6 @@ public class ClassFile implements ClassConstants
     public FieldInfo getField(int i) throws Exception
     {
         return fields[i];
-    }
-
-    /** Remove i'th field from class. */
-    public void removeField(int i) throws Exception
-    {
-        // Trim the field
-        FieldInfo newFields[] = new FieldInfo[fields.length-1];
-        if (i > 0)
-        {
-            System.arraycopy(fields, 0, newFields, 0, i);
-        }
-        if (i < fields.length-1)
-        {
-            System.arraycopy(fields, i+1, newFields, i, fields.length-i-1);
-        }
-        fields = newFields;
-        --u2fieldsCount;
     }
 
     /** Lookup the entry in the constant pool and return as an Object. */

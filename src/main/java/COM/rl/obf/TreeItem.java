@@ -47,7 +47,6 @@ public class TreeItem
     private boolean isFixed = false; // Has the name been fixed in some way?
     private boolean isFromScript = false; // Is this script constrained?
     private boolean isFromScriptMap = false; // Is this script_map constrained?
-    private boolean isTrimmed = false; // Is this to be trimmed?
     private boolean isTrimCheck = false; // Has this been checked for trimming?
     private Vector treeItemRefs = null; // List of referenced Cl/Md/Fd placeholders
 
@@ -302,12 +301,6 @@ public class TreeItem
     {
         return isGMatch(pattern, getFullInName());
     }
-
-    /** Set the trimming state for this. */
-    public void setTrimmed(boolean trimmed) { isTrimmed = trimmed; }
-
-    /** Is this to be trimmed? */
-    public boolean isTrimmed() {return isTrimmed; }
 
     /** Set the trim-check status for this. */
     public void setTrimCheck(boolean state) { isTrimCheck = state; }

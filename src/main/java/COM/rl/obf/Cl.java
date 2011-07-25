@@ -367,17 +367,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Add a method. */
-    public Md addMethod(ClassFile cf, MethodInfo methodInfo, boolean enableTrim) throws Exception
+    public Md addMethod(ClassFile cf, MethodInfo methodInfo) throws Exception
     {
         Md md = addMethod(methodInfo.isSynthetic(),
                           methodInfo.getName(),
                           methodInfo.getDescriptor(),
                           methodInfo.getAccessFlags());
-        // Construct method's reference list
-        if (enableTrim)
-        {
-            md.findRefs(cf, methodInfo);
-        }
         return md;
     }
 
@@ -410,17 +405,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Add a field. */
-    public Fd addField(ClassFile cf, FieldInfo fieldInfo, boolean enableTrim) throws Exception
+    public Fd addField(ClassFile cf, FieldInfo fieldInfo) throws Exception
     {
         Fd fd = addField(fieldInfo.isSynthetic(),
                          fieldInfo.getName(),
                          fieldInfo.getDescriptor(),
                          fieldInfo.getAccessFlags());
-        // Construct field's reference list
-        if (enableTrim)
-        {
-            fd.findRefs(cf, fieldInfo);
-        }
         return fd;
     }
 
@@ -1220,30 +1210,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         for (Enumeration enm = mdsSpecial.elements(); enm.hasMoreElements(); )
         {
             addRef((Md)enm.nextElement());
-        }
-    }
-
-    /** Remove methods and fields that are marked for trim. */
-    public void trimClassFile(ClassFile cf) throws Exception
-    {
-        for (int i = cf.getMethodCount() - 1; i >= 0; i--)
-        {
-            MethodInfo methodInfo = cf.getMethod(i);
-            Md md = getMethod(methodInfo.getName(),
-                              methodInfo.getDescriptor());
-            if (md != null && md.isTrimmed())
-            {
-                cf.removeMethod(i);
-            }
-        }
-        for (int i = cf.getFieldCount() - 1; i >= 0; i--)
-        {
-            FieldInfo fieldInfo = cf.getField(i);
-            Fd fd = getField(fieldInfo.getName());
-            if (fd != null && fd.isTrimmed())
-            {
-                cf.removeField(i);
-            }
         }
     }
 

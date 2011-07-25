@@ -131,7 +131,6 @@ public interface ClassConstants
     public static final String OPTION_DigestSHA         = "DigestSHA";
     public static final String OPTION_DigestMD5         = "DigestMD5";
     public static final String OPTION_LineNumberDebug   = "LineNumberDebug";
-    public static final String OPTION_Trim              = "Trim";
     public static final String OPTION_Repackage         = "Repackage";
     public static final String OPTION_Generic           = "Generic";
 
@@ -147,7 +146,6 @@ public interface ClassConstants
                                                   OPTION_DigestSHA,
                                                   OPTION_DigestMD5,
                                                   OPTION_LineNumberDebug,
-                                                  OPTION_Trim,
                                                   OPTION_Repackage,
                                                   OPTION_Generic,
     };

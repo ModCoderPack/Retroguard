@@ -164,12 +164,6 @@ public class ClassTree implements NameMapper
     /** Add a classfile's package, class, method and field entries to database. */
     public void addClassFile(ClassFile cf) throws Exception
     {
-        addClassFile(cf, false);
-    }
-
-    /** Add a classfile's package, class, method and field entries to database. */
-    public void addClassFile(ClassFile cf, boolean enableTrim) throws Exception
-    {
         // Add the fully qualified class name
         TreeItem ti = root;
         for (Enumeration nameEnum = getNameEnum(cf.getName()); nameEnum.hasMoreElements(); )
@@ -206,13 +200,13 @@ public class ClassTree implements NameMapper
             // Add the class's methods to the database
             for (int i = 0; i < cf.getMethodCount(); i++)
             {
-                Md md = cl.addMethod(cf, cf.getMethod(i), enableTrim);
+                Md md = cl.addMethod(cf, cf.getMethod(i));
             }
 
             // Add the class's fields to the database
             for (int i = 0; i < cf.getFieldCount(); i++)
             {
-                Fd fd = cl.addField(cf, cf.getField(i), enableTrim);
+                Fd fd = cl.addField(cf, cf.getField(i));
             }
 
             // Construct class's reference list
@@ -980,10 +974,6 @@ public class ClassTree implements NameMapper
                 if (cl.isFromScript())
                 {
                     log.println(".class " + cl.getFullInName());
-                    if (cl.isTrimmed())
-                    {
-                        log.println("# ERROR: incorrectly trimmed class " + cl.getFullInName());
-                    }
                 }
             }
             public void methodAction(Md md)
@@ -991,10 +981,6 @@ public class ClassTree implements NameMapper
                 if (md.isFromScript())
                 {
                     log.println(".method " + md.getFullInName() + " " + md.getDescriptor());
-                    if (md.isTrimmed())
-                    {
-                        log.println("# ERROR: incorrectly trimmed method " + md.getFullInName() + " " + md.getDescriptor());
-                    }
                 }
             }
             public void fieldAction(Fd fd)
@@ -1002,10 +988,6 @@ public class ClassTree implements NameMapper
                 if (fd.isFromScript())
                 {
                     log.println(".field " + fd.getFullInName() + " " + fd.getDescriptor());
-                    if (fd.isTrimmed())
-                    {
-                        log.println("# ERROR: incorrectly trimmed field " + fd.getFullInName() + " " + fd.getDescriptor());
-                    }
                 }
             }
             public void packageAction(Pk pk)
@@ -1023,48 +1005,21 @@ public class ClassTree implements NameMapper
             {
                 if (!cl.isFromScript())
                 {
-                    if (cl.isTrimmed())
-                    {
-                        log.println("# trimmed class " + cl.getFullInName());
-                    }
-                    else
-                    {
-                        log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
-                    }
+                    log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
                 }
             }
             public void methodAction(Md md)
             {
                 if (!md.isFromScript())
                 {
-                    if (!md.getParent().isTrimmed())
-                    {
-                        if (md.isTrimmed())
-                        {
-                            log.println("# trimmed method " + md.getFullInName() + " " + md.getDescriptor());
-                        }
-                        else
-                        {
-                            log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
-                        }
-                    }
+                    log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
                 }
             }
             public void fieldAction(Fd fd)
             {
                 if (!fd.isFromScript())
                 {
-                    if (!fd.getParent().isTrimmed())
-                    {
-                        if (fd.isTrimmed())
-                        {
-                            log.println("# trimmed field " + fd.getFullInName() + " " + fd.getDescriptor());
-                        }
-                        else
-                        {
-                            log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
-                        }
-                    }
+                    log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
                 }
             }
             public void packageAction(Pk pk)

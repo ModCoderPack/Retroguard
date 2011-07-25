@@ -59,7 +59,6 @@ public class GuardDB implements ClassConstants
     private ClassTree classTree;    // Tree of packages, classes. methods, fields
     private boolean hasMap = false; // Has the mapping been generated already?
     private boolean enableMapClassString = false; // Remap strings in reflection?
-    private boolean enableTrim = false; // Trim unused method, field, classes?
     private boolean enableRepackage = false; // Repackage classes for size?
     private boolean enableDummySourceFile = false; // Remap SourceFile attribute to text "SourceFile"?
     private boolean enableDigestSHA = false; // Produce SHA-1 manifest digests?
@@ -71,10 +70,9 @@ public class GuardDB implements ClassConstants
 
     // Instance Methods ------------------------------------------------------
     /** A classfile database for obfuscation. */
-    public GuardDB(File inFile, boolean enableTrim) throws Exception
+    public GuardDB(File inFile) throws Exception
     {
         inJar = new ZipFile(inFile);
-        this.enableTrim = enableTrim;
         parseManifest();
     }
 
@@ -120,7 +118,7 @@ public class GuardDB implements ClassConstants
                 {
                     incompatibleVersion = cf.getMajorVersion();
                 }
-                classTree.addClassFile(cf, enableTrim);
+                classTree.addClassFile(cf);
             }
         }
         // Warn if classes are incompatible version of class file format
@@ -190,11 +188,6 @@ public class GuardDB implements ClassConstants
                     else if (ClassConstants.OPTION_MapClassString.equals(entry.name))
                     {
                         enableMapClassString = true;
-                    }
-                    else if (ClassConstants.OPTION_Trim.equals(entry.name))
-                    {
-                        // NOTE - already set in special RGS pass
-                        //enableTrim = true;
                     }
                     else if (ClassConstants.OPTION_Repackage.equals(entry.name))
                     {
@@ -466,77 +459,6 @@ public class GuardDB implements ClassConstants
         log.println("#");
     }
 
-    /**
-     * If trim requested, mark all classes, methods, fields for trimming,
-     * then traverse method calls from isFixed methods, untrimming methods,
-     * fields, and classes touched.
-     */
-    public void trim(PrintWriter log) throws Exception
-    {
-        // Generate map table if not already done
-        if (!hasMap)
-        {
-            createMap(log);
-        }
-
-        if (enableTrim) {
-            // Mark all for trimming
-            classTree.walkTree(new TreeAction()
-            {
-                public void classAction(Cl cl) {
-                    cl.setTrimCheck(false);
-                    cl.setTrimmed(true); }
-                public void methodAction(Md md) {
-                    md.setTrimCheck(false);
-                    md.setTrimmed(true); }
-                public void fieldAction(Fd fd)  {
-                    fd.setTrimCheck(false);
-                    fd.setTrimmed(true); }
-                public void packageAction(Pk pk) { }
-            });
-            // Add script-fixed and inheritance-fixed items to stack
-            final TIStack stack = new TIStack();
-            classTree.walkTree(new TreeAction()
-            {
-                public void classAction(Cl cl)
-                {
-                    if (cl.isFromScript()) stack.push(cl);
-                }
-                public void methodAction(Md md)
-                {
-                    if (md.isFromScript()) stack.push(md);
-                    // NOTE - Push all methods which are overrides indirectly
-                    // onto the stack via their parent class (only doing the
-                    // actual push later, if their class is referenced). This
-                    // is still over-conservative, since the override method
-                    // could be safely trimmed if none of its super
-                    // implementations is called.
-                    if (md.isOverride())
-                    {
-                        md.getParent().addRef(md);
-                    }
-                }
-                public void fieldAction(Fd fd)
-                {
-                    if (fd.isFromScript()) stack.push(fd);
-                    // NOTE - See above
-                    if (fd.isOverride())
-                    {
-                        fd.getParent().addRef(fd);
-                    }
-                }
-                public void packageAction(Pk pk) { }
-            });
-            // Process each, which will involve the addition and processing
-            // of dependent references
-            while (!stack.empty())
-            {
-                TreeItem ti = (TreeItem)stack.pop();
-                ti.pushRefs(stack);
-            }
-        }
-    }
-
     /** Remap each class based on the remap database, and remove attributes. */
     public void remapTo(File out, PrintWriter log) throws Exception
     {
@@ -593,10 +515,9 @@ public class GuardDB implements ClassConstants
                         }
                         Cl cl = classTree.getCl(cf.getName());
                         // Trim entire class if requested
-                        if (cl != null && !cl.isTrimmed())
+                        if (cl != null)
                         {
                             cf.trimAttrs(classTree);
-                            cl.trimClassFile(cf);
                             cf.updateRefCount();
                             cf.remap(classTree, log, enableMapClassString,
                                      enableDummySourceFile);
@@ -903,7 +824,6 @@ class TIStack extends Stack
         if (ti != null && !ti.isTrimCheck())
         {
             ti.setTrimCheck(true);
-            ti.setTrimmed(false);
             super.push(ti);
         }
     }

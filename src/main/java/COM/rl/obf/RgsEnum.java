@@ -105,15 +105,14 @@ public class RgsEnum
                                                  ACCESS_ENUM};
 
     private static final String DEFAULT_RGS =
-    ".option Applet\n" +
-    ".option Application\n" +
-    ".option Serializable\n" +
-    ".option RMI\n" +
-    ".option RuntimeAnnotations\n" +
-    ".option MapClassString\n" +
-    ".option Trim\n" +
-    ".option Repackage\n" +
-    ".option Generic\n";
+        ".option Applet\n" +
+        ".option Application\n" +
+        ".option Serializable\n" +
+        ".option RMI\n" +
+        ".option RuntimeAnnotations\n" +
+        ".option MapClassString\n" +
+        ".option Repackage\n" +
+        ".option Generic\n";
 
 
     // Fields ----------------------------------------------------------------
@@ -211,35 +210,6 @@ public class RgsEnum
             if (!invert) accessSetting |= flag;
         }
         return (accessSetting << 16) + accessMask;
-    }
-
-    /** Does this RGS file have an '.option Trim' line? (expensive) */
-    public static boolean hasOptionTrim(File rgsFile) throws Exception
-    {
-        InputStream rgsInputStream = null;
-        try
-        {
-            rgsInputStream = rgsFile.exists() ?
-                new FileInputStream(rgsFile) : null;
-            RgsEnum rgsEnum = new RgsEnum(rgsInputStream);
-            while (rgsEnum.hasMoreEntries())
-            {
-                RgsEntry entry = rgsEnum.nextEntry();
-                if (entry.type == RgsEntry.TYPE_OPTION &&
-                    ClassConstants.OPTION_Trim.equals(entry.name))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        finally
-        {
-            if (rgsInputStream != null)
-            {
-                rgsInputStream.close();
-            }
-        }
     }
 
 
