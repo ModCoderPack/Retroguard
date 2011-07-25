@@ -187,7 +187,26 @@ abstract public class PkCl extends TreeItem
                 if(theOutName != null)
                 {
                     ti.setOutName(theOutName);
-                    System.out.println("Misc " + ti.getFullInName() + " renamed to " + ti.getFullOutName() + " from name maker.");
+                    String fullInName = ti.getFullInName();
+                    if (fullInName == "")
+                    {
+                        fullInName = ".";
+                    }
+                    String fullOutName = ti.getFullOutName();
+                    if (fullOutName == "")
+                    {
+                        fullOutName = ".";
+                    }
+                    String thisType = "Misc";
+                    if (ti instanceof Pk)
+                    {
+                        thisType = "Package";
+                    }
+                    if (ti instanceof Cl)
+                    {
+                        thisType = "Class";
+                    }
+                    System.out.println(thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker.");
                 }
             }
         }

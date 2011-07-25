@@ -178,7 +178,17 @@ public class Pk extends PkCl
             {
                 setRepackageName(theOutName);
                 setOutName(getInName());
-                System.out.println("Package " + this.getFullInName() + " renamed to " + this.getFullOutName() + " from name maker.");
+                String fullInName = this.getFullInName();
+                if (fullInName == "")
+                {
+                    fullInName = ".";
+                }
+                String fullOutName = this.getFullOutName();
+                if (fullOutName == "")
+                {
+                    fullOutName = ".";
+                }
+                System.out.println("Package " + fullInName + " renamed to " + fullOutName + " from name maker.");
             }
         }
     }
