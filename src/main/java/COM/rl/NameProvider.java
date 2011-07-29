@@ -61,7 +61,7 @@ public class NameProvider
     ////////////////////////////////////////////////////////////////////////////////
     public static String[] parseCommandLine( String[] args )
     {
-        System.out.println( "Parsing " + args.length + " parameters" );
+        System.out.println( "# Parsing " + args.length + " parameters" );
 
         if( (args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
             return parseNameSheetModeArgs( args );
@@ -80,7 +80,7 @@ public class NameProvider
             throw up;
         }
 
-        System.out.println( "New start index is " + idx );
+        System.out.println( "# New start index is " + idx );
 
         uniqueStart = idx;
 
@@ -585,7 +585,7 @@ public class NameProvider
         }
         else
         {
-            log("Warning: trying to rename unknown type " + ti.getFullInName());
+            log("# Warning: trying to rename unknown type " + ti.getFullInName());
             return null;
         }
     }

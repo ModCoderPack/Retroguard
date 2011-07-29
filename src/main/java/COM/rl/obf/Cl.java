@@ -68,7 +68,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.access = access;
         if (parent == null || "".equals(name))
         {
-            System.err.println("Internal error: class must have parent and name");
+            System.err.println("# Internal error: class must have parent and name");
         }
         if (parent instanceof Cl)
         {
@@ -731,7 +731,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         md.setOutName(theOutName);
                         //Added by Searge;
-                        System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of derived class.");
+                        System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of derived class.");
                         continue nextMethod;
                     }
                 }
@@ -744,7 +744,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         md.setOutName(theOutName);
                         md.setIsOverride();
                         //Added by Searge;
-                        System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of super class.");
+                        System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of super class.");
                         continue nextMethod;
                     }
                 }
@@ -754,7 +754,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     md.setOutName(theOutName);
-                    System.out.println("Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
+                    System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
                 }
             }
         }
@@ -772,7 +772,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         fd.setOutName(theOutName);
                         //Added by Searge;
-                        System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of derived class.");
+                        System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of derived class.");
                         continue nextField;
                     }
                 }
@@ -785,7 +785,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         fd.setOutName(theOutName);
                         fd.setIsOverride();
                         //Added by Searge;
-                        System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of super class.");
+                        System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of super class.");
                         continue nextField;
                     }
                 }
@@ -795,7 +795,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     fd.setOutName(theOutName);
-                    System.out.println("Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
+                    System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
                 }
             }
         }

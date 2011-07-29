@@ -64,11 +64,11 @@ public class Pk extends PkCl
         super(parent, name);
         if (parent == null && !name.equals(""))
         {
-            System.err.println("Internal error: only the default package has no parent");
+            System.err.println("# Internal error: only the default package has no parent");
         }
         else if (parent != null && name.equals(""))
         {
-            System.err.println("Internal error: the default package cannot have a parent");
+            System.err.println("# Internal error: the default package cannot have a parent");
         }
     }
 
@@ -188,7 +188,7 @@ public class Pk extends PkCl
                 {
                     fullOutName = ".";
                 }
-                System.out.println("Package " + fullInName + " renamed to " + fullOutName + " from name maker.");
+                System.out.println("# Package " + fullInName + " renamed to " + fullOutName + " from name maker.");
             }
         }
     }

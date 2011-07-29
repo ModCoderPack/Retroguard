@@ -53,7 +53,7 @@ abstract public class MdFd extends TreeItem
         this.isSynthetic = isSynthetic;
         if (name.equals("") || descriptor.equals("") || !(parent instanceof Cl))
         {
-            System.err.println("Internal error: method/field must have name and descriptor, and have Class or Interface as parent");
+            System.err.println("# Internal error: method/field must have name and descriptor, and have Class or Interface as parent");
         }
 
         // Disallow obfuscation of 'Synthetic' methods

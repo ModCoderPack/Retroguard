@@ -455,7 +455,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            System.out.println("Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName()+ " to " + obfName);
+            System.out.println("# Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName()+ " to " + obfName);
         }
     }
 

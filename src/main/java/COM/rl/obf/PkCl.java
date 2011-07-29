@@ -206,7 +206,7 @@ abstract public class PkCl extends TreeItem
                     {
                         thisType = "Class";
                     }
-                    System.out.println(thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker.");
+                    System.out.println("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker.");
                 }
             }
         }
