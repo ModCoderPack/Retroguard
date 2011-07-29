@@ -597,14 +597,16 @@ public class NameProvider
     {
         if( currentMode == CHANGE_NOTHING_MODE )
         {
-            log("PK: " + pk.getFullInName());
+            log("PK: " + pk.getFullInName() + " " + pk.getFullInName());
             return null;
         }
 
         if( currentMode == CLASSIC_MODE )
         {
-            log("PK: " + pk.getFullInName());
-            return "p_" + (++uniqueStart) + "_" + pk.getInName();
+            String packageName = "p_" + (++uniqueStart) + "_" + pk.getInName();
+            pk.setOutName(packageName);
+            log("PK: " + pk.getFullInName() + " " + pk.getFullOutName());
+            return packageName;
         }
 
         String packageName = pk.getFullInName();
@@ -694,14 +696,16 @@ public class NameProvider
     {
         if( currentMode == CHANGE_NOTHING_MODE )
         {
-            log("CL: " + cl.getFullInName());
+            log("CL: " + cl.getFullInName() + " " + cl.getFullInName());
             return null;
         }
 
         if( currentMode == CLASSIC_MODE )
         {
-            log("CL: " + cl.getFullInName());
-            return "C_" + (++uniqueStart) + "_" + cl.getInName();
+            String className = "C_" + (++uniqueStart) + "_" + cl.getInName();
+            cl.setOutName(className);
+            log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
+            return className;
         }
 
         String className = cl.getInName();
@@ -758,14 +762,16 @@ public class NameProvider
     {
         if( currentMode == CHANGE_NOTHING_MODE )
         {
-            log("MD: " + md.getFullInName());
+            log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getFullInName() + " " + md.getDescriptor());
             return null;
         }
 
         if( currentMode == CLASSIC_MODE )
         {
-            log("MD: " + md.getFullInName());
-            return "func_" + (++uniqueStart) + "_" + md.getInName();
+            String methodName = "func_" + (++uniqueStart) + "_" + md.getInName();
+            md.setOutName(methodName);
+            log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getFullOutName() + " " + md.getDescriptor());
+            return methodName;
         }
 
         String methodName = md.getInName();
@@ -1015,14 +1021,16 @@ public class NameProvider
     {
         if( currentMode == CHANGE_NOTHING_MODE )
         {
-            log("FD: " + fd.getFullInName());
+            log("FD: " + fd.getFullInName() + " " + fd.getFullInName());
             return null;
         }
 
         if( currentMode == CLASSIC_MODE )
         {
-            log("FD: " + fd.getFullInName());
-            return "field_" + (++uniqueStart) + "_" + fd.getInName();
+            String fieldName = "field_" + (++uniqueStart) + "_" + fd.getInName();
+            fd.setOutName(fieldName);
+            log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
+            return fieldName;
         }
 
         String fieldName = fd.getInName();
