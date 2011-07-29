@@ -73,8 +73,7 @@ public class SourceFileAttrInfo extends AttrInfo
         dout.writeShort(u2sourceFileIndex);
     }
 
-    /** Set content to the dummy string "SourceFile" for use in
-        .option LineNumberDebug */
+    /** Set content to the dummy string "SourceFile" for use in .option LineNumberDebug */
     public void setAsDummy(ConstantPool pool) throws Exception
     {
         u2sourceFileIndex = pool.remapUtf8To(ClassConstants.ATTR_SourceFile, u2sourceFileIndex);

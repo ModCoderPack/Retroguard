@@ -121,7 +121,7 @@ public class RetroGuardImpl
 
 
     // Instance Methods ------------------------------------------------------
-    // Private constructor takes in-jar, out-jar and script specifiers.
+    /** Private constructor takes in-jar, out-jar and script specifiers. */
     private RetroGuardImpl(File inFile, File outFile, File rgsFile, File logFile)
     {
         this.inFile = inFile;
@@ -130,7 +130,7 @@ public class RetroGuardImpl
         this.logFile = logFile;
     }
 
-    // Run the obfuscator.
+    /** Run the obfuscator. */
     private void run() throws Exception
     {
         // Create the session log file
@@ -140,8 +140,7 @@ public class RetroGuardImpl
             // Write out the log header
             writeLogHeader(log);
 
-            // Create the name mapping database for the input JAR, constrained
-            // by the options in the rgs script
+            // Create the name mapping database for the input JAR, constrained by the options in the rgs script
             GuardDB db = new GuardDB(inFile);
             try
             {
@@ -181,7 +180,7 @@ public class RetroGuardImpl
         }
     }
 
-    // Write a header out to the log file
+    /** Write a header out to the log file */
     private void writeLogHeader(PrintWriter log)
     {
         log.println("# If this log is to be used for incremental obfuscation / patch generation, ");

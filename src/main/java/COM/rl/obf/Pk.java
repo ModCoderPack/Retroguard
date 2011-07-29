@@ -38,8 +38,11 @@ public class Pk extends PkCl
 
 
     // Fields ----------------------------------------------------------------
-    private Hashtable pks = new Hashtable(); // Owns a list of sub-package levels
-    private String repackageName = null;     // Compact name for this package
+    /** Owns a list of sub-package levels */
+    private Hashtable pks = new Hashtable();
+
+    /** Compact name for this package */
+    private String repackageName = null;
 
 
     // Class Methods ---------------------------------------------------------
@@ -179,7 +182,6 @@ public class Pk extends PkCl
     /** Generate unique-across-run obfuscated repackage name. */
     public void repackageName() throws Exception
     {
-        //replaced by Searge:
         if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
         {
             String theOutName = NameProvider.getNewPackageName(this);

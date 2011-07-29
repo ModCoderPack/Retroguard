@@ -60,6 +60,7 @@ public class VerificationTypeInfo
     private VerificationTypeInfo()
     {
     }
+
     private void read(DataInput din) throws Exception
     {
         u1tag = din.readUnsignedByte();

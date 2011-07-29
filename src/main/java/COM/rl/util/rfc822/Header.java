@@ -31,7 +31,7 @@ import java.util.*;
 public class Header
 {
     // Constants -------------------------------------------------------------
-    /* Maximum length of header line in a section, before break to next line */
+    /** Maximum length of header line in a section, before break to next line */
     private static final int MAX_HEADER_LINE_LENGTH = 70;
 
 

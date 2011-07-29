@@ -85,7 +85,7 @@ public interface ClassConstants
     public static final String ATTR_EnclosingMethod     = "EnclosingMethod";
     public static final String ATTR_StackMapTable       = "StackMapTable";
 
-    // List of known attributes
+    /** List of known attributes */
     public static final String[] KNOWN_ATTRS =
     {
         ClassConstants.ATTR_Code,
@@ -108,7 +108,7 @@ public interface ClassConstants
         ClassConstants.ATTR_StackMapTable,
     };
 
-    // List of required attributes
+    /** List of required attributes */
     public static final String[] REQUIRED_ATTRS =
     {
         ClassConstants.ATTR_Code,
@@ -134,7 +134,7 @@ public interface ClassConstants
     public static final String OPTION_Repackage         = "Repackage";
     public static final String OPTION_Generic           = "Generic";
 
-    // List of known script options
+    /** List of known script options */
     public static final String[] KNOWN_OPTIONS =
     {
         ClassConstants.OPTION_Application,

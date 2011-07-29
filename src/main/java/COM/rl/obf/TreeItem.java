@@ -26,8 +26,7 @@ import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 
 /**
- * Item that forms a tree structure and can represent a package level, a class,
- * or a method or field.
+ * Item that forms a tree structure and can represent a package level, a class, or a method or field.
  *
  * @author      Mark Welsh
  */
@@ -37,17 +36,38 @@ public class TreeItem
 
 
     // Fields ----------------------------------------------------------------
-    protected boolean isSynthetic;  // Is a method or field Synthetic?
-    protected int access;  // Access level (interpret using java.lang.reflect.Modifier)
-    protected ClassTree classTree = null;   // Our owner
-    protected TreeItem parent = null;       // Our immediate parent
-    protected String sep = ClassFile.SEP_REGULAR; // Separator preceeding this level's name
-    private String inName = null;         // Original name of this item
-    private String outName = null;        // Output name of this item
-    private boolean isFixed = false; // Has the name been fixed in some way?
-    private boolean isFromScript = false; // Is this script constrained?
-    private boolean isFromScriptMap = false; // Is this script_map constrained?
-    private boolean isTrimCheck = false; // Has this been checked for trimming?
+    /** Is a method or field Synthetic? */
+    protected boolean isSynthetic;
+
+    /** Access level (interpret using java.lang.reflect.Modifier) */
+    protected int access;
+
+    /** Our owner */
+    protected ClassTree classTree = null;
+
+    /** Our immediate parent */
+    protected TreeItem parent = null;
+
+    /** Separator preceeding this level's name */
+    protected String sep = ClassFile.SEP_REGULAR;
+
+    /** Original name of this item */
+    private String inName = null;
+
+    /** Output name of this item */
+    private String outName = null;
+
+    /** Has the name been fixed in some way? */
+    private boolean isFixed = false;
+
+    /** Is this script constrained? */
+    private boolean isFromScript = false;
+
+    /** Is this script_map constrained? */
+    private boolean isFromScriptMap = false;
+
+    /** Has this been checked for trimming? */
+    private boolean isTrimCheck = false;
 
 
     // Class Methods ---------------------------------------------------------
@@ -132,8 +152,7 @@ public class TreeItem
     }
 
 
-    /** Do a generalized wildcard String match - handles '**' wildcard
-     *  that matches across package boundaries. */
+    /** Do a generalized wildcard String match - handles '**' wildcard that matches across package boundaries. */
     public static boolean isGMatch(String pattern, String string)
     {
         PatternList pl, sl;

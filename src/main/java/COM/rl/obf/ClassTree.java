@@ -45,8 +45,11 @@ public class ClassTree implements NameMapper
 
 
     // Fields ----------------------------------------------------------------
-    private Vector retainAttrs = new Vector();  // List of attributes to retain
-    private Pk root = null;   // Root package in database (Java default package)
+    /** List of attributes to retain */
+    private Vector retainAttrs = new Vector();
+
+    /** Root package in database (Java default package) */
+    private Pk root = null;
 
     // Class methods ---------------------------------------------------------
     /** Return a fully qualified name broken into package/class segments. */
@@ -415,7 +418,7 @@ public class ClassTree implements NameMapper
         retainItemMap(getFd(name), obfName);
     }
 
-    // Mark an item for retention, and specify its new name.
+    /** Mark an item for retention, and specify its new name. */
     private void retainItemMap(TreeItem item, String obfName) throws Exception
     {
         if (!item.isFixed())
@@ -462,7 +465,7 @@ public class ClassTree implements NameMapper
         });
     }
 
-    // Return list of currently fixed root package names
+    /** Return list of currently fixed root package names */
     private String[] getRootPackageNames() throws Exception
     {
         Vector vec = new Vector();
@@ -524,8 +527,10 @@ public class ClassTree implements NameMapper
         return attrs;
     }
 
-    /** Get classes in tree from the fully qualified name
-        (can be wildcarded). */
+    /**
+     * Get classes in tree from the fully qualified name
+     * (can be wildcarded).
+     */
     public Enumeration getClEnum(String fullName) throws Exception
     {
         final Vector vec = new Vector();
@@ -578,8 +583,7 @@ public class ClassTree implements NameMapper
         return vec.elements();
     }
 
-    /** Get methods in tree from the fully qualified, and possibly
-        wildcarded, name. */
+    /** Get methods in tree from the fully qualified, and possibly wildcarded, name. */
     public Enumeration getMdEnum(String fullName, String descriptor) throws Exception
     {
         final Vector vec = new Vector();
@@ -632,8 +636,7 @@ public class ClassTree implements NameMapper
         return vec.elements();
     }
 
-    /** Get fields in tree from the fully qualified, and possibly
-        wildcarded, name. */
+    /** Get fields in tree from the fully qualified, and possibly wildcarded, name. */
     public Enumeration getFdEnum(String fullName, String descriptor) throws Exception
     {
         final Vector vec = new Vector();
@@ -717,8 +720,9 @@ public class ClassTree implements NameMapper
         // It is an error if we do not end up with a class or interface
         if (!(ti instanceof Cl))
         {
-            // 15Jul2005 - this exception is being over-sensitive with fullName of null (should never get here) so safely return null instead
-            //throw new Exception("Inconsistent class or interface name: " + fullName);
+            // 15Jul2005 - this exception is being over-sensitive with fullName of null (should never get here) so safely return
+            // null instead
+//            throw new Exception("Inconsistent class or interface name: " + fullName);
             return null;
         }
         return (Cl)ti;
@@ -766,8 +770,10 @@ public class ClassTree implements NameMapper
         return cl.getField(fullName.substring(pos + 1));
     }
 
-    /** Mapping for fully qualified class name.
-     *  @see NameMapper#mapClass */
+    /**
+     * Mapping for fully qualified class name.
+     * @see NameMapper#mapClass
+     */
     @Override
     public String mapClass(String className) throws Exception
     {
@@ -810,8 +816,10 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mapping for method name, of fully qualified class.
-     *  @see NameMapper#mapMethod */
+    /**
+     * Mapping for method name, of fully qualified class.
+     * @see NameMapper#mapMethod
+     */
     @Override
     public String mapMethod(String className, String methodName, String descriptor) throws Exception
     {
@@ -855,8 +863,10 @@ public class ClassTree implements NameMapper
         return outName;
     }
 
-    /** Mapping for field name, of fully qualified class.
-     *  @see NameMapper#mapField */
+    /**
+     * Mapping for field name, of fully qualified class.
+     * @see NameMapper#mapField
+     */
     @Override
     public String mapField(String className, String fieldName) throws Exception
     {
@@ -900,23 +910,25 @@ public class ClassTree implements NameMapper
         return outName;
     }
 
-    /** Mapping for generic type signature.
-     *  @see NameMapper#mapSignature */
+    /**
+     * Mapping for generic type signature.
+     * @see NameMapper#mapSignature
+     */
     @Override
     public String mapSignature(String signature) throws Exception
     {
-        // NOTE - not currently parsed and mapped; reserve identifiers
-        //     appearing in type signatures for reflective methods to work.
+        // NOTE - not currently parsed and mapped; reserve identifiers appearing in type signatures for reflective methods to work.
         return signature;
     }
 
-    /** Mapping for descriptor of field or method.
-     *  @see NameMapper#mapDescriptor */
+    /**
+     * Mapping for descriptor of field or method.
+     * @see NameMapper#mapDescriptor
+     */
     @Override
     public String mapDescriptor(String descriptor) throws Exception
     {
-        // Pass everything through unchanged, except for the String between
-        // 'L' and ';' -- this is passed through mapClass(String)
+        // Pass everything through unchanged, except for the String between 'L' and ';' -- this is passed through mapClass(String)
         StringBuffer newDesc = new StringBuffer();
         int i = 0;
         while (i < descriptor.length())
@@ -1055,7 +1067,7 @@ public class ClassTree implements NameMapper
     }
 
     // Private Methods -------------------------------------------------------
-    // Mark TreeItem and all parents for retention.
+    /** Mark TreeItem and all parents for retention. */
     private void retainHierarchy(TreeItem ti, boolean invert) throws Exception
     {
         if (invert)
@@ -1087,8 +1099,7 @@ public class ClassTree implements NameMapper
         walkTree(ta, root);
     }
 
-    // Walk the tree which has TreeItem as its root taking action once only on each
-    // package level, class, method and field.
+    /** Walk the tree which has TreeItem as its root taking action once only on each package level, class, method and field. */
     private void walkTree(TreeAction ta, TreeItem ti) throws Exception
     {
         if (ti instanceof Pk)

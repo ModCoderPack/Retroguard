@@ -54,5 +54,8 @@ public class FieldInfo extends ClassItemInfo
 
 
     // Instance Methods ------------------------------------------------------
-    protected FieldInfo(ClassFile cf) {super(cf);}
+    protected FieldInfo(ClassFile cf)
+    {
+        super(cf);
+    }
 }

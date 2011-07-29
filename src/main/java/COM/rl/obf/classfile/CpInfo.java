@@ -23,8 +23,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Representation of an entry in the ConstantPool. Specific types of entry
- * have their representations sub-classed from this.
+ * Representation of an entry in the ConstantPool. Specific types of entry have their representations sub-classed from this.
  *
  * @author      Mark Welsh
  */
@@ -37,7 +36,8 @@ abstract public class CpInfo implements ClassConstants
     private int u1tag;
     private byte info[];
 
-    protected int refCount = 0;  // Used for reference counting in Constant Pool
+    /** Used for reference counting in Constant Pool */
+    protected int refCount = 0;
 
 
     // Class Methods ---------------------------------------------------------

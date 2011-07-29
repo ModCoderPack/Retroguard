@@ -50,6 +50,7 @@ public class LineNumberInfo
     private LineNumberInfo()
     {
     }
+
     private void read(DataInput din) throws Exception
     {
         u2startpc = din.readUnsignedShort();

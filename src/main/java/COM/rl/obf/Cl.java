@@ -38,18 +38,41 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
 
     // Fields ----------------------------------------------------------------
-    private Hashtable mds = new Hashtable(); // Owns a list of methods
-    private Hashtable mdsSpecial = new Hashtable(); // Owns a list of special methods
-    private Hashtable fds = new Hashtable(); // Owns a list of fields
-    private boolean isResolved = false; // Has the class been resolved already?
-    private boolean isScanned = false; // Has the class been scanned already?
-    private String superClass; // Our superclass name
-    private String[] superInterfaces; // Names of implemented interfaces
-    private boolean isInnerClass; // Is this an inner class?
-    private Vector nameListUps = new Vector(); // NameListUp interfaces for super-class/interfaces
-    private Vector nameListDowns = new Vector(); // NameListDown interfaces for derived class/interfaces
-    private boolean isNoWarn = false; // Are danger-method warnings suppressed?
-    private Vector warningList = null; // Danger-method warnings
+    /** Owns a list of methods */
+    private Hashtable mds = new Hashtable();
+
+    /** Owns a list of special methods */
+    private Hashtable mdsSpecial = new Hashtable();
+
+    /** Owns a list of fields */
+    private Hashtable fds = new Hashtable();
+
+    /** Has the class been resolved already? */
+    private boolean isResolved = false;
+
+    /** Has the class been scanned already? */
+    private boolean isScanned = false;
+
+    /** Our superclass name */
+    private String superClass;
+
+    /** Names of implemented interfaces */
+    private String[] superInterfaces;
+
+    /** Is this an inner class? */
+    private boolean isInnerClass;
+
+    /** NameListUp interfaces for super-class/interfaces */
+    private Vector nameListUps = new Vector();
+
+    /** NameListDown interfaces for derived class/interfaces */
+    private Vector nameListDowns = new Vector();
+
+    /** Are danger-method warnings suppressed? */
+    private boolean isNoWarn = false;
+
+    /** Danger-method warnings */
+    private Vector warningList = null;
 
     public static int nameSpace = 0;
 
@@ -198,8 +221,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return v.elements();
     }
 
-    /** Does this internal class have the specified class or interface
-        in its super or interface chain? */
+    /** Does this internal class have the specified class or interface in its super or interface chain? */
     protected boolean hasAsSuperInt(String queryName, boolean checkInterfaces)
     {
         try
@@ -283,8 +305,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return false;
     }
 
-    /** Does this class have the specified class or interface in its super
-        or interface chain? */
+    /** Does this class have the specified class or interface in its super or interface chain? */
     protected static boolean hasAsSuperExt(String queryName, boolean checkInterfaces, ClassTree classTree, Class clExt)
     {
         try
@@ -371,8 +392,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return false;
     }
 
-    /** Does this class have the specified class or interface in its super
-        or interface chain? */
+    /** Does this class have the specified class or interface in its super or interface chain? */
     public boolean hasAsSuperOrInterface(String queryName)
     {
         return hasAsSuperInt(queryName, true);
@@ -415,8 +435,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /** Add a method. */
     public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags) throws Exception
     {
-        // Store <init> and <clinit> methods separately - needed only for
-        // reference tracking ('.option trim')
+        // Store <init> and <clinit> methods separately - needed only for reference tracking
         Md md;
         if (name.charAt(0) == '<')
         {
@@ -526,7 +545,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    // Get lists of method and field names in inheritance namespace
+    /** Get lists of method and field names in inheritance namespace */
     private void scanNameSpaceExcept(Cl ignoreCl, Vector methods, Vector fields) throws Exception
     {
         // Special case: we are java/lang/Object
@@ -584,7 +603,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    // Get lists of method and field names in inheritance namespace
+    /** Get lists of method and field names in inheritance namespace */
     private void scanExtSupers(String name, Vector methods, Vector fields) throws Exception
     {
         Class extClass = Class.forName(ClassFile.translate(name));
@@ -651,7 +670,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    // Add method and field names from this class to the lists
+    /** Add method and field names from this class to the lists */
     private void scanThis(Vector methods, Vector fields) throws Exception
     {
         for (Enumeration mdEnum = mds.elements(); mdEnum.hasMoreElements(); )
@@ -680,7 +699,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    // Resolve an entire inheritance name space optimally.
+    /** Resolve an entire inheritance name space optimally. */
     private void resolveNameSpaceExcept(Cl ignoreCl) throws Exception
     {
         // Special case: we are java/lang/Object
@@ -731,9 +750,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    // For each super interface and the super class, if it is outside DB, use reflection
-    // to merge its list of public/protected methods/fields --
-    // while for those in the DB, resolve to get the name-mapping lists
+    /**
+     * For each super interface and the super class, if it is outside DB, use reflection to merge its list of public/protected
+     * methods/fields --  while for those in the DB, resolve to get the name-mapping lists
+     */
     private void resolveThis() throws Exception
     {
         // Special case: we are java/lang/Object
@@ -753,9 +773,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
         }
 
-        // Run through each method/field in this class checking for reservations and
-        // obfuscating accordingly
-    nextMethod:
+        // Run through each method/field in this class checking for reservations and obfuscating accordingly
+        nextMethod:
         for (Enumeration mdEnum = mds.elements(); mdEnum.hasMoreElements(); )
         {
             Md md = (Md)mdEnum.nextElement();
@@ -768,7 +787,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (theOutName != null)
                     {
                         md.setOutName(theOutName);
-                        //Added by Searge;
                         System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of derived class.");
                         continue nextMethod;
                     }
@@ -781,13 +799,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         md.setOutName(theOutName);
                         md.setIsOverride();
-                        //Added by Searge;
                         System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " because of super class.");
                         continue nextMethod;
                     }
                 }
                 // If no other restrictions, obfuscate it
-                //replaced by Searge:
                 String theOutName = NameProvider.getNewMethodName(md);
                 if (theOutName != null)
                 {
@@ -796,7 +812,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
             }
         }
-    nextField:
+        nextField:
         for (Enumeration fdEnum = fds.elements(); fdEnum.hasMoreElements(); )
         {
             Fd fd = (Fd)fdEnum.nextElement();
@@ -809,7 +825,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (theOutName != null)
                     {
                         fd.setOutName(theOutName);
-                        //Added by Searge;
                         System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of derived class.");
                         continue nextField;
                     }
@@ -822,13 +837,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         fd.setOutName(theOutName);
                         fd.setIsOverride();
-                        //Added by Searge;
                         System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " because of super class.");
                         continue nextField;
                     }
                 }
                 // If no other restrictions, obfuscate it
-                //replaced by Searge:
                 String theOutName = NameProvider.getNewFieldName(fd);
                 if (theOutName != null)
                 {
@@ -1057,8 +1070,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return null;
     }
 
-    // Construct, or retrieve from cache, the NameListUp object for an external class/interface
     private static Hashtable extNameListUpCache = new Hashtable();
+    /** Construct, or retrieve from cache, the NameListUp object for an external class/interface */
     private NameListUp getExtNameListUp(String name) throws Exception
     {
         NameListUp nl = (NameListUp)Cl.extNameListUpCache.get(name);
@@ -1070,33 +1083,33 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return nl;
     }
 
-    // NameListUp for class/interface not in the database.
+    /** NameListUp for class/interface not in the database. */
     class ExtNameListUp implements NameListUp
     {
         // Class's fully qualified name
         private Class extClass;
         private Method[] methods = null;
 
-        // Ctor.
+        /** Ctor. */
         public ExtNameListUp(String name) throws Exception
         {
             extClass = Class.forName(ClassFile.translate(name));
         }
 
-        // Ctor.
+        /** Ctor. */
         public ExtNameListUp(Class extClass) throws Exception
         {
             this.extClass = extClass;
         }
 
-        // Get obfuscated method name from list, or null if no mapping exists.
+        /** Get obfuscated method name from list, or null if no mapping exists. */
         @Override
         public String getMethodObfNameUp(String name, String descriptor) throws Exception
         {
             return getMethodOutNameUp(name, descriptor);
         }
 
-        // Get obfuscated method name from list, or null if no mapping exists.
+        /** Get obfuscated method name from list, or null if no mapping exists. */
         @Override
         public String getMethodOutNameUp(String name, String descriptor) throws Exception
         {
@@ -1121,7 +1134,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
 
             // Check each public/protected class method against the named one
-        nextMethod:
+            nextMethod:
             for (int i = 0; i < methods.length; i++)
             {
                 if (name.equals(methods[i].getName()))
@@ -1154,14 +1167,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return null;
         }
 
-        // Get obfuscated field name from list, or null if no mapping exists.
+        /** Get obfuscated field name from list, or null if no mapping exists. */
         @Override
         public String getFieldObfNameUp(String name) throws Exception
         {
             return getFieldOutNameUp(name);
         }
 
-        // Get obfuscated field name from list, or null if no mapping exists.
+        /** Get obfuscated field name from list, or null if no mapping exists. */
         @Override
         public String getFieldOutNameUp(String name) throws Exception
         {
@@ -1181,7 +1194,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return null;
         }
 
-        // Get all methods (from supers too) regardless of access level
+        /** Get all methods (from supers too) regardless of access level */
         private Method[] getAllDeclaredMethods(Class theClass)
         {
             Vector ma = new Vector();
@@ -1192,8 +1205,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             ma.addElement(allPubMethods);
             length += allPubMethods.length;
 
-            // Go up the super hierarchy, getting arrays of all methods (some redundancy
-            // here, but that's okay)
+            // Go up the super hierarchy, getting arrays of all methods (some redundancy here, but that's okay)
             while (theClass != null)
             {
                 Method[] methods = theClass.getDeclaredMethods();
@@ -1214,7 +1226,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return allMethods;
         }
 
-        // Get a specified field (from supers and interfaces too) regardless of access level
+        /** Get a specified field (from supers and interfaces too) regardless of access level */
         private Field getAllDeclaredField(Class theClass, String name)
         {
             Class origClass = theClass;
@@ -1238,8 +1250,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 theClass = theClass.getSuperclass();
             }
 
-            // Check for public field in supers and interfaces
-            // (some redundancy here, but that's okay)
+            // Check for public field in supers and interfaces (some redundancy here, but that's okay)
             try
             {
                 return origClass.getField(name);
@@ -1251,15 +1262,17 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    /** Walk class inheritance group taking action once only on each class.
-        Must be called after setupNameListDowns() called for all classes. */
+    /**
+     * Walk class inheritance group taking action once only on each class.
+     * Must be called after setupNameListDowns() called for all classes.
+     */
     public void walkGroup(TreeAction ta) throws Exception
     {
         Vector done = new Vector();
         walkGroup(ta, this, done);
     }
 
-    // Walk class inheritance group taking action once only on each class.
+    /** Walk class inheritance group taking action once only on each class. */
     private void walkGroup(TreeAction ta, Cl cl, Vector done) throws Exception
     {
         if (!done.contains(cl))
@@ -1297,7 +1310,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    // added by Searge
     @Override
     public String getFullOutName()
     {
@@ -1324,7 +1336,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return clName;
     }
 
-    // added by Searge
     public Enumeration getDownClasses()
     {
         Vector clsList = new Vector();

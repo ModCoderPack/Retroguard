@@ -25,9 +25,8 @@ import COM.rl.util.*;
 
 /**
  * This is a representation of the data in a Java class-file (*.class).
- * A ClassFile instance representing a *.class file can be generated
- * using the static create(DataInput) method, manipulated using various
- * operators, and persisted back using the write(DataOutput) method.
+ * A ClassFile instance representing a *.class file can be generated using the static create(DataInput) method, manipulated using
+ * various operators, and persisted back using the write(DataOutput) method.
  *
  * @author      Mark Welsh
  */
@@ -37,7 +36,8 @@ public class ClassFile implements ClassConstants
     public static final String SEP_REGULAR = "/";
     public static final String SEP_INNER = "$";
     private static final String CLASS_FORNAME_NAME_DESCRIPTOR = "forName(Ljava/lang/String;)Ljava/lang/Class;";
-    private static final String[] DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY = {
+    private static final String[] DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY =
+    {
         "getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;",
         "getField(Ljava/lang/String;)Ljava/lang/reflect/Field;",
         "getDeclaredMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;",
@@ -46,7 +46,8 @@ public class ClassFile implements ClassConstants
     private static final String LOG_DANGER_CLASS_PRE = "     Your class ";
     private static final String LOG_DANGER_CLASS_MID = " calls the java/lang/Class method ";
     private static final String LOG_CLASS_FORNAME_MID = " uses '.class' or calls java/lang/Class.";
-    private static final String[] DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY = {
+    private static final String[] DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY =
+    {
         "defineClass(Ljava/lang/String;[BII)Ljava/lang/Class;",
         "findLoadedClass(Ljava/lang/String;)Ljava/lang/Class;",
         "findSystemClass(Ljava/lang/String;)Ljava/lang/Class;",
@@ -81,8 +82,7 @@ public class ClassFile implements ClassConstants
 
     // Class Methods ---------------------------------------------------------
     /**
-     * Create a new ClassFile from the class file format data in the DataInput
-     * stream.
+     * Create a new ClassFile from the class file format data in the DataInput stream.
      *
      * @throws IOException if class file is corrupt or incomplete
      */
@@ -97,22 +97,28 @@ public class ClassFile implements ClassConstants
         return cf;
     }
 
-    /** Parse a method or field descriptor into a list of parameter names (for methods)
-     *  and a return type, in same format as the Class.forName() method returns . */
+    /**
+     * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
+     * Class.forName() method returns .
+     */
     public static String[] parseDescriptor(String descriptor) throws Exception
     {
         return ClassFile.parseDescriptor(descriptor, false, true);
     }
 
-    /** Parse a method or field descriptor into a list of parameter names (for methods)
-     *  and a return type, optionally in same format as the Class.forName() method returns . */
+    /**
+     * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, optionally in same format
+     * as the Class.forName() method returns .
+     */
     public static String[] parseDescriptor(String descriptor, boolean isDisplay) throws Exception
     {
         return ClassFile.parseDescriptor(descriptor, isDisplay, true);
     }
 
-    /** Parse a method or field descriptor into a list of parameter names (for methods)
-     *  and a return type, in same format as the Class.forName() method returns . */
+    /**
+     * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
+     * Class.forName() method returns .
+     */
     public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws Exception
     {
         // Check for field descriptor
@@ -286,12 +292,12 @@ public class ClassFile implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
-    // Private constructor.
+    /** Private constructor. */
     private ClassFile()
     {
     }
 
-    // Import the class data to internal representation.
+    /** Import the class data to internal representation. */
     private void read(DataInput din) throws Exception
     {
         // Read the class file
@@ -304,15 +310,14 @@ public class ClassFile implements ClassConstants
         {
             throw new IOException("Invalid magic number in class file.");
         }
-        //if (u2majorVersion > MAJOR_VERSION)
-        //{
-        //    throw new IOException("Incompatible version number for class file format.");
-        //}
+//        if (u2majorVersion > MAJOR_VERSION)
+//        {
+//            throw new IOException("Incompatible version number for class file format.");
+//        }
 
         int u2constantPoolCount = din.readUnsignedShort();
         CpInfo[] cpInfo = new CpInfo[u2constantPoolCount];
-        // Fill the constant pool, recalling the zero entry
-        // is not persisted, nor are the entries following a Long or Double
+        // Fill the constant pool, recalling the zero entry is not persisted, nor are the entries following a Long or Double
         for (int i = 1; i < u2constantPoolCount; i++)
         {
             cpInfo[i] = CpInfo.create(din);
@@ -353,9 +358,7 @@ public class ClassFile implements ClassConstants
         checkReflection();
     }
 
-    /**
-     * Define a constant String to include in this output class file.
-     */
+    /** Define a constant String to include in this output class file. */
     public void setIdString(String id) throws Exception
     {
         if (id != null)
@@ -368,11 +371,11 @@ public class ClassFile implements ClassConstants
         }
     }
 
-    // Check for reflection methods and set flag
+    /** Check for reflection methods and set flag */
     private boolean checkReflection() throws Exception
     {
-        // Need only check CONSTANT_Methodref entries of constant pool since
-        // methods belong to classes 'Class' and 'ClassLoader', not interfaces.
+        // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
+        // not interfaces.
         for (Enumeration enm = constantPool.elements(); enm.hasMoreElements(); )
         {
             Object o = enm.nextElement();
@@ -426,7 +429,7 @@ public class ClassFile implements ClassConstants
         return interfaces;
     }
 
-    // Convert a CP index to a class name.
+    /** Convert a CP index to a class name. */
     private String toName(int u2index) throws Exception
     {
         CpInfo classEntry = getCpEntry(u2index);
@@ -521,8 +524,8 @@ public class ClassFile implements ClassConstants
     /** List methods which can break obfuscated code, and log to a Vector. */
     public Vector listDangerMethods(Vector list) throws Exception
     {
-        // Need only check CONSTANT_Methodref entries of constant pool since
-        // dangerous methods belong to classes 'Class' and 'ClassLoader', not to interfaces.
+        // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
+        // 'ClassLoader', not to interfaces.
         for (Enumeration enm = constantPool.elements(); enm.hasMoreElements(); )
         {
             Object o = enm.nextElement();
@@ -614,8 +617,8 @@ public class ClassFile implements ClassConstants
     }
 
     /**
-     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue'
-     * are preserved, all others except the list in the String[] are killed).
+     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except the list in the
+     * String[] are killed).
      */
     public void trimAttrsExcept(String[] extraAttrs) throws Exception
     {
@@ -674,15 +677,13 @@ public class ClassFile implements ClassConstants
         constantPool.updateRefCount();
     }
 
-    /**
-     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue'
-     * are preserved, all others are killed).
-     */
-    public void trimAttrs() throws Exception {trimAttrsExcept(null);}
+    /** Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed). */
+    public void trimAttrs() throws Exception
+    {
+        trimAttrsExcept(null);
+    }
 
-    /**
-     * Remap SourceFile attribute to constant string "SourceFile"
-     */
+    /** Remap SourceFile attribute to constant string "SourceFile" */
     public void setDummySourceFile() throws Exception
     {
         for (int i = 0; i < attributes.length; i++)
@@ -711,8 +712,7 @@ public class ClassFile implements ClassConstants
     /** Remap the entities in the specified ClassFile. */
     public void remap(NameMapper nm, PrintWriter log, boolean enableMapClassString, boolean enableDummySourceFile) throws Exception
     {
-        // If requested by '.option LineNumberDebug' make SourceFile attribute
-        // into dummy constant string "SourceFile"
+        // If requested by '.option LineNumberDebug' make SourceFile attribute into dummy constant string "SourceFile"
         if (enableDummySourceFile)
         {
             setDummySourceFile();
@@ -760,9 +760,8 @@ public class ClassFile implements ClassConstants
             CpInfo cpInfo = getCpEntry(i);
             if (cpInfo != null)
             {
-                // If this is a CONSTANT_Fieldref, CONSTANT_Methodref or CONSTANT_InterfaceMethodref
-                // get the CONSTANT_NameAndType and remap the name and the components of the
-                // descriptor string.
+                // If this is a CONSTANT_Fieldref, CONSTANT_Methodref or CONSTANT_InterfaceMethodref get the CONSTANT_NameAndType
+                // and remap the name and the components of the descriptor string.
                 if (cpInfo instanceof RefCpInfo)
                 {
                     // Get the unmodified class name
@@ -788,9 +787,8 @@ public class ClassFile implements ClassConstants
                     }
                     String remapDesc = nm.mapDescriptor(descUtf.getString());
 
-                    // If a remap is required, make a new N&T (increment ref count on 'name' and
-                    // 'descriptor', decrement original N&T's ref count, set new N&T ref count to 1),
-                    // remap new N&T's utf's
+                    // If a remap is required, make a new N&T (increment ref count on 'name' and 'descriptor', decrement original
+                    // N&T's ref count, set new N&T ref count to 1), remap new N&T's utf's
                     if (!remapRef.equals(refUtf.getString()) || !remapDesc.equals(descUtf.getString()))
                     {
                         // Get the new N&T guy
@@ -808,8 +806,7 @@ public class ClassFile implements ClassConstants
                             getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
                             getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
 
-                            // Append it to the Constant Pool, and
-                            // point the RefCpInfo entry to the new N&T data
+                            // Append it to the Constant Pool, and point the RefCpInfo entry to the new N&T data
                             ((RefCpInfo)cpInfo).setNameAndTypeIndex(constantPool.addEntry(newNameTypeInfo));
 
                             // Adjust reference counts from RefCpInfo
@@ -864,17 +861,17 @@ public class ClassFile implements ClassConstants
         }
 
         // If reflection, attempt to remap all class string references
-        // NOTE - hasReflection wasn't picking up reflection in inner classes
-        //        because they call to the outer class to do forName(...).
+        // NOTE - hasReflection wasn't picking up reflection in inner classes because they call to the outer class to do
+        //        forName(...).
         //        Therefore removed.
-        //if (hasReflection && enableMapClassString)
+//        if (hasReflection && enableMapClassString)
         if (enableMapClassString)
         {
             remapClassStrings(nm, log);
         }
     }
 
-    // Remap Class.forName and .class, leaving other identical Strings alone
+    /** Remap Class.forName and .class, leaving other identical Strings alone */
     private void remapClassStrings(NameMapper nm, PrintWriter log) throws Exception
     {
         // Visit all method Code attributes, collecting information on remap
@@ -913,8 +910,7 @@ public class ClassFile implements ClassConstants
                         StringCpInfo remapStringInfo = new StringCpInfo();
                         remapStringInfo.setStringIndex(remapUtf8Index);
                         int remapStringIndex = constantPool.addEntry(remapStringInfo);
-                        // Default to full remap if new String would require
-                        // ldc_w to access - we can't cope with that yet
+                        // Default to full remap if new String would require ldc_w to access - we can't cope with that yet
                         if (remapStringIndex > 0xFF)
                         {
                             simpleRemap = true;
@@ -934,9 +930,8 @@ public class ClassFile implements ClassConstants
                     if (simpleRemap)
                     {
                         log.println("# MapClassString (full) in class " + getName() + ": " + name + " -> " + remapName);
-                        // Just remap the existing String/Utf8, since it is
-                        // only used for Class.forName or .class, or maybe
-                        // ldc_w was needed (which gives improper String remap)
+                        // Just remap the existing String/Utf8, since it is only used for Class.forName or .class, or maybe ldc_w
+                        // was needed (which gives improper String remap)
                         int remapIndex = constantPool.remapUtf8To(ClassFile.translate(remapName), stringCpInfo.getStringIndex());
                         stringCpInfo.setStringIndex(remapIndex);
                     }
@@ -958,8 +953,8 @@ public class ClassFile implements ClassConstants
         }
     }
 
-    // Is this String a valid class specifier?
-    private static boolean isClassSpec(String s) //throws Exception
+    /** Is this String a valid class specifier? */
+    private static boolean isClassSpec(String s)
     {
         if (s.length() == 0)
         {
@@ -981,8 +976,8 @@ public class ClassFile implements ClassConstants
         return true;
     }
 
-    // Is this String a valid Java identifier?
-    private static boolean isJavaIdentifier(String s) // throws Exception
+    /** Is this String a valid Java identifier? */
+    private static boolean isJavaIdentifier(String s)
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
         {
@@ -1091,11 +1086,11 @@ public class ClassFile implements ClassConstants
             {
                 pw.println("  Field " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)getCpEntry(info.getNameIndex())).getString() + " " + ((Utf8CpInfo)getCpEntry(info.getDescriptorIndex())).getString());
             }
-            //pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
-            //for (int j = 0; j < info.u2attributesCount; j++)
-            //{
-            //    info.attributes[j].dump(pw, this);
-            //}
+//            pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
+//            for (int j = 0; j < info.u2attributesCount; j++)
+//            {
+//                info.attributes[j].dump(pw, this);
+//            }
         }
         pw.println("Methods count: " + Integer.toHexString(u2methodsCount));
         for (int i = 0; i < u2methodsCount; i++)
@@ -1109,16 +1104,16 @@ public class ClassFile implements ClassConstants
             {
                 pw.println("  Method " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)getCpEntry(info.getNameIndex())).getString() + " " + ((Utf8CpInfo)getCpEntry(info.getDescriptorIndex())).getString() + " " + Integer.toHexString(info.getAccessFlags()));
             }
-            //pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
-            //for (int j = 0; j < info.u2attributesCount; j++)
-            //{
-            //    info.attributes[j].dump(pw, this);
-            //}
+//            pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
+//            for (int j = 0; j < info.u2attributesCount; j++)
+//            {
+//                info.attributes[j].dump(pw, this);
+//            }
         }
-        //pw.println("Attrs count: " + Integer.toHexString(u2attributesCount));
-        //for (int i = 0; i < u2attributesCount; i++)
-        //{
-        //    attributes[i].dump(pw, this);
-        //}
+//        pw.println("Attrs count: " + Integer.toHexString(u2attributesCount));
+//        for (int i = 0; i < u2attributesCount; i++)
+//        {
+//            attributes[i].dump(pw, this);
+//        }
     }
 }

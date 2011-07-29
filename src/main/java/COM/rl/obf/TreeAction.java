@@ -33,18 +33,22 @@ public class TreeAction
     {
         defaultAction(pk);
     }
+
     public void classAction(Cl cl) throws Exception
     {
         defaultAction(cl);
     }
+
     public void methodAction(Md md) throws Exception
     {
         defaultAction(md);
     }
+
     public void fieldAction(Fd fd) throws Exception
     {
         defaultAction(fd);
     }
+
     public void defaultAction(TreeItem ti) throws Exception
     {
     }

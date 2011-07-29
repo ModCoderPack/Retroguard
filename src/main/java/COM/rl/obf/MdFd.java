@@ -84,8 +84,7 @@ abstract public class MdFd extends TreeItem
     {
         StringBuffer sb = new StringBuffer();
         int modifiers = getModifiers();
-        // NOTE - could update with new JDK1.5 modifiers, but that
-        //        would cause incompatibility with earlier systems for RG
+        // NOTE - could update with new JDK1.5 modifiers, but that would cause incompatibility with earlier systems for RG
         if (Modifier.isAbstract(modifiers))
         {
             sb.append("abstract ");

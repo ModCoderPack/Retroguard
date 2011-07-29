@@ -118,7 +118,7 @@ public class ConstantPool
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
-            //throw new Exception("Illegal access to a Constant Pool element.");
+//            throw new Exception("Illegal access to a Constant Pool element.");
         }
         else
         {
@@ -140,7 +140,7 @@ public class ConstantPool
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
-            //throw new Exception("Illegal access to a Constant Pool element.");
+//            throw new Exception("Illegal access to a Constant Pool element.");
         }
         else
         {
@@ -196,7 +196,7 @@ public class ConstantPool
         return addEntry(new Utf8CpInfo(s));
     }
 
-    // Data walker
+    /** Data walker */
     class PoolAction
     {
         public void utf8Action(Utf8CpInfo cpInfo) throws Exception

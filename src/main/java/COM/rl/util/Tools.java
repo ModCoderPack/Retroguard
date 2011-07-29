@@ -36,9 +36,7 @@ public class Tools
 
 
     // Class Methods ---------------------------------------------------------
-    /**
-     * Is the string one of the ones in the array?
-     */
+    /** Is the string one of the ones in the array? */
     public static boolean isInArray(String s, String[] list)
     {
         for (int i = 0; i < list.length; i++)
@@ -52,11 +50,13 @@ public class Tools
     }
 
     /** Encode a byte[] as a Base64 (see RFC1521, Section 5.2) String. */
-    private static final char[] base64 = {
+    private static final char[] base64 =
+    {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
         'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
         'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-        'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
+        'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
+    };
     private static final char pad = '=';
     public static String toBase64(byte[] b)
     {

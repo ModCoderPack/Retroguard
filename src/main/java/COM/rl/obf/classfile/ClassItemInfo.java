@@ -84,8 +84,8 @@ abstract public class ClassItemInfo implements ClassConstants
     }
 
     /**
-     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue'
-     * are preserved, all others except the list in the String[] are killed).
+     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except the list in the
+     * String[] are killed).
      */
     protected void trimAttrsExcept(String[] keepAttrs) throws Exception
     {

@@ -160,7 +160,7 @@ public class StackMapFrameInfo
         }
     }
 
-    // Read 'locals' VerificationTypeInfo
+    /** Read 'locals' VerificationTypeInfo */
     private void readLocals(DataInput din) throws Exception
     {
         locals = new VerificationTypeInfo[u2numberOfLocals];
@@ -170,7 +170,7 @@ public class StackMapFrameInfo
         }
     }
 
-    // Write 'locals' VerificationTypeInfo
+    /** Write 'locals' VerificationTypeInfo */
     private void writeLocals(DataOutput dout) throws Exception
     {
         for (int i = 0; i < u2numberOfLocals; i++)
@@ -179,7 +179,7 @@ public class StackMapFrameInfo
         }
     }
 
-    // Read 'stack items' VerificationTypeInfo
+    /** Read 'stack items' VerificationTypeInfo */
     private void readStackItems(DataInput din) throws Exception
     {
         stack = new VerificationTypeInfo[u2numberOfStackItems];
@@ -189,7 +189,7 @@ public class StackMapFrameInfo
         }
     }
 
-    // Write 'stack items' VerificationTypeInfo
+    /** Write 'stack items' VerificationTypeInfo */
     private void writeStackItems(DataOutput dout) throws Exception
     {
         for (int i = 0; i < u2numberOfStackItems; i++)

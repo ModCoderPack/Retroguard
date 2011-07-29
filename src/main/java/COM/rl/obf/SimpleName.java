@@ -23,8 +23,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Java 'simple name' -- a class name or a component of a package name,
- * along with the type of this simple name.
+ * Java 'simple name' -- a class name or a component of a package name, along with the type of this simple name.
  *
  * @author      Mark Welsh
  */

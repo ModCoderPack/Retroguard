@@ -53,16 +53,35 @@ public class GuardDB implements ClassConstants
 
 
     // Fields ----------------------------------------------------------------
-    private ZipFile inJar;          // JAR file for obfuscation
-    private SectionList oldManifest;   // MANIFEST.MF RFC822-style data from old Jar
-    private SectionList newManifest;   // MANIFEST.MF RFC822-style data for new Jar
-    private ClassTree classTree;    // Tree of packages, classes. methods, fields
-    private boolean hasMap = false; // Has the mapping been generated already?
-    private boolean enableMapClassString = false; // Remap strings in reflection?
-    private boolean enableRepackage = false; // Repackage classes for size?
-    private boolean enableDummySourceFile = false; // Remap SourceFile attribute to text "SourceFile"?
-    private boolean enableDigestSHA = false; // Produce SHA-1 manifest digests?
-    private boolean enableDigestMD5 = false; // Produce MD5 manifest digests?
+    /** JAR file for obfuscation */
+    private ZipFile inJar;
+
+    /** MANIFEST.MF RFC822-style data from old Jar */
+    private SectionList oldManifest;
+
+    /** MANIFEST.MF RFC822-style data for new Jar */
+    private SectionList newManifest;
+
+    /** Tree of packages, classes. methods, fields */
+    private ClassTree classTree;
+
+    /** Has the mapping been generated already? */
+    private boolean hasMap = false;
+
+    /** Remap strings in reflection? */
+    private boolean enableMapClassString = false;
+
+    /** Repackage classes for size? */
+    private boolean enableRepackage = false;
+
+    /** Remap SourceFile attribute to text "SourceFile"? */
+    private boolean enableDummySourceFile = false;
+
+    /** Produce SHA-1 manifest digests? */
+    private boolean enableDigestSHA = false;
+
+    /** Produce MD5 manifest digests? */
+    private boolean enableDigestMD5 = false;
 
 
     // Class Methods ---------------------------------------------------------
@@ -127,10 +146,7 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    /**
-     * Go through database marking certain entities for retention, while
-     * maintaining polymorphic integrity.
-     */
+    /** Go through database marking certain entities for retention, while maintaining polymorphic integrity. */
     public void retain(RgsEnum rgsEnum, PrintWriter log) throws Exception
     {
 
@@ -145,8 +161,7 @@ public class GuardDB implements ClassConstants
         // .method;native ** * and_class
         classTree.retainMethod("**", "*", true, null, false, false, ClassConstants.ACC_NATIVE, ClassConstants.ACC_NATIVE);
 
-        // Always retain the auto-generated values() and valueOf(...)
-        // methods in Enums, using script entries:
+        // Always retain the auto-generated values() and valueOf(...) methods in Enums, using script entries:
         // .method;public;static;final **/values * extends java/lang/Enum
         // .method;public;static **/valueOf * extends java/lang/Enum
         classTree.retainMethod ("**/values", "*", false, "java/lang/Enum", false, false, ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL, ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
@@ -344,12 +359,10 @@ public class GuardDB implements ClassConstants
             }
         });
 
-        // Traverse the class tree, generating obfuscated names within
-        // package and class namespaces
+        // Traverse the class tree, generating obfuscated names within package and class namespaces
         classTree.generateNames(enableRepackage);
 
-        // Resolve the polymorphic dependencies of each class, generating
-        // non-private method and field names for each namespace
+        // Resolve the polymorphic dependencies of each class, generating non-private method and field names for each namespace
         classTree.resolveClasses();
 
         // Signal that the namespace maps have been created
@@ -376,9 +389,9 @@ public class GuardDB implements ClassConstants
         // Write the name frequency and name mapping table to the log file
         classTree.dump(log);
 
-        // Go through the input Jar, removing attributes and remapping the Constant Pool
-        // for each class file. Other files are copied through unchanged, except for manifest
-        // and any signature files - these are deleted and the manifest is regenerated.
+        // Go through the input Jar, removing attributes and remapping the Constant Pool for each class file. Other files are
+        // copied through unchanged, except for manifest and any signature files - these are deleted and the manifest is
+        // regenerated.
         Enumeration entries = inJar.entries();
         ZipOutputStream outJar = null;
         try
@@ -532,11 +545,10 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    // Parse the RFC822-style MANIFEST.MF file
+    /** Parse the RFC822-style MANIFEST.MF file */
     private void parseManifest() throws Exception
     {
-        // The manifest file is the first in the jar and is called
-        // (case insensitively) 'MANIFEST.MF'
+        // The manifest file is the first in the jar and is called (case insensitively) 'MANIFEST.MF'
         oldManifest = new SectionList();
         Enumeration entries = inJar.entries();
         while (entries.hasMoreElements())
@@ -584,7 +596,7 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    // Update an entry in the manifest file
+    /** Update an entry in the manifest file */
     private void updateManifest(String inName, String outName, MessageDigest[] digests)
     {
         // Check for section in old manifest
@@ -639,7 +651,7 @@ public class GuardDB implements ClassConstants
     }
 }
 
-// Stack used for marking TreeItems that must not be trimmed
+/** Stack used for marking TreeItems that must not be trimmed */
 class TIStack extends Stack
 {
     private static final long serialVersionUID = 1L;
@@ -692,7 +704,7 @@ class TIStack extends Stack
         }
         return o;
     }
-    // Push class and all supers onto trim-preserve stack
+    /** Push class and all supers onto trim-preserve stack */
     private Object pushClTree(Cl cl) throws Exception
     {
         if (cl != null)
@@ -706,7 +718,7 @@ class TIStack extends Stack
         }
         return cl;
     }
-    // Push item onto trim-preserve stack
+    /** Push item onto trim-preserve stack */
     private void pushItem(TreeItem ti)
     {
         if ((ti != null) && !ti.isTrimCheck())
@@ -715,12 +727,12 @@ class TIStack extends Stack
             super.push(ti);
         }
     }
-    // Push method across inheritance group onto trim-preserve stack
+    /** Push method across inheritance group onto trim-preserve stack */
     private void pushMdGroup(Cl cl, String mdName, String mdDesc) throws Exception
     {
         pushMdFdGroup(cl, mdName, mdDesc);
     }
-    // Push field across inheritance group onto trim-preserve stack
+    /** Push field across inheritance group onto trim-preserve stack */
     private void pushFdGroup(Cl cl, String fdName) throws Exception
     {
         pushMdFdGroup(cl, fdName, null);

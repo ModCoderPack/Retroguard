@@ -26,8 +26,7 @@ import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 
 /**
- * Placeholder class -- used to represent a class which has inner classes, before the
- * class itself has been encountered.
+ * Placeholder class -- used to represent a class which has inner classes, before the class itself has been encountered.
  *
  * @author      Mark Welsh
  */

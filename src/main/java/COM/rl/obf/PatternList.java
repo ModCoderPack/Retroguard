@@ -22,8 +22,8 @@ package COM.rl.obf;
 import java.util.*;
 
 /**
- * Class used for limited pattern matching with '**' (matches across package
- * boundaries) and '*' (does not match across package boundaries) wildcards.
+ * Class used for limited pattern matching with '**' (matches across package boundaries) and '*' (does not match across package
+ * boundaries) wildcards.
  *
  * @author      Mark Welsh
  */

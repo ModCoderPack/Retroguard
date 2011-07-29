@@ -56,9 +56,6 @@ public class NameProvider
     private static HashMap<String, FieldEntry> fieldsObf2Deobf = new HashMap<String, FieldEntry>();
     private static HashMap<String, FieldEntry> fieldsDeobf2Obf = new HashMap<String, FieldEntry>();
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     public static String[] parseCommandLine( String[] args )
     {
         System.out.println( "# Parsing " + args.length + " parameters" );
@@ -98,9 +95,6 @@ public class NameProvider
         return newArgs;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static String[] parseNameSheetModeArgs(String[] args)
     {
         if(args.length < 2)
@@ -292,9 +286,6 @@ public class NameProvider
         return newArgs;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void initLogfiles()
     {
         try
@@ -352,9 +343,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void readSRGFiles()
     {
         if(NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
@@ -373,9 +361,6 @@ public class NameProvider
         NameProvider.updateAllXrefs();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void updateAllXrefs()
     {
         for(PackageEntry entry : NameProvider.packageDefs)
@@ -403,9 +388,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void readPackagesSRG()
     {
         if(NameProvider.packagesFile == null)
@@ -444,9 +426,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void readClassesSRG()
     {
         if(NameProvider.classesFile == null)
@@ -471,9 +450,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void readMethodsSRG()
     {
         if(NameProvider.methodsFile == null)
@@ -503,9 +479,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void readFieldsSRG()
     {
         if(NameProvider.fieldsFile == null)
@@ -530,9 +503,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static String[] readAllLines( File file )
     {
         List<String> lines = new ArrayList<String>();
@@ -582,9 +552,6 @@ public class NameProvider
         return result;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static void log( String text )
     {
         System.out.println(text);
@@ -641,12 +608,9 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     public static String getNewTreeItemName( TreeItem ti )
     {
-        //log("TI: " + ti.getFullInName());
+//        NameProvider.log("TI: " + ti.getFullInName());
         if( ti instanceof Pk)
         {
             return NameProvider.getNewPackageName((Pk)ti);
@@ -670,9 +634,6 @@ public class NameProvider
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     public static String getNewPackageName( Pk pk )
     {
         if( NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE )
@@ -760,9 +721,6 @@ public class NameProvider
         return packageName;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static String getNewPackageName(String pkgName)
     {
         String newPkg = "";
@@ -779,9 +737,6 @@ public class NameProvider
         return newPkg.equals("") ? newPkg : newPkg + "/";
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     public static String getNewClassName( Cl cl )
     {
         if( NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE )
@@ -854,9 +809,6 @@ public class NameProvider
         return className;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     public static String getNewMethodName( Md md )
     {
         if( NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE )
@@ -980,13 +932,13 @@ public class NameProvider
                 }
 
                 Enumeration children = cls.getDownClasses();
-                //NameProvider.log("Children: " + children.hasMoreElements());
+//                NameProvider.log("Children: " + children.hasMoreElements());
 
                 boolean goingDown = false;
                 do
                 {
                     tmpMd.setParent(cls);
-                    //NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
+//                    NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
                     if(NameProvider.methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
                     {
                         String obfName = NameProvider.methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
@@ -1006,7 +958,7 @@ public class NameProvider
                     try
                     {
                         en = cls.getSuperInterfaces();
-                        //NameProvider.log("Interfaces: " + en.hasMoreElements());
+//                        NameProvider.log("Interfaces: " + en.hasMoreElements());
                     }
                     catch (Exception e1)
                     {
@@ -1033,7 +985,7 @@ public class NameProvider
                         Cl iface = (Cl) en.nextElement();
 
                         tmpMd.setParent(iface);
-                        //NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
+//                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
                         if(NameProvider.methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
                         {
                             String obfName = NameProvider.methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
@@ -1063,10 +1015,10 @@ public class NameProvider
                             {
                                 goingDown = true;
                             }
-                            else
-                            {
-                                //NameProvider.log("Parent: " + cls.getFullInName());
-                            }
+//                            else
+//                            {
+//                                NameProvider.log("Parent: " + cls.getFullInName());
+//                            }
                         }
                         catch (Exception e)
                         {
@@ -1079,7 +1031,7 @@ public class NameProvider
                         if(children.hasMoreElements())
                         {
                             cls = (Cl) children.nextElement();
-                            //NameProvider.log("Child: " + cls.getFullInName());
+//                            NameProvider.log("Child: " + cls.getFullInName());
                         }
                         else
                         {
@@ -1151,9 +1103,6 @@ public class NameProvider
         return methodName;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     public static String getNewFieldName( Fd fd )
     {
         if( NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE )
@@ -1220,9 +1169,6 @@ public class NameProvider
         return fieldName;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////
     private static boolean isInProtectedPackage( String fullInName )
     {
         for( String pkg : NameProvider.protectedPackages)

@@ -76,7 +76,8 @@ public class RgsEnum
     public static final String ACCESS_ANNOTATION   = "annotation";
     public static final String ACCESS_ENUM         = "enum";
 
-    public static final String[] CLASS_ACCESS = {
+    public static final String[] CLASS_ACCESS =
+    {
         RgsEnum.ACCESS_PUBLIC,
         RgsEnum.ACCESS_FINAL,
         RgsEnum.ACCESS_INTERFACE,
@@ -85,7 +86,8 @@ public class RgsEnum
         RgsEnum.ACCESS_ENUM
     };
 
-    public static final String[] METHOD_ACCESS = {
+    public static final String[] METHOD_ACCESS =
+    {
         RgsEnum.ACCESS_PUBLIC,
         RgsEnum.ACCESS_PRIVATE,
         RgsEnum.ACCESS_PROTECTED,
@@ -99,7 +101,8 @@ public class RgsEnum
         RgsEnum.ACCESS_STRICT
     };
 
-    public static final String[] FIELD_ACCESS = {
+    public static final String[] FIELD_ACCESS =
+    {
         RgsEnum.ACCESS_PUBLIC,
         RgsEnum.ACCESS_PRIVATE,
         RgsEnum.ACCESS_PROTECTED,
@@ -211,8 +214,7 @@ public class RgsEnum
         }
     }
 
-    /** Decode a list of access flags into a bit mask for class, method, or
-        field access flag u2's. */
+    /** Decode a list of access flags into a bit mask for class, method, or field access flag u2's. */
     private static int decodeAccessFlags(int entryType, String accessString) throws Exception
     {
         int accessMask = 0;
@@ -302,7 +304,7 @@ public class RgsEnum
         return thisOne;
     }
 
-    // Read the next entry, returning true if one is available.
+    /** Read the next entry, returning true if one is available. */
     private void readNext()
     {
         // Reset the 'next error' state
@@ -443,13 +445,13 @@ public class RgsEnum
                                 entry = new RgsEntry(directive, tk.sval);
                                 break;
                             case RgsEntry.TYPE_NOWARN:
-                                //checkClassSpec(tk.sval);
+//                                checkClassSpec(tk.sval);
                                 entry = new RgsEntry(directive, tk.sval);
                                 break;
                             case RgsEntry.TYPE_CLASS:
                             case RgsEntry.TYPE_NOTRIM_CLASS:
                             case RgsEntry.TYPE_NOT_CLASS:
-                                //checkClassWCSpec(tk.sval);
+//                                checkClassWCSpec(tk.sval);
                                 entry = new RgsEntry(directive, tk.sval);
                                 entry.accessMask = accessMask;
                                 entry.accessSetting = accessSetting;
@@ -460,12 +462,12 @@ public class RgsEnum
                                 if (name == null)
                                 {
                                     name = tk.sval;
-                                    //checkMethodOrFieldSpec(name);
+//                                    checkMethodOrFieldSpec(name);
                                 }
                                 else if (descriptor == null)
                                 {
                                     descriptor = tk.sval;
-                                    //checkMethodDescriptor(descriptor);
+//                                    checkMethodDescriptor(descriptor);
                                     entry = new RgsEntry(directive, name, descriptor);
                                     entry.accessMask = accessMask;
                                     entry.accessSetting = accessSetting;
@@ -477,12 +479,12 @@ public class RgsEnum
                                 if (name == null)
                                 {
                                     name = tk.sval;
-                                    //checkMethodOrFieldSpec(name);
+//                                    checkMethodOrFieldSpec(name);
                                 }
                                 else
                                 {
                                     descriptor = tk.sval;
-                                    //checkJavaType(descriptor);
+//                                    checkJavaType(descriptor);
                                     entry = new RgsEntry(directive, name, descriptor);
                                     entry.accessMask = accessMask;
                                     entry.accessSetting = accessSetting;
@@ -672,7 +674,7 @@ public class RgsEnum
         }
     }
 
-    // Throw if invalid
+    /** Throw if invalid */
     private void checkMethodDescriptor(String s) throws Exception
     {
         if ((s.length() == 0) || (s.charAt(0) != '('))
@@ -689,7 +691,7 @@ public class RgsEnum
         checkJavaType(s.substring(1));
     }
 
-    // Throw if first type is invalid, else return all but first type in String
+    /** Throw if first type is invalid, else return all but first type in String */
     private String checkFirstJavaType(String s) throws Exception
     {
         // Pull off the array specifiers
@@ -733,7 +735,7 @@ public class RgsEnum
         return s.substring(pos + 1);
     }
 
-    // Throw if type is invalid
+    /** Throw if type is invalid */
     private void checkJavaType(String s) throws Exception
     {
         if (!checkFirstJavaType(s).equals(""))
@@ -742,7 +744,7 @@ public class RgsEnum
         }
     }
 
-    // Throw if invalid
+    /** Throw if invalid */
     private void checkMethodOrFieldSpec(String s) throws Exception
     {
         if (s.length() == 0)
@@ -760,7 +762,7 @@ public class RgsEnum
         checkClassSpec(s.substring(0, pos));
     }
 
-    // Throw if invalid
+    /** Throw if invalid */
     private void checkClassSpec(String s) throws Exception
     {
         if (s.length() == 0)
@@ -782,7 +784,7 @@ public class RgsEnum
         checkJavaIdentifier(s);
     }
 
-    // Throw if invalid
+    /** Throw if invalid */
     private void checkClassWCSpec(String s) throws Exception
     {
         // Check for wildcard package spec first
@@ -818,7 +820,7 @@ public class RgsEnum
         }
     }
 
-    // Throw if invalid
+    /** Throw if invalid */
     private void checkJavaIdentifier(String s) throws Exception
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
@@ -834,7 +836,7 @@ public class RgsEnum
         }
     }
 
-    // Throw if invalid (allows for anon. inner class names like '4')
+    /** Throw if invalid (allows for anon. inner class names like '4') */
     private void checkJavaInnerIdentifier(String s) throws Exception
     {
         if (s.length() == 0)

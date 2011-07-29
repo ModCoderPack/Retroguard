@@ -166,7 +166,6 @@ abstract public class PkCl extends TreeItem
         for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
         {
             TreeItem ti = (TreeItem)enm.nextElement();
-            //replaced by Searge:
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);

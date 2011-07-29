@@ -20,9 +20,8 @@
 package COM.rl.obf;
 
 /**
- * Interface to a list of method and field names and descriptors -- used for checking
- * if a name/descriptor is in the public/protected lists of the super-class/interface
- * hierarchy.
+ * Interface to a list of method and field names and descriptors -- used for checking if a name/descriptor is in the
+ * public/protected lists of the super-class/interface hierarchy.
  *
  * @author      Mark Welsh
  */

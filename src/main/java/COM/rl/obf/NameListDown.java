@@ -20,8 +20,8 @@
 package COM.rl.obf;
 
 /**
- * Interface to a list of method and field names and descriptors -- used for checking
- * if a name/descriptor is reserved through a derived class/interface.
+ * Interface to a list of method and field names and descriptors -- used for checking if a name/descriptor is reserved through a
+ * derived class/interface.
  *
  * @author      Mark Welsh
  */
@@ -29,6 +29,7 @@ public interface NameListDown
 {
     /** Is the method reserved because of its reservation down the class hierarchy? */
     public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws Exception;
+
     /** Is the field reserved because of its reservation down the class hierarchy? */
     public String getFieldObfNameDown(Cl caller, String name) throws Exception;
 }

@@ -34,11 +34,16 @@ public class MemberValueInfo
 
     // Fields ----------------------------------------------------------------
     private int u1tag;
+
     private int u2constValueIndex;           // Union: const_value_index
+
     private int u2typeNameIndex;             // Union:     enum_const_value
     private int u2constNameIndex;            //            enum_const_value
+
     private int u2classInfoIndex;            // Union: class_info_index
+
     private AnnotationInfo annotationValue;  // Union:     annotation_value
+
     private int u2numValues;                 // Union: array_value
     private MemberValueInfo[] values;        //        array_value
 

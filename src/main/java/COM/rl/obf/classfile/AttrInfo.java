@@ -23,8 +23,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Representation of an attribute. Specific attributes have their representations
- * sub-classed from this.
+ * Representation of an attribute. Specific attributes have their representations sub-classed from this.
  *
  * @author      Mark Welsh
  */
@@ -169,9 +168,7 @@ public class AttrInfo implements ClassConstants
         return ClassConstants.ATTR_Unknown;
     }
 
-    /**
-     * Trim attributes from the classfile except those in the String[].
-     */
+    /** Trim attributes from the classfile except those in the String[]. */
     protected void trimAttrsExcept(String[] keepAttrs) throws Exception
     {
     }
@@ -183,10 +180,7 @@ public class AttrInfo implements ClassConstants
         markUtf8RefsInInfo(pool);
     }
 
-    /**
-     * Check for Utf8 references in the 'info' data to the constant pool and
-     * mark them; over-ride this in sub-classes.
-     */
+    /** Check for Utf8 references in the 'info' data to the constant pool and mark them; over-ride this in sub-classes. */
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
     }

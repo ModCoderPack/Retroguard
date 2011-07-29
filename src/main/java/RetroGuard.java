@@ -25,8 +25,7 @@ import COM.rl.obf.*;
 import COM.rl.obf.classfile.ClassFile;
 
 /**
- * Main class for obfuscator package. Calls through to packaged implementation
- * class.
+ * Main class for obfuscator package. Calls through to packaged implementation class.
  *
  * @author      Mark Welsh
  */
@@ -43,16 +42,14 @@ public class RetroGuard
 
     // Class Methods ---------------------------------------------------------
     /**
-     * Obfuscate an input Jar file on the file system into an output Jar file,
-     * using the script file supplied to change obfuscation settings from their
-     * default. <p>
+     * Obfuscate an input Jar file on the file system into an output Jar file, using the script file supplied to change obfuscation
+     * settings from their default. <p>
      *
      * Usage: java RetroGuard [INPUT-FILE [OUTPUT-FILE [SCRIPT-FILE [LOG-FILE]]]]
-     * where INPUT-FILE is the name of the JAR to be obfuscated (defaults to 'in.jar'),
-     * OUTPUT-FILE is the name for the obfuscated JAR (defaults to 'out.jar'),
-     * SCRIPT-FILE is the file name of a valid RetroGuard script (*.rgs) file
-     * (defaults to 'script.rgs'), LOG-FILE is the file name of the output log file
-     * in which name mappings are listed (defaults to 'retroguard.log'). <p>
+     *   where INPUT-FILE is the name of the JAR to be obfuscated (defaults to 'in.jar'),
+     *     OUTPUT-FILE is the name for the obfuscated JAR (defaults to 'out.jar'),
+     *     SCRIPT-FILE is the file name of a valid RetroGuard script (*.rgs) file (defaults to 'script.rgs'),
+     *     LOG-FILE is the file name of the output log file in which name mappings are listed (defaults to 'retroguard.log'). <p>
      */
     public static void main(String args[])
     {
