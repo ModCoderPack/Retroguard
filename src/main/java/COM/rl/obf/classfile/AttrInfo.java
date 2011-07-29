@@ -50,7 +50,10 @@ public class AttrInfo implements ClassConstants
      */
     public static AttrInfo create(DataInput din, ClassFile cf) throws Exception
     {
-        if (din == null) throw new IOException("No input stream was provided.");
+        if (din == null)
+        {
+            throw new IOException("No input stream was provided.");
+        }
 
         // Instantiate based on attribute name
         AttrInfo ai = null;
@@ -194,7 +197,10 @@ public class AttrInfo implements ClassConstants
     /** Export the representation to a DataOutput stream. */
     public final void write(DataOutput dout) throws Exception
     {
-        if (dout == null) throw new IOException("No output stream was provided.");
+        if (dout == null)
+        {
+            throw new IOException("No output stream was provided.");
+        }
         dout.writeShort(u2attrNameIndex);
         dout.writeInt(getAttrInfoLength());
         writeInfo(dout);

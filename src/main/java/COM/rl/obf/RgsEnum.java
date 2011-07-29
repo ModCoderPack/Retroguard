@@ -129,40 +129,77 @@ public class RgsEnum
     private static int toAccessFlag(String accessString) throws Exception
     {
         if      (RgsEnum.ACCESS_PUBLIC.equals(accessString))
+        {
             return ClassConstants.ACC_PUBLIC;
+        }
         else if (RgsEnum.ACCESS_PRIVATE.equals(accessString))
+        {
             return ClassConstants.ACC_PRIVATE;
+        }
         else if (RgsEnum.ACCESS_PROTECTED.equals(accessString))
+        {
             return ClassConstants.ACC_PROTECTED;
+        }
         else if (RgsEnum.ACCESS_STATIC.equals(accessString))
+        {
             return ClassConstants.ACC_STATIC;
+        }
         else if (RgsEnum.ACCESS_FINAL.equals(accessString))
+        {
             return ClassConstants.ACC_FINAL;
+        }
         else if (RgsEnum.ACCESS_SYNCHRONIZED.equals(accessString))
+        {
             return ClassConstants.ACC_SYNCHRONIZED;
+        }
         else if (RgsEnum.ACCESS_BRIDGE.equals(accessString))
+        {
             return ClassConstants.ACC_BRIDGE;
+        }
         else if (RgsEnum.ACCESS_VOLATILE.equals(accessString))
+        {
             return ClassConstants.ACC_VOLATILE;
+        }
         else if (RgsEnum.ACCESS_VARARGS.equals(accessString))
+        {
             return ClassConstants.ACC_VARARGS;
+        }
         else if (RgsEnum.ACCESS_TRANSIENT.equals(accessString))
+        {
             return ClassConstants.ACC_TRANSIENT;
+        }
         else if (RgsEnum.ACCESS_NATIVE.equals(accessString))
+        {
             return ClassConstants.ACC_NATIVE;
+        }
         else if (RgsEnum.ACCESS_INTERFACE.equals(accessString))
+        {
             return ClassConstants.ACC_INTERFACE;
+        }
         else if (RgsEnum.ACCESS_ABSTRACT.equals(accessString))
+        {
             return ClassConstants.ACC_ABSTRACT;
+        }
         else if (RgsEnum.ACCESS_STRICT.equals(accessString))
+        {
             return ClassConstants.ACC_STRICT;
+        }
         else if (RgsEnum.ACCESS_SYNTHETIC.equals(accessString))
+        {
             return ClassConstants.ACC_SYNTHETIC;
+        }
         else if (RgsEnum.ACCESS_ANNOTATION.equals(accessString))
+        {
             return ClassConstants.ACC_ANNOTATION;
+        }
         else if (RgsEnum.ACCESS_ENUM.equals(accessString))
+        {
             return ClassConstants.ACC_ENUM;
-        else throw new Exception();
+        }
+        else
+        {
+            throw new Exception();
+        }
     }
 
     /** Decode a list of access flags into a bit mask for class, method, or
@@ -174,7 +211,10 @@ public class RgsEnum
         while ((accessString != null) && (accessString.length() >= 5)) // ';enum'
         {
             boolean invert = false;
-            if (accessString.charAt(0) != ';') throw new Exception();
+            if (accessString.charAt(0) != ';')
+            {
+                throw new Exception();
+            }
             int startIndex = 1;
             if (accessString.charAt(1) == '!')
             {
@@ -207,7 +247,10 @@ public class RgsEnum
             }
             int flag = RgsEnum.toAccessFlag(flagString);
             accessMask |= flag;
-            if (!invert) accessSetting |= flag;
+            if (!invert)
+            {
+                accessSetting |= flag;
+            }
         }
         return (accessSetting << 16) + accessMask;
     }

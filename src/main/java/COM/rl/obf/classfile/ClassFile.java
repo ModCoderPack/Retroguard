@@ -89,7 +89,10 @@ public class ClassFile implements ClassConstants
      */
     public static ClassFile create(DataInput din) throws Exception
     {
-        if (din == null) throw new IOException("No input stream was provided.");
+        if (din == null)
+        {
+            throw new IOException("No input stream was provided.");
+        }
         ClassFile cf = new ClassFile();
         cf.read(din);
         return cf;
@@ -971,14 +974,23 @@ public class ClassFile implements ClassConstants
     // Is this String a valid class specifier?
     private static boolean isClassSpec(String s) //throws Exception
     {
-        if (s.length() == 0) return false;
+        if (s.length() == 0)
+        {
+            return false;
+        }
         int pos = -1;
         while ((pos = s.lastIndexOf('/')) != -1)
         {
-            if (!ClassFile.isJavaIdentifier(s.substring(pos + 1))) return false;
+            if (!ClassFile.isJavaIdentifier(s.substring(pos + 1)))
+            {
+                return false;
+            }
             s = s.substring(0, pos);
         }
-        if (!ClassFile.isJavaIdentifier(s)) return false;
+        if (!ClassFile.isJavaIdentifier(s))
+        {
+            return false;
+        }
         return true;
     }
 
@@ -986,17 +998,26 @@ public class ClassFile implements ClassConstants
     private static boolean isJavaIdentifier(String s) // throws Exception
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
+        {
             return false;
+        }
         for (int i = 1; i < s.length(); i++)
+        {
             if (!Character.isJavaIdentifierPart(s.charAt(i)))
+            {
                 return false;
+            }
+        }
         return true;
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        if (dout == null) throw new IOException("No output stream was provided.");
+        if (dout == null)
+        {
+            throw new IOException("No output stream was provided.");
+        }
         dout.writeInt(u4magic);
         dout.writeShort(u2minorVersion);
         dout.writeShort(u2majorVersion);

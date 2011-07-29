@@ -43,7 +43,10 @@ public class MethodInfo extends ClassItemInfo
      */
     public static MethodInfo create(DataInput din, ClassFile cf) throws Exception
     {
-        if (din == null) throw new IOException("No input stream was provided.");
+        if (din == null)
+        {
+            throw new IOException("No input stream was provided.");
+        }
         MethodInfo mi = new MethodInfo(cf);
         mi.read(din);
         return mi;

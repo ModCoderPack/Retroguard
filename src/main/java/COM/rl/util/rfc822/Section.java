@@ -85,7 +85,10 @@ public class Section
     public Header findTag(String tag)
     {
         // Check params
-        if (tag == null) return null;
+        if (tag == null)
+        {
+            return null;
+        }
 
         // For now, do linear search of headers
         for (Enumeration enm = headers.elements(); enm.hasMoreElements(); )

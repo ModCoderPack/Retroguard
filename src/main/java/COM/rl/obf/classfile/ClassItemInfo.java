@@ -149,7 +149,10 @@ abstract public class ClassItemInfo implements ClassConstants
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        if (dout == null) throw new IOException("No output stream was provided.");
+        if (dout == null)
+        {
+            throw new IOException("No output stream was provided.");
+        }
         dout.writeShort(u2accessFlags);
         dout.writeShort(u2nameIndex);
         dout.writeShort(u2descriptorIndex);

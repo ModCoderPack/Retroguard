@@ -143,31 +143,49 @@ public class TreeItem
             sl = PatternList.create(string);
             if (!pl.scExists())
             {
-                if (pl.length() != sl.length()) return false;
+                if (pl.length() != sl.length())
+                {
+                    return false;
+                }
                 // check each string identifier against the non-** pattern
                 for (int i = 0; i < pl.length(); i++)
                 {
-                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i))) return false;
+                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i)))
+                    {
+                        return false;
+                    }
                 }
             }
             else
             {
-                if (pl.length() > sl.length()) return false;
+                if (pl.length() > sl.length())
+                {
+                    return false;
+                }
                 // check the head identifiers (pre-** segment)
                 for (int i = 0; i < pl.scIndex(); i++)
                 {
-                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i))) return false;
+                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i)))
+                    {
+                        return false;
+                    }
                 }
                 // check the tail identifiers (post-** segment)
                 for (int i = pl.scIndex() + 1; i < pl.length(); i++)
                 {
                     int j = i + sl.length() - pl.length();
-                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(j))) return false;
+                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(j)))
+                    {
+                        return false;
+                    }
                 }
                 // check the merged central identifiers against the ** segment
                 int j = pl.scIndex() + sl.length() - pl.length();
                 if (!TreeItem.isMatch(pl.getSub(pl.scIndex()),
-                                      sl.getSub(pl.scIndex(), j))) return false;
+                                      sl.getSub(pl.scIndex(), j)))
+                {
+                    return false;
+                }
             }
         }
         catch (Exception e)
@@ -264,7 +282,9 @@ public class TreeItem
         {
             String s = parent.getFullInName();
             if(s.equals(""))
+            {
                 return getInName();
+            }
             return s + sep + getInName();
         }
     }
@@ -284,7 +304,9 @@ public class TreeItem
         {
             String s = parent.getFullOutName();
             if(s.equals("") || (this instanceof Pk))
+            {
                 return getOutName();
+            }
             return s + sep + getOutName();
         }
     }

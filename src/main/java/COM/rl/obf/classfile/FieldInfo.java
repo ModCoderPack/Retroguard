@@ -43,7 +43,10 @@ public class FieldInfo extends ClassItemInfo
      */
     public static FieldInfo create(DataInput din, ClassFile cf) throws Exception
     {
-        if (din == null) throw new IOException("No input stream was provided.");
+        if (din == null)
+        {
+            throw new IOException("No input stream was provided.");
+        }
         FieldInfo fi = new FieldInfo(cf);
         fi.read(din);
         return fi;

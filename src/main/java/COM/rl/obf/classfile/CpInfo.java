@@ -48,7 +48,10 @@ abstract public class CpInfo implements ClassConstants
      */
     public static CpInfo create(DataInput din) throws Exception
     {
-        if (din == null) throw new IOException("No input stream was provided.");
+        if (din == null)
+        {
+            throw new IOException("No input stream was provided.");
+        }
 
         // Instantiate based on tag byte
         CpInfo ci = null;
@@ -90,7 +93,10 @@ abstract public class CpInfo implements ClassConstants
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        if (dout == null) throw new IOException("No output stream was provided.");
+        if (dout == null)
+        {
+            throw new IOException("No output stream was provided.");
+        }
         dout.writeByte(u1tag);
         writeInfo(dout);
     }
@@ -107,7 +113,10 @@ abstract public class CpInfo implements ClassConstants
     /** Decrement the reference count. */
     public void decRefCount() throws Exception
     {
-        if (refCount == 0) throw new Exception("Illegal to decrement ref count that is already zero.");
+        if (refCount == 0)
+        {
+            throw new Exception("Illegal to decrement ref count that is already zero.");
+        }
         refCount--;
     }
 

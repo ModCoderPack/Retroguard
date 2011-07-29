@@ -56,12 +56,18 @@ public class PatternList
         {
             int oldpos = pos;
             pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, oldpos+1);
-            if (pos == -1) pos = pattern.length();
+            if (pos == -1)
+            {
+                pos = pattern.length();
+            }
             if ((scFirst >= 0) && (oldpos+1 <= scFirst) && (scFirst+2 <= pos))
             {
                 sc = length();
                 pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast+2);
-                if (pos == -1) pos = pattern.length();
+                if (pos == -1)
+                {
+                    pos = pattern.length();
+                }
             }
             subs.addElement(pattern.substring(oldpos+1, pos));
         }
@@ -94,12 +100,18 @@ public class PatternList
     /** Return the i'th through j'th segments, joined by package separators. */
     public String getSub(int i, int j)
     {
-        if ((i < 0) || (i > j) || (j >= length())) throw new IllegalArgumentException();
+        if ((i < 0) || (i > j) || (j >= length()))
+        {
+            throw new IllegalArgumentException();
+        }
         StringBuffer sb = new StringBuffer();
         for (int k = i; k <= j; k++)
         {
             sb.append(getSub(k));
-            if (k < j) sb.append(ClassTree.PACKAGE_LEVEL);
+            if (k < j)
+            {
+                sb.append(ClassTree.PACKAGE_LEVEL);
+            }
         }
         return sb.toString();
     }

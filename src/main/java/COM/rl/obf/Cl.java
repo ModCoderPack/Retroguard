@@ -193,16 +193,25 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         try
         {
             // Special case: is this java/lang/Object?
-            if (superClass == null) return false;
+            if (superClass == null)
+            {
+                return false;
+            }
             // Check our parents
-            if (superClass.equals(queryName)) return true;
+            if (superClass.equals(queryName))
+            {
+                return true;
+            }
             if (checkInterfaces)
             {
                 if (superInterfaces != null)
                 {
                     for (int i = 0; i < superInterfaces.length; i++)
                     {
-                        if (queryName.equals(superInterfaces[i])) return true;
+                        if (queryName.equals(superInterfaces[i]))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -211,7 +220,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (superClInt != null)
             {
                 if (superClInt.hasAsSuperInt(queryName, checkInterfaces))
+                {
                     return true;
+                }
             }
             else
             {
@@ -220,7 +231,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 {
                     if (Cl.hasAsSuperExt(queryName, checkInterfaces,
                                          this.classTree, superClExt))
+                    {
                         return true;
+                    }
                 }
             }
             if (checkInterfaces)
@@ -233,7 +246,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         if (interClInt != null)
                         {
                             if (interClInt.hasAsSuperInt(queryName, checkInterfaces))
+                            {
                                 return true;
+                            }
                         }
                         else
                         {
@@ -243,7 +258,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                             {
                                 if (Cl.hasAsSuperExt(queryName, checkInterfaces,
                                                      this.classTree, interClExt))
+                                {
                                     return true;
+                                }
                             }
                         }
                     }
@@ -268,19 +285,28 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             // Special case: is this java/lang/Object?
             if ((clExt == null) ||
-                clExt.getName().equals("java.lang.Object")) return false;
+                clExt.getName().equals("java.lang.Object"))
+            {
+                return false;
+            }
             // Check our parents
             String queryNameExt = ClassFile.translate(queryName);
             Class superClass = clExt.getSuperclass();
             Class[] superInterfaces = clExt.getInterfaces();
-            if (queryNameExt.equals(superClass.getName())) return true;
+            if (queryNameExt.equals(superClass.getName()))
+            {
+                return true;
+            }
             if (checkInterfaces)
             {
                 if (superInterfaces != null)
                 {
                     for (int i = 0; i < superInterfaces.length; i++)
                     {
-                        if (queryNameExt.equals(superInterfaces[i].getName())) return true;
+                        if (queryNameExt.equals(superInterfaces[i].getName()))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -289,7 +315,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (superClInt != null)
             {
                 if (superClInt.hasAsSuperInt(queryName, checkInterfaces))
+                {
                     return true;
+                }
             }
             else
             {
@@ -298,7 +326,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 {
                     if (Cl.hasAsSuperExt(queryName, checkInterfaces,
                                          classTree, superClExt))
+                    {
                         return true;
+                    }
                 }
             }
             if (checkInterfaces)
@@ -311,7 +341,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         if (interClInt != null)
                         {
                             if (interClInt.hasAsSuperInt(queryName, checkInterfaces))
+                            {
                                 return true;
+                            }
                         }
                         else
                         {
@@ -320,7 +352,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                             {
                                 if (Cl.hasAsSuperExt(queryName, checkInterfaces,
                                                      classTree, interClExt))
+                                {
                                     return true;
+                                }
                             }
                         }
                     }
@@ -440,7 +474,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public void setupNameListDowns() throws Exception
     {
         // Special case: we are java/lang/Object
-        if (superClass == null) return;
+        if (superClass == null)
+        {
+            return;
+        }
 
         // Add this class as a NameListDown to the super and each interface, if they are in the JAR
         Cl superClassItem = classTree.getCl(superClass);
@@ -498,7 +535,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                                      Vector fields) throws Exception
     {
         // Special case: we are java/lang/Object
-        if (superClass == null) return;
+        if (superClass == null)
+        {
+            return;
+        }
 
         // Traverse one step in each direction in name space, scanning
         if (!isScanned)
@@ -650,7 +690,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     private void resolveNameSpaceExcept(Cl ignoreCl) throws Exception
     {
         // Special case: we are java/lang/Object
-        if (superClass == null) return;
+        if (superClass == null)
+        {
+            return;
+        }
 
         // Traverse one step in each direction in name space, resolving
         if (!isResolved)
@@ -700,7 +743,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     private void resolveThis() throws Exception
     {
         // Special case: we are java/lang/Object
-        if (superClass == null) return;
+        if (superClass == null)
+        {
+            return;
+        }
 
         Cl superClassItem = classTree.getCl(superClass);
         nameListUps.addElement(superClassItem != null ?
@@ -1277,7 +1323,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     String pkName = this.parent.getFullOutName();
 
                     if (pkName.equals(""))
+                    {
                         return clName;
+                    }
 
                     return pkName + sep + clName;
                 }

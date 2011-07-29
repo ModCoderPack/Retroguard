@@ -64,10 +64,14 @@ public class NameProvider
         System.out.println( "# Parsing " + args.length + " parameters" );
 
         if( (args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
+        {
             return NameProvider.parseNameSheetModeArgs( args );
+        }
 
         if( args.length < 5 )
+        {
             return args;
+        }
 
         int idx;
         try
@@ -87,7 +91,9 @@ public class NameProvider
         String[] newArgs = new String[4];
 
         for( int i = 0; i < 4; ++i )
+        {
             newArgs[i] = args[i];
+        }
 
         return newArgs;
     }
@@ -98,7 +104,9 @@ public class NameProvider
     private static String[] parseNameSheetModeArgs(String[] args)
     {
         if(args.length < 2)
+        {
             return null;
+        }
 
         String configFileName = args[1];
         File configFile = new File(configFileName);
@@ -122,7 +130,9 @@ public class NameProvider
             {
                 line = reader.readLine();
                 if((line == null) || line.trim().startsWith( "#" ))
+                {
                     continue;
+                }
 
                 String[] defines = line.split( "=" );
                 if(defines.length > 1)
@@ -134,31 +144,41 @@ public class NameProvider
                     {
                         NameProvider.packagesFile = new File(defines[1]);
                         if(!NameProvider.packagesFile.exists() || !NameProvider.packagesFile.isFile())
+                        {
                             NameProvider.packagesFile = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("classes"))
                     {
                         NameProvider.classesFile = new File(defines[1]);
                         if(!NameProvider.classesFile.exists() || !NameProvider.classesFile.isFile())
+                        {
                             NameProvider.classesFile = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("methods"))
                     {
                         NameProvider.methodsFile = new File(defines[1]);
                         if(!NameProvider.methodsFile.exists() || !NameProvider.methodsFile.isFile())
+                        {
                             NameProvider.methodsFile = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("fields"))
                     {
                         NameProvider.fieldsFile = new File(defines[1]);
                         if(!NameProvider.fieldsFile.exists() || !NameProvider.fieldsFile.isFile())
+                        {
                             NameProvider.fieldsFile = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("reob"))
                     {
                         NameProvider.reobFile = new File(defines[1]);
                         if(!NameProvider.reobFile.exists() || !NameProvider.reobFile.isFile())
+                        {
                             NameProvider.reobFile = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("input"))
                     {
@@ -188,13 +208,17 @@ public class NameProvider
                     {
                         NameProvider.npLog = new File(defines[1]);
                         if(NameProvider.npLog.exists() && !NameProvider.npLog.isFile())
+                        {
                             NameProvider.npLog = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("rolog"))
                     {
                         NameProvider.roLog = new File(defines[1]);
                         if(NameProvider.roLog.exists() && !NameProvider.roLog.isFile())
+                        {
                             NameProvider.roLog = null;
+                        }
                     }
                     else if(defines[0].equalsIgnoreCase("startindex"))
                     {
@@ -224,9 +248,13 @@ public class NameProvider
             try
             {
                 if(reader != null)
+                {
                     reader.close();
+                }
                 if(fileReader != null)
+                {
                     fileReader.close();
+                }
             }
             catch( IOException e )
             {
@@ -235,11 +263,17 @@ public class NameProvider
         }
 
         if(args[0].equalsIgnoreCase( "-searge" ))
+        {
             NameProvider.currentMode = NameProvider.DEOBFUSCATION_MODE;
+        }
         else if(args[0].equalsIgnoreCase( "-notch" ))
+        {
             NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
+        }
         else
+        {
             return null;
+        }
 
         if(NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
@@ -248,7 +282,9 @@ public class NameProvider
         }
 
         if((newArgs[0] == null) || (newArgs[1] == null) || (newArgs[2] == null) || (newArgs[3] == null))
+        {
             return null;
+        }
 
         NameProvider.initLogfiles();
         NameProvider.readSRGFiles();
@@ -279,7 +315,9 @@ public class NameProvider
                     finally
                     {
                         if(writer != null)
+                        {
                             writer.close();
+                        }
                     }
                 }
             }
@@ -299,7 +337,9 @@ public class NameProvider
                     finally
                     {
                         if(writer != null)
+                        {
                             writer.close();
+                        }
                     }
                 }
             }
@@ -369,7 +409,9 @@ public class NameProvider
     private static void readPackagesSRG()
     {
         if(NameProvider.packagesFile == null)
+        {
             return;
+        }
 
         String[] lines = NameProvider.readAllLines( NameProvider.packagesFile );
 
@@ -377,17 +419,27 @@ public class NameProvider
         {
             String[] lineParts = line.split( " " );
             if((lineParts.length != 3) || !lineParts[0].startsWith( "PK:" ))
+            {
                 continue;
+            }
 
             PackageEntry entry = new PackageEntry();
             if(lineParts[1].equals( "." ))
+            {
                 entry.obfName = "";
+            }
             else
+            {
                 entry.obfName = lineParts[1];
+            }
             if(lineParts[2].equals( "." ))
+            {
                 entry.deobfName = "";
+            }
             else
+            {
                 entry.deobfName = lineParts[2];
+            }
             NameProvider.packageDefs.add( entry );
         }
     }
@@ -398,7 +450,9 @@ public class NameProvider
     private static void readClassesSRG()
     {
         if(NameProvider.classesFile == null)
+        {
             return;
+        }
 
         String[] lines = NameProvider.readAllLines( NameProvider.classesFile );
 
@@ -406,7 +460,9 @@ public class NameProvider
         {
             String[] lineParts = line.split( " " );
             if((lineParts.length != 3) || !lineParts[0].startsWith( "CL:" ))
+            {
                 continue;
+            }
 
             ClassEntry entry = new ClassEntry();
             entry.obfName = lineParts[1];
@@ -421,7 +477,9 @@ public class NameProvider
     private static void readMethodsSRG()
     {
         if(NameProvider.methodsFile == null)
+        {
             return;
+        }
 
         String[] lines = NameProvider.readAllLines( NameProvider.methodsFile );
 
@@ -429,14 +487,18 @@ public class NameProvider
         {
             String[] lineParts = line.split( " " );
             if((lineParts.length < 4) || !lineParts[0].startsWith( "MD:" ))
+            {
                 continue;
+            }
 
             MethodEntry entry = new MethodEntry();
             entry.obfName = lineParts[1];
             entry.obfDesc = lineParts[2];
             entry.deobfName = lineParts[3];
             if(lineParts.length > 4)
+            {
                 entry.deobfDesc = lineParts[4];
+            }
             NameProvider.methodDefs.add( entry );
         }
     }
@@ -447,7 +509,9 @@ public class NameProvider
     private static void readFieldsSRG()
     {
         if(NameProvider.fieldsFile == null)
+        {
             return;
+        }
 
         String[] lines = NameProvider.readAllLines( NameProvider.fieldsFile );
 
@@ -455,7 +519,9 @@ public class NameProvider
         {
             String[] lineParts = line.split( " " );
             if((lineParts.length != 3) || !lineParts[0].startsWith( "FD:" ))
+            {
                 continue;
+            }
 
             FieldEntry entry = new FieldEntry();
             entry.obfName = lineParts[1];
@@ -495,9 +561,13 @@ public class NameProvider
             try
             {
                 if(reader != null)
+                {
                     reader.close();
+                }
                 if(fileReader != null)
+                {
                     fileReader.close();
+                }
             }
             catch( Exception e )
             {
@@ -521,12 +591,18 @@ public class NameProvider
 
         File log = null;
         if(NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
+        {
             log = NameProvider.npLog;
+        }
         else if(NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+        {
             log = NameProvider.roLog;
+        }
 
         if( log == null )
+        {
             return;
+        }
 
         FileWriter fileWriter = null;
         BufferedWriter writer = null;
@@ -550,9 +626,13 @@ public class NameProvider
             try
             {
                 if(writer != null)
+                {
                     writer.close();
+                }
                 if(fileWriter != null)
+                {
                     fileWriter.close();
+                }
             }
             catch( IOException e )
             {
@@ -664,12 +744,18 @@ public class NameProvider
         String outName = pk.getFullOutName();
 
         if(inName.equals(""))
+        {
             inName = ".";
+        }
         if(outName.equals(""))
+        {
             outName = ".";
+        }
 
         if(!NameProvider.isInProtectedPackage(inName + "/") && !known)
+        {
             NameProvider.log("PK: " + inName + " " + outName);
+        }
 
         return packageName;
     }
@@ -682,9 +768,13 @@ public class NameProvider
         String newPkg = "";
 
         if(NameProvider.packageNameLookup.containsKey(pkgName))
+        {
             newPkg = NameProvider.packageNameLookup.get(pkgName);
+        }
         else
+        {
             newPkg = pkgName;
+        }
 
         return newPkg.equals("") ? newPkg : newPkg + "/";
     }
@@ -716,9 +806,13 @@ public class NameProvider
             {
                 String deobfName = NameProvider.classesObf2Deobf.get( cl.getFullInName() ).deobfName;
                 if(deobfName.contains( "/" ))
+                {
                     className = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
+                }
                 else
+                {
                     className = deobfName;
+                }
 
                 NameProvider.classNameLookup.put( cl.getInName(), className );
             }
@@ -738,9 +832,13 @@ public class NameProvider
             {
                 String obfName = NameProvider.classesDeobf2Obf.get( cl.getFullInName() ).obfName;
                 if(obfName.contains( "/" ))
+                {
                     className = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                }
                 else
+                {
                     className = obfName;
+                }
 
                 NameProvider.classNameLookup.put( cl.getInName(), className );
             }
@@ -749,7 +847,9 @@ public class NameProvider
         cl.setOutName( className );
 
         if(!NameProvider.isInProtectedPackage(cl.getFullInName()))
+        {
             NameProvider.log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
+        }
 
         return className;
     }
@@ -757,7 +857,6 @@ public class NameProvider
     ////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////
-    @SuppressWarnings("rawtypes")
     public static String getNewMethodName( Md md )
     {
         if( NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE )
@@ -785,14 +884,20 @@ public class NameProvider
             {
                 String deobfName = NameProvider.methodsObf2Deobf.get( md.getFullInName() + desc ).deobfName;
                 if(deobfName.contains( "/" ))
+                {
                     methodName = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
+                }
                 else
+                {
                     methodName = deobfName;
+                }
             }
             else
             {
                 if(!NameProvider.isInProtectedPackage(md.getFullInName()) && (NameProvider.uniqueStart > 0))
+                {
                     methodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
+                }
             }
 
             int i = 0;
@@ -822,13 +927,19 @@ public class NameProvider
 
                             String newCls = clsName;
                             if(NameProvider.classNameLookup.containsKey( clsName ))
+                            {
                                 newCls = NameProvider.classNameLookup.get( clsName );
+                            }
 
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if(pkgName.equals(""))
+                            {
                                 newDesc = newDesc.replaceFirst( "L" + clsName + ";", "L" + newPkg + newCls + ";" );
+                            }
                             else
+                            {
                                 newDesc = newDesc.replaceFirst( "L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";" );
+                            }
 
                             i = j;
                             break;
@@ -845,9 +956,13 @@ public class NameProvider
             {
                 String obfName = NameProvider.methodsDeobf2Obf.get( md.getFullInName() + desc ).obfName;
                 if(obfName.contains( "/" ))
+                {
                     methodName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                }
                 else
+                {
                     methodName = obfName;
+                }
             }
             else
             {
@@ -865,20 +980,24 @@ public class NameProvider
                 }
 
                 Enumeration children = cls.getDownClasses();
-                //log("Children: " + children.hasMoreElements());
+                //NameProvider.log("Children: " + children.hasMoreElements());
 
                 boolean goingDown = false;
                 do
                 {
                     tmpMd.setParent(cls);
-                    //log("CHECKING: " + tmpMd.getFullInName() + desc);
+                    //NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
                     if(NameProvider.methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
                     {
                         String obfName = NameProvider.methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
                         if(obfName.contains( "/" ))
+                        {
                             methodName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                        }
                         else
+                        {
                             methodName = obfName;
+                        }
                         break;
                     }
 
@@ -887,7 +1006,7 @@ public class NameProvider
                     try
                     {
                         en = cls.getSuperInterfaces();
-                        //log("Interfaces: " + en.hasMoreElements());
+                        //NameProvider.log("Interfaces: " + en.hasMoreElements());
                     }
                     catch (Exception e1)
                     {
@@ -914,20 +1033,26 @@ public class NameProvider
                         Cl iface = (Cl) en.nextElement();
 
                         tmpMd.setParent(iface);
-                        //log("CHECKING: " + tmpMd.getFullInName() + desc);
+                        //NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
                         if(NameProvider.methodsDeobf2Obf.containsKey( tmpMd.getFullInName() + desc ))
                         {
                             String obfName = NameProvider.methodsDeobf2Obf.get( tmpMd.getFullInName() + desc ).obfName;
                             if(obfName.contains( "/" ))
+                            {
                                 methodName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                            }
                             else
+                            {
                                 methodName = obfName;
+                            }
                             found = true;
                         }
                     }
 
                     if(found)
+                    {
                         break;
+                    }
 
                     if(!goingDown)
                     {
@@ -935,9 +1060,13 @@ public class NameProvider
                         {
                             cls = cls.getSuperCl();
                             if(cls == null)
+                            {
                                 goingDown = true;
-                            //else
-                                //log("Parent: " + cls.getFullInName());
+                            }
+                            else
+                            {
+                                //NameProvider.log("Parent: " + cls.getFullInName());
+                            }
                         }
                         catch (Exception e)
                         {
@@ -950,7 +1079,7 @@ public class NameProvider
                         if(children.hasMoreElements())
                         {
                             cls = (Cl) children.nextElement();
-                            //log("Child: " + cls.getFullInName());
+                            //NameProvider.log("Child: " + cls.getFullInName());
                         }
                         else
                         {
@@ -988,13 +1117,19 @@ public class NameProvider
 
                             String newCls = clsName;
                             if(NameProvider.classNameLookup.containsKey( clsName ))
+                            {
                                 newCls = NameProvider.classNameLookup.get( clsName );
+                            }
 
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if(pkgName.equals(""))
+                            {
                                 newDesc = newDesc.replaceFirst( "L" + clsName + ";", "L" + newPkg + newCls + ";" );
+                            }
                             else
+                            {
                                 newDesc = newDesc.replaceFirst( "L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";" );
+                            }
 
                             i = j;
                             break;
@@ -1009,7 +1144,9 @@ public class NameProvider
         md.setOutName( methodName );
 
         if(!NameProvider.isInProtectedPackage(md.getFullInName()))
+        {
             NameProvider.log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
+        }
 
         return methodName;
     }
@@ -1041,14 +1178,20 @@ public class NameProvider
             {
                 String deobfName = NameProvider.fieldsObf2Deobf.get( fd.getFullInName() ).deobfName;
                 if(deobfName.contains( "/" ))
+                {
                     fieldName = deobfName.substring( deobfName.lastIndexOf( '/' ) + 1 );
+                }
                 else
+                {
                     fieldName = deobfName;
+                }
             }
             else
             {
                 if(!NameProvider.isInProtectedPackage(fd.getFullInName()) && (NameProvider.uniqueStart > 0))
+                {
                     fieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fieldName;
+                }
             }
         }
         else if(NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
@@ -1057,16 +1200,22 @@ public class NameProvider
             {
                 String obfName = NameProvider.fieldsDeobf2Obf.get( fd.getFullInName() ).obfName;
                 if(obfName.contains( "/" ))
+                {
                     fieldName = obfName.substring( obfName.lastIndexOf( '/' ) + 1 );
+                }
                 else
+                {
                     fieldName = obfName;
+                }
             }
         }
 
         fd.setOutName( fieldName );
 
         if(!NameProvider.isInProtectedPackage(fd.getFullInName()))
+        {
             NameProvider.log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
+        }
 
         return fieldName;
     }
@@ -1079,7 +1228,9 @@ public class NameProvider
         for( String pkg : NameProvider.protectedPackages)
         {
             if(fullInName.startsWith( pkg ))
+            {
                 return true;
+            }
         }
         return false;
     }

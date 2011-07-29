@@ -433,13 +433,21 @@ public class GuardDB implements ClassConstants
         }
 
         //TODO: Searge: check if those two walks are obsolete
-        classTree.walkTree(new TreeAction() {
+        classTree.walkTree(new TreeAction()
+        {
             @Override
-            public void classAction(Cl cl) throws Exception {cl.resetResolve();}
+            public void classAction(Cl cl) throws Exception
+            {
+                cl.resetResolve();
+            }
         });
-        classTree.walkTree(new TreeAction() {
+        classTree.walkTree(new TreeAction()
+        {
             @Override
-            public void classAction(Cl cl) throws Exception {cl.setupNameListDowns();}
+            public void classAction(Cl cl) throws Exception
+            {
+                cl.setupNameListDowns();
+            }
         });
 
         // Traverse the class tree, generating obfuscated names within
@@ -820,7 +828,10 @@ class TIStack extends Stack
             pushClTree(cl.getSuperCl());
             for (Enumeration enm = cl.getSuperInterfaces();
                  enm.hasMoreElements();
-                 pushClTree((Cl)enm.nextElement()));
+                 pushClTree((Cl)enm.nextElement()))
+            {
+                ;
+            }
         }
         return cl;
     }
@@ -849,16 +860,22 @@ class TIStack extends Stack
         {
             final String fname = name;
             final String fdesc = desc;
-            cl.walkGroup(new TreeAction() {
+            cl.walkGroup(new TreeAction()
+            {
                 @Override
                 public void classAction(Cl cl)
                 {
-                    try {
+                    try
+                    {
                         MdFd mdfd = (fdesc == null ?
                                      (MdFd)cl.getField(fname) :
                                      (MdFd)cl.getMethod(fname, fdesc));
                         pushItem(mdfd);
-                    } catch (Exception e) { /* ignore */ }
+                    }
+                    catch (Exception e)
+                    {
+                        /* ignore */
+                    }
                 }
             });
         }

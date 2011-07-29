@@ -82,9 +82,13 @@ public class ConstantPool
     public void updateRefCount() throws Exception
     {
         // Reset all reference counts to zero
-        walkPool(new PoolAction() {
+        walkPool(new PoolAction()
+        {
             @Override
-            public void defaultAction(CpInfo cpInfo) throws Exception {cpInfo.resetRefCount();}
+            public void defaultAction(CpInfo cpInfo) throws Exception
+            {
+                cpInfo.resetRefCount();
+            }
         });
 
         // Count the direct references to Utf8 entries
@@ -94,9 +98,16 @@ public class ConstantPool
         myClassFile.markNTRefs(this);
 
         // Go through pool, clearing the Utf8 entries which have no references
-        walkPool(new PoolAction() {
+        walkPool(new PoolAction()
+        {
             @Override
-            public void utf8Action(Utf8CpInfo cpInfo) throws Exception {if (cpInfo.getRefCount() == 0) cpInfo.clearString();}
+            public void utf8Action(Utf8CpInfo cpInfo) throws Exception
+            {
+                if (cpInfo.getRefCount() == 0)
+                {
+                    cpInfo.clearString();
+                }
+            }
         });
     }
 
@@ -186,8 +197,17 @@ public class ConstantPool
     }
 
     // Data walker
-    class PoolAction {public void utf8Action(Utf8CpInfo cpInfo) throws Exception {defaultAction(cpInfo);}
-        public void defaultAction(CpInfo cpInfo) throws Exception {}}
+    class PoolAction
+    {
+        public void utf8Action(Utf8CpInfo cpInfo) throws Exception
+        {
+            defaultAction(cpInfo);
+        }
+        public void defaultAction(CpInfo cpInfo) throws Exception
+        {
+            ;
+        }
+    }
     private void walkPool(PoolAction pa) throws Exception
     {
         for (Enumeration enm = pool.elements(); enm.hasMoreElements(); )

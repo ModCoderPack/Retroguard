@@ -232,9 +232,16 @@ public class ClassTree implements NameMapper
     public void logWarnings(PrintWriter log) throws Exception
     {
         final Vector hasWarnings = new Vector();
-        walkTree(new TreeAction() {
+        walkTree(new TreeAction()
+        {
             @Override
-            public void classAction(Cl cl) throws Exception { if (cl.hasWarnings()) hasWarnings.addElement(Boolean.valueOf(true)); }
+            public void classAction(Cl cl) throws Exception
+            {
+                if (cl.hasWarnings())
+                {
+                    hasWarnings.addElement(Boolean.valueOf(true));
+                }
+            }
         });
         if (hasWarnings.size() > 0)
         {

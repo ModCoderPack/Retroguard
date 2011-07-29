@@ -41,7 +41,13 @@ public class Tools
      */
     public static boolean isInArray(String s, String[] list)
     {
-        for (int i = 0; i < list.length; i++) if (s.equals(list[i])) return true;
+        for (int i = 0; i < list.length; i++)
+        {
+            if (s.equals(list[i]))
+            {
+                return true;
+            }
+        }
         return false;
     }
 
