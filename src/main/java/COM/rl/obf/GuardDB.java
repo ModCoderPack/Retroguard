@@ -77,6 +77,7 @@ public class GuardDB implements ClassConstants
     }
 
     /** Close input JAR file and log-file at GC-time. */
+    @Override
     protected void finalize() throws Exception
     {
         close();
@@ -433,9 +434,11 @@ public class GuardDB implements ClassConstants
 
         //TODO: Searge: check if those two walks are obsolete
         classTree.walkTree(new TreeAction() {
+            @Override
             public void classAction(Cl cl) throws Exception {cl.resetResolve();}
         });
         classTree.walkTree(new TreeAction() {
+            @Override
             public void classAction(Cl cl) throws Exception {cl.setupNameListDowns();}
         });
 
@@ -763,6 +766,7 @@ class TIStack extends Stack
 {
     private static final long serialVersionUID = 1L;
 
+    @Override
     public Object push(Object o)
     {
         try
@@ -846,6 +850,7 @@ class TIStack extends Stack
             final String fname = name;
             final String fdesc = desc;
             cl.walkGroup(new TreeAction() {
+                @Override
                 public void classAction(Cl cl)
                 {
                     try {

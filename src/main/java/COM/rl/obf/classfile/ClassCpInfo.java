@@ -58,18 +58,21 @@ public class ClassCpInfo extends CpInfo
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
+    @Override
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
         pool.incRefCount(u2nameIndex);
     }
 
     /** Read the 'info' data following the u1tag byte. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2nameIndex = din.readUnsignedShort();
     }
 
     /** Write the 'info' data following the u1tag byte. */
+    @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2nameIndex);

@@ -56,6 +56,7 @@ public class Utf8CpInfo extends CpInfo
     }
 
     /** Decrement the reference count, blanking the entry if no more references. */
+    @Override
     public void decRefCount() throws Exception
     {
         super.decRefCount();
@@ -93,6 +94,7 @@ public class Utf8CpInfo extends CpInfo
     }
 
     /** Read the 'info' data following the u1tag byte. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2length = din.readUnsignedShort();
@@ -102,6 +104,7 @@ public class Utf8CpInfo extends CpInfo
     }
 
     /** Write the 'info' data following the u1tag byte. */
+    @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2length);

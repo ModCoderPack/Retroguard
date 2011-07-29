@@ -348,6 +348,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Add an inner class. */
+    @Override
     public Cl addClass(String name, String superName, String[] interfaceNames, int access) throws Exception
     {
         return addClass(true, name, superName, interfaceNames, access);
@@ -361,6 +362,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Add a placeholder class. */
+    @Override
     public Cl addPlaceholderClass(String name) throws Exception
     {
         return addPlaceholderClass(true, name);
@@ -802,6 +804,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Get output method name from list, or null if no mapping exists. */
+    @Override
     public String getMethodOutNameUp(String name, String descriptor) throws Exception
     {
         // Check supers
@@ -827,6 +830,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Get obfuscated method name from list, or null if no mapping exists. */
+    @Override
     public String getMethodObfNameUp(String name, String descriptor) throws Exception
     {
         // Check supers
@@ -852,6 +856,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Get output field name from list, or null if no mapping exists. */
+    @Override
     public String getFieldOutNameUp(String name) throws Exception
     {
         // Check supers
@@ -877,6 +882,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Get obfuscated field name from list, or null if no mapping exists. */
+    @Override
     public String getFieldObfNameUp(String name) throws Exception
     {
         // Check supers
@@ -902,6 +908,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Is the method reserved because of its reservation down the class hierarchy? */
+    @Override
     public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws Exception
     {
         // Check ourself for an explicit 'do not obfuscate'
@@ -958,6 +965,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Is the field reserved because of its reservation down the class hierarchy? */
+    @Override
     public String getFieldObfNameDown(Cl caller, String name) throws Exception
     {
         // Check ourself for an explicit 'do not obfuscate'
@@ -1046,12 +1054,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Get obfuscated method name from list, or null if no mapping exists.
+        @Override
         public String getMethodObfNameUp(String name, String descriptor) throws Exception
         {
             return getMethodOutNameUp(name, descriptor);
         }
 
         // Get obfuscated method name from list, or null if no mapping exists.
+        @Override
         public String getMethodOutNameUp(String name, String descriptor) throws Exception
         {
             // Get list of public/protected methods
@@ -1109,12 +1119,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Get obfuscated field name from list, or null if no mapping exists.
+        @Override
         public String getFieldObfNameUp(String name) throws Exception
         {
             return getFieldOutNameUp(name);
         }
 
         // Get obfuscated field name from list, or null if no mapping exists.
+        @Override
         public String getFieldOutNameUp(String name) throws Exception
         {
             // Use reflection to check class for field
@@ -1251,6 +1263,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     // added by Searge
+    @Override
     public String getFullOutName()
     {
         String clName = super.getFullOutName();

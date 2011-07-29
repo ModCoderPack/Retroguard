@@ -53,6 +53,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
         for (int i = 0; i < parameterAnnotationsTable.length; i++)
@@ -62,6 +63,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /** Read the data following the header. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u1numParameters = din.readUnsignedByte();
@@ -73,6 +75,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /** Export data following the header to a DataOutput stream. */
+    @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeByte(u1numParameters);
@@ -83,6 +86,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /** Do necessary name remapping. */
+    @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
         for (int i = 0; i < u1numParameters; i++)

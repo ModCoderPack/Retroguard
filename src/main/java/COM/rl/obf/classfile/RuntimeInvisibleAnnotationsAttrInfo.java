@@ -45,6 +45,7 @@ public class RuntimeInvisibleAnnotationsAttrInfo extends AnnotationsAttrInfo
     }
 
     /** Return the String name of the attribute. */
+    @Override
     protected String getAttrName() throws Exception
     {
         return ATTR_RuntimeInvisibleAnnotations;

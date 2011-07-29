@@ -78,12 +78,14 @@ abstract public class RefCpInfo extends CpInfo
     }
 
     /** Check for N+T references to constant pool and mark them. */
+    @Override
     protected void markNTRefs(ConstantPool pool) throws Exception
     {
         pool.incRefCount(u2nameAndTypeIndex);
     }
 
     /** Read the 'info' data following the u1tag byte. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2classIndex = din.readUnsignedShort();
@@ -91,6 +93,7 @@ abstract public class RefCpInfo extends CpInfo
     }
 
     /** Write the 'info' data following the u1tag byte. */
+    @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2classIndex);
@@ -98,6 +101,7 @@ abstract public class RefCpInfo extends CpInfo
     }
 
     /** Dump the content of the class file to the specified file (used for debugging). */
+    @Override
     public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
     {
         pw.println("  Ref " + Integer.toString(index) + ": " + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(u2classIndex)).getNameIndex())).getString() +

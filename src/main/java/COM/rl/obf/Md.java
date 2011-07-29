@@ -49,6 +49,7 @@ public class Md extends MdFd
     }
 
     /** Return the display name of the descriptor types. */
+    @Override
     protected String getDescriptorName()
     {
         String[] types = parseTypes();

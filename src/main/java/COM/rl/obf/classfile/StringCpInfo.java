@@ -52,18 +52,21 @@ public class StringCpInfo extends CpInfo
     protected void setStringIndex(int index) {u2stringIndex = index;}
 
     /** Check for Utf8 references to constant pool and mark them. */
+    @Override
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
         pool.incRefCount(u2stringIndex);
     }
 
     /** Read the 'info' data following the u1tag byte. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2stringIndex = din.readUnsignedShort();
     }
 
     /** Write the 'info' data following the u1tag byte. */
+    @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2stringIndex);

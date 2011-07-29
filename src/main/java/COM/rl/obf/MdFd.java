@@ -79,6 +79,7 @@ abstract public class MdFd extends TreeItem
     public boolean isOverride() {return isOverride;}
 
     /** Return the display name for field. */
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

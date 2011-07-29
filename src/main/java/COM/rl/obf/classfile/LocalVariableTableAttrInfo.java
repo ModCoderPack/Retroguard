@@ -47,6 +47,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     }
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
+    @Override
     protected String getAttrName() throws Exception
     {
         return ATTR_LocalVariableTable;
@@ -59,6 +60,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
         for (int i = 0; i < localVariableTable.length; i++)
@@ -68,6 +70,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     }
 
     /** Read the data following the header. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2localVariableTableLength = din.readUnsignedShort();
@@ -79,6 +82,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     }
 
     /** Export data following the header to a DataOutput stream. */
+    @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2localVariableTableLength);
@@ -89,6 +93,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     }
 
     /** Do necessary name remapping. */
+    @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
         for (int i = 0; i < u2localVariableTableLength; i++)

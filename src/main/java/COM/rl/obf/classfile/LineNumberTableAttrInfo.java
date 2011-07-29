@@ -47,12 +47,14 @@ public class LineNumberTableAttrInfo extends AttrInfo
     }
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
+    @Override
     protected String getAttrName() throws Exception
     {
         return ATTR_LineNumberTable;
     }
 
     /** Read the data following the header. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2lineNumberTableLength = din.readUnsignedShort();
@@ -64,6 +66,7 @@ public class LineNumberTableAttrInfo extends AttrInfo
     }
 
     /** Export data following the header to a DataOutput stream. */
+    @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2lineNumberTableLength);

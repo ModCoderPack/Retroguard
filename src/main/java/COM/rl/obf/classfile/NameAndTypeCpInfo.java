@@ -47,6 +47,7 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
     }
 
     /** Clone the entry. */
+    @Override
     public Object clone()
     {
         NameAndTypeCpInfo cloneInfo = new NameAndTypeCpInfo();
@@ -69,6 +70,7 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
     protected void setDescriptorIndex(int index) {u2descriptorIndex = index;}
 
     /** Check for Utf8 references to constant pool and mark them. */
+    @Override
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
         pool.incRefCount(u2nameIndex);
@@ -76,6 +78,7 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
     }
 
     /** Read the 'info' data following the u1tag byte. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2nameIndex = din.readUnsignedShort();
@@ -83,6 +86,7 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
     }
 
     /** Write the 'info' data following the u1tag byte. */
+    @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2nameIndex);

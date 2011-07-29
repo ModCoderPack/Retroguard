@@ -48,6 +48,7 @@ public class DoubleCpInfo extends CpInfo
 
 
     /** Read the 'info' data following the u1tag byte. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u4highBytes = din.readInt();
@@ -55,6 +56,7 @@ public class DoubleCpInfo extends CpInfo
     }
 
     /** Write the 'info' data following the u1tag byte. */
+    @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeInt(u4highBytes);

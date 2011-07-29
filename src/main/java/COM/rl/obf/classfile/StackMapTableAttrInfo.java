@@ -47,12 +47,14 @@ public class StackMapTableAttrInfo extends AttrInfo
     }
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
+    @Override
     protected String getAttrName() throws Exception
     {
         return ATTR_StackMapTable;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
         for (int i = 0; i < u2numberOfEntries; i++)
@@ -62,6 +64,7 @@ public class StackMapTableAttrInfo extends AttrInfo
     }
 
     /** Read the data following the header. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         u2numberOfEntries = din.readUnsignedShort();
@@ -73,6 +76,7 @@ public class StackMapTableAttrInfo extends AttrInfo
     }
 
     /** Export data following the header to a DataOutput stream. */
+    @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(u2numberOfEntries);

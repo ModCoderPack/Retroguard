@@ -233,6 +233,7 @@ public class ClassTree implements NameMapper
     {
         final Vector hasWarnings = new Vector();
         walkTree(new TreeAction() {
+            @Override
             public void classAction(Cl cl) throws Exception { if (cl.hasWarnings()) hasWarnings.addElement(Boolean.valueOf(true)); }
         });
         if (hasWarnings.size() > 0)
@@ -243,6 +244,7 @@ public class ClassTree implements NameMapper
             log.println(LOG_DANGER_HEADER3);
             final PrintWriter flog = log;
             walkTree(new TreeAction() {
+                @Override
                 public void classAction(Cl cl) throws Exception { cl.logWarnings(flog); }
             });
         }
@@ -467,12 +469,15 @@ public class ClassTree implements NameMapper
         if (enableRepackage) {
             // Generate single-level package names, unique across jar
             walkTree(new TreeAction() {
+                    @Override
                     public void packageAction(Pk pk) throws Exception {pk.repackageName();}
             });
         }
         // Now rename everything in the traditional way (no repackaging)
         walkTree(new TreeAction() {
+            @Override
             public void packageAction(Pk pk) throws Exception {pk.generateNames();}
+            @Override
             public void classAction(Cl cl) throws Exception {cl.generateNames();}
         });
     }
@@ -501,18 +506,22 @@ public class ClassTree implements NameMapper
     public void resolveClasses() throws Exception
     {
         walkTree(new TreeAction() {
+            @Override
             public void classAction(Cl cl) throws Exception {cl.resetResolve();}
         });
         walkTree(new TreeAction() {
+            @Override
             public void classAction(Cl cl) throws Exception {cl.setupNameListDowns();}
         });
         Cl.nameSpace = 0;
         walkTree(new TreeAction() {
+            @Override
             public void classAction(Cl cl) throws Exception {cl.resolveOptimally();}
         });
     }
 
     /** Return a list of attributes marked to keep. */
+    @Override
     public String[] getAttrsToKeep() throws Exception
     {
         String[] attrs = new String[retainAttrs.size()];
@@ -538,6 +547,7 @@ public class ClassTree implements NameMapper
                 final String fName = fullName.substring(1);
                 walkTree(new TreeAction()
                 {
+                    @Override
                     public void classAction(Cl cl) throws Exception
                     {
                         if (cl.isOldStyleMatch(fName))
@@ -553,6 +563,7 @@ public class ClassTree implements NameMapper
                 final String fName = fullName;
                 walkTree(new TreeAction()
                 {
+                    @Override
                     public void classAction(Cl cl) throws Exception
                     {
                         if (cl.isWildcardMatch(fName))
@@ -593,6 +604,7 @@ public class ClassTree implements NameMapper
                 final String fName = fullName.substring(1);
                 walkTree(new TreeAction()
                 {
+                    @Override
                     public void methodAction(Md md) throws Exception
                     {
                         if (md.isOldStyleMatch(fName, fDesc))
@@ -608,6 +620,7 @@ public class ClassTree implements NameMapper
                 final String fName = fullName;
                 walkTree(new TreeAction()
                 {
+                    @Override
                     public void methodAction(Md md) throws Exception
                     {
                         if (md.isWildcardMatch(fName, fDesc))
@@ -645,6 +658,7 @@ public class ClassTree implements NameMapper
                 final String fName = fullName.substring(1);
                 walkTree(new TreeAction()
                 {
+                    @Override
                     public void fieldAction(Fd fd) throws Exception
                     {
                         if (fd.isOldStyleMatch(fName))
@@ -661,6 +675,7 @@ public class ClassTree implements NameMapper
                 final String fDesc = descriptor;
                 walkTree(new TreeAction()
                 {
+                    @Override
                     public void fieldAction(Fd fd) throws Exception
                     {
                         if (fd.isWildcardMatch(fName, fDesc))
@@ -764,6 +779,7 @@ public class ClassTree implements NameMapper
 
     /** Mapping for fully qualified class name.
      *  @see NameMapper#mapClass */
+    @Override
     public String mapClass(String className) throws Exception
     {
         // Check for array -- requires special handling
@@ -807,6 +823,7 @@ public class ClassTree implements NameMapper
 
     /** Mapping for method name, of fully qualified class.
      *  @see NameMapper#mapMethod */
+    @Override
     public String mapMethod(String className, String methodName, String descriptor) throws Exception
     {
         String outName = methodName;
@@ -851,6 +868,7 @@ public class ClassTree implements NameMapper
 
     /** Mapping for field name, of fully qualified class.
      *  @see NameMapper#mapField */
+    @Override
     public String mapField(String className, String fieldName) throws Exception
     {
         String outName = fieldName;
@@ -895,6 +913,7 @@ public class ClassTree implements NameMapper
 
     /** Mapping for generic type signature.
      *  @see NameMapper#mapSignature */
+    @Override
     public String mapSignature(String signature) throws Exception
     {
         // NOTE - not currently parsed and mapped; reserve identifiers
@@ -904,6 +923,7 @@ public class ClassTree implements NameMapper
 
     /** Mapping for descriptor of field or method.
      *  @see NameMapper#mapDescriptor */
+    @Override
     public String mapDescriptor(String descriptor) throws Exception
     {
         // Pass everything through unchanged, except for the String between
@@ -957,6 +977,7 @@ public class ClassTree implements NameMapper
         log.println("#");
         walkTree(new TreeAction()
         {
+            @Override
             public void classAction(Cl cl)
             {
                 if (cl.isFromScript())
@@ -964,6 +985,7 @@ public class ClassTree implements NameMapper
                     log.println(".class " + cl.getFullInName());
                 }
             }
+            @Override
             public void methodAction(Md md)
             {
                 if (md.isFromScript())
@@ -971,6 +993,7 @@ public class ClassTree implements NameMapper
                     log.println(".method " + md.getFullInName() + " " + md.getDescriptor());
                 }
             }
+            @Override
             public void fieldAction(Fd fd)
             {
                 if (fd.isFromScript())
@@ -978,6 +1001,7 @@ public class ClassTree implements NameMapper
                     log.println(".field " + fd.getFullInName() + " " + fd.getDescriptor());
                 }
             }
+            @Override
             public void packageAction(Pk pk)
             {
                 // No action
@@ -989,6 +1013,7 @@ public class ClassTree implements NameMapper
         log.println("#");
         walkTree(new TreeAction()
         {
+            @Override
             public void classAction(Cl cl)
             {
                 if (!cl.isFromScript())
@@ -996,6 +1021,7 @@ public class ClassTree implements NameMapper
                     log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
                 }
             }
+            @Override
             public void methodAction(Md md)
             {
                 if (!md.isFromScript())
@@ -1003,6 +1029,7 @@ public class ClassTree implements NameMapper
                     log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
                 }
             }
+            @Override
             public void fieldAction(Fd fd)
             {
                 if (!fd.isFromScript())
@@ -1010,6 +1037,7 @@ public class ClassTree implements NameMapper
                     log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
                 }
             }
+            @Override
             public void packageAction(Pk pk)
             {
                 if (!pk.isFromScript() && pk.getFullInName().length() > 0)

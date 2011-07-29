@@ -46,6 +46,7 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
     }
 
     /** Return the String name of the attribute. */
+    @Override
     protected String getAttrName() throws Exception
     {
         return ATTR_AnnotationDefault;
@@ -58,24 +59,28 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
         defaultValue.markUtf8Refs(pool);
     }
 
     /** Read the data following the header. */
+    @Override
     protected void readInfo(DataInput din) throws Exception
     {
         defaultValue = MemberValueInfo.create(din);
     }
 
     /** Export data following the header to a DataOutput stream. */
+    @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
         defaultValue.write(dout);
     }
 
     /** Do necessary name remapping. */
+    @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
         defaultValue.remap(cf, nm);

@@ -71,6 +71,7 @@ public class Header
     public String getValue() { return value; }
 
     /** Test equality of headers. */
+    @Override
     public boolean equals(Object o)
     {
         if (o instanceof Header)
@@ -85,6 +86,7 @@ public class Header
         return false;
     }
 
+    @Override
     public int hashCode()
     {
         final int prime = 31;
@@ -112,6 +114,7 @@ public class Header
     }
 
     /** Return String rep of this object. */
+    @Override
     public String toString()
     {
         return getTag() + ": " + getValue();

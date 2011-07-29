@@ -45,15 +45,18 @@ public class DeprecatedAttrInfo extends AttrInfo
     }
 
     /** Return the String name of the attribute. */
+    @Override
     protected String getAttrName() throws Exception
     {
         return ATTR_Deprecated;
     }
 
     /** Read the data following the header. */
+    @Override
     protected void readInfo(DataInput din) throws Exception {}
 
     /** Export data following the header to a DataOutput stream. */
+    @Override
     public void writeInfo(DataOutput dout) throws Exception {}
 }
 

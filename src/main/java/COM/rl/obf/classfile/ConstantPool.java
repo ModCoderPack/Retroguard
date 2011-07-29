@@ -83,6 +83,7 @@ public class ConstantPool
     {
         // Reset all reference counts to zero
         walkPool(new PoolAction() {
+            @Override
             public void defaultAction(CpInfo cpInfo) throws Exception {cpInfo.resetRefCount();}
         });
 
@@ -94,6 +95,7 @@ public class ConstantPool
 
         // Go through pool, clearing the Utf8 entries which have no references
         walkPool(new PoolAction() {
+            @Override
             public void utf8Action(Utf8CpInfo cpInfo) throws Exception {if (cpInfo.getRefCount() == 0) cpInfo.clearString();}
         });
     }

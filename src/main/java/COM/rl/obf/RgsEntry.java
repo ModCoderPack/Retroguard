@@ -79,6 +79,7 @@ public class RgsEntry
         this.descriptor = descriptor;
     }
 
+    @Override
     public String toString()
     {
         return name;

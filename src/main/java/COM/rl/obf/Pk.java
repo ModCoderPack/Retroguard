@@ -149,18 +149,21 @@ public class Pk extends PkCl
     }
 
     /** Add a class. */
+    @Override
     public Cl addClass(String name, String superName, String[] interfaceNames, int access) throws Exception
     {
         return addClass(false, name, superName, interfaceNames, access);
     }
 
     /** Add a placeholder class. */
+    @Override
     public Cl addPlaceholderClass(String name) throws Exception
     {
         return addPlaceholderClass(false, name);
     }
 
     /** Generate unique obfuscated names for this namespace. */
+    @Override
     public void generateNames() throws Exception
     {
         super.generateNames();
@@ -194,6 +197,7 @@ public class Pk extends PkCl
     }
 
     /** Construct and return the full obfuscated name of the entry. */
+    @Override
     public String getFullOutName()
     {
         if (getRepackageName() == null)
