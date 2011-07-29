@@ -29,6 +29,8 @@ import java.util.*;
  */
 public class FlagHashtable extends Hashtable
 {
+    private static final long serialVersionUID = 1L;
+
     public void updateFlag(CpInfo cpInfo, int index, boolean forNameFlag)
     {
         StringCpInfoFlags flags = (StringCpInfoFlags)get(cpInfo);

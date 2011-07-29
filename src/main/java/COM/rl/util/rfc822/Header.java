@@ -85,6 +85,15 @@ public class Header
         return false;
     }
 
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.tag == null) ? 0 : this.tag.hashCode());
+        result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
+        return result;
+    }
+
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {

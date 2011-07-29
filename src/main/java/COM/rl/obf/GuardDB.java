@@ -761,6 +761,8 @@ public class GuardDB implements ClassConstants
 // Stack used for marking TreeItems that must not be trimmed
 class TIStack extends Stack
 {
+    private static final long serialVersionUID = 1L;
+
     public Object push(Object o)
     {
         try

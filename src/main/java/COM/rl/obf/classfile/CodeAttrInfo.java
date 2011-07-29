@@ -275,6 +275,7 @@ public class CodeAttrInfo extends AttrInfo
                                     case 0x13: // ldc_w
                                         code[i-2] = 0;
                                         // fallthru
+                                        //$FALL-THROUGH$
                                     case 0x12: // ldc
                                         code[i-1] = (byte)remapStringIndex;
                                         break;

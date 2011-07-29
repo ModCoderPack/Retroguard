@@ -163,20 +163,6 @@ abstract public class PkCl extends TreeItem
     /** Generate unique obfuscated names for a given namespace. */
     protected void generateNames(Hashtable hash) throws Exception
     {
-        Vector vec = new Vector();
-        for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
-        {
-            TreeItem ti = (TreeItem)enm.nextElement();
-            if (ti.isFixed())
-            {
-                vec.addElement(ti.getOutName());
-            }
-        }
-        String[] noObfNames = new String[vec.size()];
-        for (int i = 0; i < noObfNames.length; i++)
-        {
-            noObfNames[i] = (String)vec.elementAt(i);
-        }
         for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
         {
             TreeItem ti = (TreeItem)enm.nextElement();
