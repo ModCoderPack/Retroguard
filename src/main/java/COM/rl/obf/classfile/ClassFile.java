@@ -806,8 +806,8 @@ public class ClassFile implements ClassConstants
                             newNameTypeInfo = (NameAndTypeCpInfo)nameTypeInfo.clone();
 
                             // Adjust its reference counts of its utf's
-                            ((CpInfo)getCpEntry(newNameTypeInfo.getNameIndex())).incRefCount();
-                            ((CpInfo)getCpEntry(newNameTypeInfo.getDescriptorIndex())).incRefCount();
+                            getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
+                            getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
 
                             // Append it to the Constant Pool, and
                             // point the RefCpInfo entry to the new N&T data
@@ -1049,7 +1049,7 @@ public class ClassFile implements ClassConstants
         pw.println("CP length: " + Integer.toHexString(constantPool.length()));
         for (int i = 0; i < constantPool.length(); i++)
         {
-            CpInfo cpInfo = (CpInfo)constantPool.getCpEntry(i);
+            CpInfo cpInfo = constantPool.getCpEntry(i);
             if (cpInfo != null)
             {
                 cpInfo.dump(pw, this, i);

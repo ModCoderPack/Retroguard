@@ -296,7 +296,7 @@ public class CodeAttrInfo extends AttrInfo
                 }
                 if (cpToFlag != null)
                 {
-                    cpToFlag.updateFlag((StringCpInfo)cf.getCpEntry(ldcIndex),
+                    cpToFlag.updateFlag(cf.getCpEntry(ldcIndex),
                                         ldcIndex, isClassForName);
                 }
             }

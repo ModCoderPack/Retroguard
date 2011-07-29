@@ -34,7 +34,7 @@ public class Version
     private static final String RETROGUARD_REL_JAR_COMMENT =
         "Obfuscation by RetroGuard MCP";
     private static final String RETROGUARD_FULL_VERSION_COMMENT =
-        "RetroGuard MCP v" + REL_VERSION +"\n" + 
+        "RetroGuard MCP v" + REL_VERSION +"\n" +
         "based on RetroGuard v" + ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
 
     public static final boolean isLite = true;
