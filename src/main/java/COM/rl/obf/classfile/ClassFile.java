@@ -36,8 +36,7 @@ public class ClassFile implements ClassConstants
     // Constants -------------------------------------------------------------
     public static final String SEP_REGULAR = "/";
     public static final String SEP_INNER = "$";
-    private static final String CLASS_FORNAME_NAME_DESCRIPTOR =
-    "forName(Ljava/lang/String;)Ljava/lang/Class;";
+    private static final String CLASS_FORNAME_NAME_DESCRIPTOR = "forName(Ljava/lang/String;)Ljava/lang/Class;";
     private static final String[] DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY = {
         "getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;",
         "getField(Ljava/lang/String;)Ljava/lang/reflect/Field;",
@@ -133,40 +132,40 @@ public class ClassFile implements ClassConstants
             {
                 switch (descriptor.charAt(0))
                 {
-                case '[':
-                    type = type + "[";
-                    descriptor = descriptor.substring(1);
+                    case '[':
+                        type = type + "[";
+                        descriptor = descriptor.substring(1);
+                        break;
+
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case 'F':
+                    case 'I':
+                    case 'J':
+                    case 'S':
+                    case 'Z':
+                    case 'V':
+                        namesVec.addElement(type + descriptor.substring(0, 1));
+                        descriptor = descriptor.substring(1);
+                        type = "";
+                        break;
+
+                    case ')':
+                        descriptor = descriptor.substring(1);
+                        break;
+
+                    case 'L':
+                    {
+                        int pos = descriptor.indexOf(';') + 1;
+                        namesVec.addElement(type + descriptor.substring(0, pos));
+                        descriptor = descriptor.substring(pos);
+                        type = "";
+                    }
                     break;
 
-                case 'B':
-                case 'C':
-                case 'D':
-                case 'F':
-                case 'I':
-                case 'J':
-                case 'S':
-                case 'Z':
-                case 'V':
-                    namesVec.addElement(type + descriptor.substring(0, 1));
-                    descriptor = descriptor.substring(1);
-                    type = "";
-                    break;
-
-                case ')':
-                    descriptor = descriptor.substring(1);
-                    break;
-
-                case 'L':
-                {
-                    int pos = descriptor.indexOf(';') + 1;
-                    namesVec.addElement(type + descriptor.substring(0, pos));
-                    descriptor = descriptor.substring(pos);
-                    type = "";
-                }
-                break;
-
-                default:
-                    throw new Exception("Illegal field or method descriptor: " + descriptor);
+                    default:
+                        throw new Exception("Illegal field or method descriptor: " + descriptor);
                 }
             }
             names = new String[namesVec.size()];
@@ -198,65 +197,65 @@ public class ClassFile implements ClassConstants
         String outName = null;
         switch (inName.charAt(0))
         {
-        case '[': // For array types, Class.forName() inconsistently uses the internal type name
-                  // but with '/' --> '.'
-            if (!isDisplay)
+            case '[':
+                // For array types, Class.forName() inconsistently uses the internal type name but with '/' --> '.'
+                if (!isDisplay)
+                {
+                    // return the Class.forName() form
+                    outName = ClassFile.translate(inName);
+                }
+                else
+                {
+                    // return the pretty display form
+                    outName = ClassFile.translateType(inName.substring(1), true) + "[]";
+                }
+                break;
+
+            case 'B':
+                outName = Byte.TYPE.getName();
+                break;
+
+            case 'C':
+                outName = Character.TYPE.getName();
+                break;
+
+            case 'D':
+                outName = Double.TYPE.getName();
+                break;
+
+            case 'F':
+                outName = Float.TYPE.getName();
+                break;
+
+            case 'I':
+                outName = Integer.TYPE.getName();
+                break;
+
+            case 'J':
+                outName = Long.TYPE.getName();
+                break;
+
+            case 'S':
+                outName = Short.TYPE.getName();
+                break;
+
+            case 'Z':
+                outName = Boolean.TYPE.getName();
+                break;
+
+            case 'V':
+                outName = Void.TYPE.getName();
+                break;
+
+            case 'L':
             {
-                // return the Class.forName() form
-                outName = ClassFile.translate(inName);
-            }
-            else
-            {
-                // return the pretty display form
-                outName = ClassFile.translateType(inName.substring(1), true) + "[]";
+                int pos = inName.indexOf(';');
+                outName = ClassFile.translate(inName.substring(1, inName.indexOf(';')));
             }
             break;
 
-        case 'B':
-            outName = Byte.TYPE.getName();
-            break;
-
-        case 'C':
-            outName = Character.TYPE.getName();
-            break;
-
-        case 'D':
-            outName = Double.TYPE.getName();
-            break;
-
-        case 'F':
-            outName = Float.TYPE.getName();
-            break;
-
-        case 'I':
-            outName = Integer.TYPE.getName();
-            break;
-
-        case 'J':
-            outName = Long.TYPE.getName();
-            break;
-
-        case 'S':
-            outName = Short.TYPE.getName();
-            break;
-
-        case 'Z':
-            outName = Boolean.TYPE.getName();
-            break;
-
-        case 'V':
-            outName = Void.TYPE.getName();
-            break;
-
-        case 'L':
-        {
-            int pos = inName.indexOf(';');
-            outName = ClassFile.translate(inName.substring(1, inName.indexOf(';')));
-        }
-        break;
-
-        default:
-            throw new Exception("Illegal field or method name: " + inName);
+            default:
+                throw new Exception("Illegal field or method name: " + inName);
         }
         return outName;
     }
@@ -288,7 +287,9 @@ public class ClassFile implements ClassConstants
 
     // Instance Methods ------------------------------------------------------
     // Private constructor.
-    private ClassFile() {}
+    private ClassFile()
+    {
+    }
 
     // Import the class data to internal representation.
     private void read(DataInput din) throws Exception
@@ -315,8 +316,7 @@ public class ClassFile implements ClassConstants
         for (int i = 1; i < u2constantPoolCount; i++)
         {
             cpInfo[i] = CpInfo.create(din);
-            if ((cpInfo[i] instanceof LongCpInfo) ||
-                (cpInfo[i] instanceof DoubleCpInfo))
+            if ((cpInfo[i] instanceof LongCpInfo) || (cpInfo[i] instanceof DoubleCpInfo))
             {
                 i++;
             }
@@ -387,8 +387,7 @@ public class ClassFile implements ClassConstants
                 String descriptor = ((Utf8CpInfo)getCpEntry(ntEntry.getDescriptorIndex())).getString();
 
                 // Check if this is Class.forName
-                if (className.equals("java/lang/Class") &&
-                    ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
+                if (className.equals("java/lang/Class") && ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                 {
                     hasReflection = true;
                 }
@@ -581,9 +580,7 @@ public class ClassFile implements ClassConstants
             for (Enumeration enm = pool.elements(); enm.hasMoreElements(); )
             {
                 Object o = enm.nextElement();
-                if ((o instanceof NameAndTypeCpInfo) ||
-                    (o instanceof ClassCpInfo) ||
-                    (o instanceof StringCpInfo))
+                if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
                 {
                     ((CpInfo)o).markUtf8Refs(pool);
                 }
@@ -794,8 +791,7 @@ public class ClassFile implements ClassConstants
                     // If a remap is required, make a new N&T (increment ref count on 'name' and
                     // 'descriptor', decrement original N&T's ref count, set new N&T ref count to 1),
                     // remap new N&T's utf's
-                    if (!remapRef.equals(refUtf.getString()) ||
-                        !remapDesc.equals(descUtf.getString()))
+                    if (!remapRef.equals(refUtf.getString()) || !remapDesc.equals(descUtf.getString()))
                     {
                         // Get the new N&T guy
                         NameAndTypeCpInfo newNameTypeInfo;
@@ -814,8 +810,7 @@ public class ClassFile implements ClassConstants
 
                             // Append it to the Constant Pool, and
                             // point the RefCpInfo entry to the new N&T data
-                            ((RefCpInfo)cpInfo).setNameAndTypeIndex(
-                                constantPool.addEntry(newNameTypeInfo));
+                            ((RefCpInfo)cpInfo).setNameAndTypeIndex(constantPool.addEntry(newNameTypeInfo));
 
                             // Adjust reference counts from RefCpInfo
                             newNameTypeInfo.incRefCount();
@@ -873,7 +868,7 @@ public class ClassFile implements ClassConstants
         //        because they call to the outer class to do forName(...).
         //        Therefore removed.
         //if (hasReflection && enableMapClassString)
-        if (/* hasReflection && */ enableMapClassString)
+        if (enableMapClassString)
         {
             remapClassStrings(nm, log);
         }
@@ -901,8 +896,7 @@ public class ClassFile implements ClassConstants
         for (Enumeration enm = cpToFlag.keys(); enm.hasMoreElements(); )
         {
             StringCpInfo stringCpInfo = (StringCpInfo)enm.nextElement();
-            StringCpInfoFlags flags =
-                (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
+            StringCpInfoFlags flags = (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
             String name = ClassFile.backTranslate(((Utf8CpInfo)getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
             if (ClassFile.isClassSpec(name) && flags.forNameFlag)
@@ -915,12 +909,10 @@ public class ClassFile implements ClassConstants
                     if (flags.otherFlag)
                     {
                         // Create a new String/Utf8 for remapped Class-name
-                        int remapUtf8Index =
-                            constantPool.addUtf8Entry(ClassFile.translate(remapName));
+                        int remapUtf8Index = constantPool.addUtf8Entry(ClassFile.translate(remapName));
                         StringCpInfo remapStringInfo = new StringCpInfo();
                         remapStringInfo.setStringIndex(remapUtf8Index);
-                        int remapStringIndex =
-                            constantPool.addEntry(remapStringInfo);
+                        int remapStringIndex = constantPool.addEntry(remapStringInfo);
                         // Default to full remap if new String would require
                         // ldc_w to access - we can't cope with that yet
                         if (remapStringIndex > 0xFF)
@@ -930,12 +922,9 @@ public class ClassFile implements ClassConstants
                         }
                         else
                         {
-                            log.println("# MapClassString (partial) in class "
-                                        + getName() + ": "
-                                        + name + " -> " + remapName);
+                            log.println("# MapClassString (partial) in class " + getName() + ": " + name + " -> " + remapName);
                             // Add to cpUpdate hash for later remap in Code
-                            cpUpdate.put(new Integer(flags.stringIndex),
-                                         new Integer(remapStringIndex));
+                            cpUpdate.put(new Integer(flags.stringIndex), new Integer(remapStringIndex));
                         }
                     }
                     else  // String only accessed as Class.forName
@@ -944,9 +933,7 @@ public class ClassFile implements ClassConstants
                     }
                     if (simpleRemap)
                     {
-                        log.println("# MapClassString (full) in class "
-                                    + getName() + ": "
-                                    + name + " -> " + remapName);
+                        log.println("# MapClassString (full) in class " + getName() + ": " + name + " -> " + remapName);
                         // Just remap the existing String/Utf8, since it is
                         // only used for Class.forName or .class, or maybe
                         // ldc_w was needed (which gives improper String remap)

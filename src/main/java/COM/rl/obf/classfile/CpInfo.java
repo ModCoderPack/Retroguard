@@ -57,18 +57,41 @@ abstract public class CpInfo implements ClassConstants
         CpInfo ci = null;
         switch (din.readUnsignedByte())
         {
-        case CONSTANT_Utf8:                 ci = new Utf8CpInfo();              break;
-        case CONSTANT_Integer:              ci = new IntegerCpInfo();           break;
-        case CONSTANT_Float:                ci = new FloatCpInfo();             break;
-        case CONSTANT_Long:                 ci = new LongCpInfo();              break;
-        case CONSTANT_Double:               ci = new DoubleCpInfo();            break;
-        case CONSTANT_Class:                ci = new ClassCpInfo();             break;
-        case CONSTANT_String:               ci = new StringCpInfo();            break;
-        case CONSTANT_Fieldref:             ci = new FieldrefCpInfo();          break;
-        case CONSTANT_Methodref:            ci = new MethodrefCpInfo();         break;
-        case CONSTANT_InterfaceMethodref:   ci = new InterfaceMethodrefCpInfo();break;
-        case CONSTANT_NameAndType:          ci = new NameAndTypeCpInfo();       break;
-        default:    throw new IOException("Unknown tag type in constant pool.");
+            case CONSTANT_Utf8:
+                ci = new Utf8CpInfo();
+                break;
+            case CONSTANT_Integer:
+                ci = new IntegerCpInfo();
+                break;
+            case CONSTANT_Float:
+                ci = new FloatCpInfo();
+                break;
+            case CONSTANT_Long:
+                ci = new LongCpInfo();
+                break;
+            case CONSTANT_Double:
+                ci = new DoubleCpInfo();
+                break;
+            case CONSTANT_Class:
+                ci = new ClassCpInfo();
+                break;
+            case CONSTANT_String:
+                ci = new StringCpInfo();
+                break;
+            case CONSTANT_Fieldref:
+                ci = new FieldrefCpInfo();
+                break;
+            case CONSTANT_Methodref:
+                ci = new MethodrefCpInfo();
+                break;
+            case CONSTANT_InterfaceMethodref:
+                ci = new InterfaceMethodrefCpInfo();
+                break;
+            case CONSTANT_NameAndType:
+                ci = new NameAndTypeCpInfo();
+                break;
+            default:
+                throw new IOException("Unknown tag type in constant pool.");
         }
         ci.readInfo(din);
         return ci;
@@ -85,10 +108,14 @@ abstract public class CpInfo implements ClassConstants
     abstract protected void readInfo(DataInput din) throws Exception;
 
     /** Check for Utf8 references to constant pool and mark them; over-ride this in sub-classes. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception {}
+    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    {
+    }
 
     /** Check for NameAndType references to constant pool and mark them; over-ride this in sub-classes. */
-    protected void markNTRefs(ConstantPool pool) throws Exception {}
+    protected void markNTRefs(ConstantPool pool) throws Exception
+    {
+    }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
@@ -105,10 +132,16 @@ abstract public class CpInfo implements ClassConstants
     abstract protected void writeInfo(DataOutput dout) throws Exception;
 
     /** Return the reference count. */
-    public int getRefCount() {return refCount;}
+    public int getRefCount()
+    {
+        return refCount;
+    }
 
     /** Increment the reference count. */
-    public void incRefCount() {refCount++;}
+    public void incRefCount()
+    {
+        refCount++;
+    }
 
     /** Decrement the reference count. */
     public void decRefCount() throws Exception
@@ -121,8 +154,13 @@ abstract public class CpInfo implements ClassConstants
     }
 
     /** Reset the reference count to zero. */
-    public void resetRefCount() {refCount = 0;}
+    public void resetRefCount()
+    {
+        refCount = 0;
+    }
 
     /** Dump the content of the class file to the specified file (used for debugging). */
-    public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception {}
+    public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
+    {
+    }
 }

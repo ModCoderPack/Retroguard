@@ -58,16 +58,28 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
     }
 
     /** Return the name index. */
-    protected int getNameIndex() {return u2nameIndex;}
+    protected int getNameIndex()
+    {
+        return u2nameIndex;
+    }
 
     /** Set the name index. */
-    protected void setNameIndex(int index) {u2nameIndex = index;}
+    protected void setNameIndex(int index)
+    {
+        u2nameIndex = index;
+    }
 
     /** Return the descriptor index. */
-    protected int getDescriptorIndex() {return u2descriptorIndex;}
+    protected int getDescriptorIndex()
+    {
+        return u2descriptorIndex;
+    }
 
     /** Set the descriptor index. */
-    protected void setDescriptorIndex(int index) {u2descriptorIndex = index;}
+    protected void setDescriptorIndex(int index)
+    {
+        u2descriptorIndex = index;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     @Override

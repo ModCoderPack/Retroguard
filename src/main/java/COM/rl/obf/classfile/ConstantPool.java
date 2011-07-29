@@ -205,7 +205,6 @@ public class ConstantPool
         }
         public void defaultAction(CpInfo cpInfo) throws Exception
         {
-            ;
         }
     }
     private void walkPool(PoolAction pa) throws Exception

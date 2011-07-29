@@ -50,7 +50,9 @@ public class ExceptionInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private ExceptionInfo() {}
+    private ExceptionInfo()
+    {
+    }
     private void read(DataInput din) throws Exception
     {
         u2startpc = din.readUnsignedShort();

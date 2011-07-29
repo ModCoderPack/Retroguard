@@ -64,13 +64,22 @@ public class SimpleName
     }
 
     /** Is this a package level simple name? */
-    public boolean isAsPackage() { return isAsPackage; }
+    public boolean isAsPackage()
+    {
+        return isAsPackage;
+    }
 
     /** Is this a class level simple name? */
-    public boolean isAsClass() { return !isAsPackage; }
+    public boolean isAsClass()
+    {
+        return !isAsPackage;
+    }
 
     /** Return the simple name. */
-    public String getName() { return name; }
+    public String getName()
+    {
+        return name;
+    }
 }
 
 

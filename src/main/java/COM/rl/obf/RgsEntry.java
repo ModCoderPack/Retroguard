@@ -87,32 +87,6 @@ public class RgsEntry
 
     public String debugString()
     {
-        return
-            (type == RgsEntry.TYPE_OPTION ? ".option " :
-             (type == RgsEntry.TYPE_ATTR ? ".attribute " :
-              (type == RgsEntry.TYPE_CLASS ? ".class " :
-               (type == RgsEntry.TYPE_NOTRIM_CLASS ? "^class " :
-                (type == RgsEntry.TYPE_NOT_CLASS ? "!class " :
-                 (type == RgsEntry.TYPE_METHOD ? ".method " :
-                  (type == RgsEntry.TYPE_NOTRIM_METHOD ? "^method " :
-                   (type == RgsEntry.TYPE_NOT_METHOD ? "!method " :
-                    (type == RgsEntry.TYPE_FIELD ? ".field " :
-                     (type == RgsEntry.TYPE_NOTRIM_FIELD ? "^field " :
-                      (type == RgsEntry.TYPE_NOT_FIELD ? "!field " :
-                       (type == RgsEntry.TYPE_PACKAGE_MAP ? ".package_map " :
-                        (type == RgsEntry.TYPE_REPACKAGE_MAP ? ".repackage_map " :
-                         (type == RgsEntry.TYPE_CLASS_MAP ? ".class_map " :
-                          (type == RgsEntry.TYPE_METHOD_MAP ? ".method_map " :
-                           (type == RgsEntry.TYPE_FIELD_MAP ? ".field_map " :
-                            (type == RgsEntry.TYPE_NOWARN ? ".nowarn " : "")))))))))))))))))
-            + name + " "
-            + (descriptor != null ? descriptor + " " : "")
-            + (retainToPublic ? "public " : "")
-            + (retainToProtected ? "protected " : "")
-            + (retainPubProtOnly ? "pub_prot_only " : "")
-            + (retainFieldsOnly ? "field " : "")
-            + (retainMethodsOnly ? "method " : "")
-            + (retainAndClass ? "and_class " : "")
-            + (extendsName != null ? "extends " + extendsName : "");
+        return (type == RgsEntry.TYPE_OPTION ? ".option " : (type == RgsEntry.TYPE_ATTR ? ".attribute " : (type == RgsEntry.TYPE_CLASS ? ".class " : (type == RgsEntry.TYPE_NOTRIM_CLASS ? "^class " : (type == RgsEntry.TYPE_NOT_CLASS ? "!class " : (type == RgsEntry.TYPE_METHOD ? ".method " : (type == RgsEntry.TYPE_NOTRIM_METHOD ? "^method " : (type == RgsEntry.TYPE_NOT_METHOD ? "!method " : (type == RgsEntry.TYPE_FIELD ? ".field " : (type == RgsEntry.TYPE_NOTRIM_FIELD ? "^field " : (type == RgsEntry.TYPE_NOT_FIELD ? "!field " : (type == RgsEntry.TYPE_PACKAGE_MAP ? ".package_map " : (type == RgsEntry.TYPE_REPACKAGE_MAP ? ".repackage_map " : (type == RgsEntry.TYPE_CLASS_MAP ? ".class_map " : (type == RgsEntry.TYPE_METHOD_MAP ? ".method_map " : (type == RgsEntry.TYPE_FIELD_MAP ? ".field_map " : (type == RgsEntry.TYPE_NOWARN ? ".nowarn " : ""))))))))))))))))) + name + " " + (descriptor != null ? descriptor + " " : "") + (retainToPublic ? "public " : "") + (retainToProtected ? "protected " : "") + (retainPubProtOnly ? "pub_prot_only " : "") + (retainFieldsOnly ? "field " : "") + (retainMethodsOnly ? "method " : "") + (retainAndClass ? "and_class " : "") + (extendsName != null ? "extends " + extendsName : "");
     }
 }

@@ -163,8 +163,6 @@ abstract public class MdFd extends TreeItem
     /** Does this member match the wildcard pattern? (** and * supported) */
     public boolean isWildcardMatch(String namePattern, String descPattern)
     {
-        return
-            isWildcardMatch(namePattern) &&
-            TreeItem.isMatch(descPattern, getDescriptor());
+        return isWildcardMatch(namePattern) && TreeItem.isMatch(descPattern, getDescriptor());
     }
 }

@@ -54,5 +54,8 @@ public class MethodInfo extends ClassItemInfo
 
 
     // Instance Methods ------------------------------------------------------
-    protected MethodInfo(ClassFile cf) {super(cf);}
+    protected MethodInfo(ClassFile cf)
+    {
+        super(cf);
+    }
 }

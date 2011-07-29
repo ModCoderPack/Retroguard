@@ -57,31 +57,33 @@ public class VerificationTypeInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private VerificationTypeInfo() {}
+    private VerificationTypeInfo()
+    {
+    }
     private void read(DataInput din) throws Exception
     {
         u1tag = din.readUnsignedByte();
         switch (u1tag)
         {
-        case ITEM_Top:
-        case ITEM_Integer:
-        case ITEM_Float:
-        case ITEM_Long:
-        case ITEM_Double:
-        case ITEM_Null:
-        case ITEM_UninitializedThis:
-            break;
+            case ITEM_Top:
+            case ITEM_Integer:
+            case ITEM_Float:
+            case ITEM_Long:
+            case ITEM_Double:
+            case ITEM_Null:
+            case ITEM_UninitializedThis:
+                break;
 
-        case ITEM_Object:
-            u2cpoolIndex = din.readUnsignedShort();
-            break;
+            case ITEM_Object:
+                u2cpoolIndex = din.readUnsignedShort();
+                break;
 
-        case ITEM_Uninitialized:
-            u2offset = din.readUnsignedShort();
-            break;
+            case ITEM_Uninitialized:
+                u2offset = din.readUnsignedShort();
+                break;
 
-        default:
-            throw new Exception("Illegal Verification Type Info tag: " + u1tag);
+            default:
+                throw new Exception("Illegal Verification Type Info tag: " + u1tag);
         }
     }
 
@@ -100,25 +102,25 @@ public class VerificationTypeInfo
         dout.writeByte(u1tag);
         switch (u1tag)
         {
-        case ITEM_Top:
-        case ITEM_Integer:
-        case ITEM_Float:
-        case ITEM_Long:
-        case ITEM_Double:
-        case ITEM_Null:
-        case ITEM_UninitializedThis:
-            break;
+            case ITEM_Top:
+            case ITEM_Integer:
+            case ITEM_Float:
+            case ITEM_Long:
+            case ITEM_Double:
+            case ITEM_Null:
+            case ITEM_UninitializedThis:
+                break;
 
-        case ITEM_Object:
-            dout.writeShort(u2cpoolIndex);
-            break;
+            case ITEM_Object:
+                dout.writeShort(u2cpoolIndex);
+                break;
 
-        case ITEM_Uninitialized:
-            dout.writeShort(u2offset);
-            break;
+            case ITEM_Uninitialized:
+                dout.writeShort(u2offset);
+                break;
 
-        default:
-            throw new Exception("Illegal Verification Type Info tag: " + u1tag);
+            default:
+                throw new Exception("Illegal Verification Type Info tag: " + u1tag);
         }
     }
 }

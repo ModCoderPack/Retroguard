@@ -76,18 +76,23 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Do not obfuscate anonymous inner classes
-        if (isInnerClass && (name != null) && (name.length() > 0)
-            && Character.isDigit(name.charAt(0)))
+        if (isInnerClass && (name != null) && (name.length() > 0) && Character.isDigit(name.charAt(0)))
         {
             setOutName(getInName());
         }
     }
 
     /** Is this an inner class? */
-    public boolean isInnerClass() { return isInnerClass; }
+    public boolean isInnerClass()
+    {
+        return isInnerClass;
+    }
 
     /** Suppress warnings. */
-    public void setNoWarn() { isNoWarn = true; }
+    public void setNoWarn()
+    {
+        isNoWarn = true;
+    }
 
     /** Add class's warning. */
     public void setWarnings(ClassFile cf) throws Exception
@@ -110,8 +115,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     {
         if (hasWarnings())
         {
-            for (Enumeration enm = warningList.elements();
-                 enm.hasMoreElements(); )
+            for (Enumeration enm = warningList.elements(); enm.hasMoreElements(); )
             {
                 log.println("# " + (String)enm.nextElement());
             }
@@ -146,13 +150,22 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /** Get a field by name. */
-    public Fd getField(String name) throws Exception {return (Fd)fds.get(name);}
+    public Fd getField(String name) throws Exception
+    {
+        return (Fd)fds.get(name);
+    }
 
     /** Get an Enumeration of methods. */
-    public Enumeration getMethodEnum() throws Exception {return mds.elements();}
+    public Enumeration getMethodEnum() throws Exception
+    {
+        return mds.elements();
+    }
 
     /** Get an Enumeration of fields. */
-    public Enumeration getFieldEnum() throws Exception {return fds.elements();}
+    public Enumeration getFieldEnum() throws Exception
+    {
+        return fds.elements();
+    }
 
     /** Return this Cl's superclass Cl */
     public Cl getSuperCl() throws Exception
@@ -187,8 +200,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     /** Does this internal class have the specified class or interface
         in its super or interface chain? */
-    protected boolean hasAsSuperInt(String queryName,
-                                    boolean checkInterfaces)
+    protected boolean hasAsSuperInt(String queryName, boolean checkInterfaces)
     {
         try
         {
@@ -229,8 +241,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 Class superClExt = Class.forName(ClassFile.translate(superClass));
                 if (superClExt != null)
                 {
-                    if (Cl.hasAsSuperExt(queryName, checkInterfaces,
-                                         this.classTree, superClExt))
+                    if (Cl.hasAsSuperExt(queryName, checkInterfaces, this.classTree, superClExt))
                     {
                         return true;
                     }
@@ -252,12 +263,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         }
                         else
                         {
-                            Class interClExt =
-                                Class.forName(ClassFile.translate(superInterfaces[i]));
+                            Class interClExt = Class.forName(ClassFile.translate(superInterfaces[i]));
                             if (interClExt != null)
                             {
-                                if (Cl.hasAsSuperExt(queryName, checkInterfaces,
-                                                     this.classTree, interClExt))
+                                if (Cl.hasAsSuperExt(queryName, checkInterfaces, this.classTree, interClExt))
                                 {
                                     return true;
                                 }
@@ -276,16 +285,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     /** Does this class have the specified class or interface in its super
         or interface chain? */
-    protected static boolean hasAsSuperExt(String queryName,
-                                           boolean checkInterfaces,
-                                           ClassTree classTree,
-                                           Class clExt)
+    protected static boolean hasAsSuperExt(String queryName, boolean checkInterfaces, ClassTree classTree, Class clExt)
     {
         try
         {
             // Special case: is this java/lang/Object?
-            if ((clExt == null) ||
-                clExt.getName().equals("java.lang.Object"))
+            if ((clExt == null) || clExt.getName().equals("java.lang.Object"))
             {
                 return false;
             }
@@ -324,8 +329,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 Class superClExt = superClass;
                 if (superClExt != null)
                 {
-                    if (Cl.hasAsSuperExt(queryName, checkInterfaces,
-                                         classTree, superClExt))
+                    if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, superClExt))
                     {
                         return true;
                     }
@@ -350,8 +354,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                             Class interClExt = superInterfaces[i];
                             if (interClExt != null)
                             {
-                                if (Cl.hasAsSuperExt(queryName, checkInterfaces,
-                                                     classTree, interClExt))
+                                if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, interClExt))
                                 {
                                     return true;
                                 }
@@ -405,16 +408,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /** Add a method. */
     public Md addMethod(ClassFile cf, MethodInfo methodInfo) throws Exception
     {
-        Md md = addMethod(methodInfo.isSynthetic(),
-                          methodInfo.getName(),
-                          methodInfo.getDescriptor(),
-                          methodInfo.getAccessFlags());
+        Md md = addMethod(methodInfo.isSynthetic(), methodInfo.getName(), methodInfo.getDescriptor(), methodInfo.getAccessFlags());
         return md;
     }
 
     /** Add a method. */
-    public Md addMethod(boolean isSynthetic, String name, String descriptor,
-                        int accessFlags) throws Exception
+    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags) throws Exception
     {
         // Store <init> and <clinit> methods separately - needed only for
         // reference tracking ('.option trim')
@@ -443,10 +442,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /** Add a field. */
     public Fd addField(ClassFile cf, FieldInfo fieldInfo) throws Exception
     {
-        Fd fd = addField(fieldInfo.isSynthetic(),
-                         fieldInfo.getName(),
-                         fieldInfo.getDescriptor(),
-                         fieldInfo.getAccessFlags());
+        Fd fd = addField(fieldInfo.isSynthetic(), fieldInfo.getName(), fieldInfo.getDescriptor(), fieldInfo.getAccessFlags());
         return fd;
     }
 
@@ -531,8 +527,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     // Get lists of method and field names in inheritance namespace
-    private void scanNameSpaceExcept(Cl ignoreCl, Vector methods,
-                                     Vector fields) throws Exception
+    private void scanNameSpaceExcept(Cl ignoreCl, Vector methods, Vector fields) throws Exception
     {
         // Special case: we are java/lang/Object
         if (superClass == null)
@@ -590,8 +585,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     // Get lists of method and field names in inheritance namespace
-    private void scanExtSupers(String name, Vector methods,
-                               Vector fields) throws Exception
+    private void scanExtSupers(String name, Vector methods, Vector fields) throws Exception
     {
         Class extClass = Class.forName(ClassFile.translate(name));
 
@@ -749,17 +743,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         Cl superClassItem = classTree.getCl(superClass);
-        nameListUps.addElement(superClassItem != null ?
-                               (NameListUp)superClassItem :
-                               getExtNameListUp(superClass));
+        nameListUps.addElement(superClassItem != null ? (NameListUp)superClassItem : getExtNameListUp(superClass));
         if (superInterfaces != null)
         {
             for (int i = 0; i < superInterfaces.length; i++)
             {
                 Cl interfaceItem = classTree.getCl(superInterfaces[i]);
-                nameListUps.addElement(interfaceItem != null ?
-                                       (NameListUp)interfaceItem :
-                                       getExtNameListUp(superInterfaces[i]));
+                nameListUps.addElement(interfaceItem != null ? (NameListUp)interfaceItem : getExtNameListUp(superInterfaces[i]));
             }
         }
 
@@ -1296,8 +1286,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
             }
             // Traverse derived classes
-            for (Enumeration clEnum = nameListDowns.elements();
-                 clEnum.hasMoreElements(); )
+            for (Enumeration clEnum = nameListDowns.elements(); clEnum.hasMoreElements(); )
             {
                 Cl subCl = (Cl)clEnum.nextElement();
                 if (subCl != null)

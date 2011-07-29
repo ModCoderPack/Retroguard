@@ -47,10 +47,15 @@ public class MemberValuePairInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private MemberValuePairInfo() {}
+    private MemberValuePairInfo()
+    {
+    }
 
     /** Return member name index into Constant Pool. */
-    protected int getMemberNameIndex() {return u2memberNameIndex;}
+    protected int getMemberNameIndex()
+    {
+        return u2memberNameIndex;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception

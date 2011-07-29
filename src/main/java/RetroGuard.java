@@ -84,8 +84,7 @@ public class RetroGuard
             String logFilename = (args.length < 4 ? null : args[3]);
 
             // Call the main entry point on the obfuscator.
-            RetroGuardImpl.obfuscate(inFilename, outFilename,
-                                     rgsFilename, logFilename);
+            RetroGuardImpl.obfuscate(inFilename, outFilename, rgsFilename, logFilename);
             System.exit(0);
         }
         catch (IllegalArgumentException e)

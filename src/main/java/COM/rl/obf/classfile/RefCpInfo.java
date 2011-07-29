@@ -47,13 +47,22 @@ abstract public class RefCpInfo extends CpInfo
     }
 
     /** Return the class index. */
-    protected int getClassIndex() {return u2classIndex;}
+    protected int getClassIndex()
+    {
+        return u2classIndex;
+    }
 
     /** Return the name-and-type index. */
-    protected int getNameAndTypeIndex() {return u2nameAndTypeIndex;}
+    protected int getNameAndTypeIndex()
+    {
+        return u2nameAndTypeIndex;
+    }
 
     /** Set the name-and-type index. */
-    protected void setNameAndTypeIndex(int index) {u2nameAndTypeIndex = index;}
+    protected void setNameAndTypeIndex(int index)
+    {
+        u2nameAndTypeIndex = index;
+    }
 
     /** Return the method's class string name. */
     public String getClassName(ClassFile cf) throws Exception
@@ -64,16 +73,14 @@ abstract public class RefCpInfo extends CpInfo
     /** Return the method's string name. */
     public String getName(ClassFile cf) throws Exception
     {
-        NameAndTypeCpInfo ntCpInfo =
-            (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
+        NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
         return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getNameIndex())).getString();
     }
 
     /** Return the method's string descriptor. */
     public String getDescriptor(ClassFile cf) throws Exception
     {
-        NameAndTypeCpInfo ntCpInfo =
-            (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
+        NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
         return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getDescriptorIndex())).getString();
     }
 
@@ -104,8 +111,6 @@ abstract public class RefCpInfo extends CpInfo
     @Override
     public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
     {
-        pw.println("  Ref " + Integer.toString(index) + ": " + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(u2classIndex)).getNameIndex())).getString() +
-                   " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex)).getNameIndex())).getString() +
-                   " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex)).getDescriptorIndex())).getString());
+        pw.println("  Ref " + Integer.toString(index) + ": " + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(u2classIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex)).getDescriptorIndex())).getString());
     }
 }

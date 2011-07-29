@@ -47,7 +47,9 @@ public class ParameterAnnotationsInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private ParameterAnnotationsInfo() {}
+    private ParameterAnnotationsInfo()
+    {
+    }
 
     /** Return the array of annotation table entries. */
     protected AnnotationInfo[] getAnnotationTable() throws Exception

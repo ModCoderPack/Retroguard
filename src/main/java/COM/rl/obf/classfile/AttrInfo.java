@@ -172,7 +172,9 @@ public class AttrInfo implements ClassConstants
     /**
      * Trim attributes from the classfile except those in the String[].
      */
-    protected void trimAttrsExcept(String[] keepAttrs) throws Exception {}
+    protected void trimAttrsExcept(String[] keepAttrs) throws Exception
+    {
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
@@ -185,7 +187,9 @@ public class AttrInfo implements ClassConstants
      * Check for Utf8 references in the 'info' data to the constant pool and
      * mark them; over-ride this in sub-classes.
      */
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception {}
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    {
+    }
 
     /** Read the data following the header; over-ride this in sub-classes. */
     protected void readInfo(DataInput din) throws Exception
@@ -213,7 +217,9 @@ public class AttrInfo implements ClassConstants
     }
 
     /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception { }
+    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    {
+    }
 
     /** Provide debugging dump of this object. */
     public void dump(PrintStream ps) throws Exception

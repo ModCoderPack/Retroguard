@@ -135,18 +135,20 @@ public interface ClassConstants
     public static final String OPTION_Generic           = "Generic";
 
     // List of known script options
-    public static final String[] KNOWN_OPTIONS = {ClassConstants.OPTION_Application,
-                                                  ClassConstants.OPTION_Applet,
-                                                  ClassConstants.OPTION_Serializable,
-                                                  ClassConstants.OPTION_RMI,
-                                                  ClassConstants.OPTION_Enumeration,
-                                                  ClassConstants.OPTION_Annotations,
-                                                  ClassConstants.OPTION_RuntimeAnnotations,
-                                                  ClassConstants.OPTION_MapClassString,
-                                                  ClassConstants.OPTION_DigestSHA,
-                                                  ClassConstants.OPTION_DigestMD5,
-                                                  ClassConstants.OPTION_LineNumberDebug,
-                                                  ClassConstants.OPTION_Repackage,
-                                                  ClassConstants.OPTION_Generic,
+    public static final String[] KNOWN_OPTIONS =
+    {
+        ClassConstants.OPTION_Application,
+        ClassConstants.OPTION_Applet,
+        ClassConstants.OPTION_Serializable,
+        ClassConstants.OPTION_RMI,
+        ClassConstants.OPTION_Enumeration,
+        ClassConstants.OPTION_Annotations,
+        ClassConstants.OPTION_RuntimeAnnotations,
+        ClassConstants.OPTION_MapClassString,
+        ClassConstants.OPTION_DigestSHA,
+        ClassConstants.OPTION_DigestMD5,
+        ClassConstants.OPTION_LineNumberDebug,
+        ClassConstants.OPTION_Repackage,
+        ClassConstants.OPTION_Generic,
     };
 }

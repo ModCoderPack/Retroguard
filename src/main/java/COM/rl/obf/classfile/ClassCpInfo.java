@@ -46,10 +46,16 @@ public class ClassCpInfo extends CpInfo
     }
 
     /** Return the name index. */
-    protected int getNameIndex() {return u2nameIndex;}
+    protected int getNameIndex()
+    {
+        return u2nameIndex;
+    }
 
     /** Set the name index. */
-    protected void setNameIndex(int index) {u2nameIndex = index;}
+    protected void setNameIndex(int index)
+    {
+        u2nameIndex = index;
+    }
 
     /** Return the string name. */
     public String getName(ClassFile cf) throws Exception

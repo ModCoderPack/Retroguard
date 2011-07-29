@@ -73,9 +73,7 @@ public class Md extends MdFd
     /** Does this method match the wildcard pattern? (compatibility mode) */
     public boolean isOldStyleMatch(String namePattern, String descPattern)
     {
-        return
-            isOldStyleMatch(namePattern) &&
-            TreeItem.isMatch(descPattern, getDescriptor());
+        return isOldStyleMatch(namePattern) && TreeItem.isMatch(descPattern, getDescriptor());
     }
 }
 

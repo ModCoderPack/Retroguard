@@ -36,12 +36,9 @@ public class ClassTree implements NameMapper
     public static final char PACKAGE_LEVEL = '/';
     public static final char CLASS_LEVEL = '$';
     public static final char METHOD_FIELD_LEVEL = '/';
-    private static final String LOG_PRE_UNOBFUSCATED =
-    "# Names reserved from obfuscation:";
-    private static final String LOG_PRE_OBFUSCATED =
-    "# Obfuscated name mappings (some of these may be unchanged due to polymorphism constraints):";
-    private static final String LOG_FREQUENCY_TABLE =
-    "# Obfuscated name overloading frequency:";
+    private static final String LOG_PRE_UNOBFUSCATED = "# Names reserved from obfuscation:";
+    private static final String LOG_PRE_OBFUSCATED = "# Obfuscated name mappings (some of these may be unchanged due to polymorphism constraints):";
+    private static final String LOG_FREQUENCY_TABLE = "# Obfuscated name overloading frequency:";
     private static final String LOG_DANGER_HEADER1 = "# WARNING - Reflection methods are called which may unavoidably break in the";
     private static final String LOG_DANGER_HEADER2 = "# obfuscated version at runtime. Please review your source code to ensure";
     private static final String LOG_DANGER_HEADER3 = "# these methods do not act on classes in the obfuscated Jar file.";
@@ -86,8 +83,7 @@ public class ClassTree implements NameMapper
                 }
                 else
                 {
-                    throw new IOException("Invalid fully qualified name (a): " +
-                                          nameOrig);
+                    throw new IOException("Invalid fully qualified name (a): " + nameOrig);
                 }
             }
             vec.addElement(simpleName);
@@ -125,9 +121,12 @@ public class ClassTree implements NameMapper
                         if (ti != null)
                         {
                             String repackageName = ((Pk)ti).getRepackageName();
-                            if (repackageName != null) {
+                            if (repackageName != null)
+                            {
                                 sb = new StringBuffer(repackageName);
-                            } else {
+                            }
+                            else
+                            {
                                 sb.append(ti.getOutName());
                             }
                         }
@@ -250,9 +249,13 @@ public class ClassTree implements NameMapper
             log.println(ClassTree.LOG_DANGER_HEADER2);
             log.println(ClassTree.LOG_DANGER_HEADER3);
             final PrintWriter flog = log;
-            walkTree(new TreeAction() {
+            walkTree(new TreeAction()
+            {
                 @Override
-                public void classAction(Cl cl) throws Exception { cl.logWarnings(flog); }
+                public void classAction(Cl cl) throws Exception
+                {
+                    cl.logWarnings(flog);
+                }
             });
         }
     }
@@ -264,24 +267,13 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a class/interface type (and possibly methods and fields defined in class) for retention. */
-    public void retainClass(String name, boolean retainToPublic,
-                            boolean retainToProtected,
-                            boolean retainPubProtOnly,
-                            boolean retainFieldsOnly,
-                            boolean retainMethodsOnly,
-                            String extendsName,
-                            boolean invert,
-                            boolean notrimOnly, // TODO - use notrimOnly
-                            int accessMask,
-                            int accessSetting) throws Exception
+    public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly, boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
         for (Enumeration clEnum = getClEnum(name); clEnum.hasMoreElements(); )
         {
             Cl cl = (Cl)clEnum.nextElement();
-            if (((extendsName == null) ||
-                 cl.hasAsSuperOrInterface(extendsName)) &&
-                cl.modifiersMatchMask(accessMask, accessSetting))
+            if (((extendsName == null) || cl.hasAsSuperOrInterface(extendsName)) && cl.modifiersMatchMask(accessMask, accessSetting))
             {
                 retainHierarchy(cl, invert);
                 if (retainToPublic || retainToProtected || retainPubProtOnly)
@@ -289,17 +281,10 @@ public class ClassTree implements NameMapper
                     // Retain methods if requested
                     if (!retainFieldsOnly)
                     {
-                        for (Enumeration enm = cl.getMethodEnum();
-                             enm.hasMoreElements(); )
+                        for (Enumeration enm = cl.getMethodEnum(); enm.hasMoreElements(); )
                         {
                             Md md = (Md)enm.nextElement();
-                            if ((retainToPublic &&
-                                 Modifier.isPublic(md.getModifiers())) ||
-                                (retainToProtected &&
-                                 !Modifier.isPrivate(md.getModifiers())) ||
-                                (retainPubProtOnly &&
-                                 (Modifier.isPublic(md.getModifiers()) ||
-                                  Modifier.isProtected(md.getModifiers()))))
+                            if ((retainToPublic && Modifier.isPublic(md.getModifiers())) || (retainToProtected && !Modifier.isPrivate(md.getModifiers())) || (retainPubProtOnly && (Modifier.isPublic(md.getModifiers()) || Modifier.isProtected(md.getModifiers()))))
                             {
                                 if (invert)
                                 {
@@ -318,17 +303,10 @@ public class ClassTree implements NameMapper
                     // Retain fields if requested
                     if (!retainMethodsOnly)
                     {
-                        for (Enumeration enm = cl.getFieldEnum();
-                             enm.hasMoreElements(); )
+                        for (Enumeration enm = cl.getFieldEnum(); enm.hasMoreElements(); )
                         {
                             Fd fd = (Fd)enm.nextElement();
-                            if ((retainToPublic &&
-                                 Modifier.isPublic(fd.getModifiers())) ||
-                                (retainToProtected &&
-                                 !Modifier.isPrivate(fd.getModifiers())) ||
-                                (retainPubProtOnly &&
-                                 (Modifier.isPublic(fd.getModifiers()) ||
-                                  Modifier.isProtected(fd.getModifiers()))))
+                            if ((retainToPublic && Modifier.isPublic(fd.getModifiers())) || (retainToProtected && !Modifier.isPrivate(fd.getModifiers())) || (retainPubProtOnly && (Modifier.isPublic(fd.getModifiers()) || Modifier.isProtected(fd.getModifiers()))))
                             {
                                 if (invert)
                                 {
@@ -349,21 +327,13 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a method type for retention. */
-    public void retainMethod(String name, String descriptor,
-                             boolean retainAndClass,
-                             String extendsName,
-                             boolean invert,
-                             boolean notrimOnly, // TODO - use notrimOnly
-                             int accessMask,
-                             int accessSetting) throws Exception
+    public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = getMdEnum(name, descriptor);
-             enm.hasMoreElements(); ) {
+        for (Enumeration enm = getMdEnum(name, descriptor); enm.hasMoreElements(); )
+        {
             Md md = (Md)enm.nextElement();
             Cl thisCl = (Cl)md.getParent();
-            if (((extendsName == null) ||
-                 thisCl.hasAsSuperOrInterface(extendsName)) &&
-                md.modifiersMatchMask(accessMask, accessSetting))
+            if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName)) && md.modifiersMatchMask(accessMask, accessSetting))
             {
                 if (invert)
                 {
@@ -384,21 +354,13 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a field type for retention. */
-    public void retainField(String name, String descriptor,
-                            boolean retainAndClass,
-                            String extendsName,
-                            boolean invert,
-                            boolean notrimOnly, // TODO - use notrimOnly
-                            int accessMask,
-                            int accessSetting) throws Exception
+    public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = getFdEnum(name, descriptor);
-             enm.hasMoreElements(); ) {
+        for (Enumeration enm = getFdEnum(name, descriptor); enm.hasMoreElements(); )
+        {
             Fd fd = (Fd)enm.nextElement();
             Cl thisCl = (Cl)fd.getParent();
-            if (((extendsName == null) ||
-                 thisCl.hasAsSuperOrInterface(extendsName)) &&
-                fd.modifiersMatchMask(accessMask, accessSetting))
+            if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName)) && fd.modifiersMatchMask(accessMask, accessSetting))
             {
                 if (invert)
                 {
@@ -442,8 +404,7 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a method type for retention, and specify its new name. */
-    public void retainMethodMap(String name, String descriptor,
-                                String obfName) throws Exception
+    public void retainMethodMap(String name, String descriptor, String obfName) throws Exception
     {
         retainItemMap(getMd(name, descriptor), obfName);
     }
@@ -473,19 +434,31 @@ public class ClassTree implements NameMapper
     {
         // Repackage first, if requested
         // (need TreeItem.isFixed set properly, so must be done first)
-        if (enableRepackage) {
+        if (enableRepackage)
+        {
             // Generate single-level package names, unique across jar
-            walkTree(new TreeAction() {
-                    @Override
-                    public void packageAction(Pk pk) throws Exception {pk.repackageName();}
+            walkTree(new TreeAction()
+            {
+                @Override
+                public void packageAction(Pk pk) throws Exception
+                {
+                    pk.repackageName();
+                }
             });
         }
         // Now rename everything in the traditional way (no repackaging)
-        walkTree(new TreeAction() {
+        walkTree(new TreeAction()
+        {
             @Override
-            public void packageAction(Pk pk) throws Exception {pk.generateNames();}
+            public void packageAction(Pk pk) throws Exception
+            {
+                pk.generateNames();
+            }
             @Override
-            public void classAction(Cl cl) throws Exception {cl.generateNames();}
+            public void classAction(Cl cl) throws Exception
+            {
+                cl.generateNames();
+            }
         });
     }
 
@@ -512,18 +485,30 @@ public class ClassTree implements NameMapper
     /** Resolve the polymorphic dependencies of each class. */
     public void resolveClasses() throws Exception
     {
-        walkTree(new TreeAction() {
+        walkTree(new TreeAction()
+        {
             @Override
-            public void classAction(Cl cl) throws Exception {cl.resetResolve();}
+            public void classAction(Cl cl) throws Exception
+            {
+                cl.resetResolve();
+            }
         });
-        walkTree(new TreeAction() {
+        walkTree(new TreeAction()
+        {
             @Override
-            public void classAction(Cl cl) throws Exception {cl.setupNameListDowns();}
+            public void classAction(Cl cl) throws Exception
+            {
+                cl.setupNameListDowns();
+            }
         });
         Cl.nameSpace = 0;
-        walkTree(new TreeAction() {
+        walkTree(new TreeAction()
+        {
             @Override
-            public void classAction(Cl cl) throws Exception {cl.resolveOptimally();}
+            public void classAction(Cl cl) throws Exception
+            {
+                cl.resolveOptimally();
+            }
         });
     }
 
@@ -595,14 +580,12 @@ public class ClassTree implements NameMapper
 
     /** Get methods in tree from the fully qualified, and possibly
         wildcarded, name. */
-    public Enumeration getMdEnum(String fullName,
-                                 String descriptor) throws Exception
+    public Enumeration getMdEnum(String fullName, String descriptor) throws Exception
     {
         final Vector vec = new Vector();
         final String fDesc = descriptor;
         // Wildcard? then return list of all matching methods
-        if ((fullName.indexOf('*') != -1) ||
-            (descriptor.indexOf('*') != -1))
+        if ((fullName.indexOf('*') != -1) || (descriptor.indexOf('*') != -1))
         {
             // Old !a/b/* wildcard syntax, for backward compatibility
             // (acts as if every * becomes a ** in new-style match)
@@ -651,8 +634,7 @@ public class ClassTree implements NameMapper
 
     /** Get fields in tree from the fully qualified, and possibly
         wildcarded, name. */
-    public Enumeration getFdEnum(String fullName,
-                                 String descriptor) throws Exception
+    public Enumeration getFdEnum(String fullName, String descriptor) throws Exception
     {
         final Vector vec = new Vector();
         // Wildcard? then return list of all matching methods
@@ -799,24 +781,24 @@ public class ClassTree implements NameMapper
                 char ch = className.charAt(i++);
                 switch (ch)
                 {
-                case '[':
-                case ';':
-                    newName.append(ch);
-                    break;
+                    case '[':
+                    case ';':
+                        newName.append(ch);
+                        break;
 
-                case 'L':
-                    newName.append(ch);
-                    int pos = className.indexOf(';', i);
-                    if (pos < 0)
-                    {
-                        throw new Exception("Invalid class name encountered: " + className);
-                    }
-                    newName.append(mapClass(className.substring(i, pos)));
-                    i = pos;
-                    break;
+                    case 'L':
+                        newName.append(ch);
+                        int pos = className.indexOf(';', i);
+                        if (pos < 0)
+                        {
+                            throw new Exception("Invalid class name encountered: " + className);
+                        }
+                        newName.append(mapClass(className.substring(i, pos)));
+                        i = pos;
+                        break;
 
-                default:
-                    return className;
+                    default:
+                        return className;
                 }
             }
             return newName.toString();
@@ -942,35 +924,35 @@ public class ClassTree implements NameMapper
             char ch = descriptor.charAt(i++);
             switch (ch)
             {
-            case '[':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'F':
-            case 'I':
-            case 'J':
-            case 'S':
-            case 'Z':
-            case 'V':
-            case '(':
-            case ')':
-            case ';':
-                newDesc.append(ch);
-                break;
+                case '[':
+                case 'B':
+                case 'C':
+                case 'D':
+                case 'F':
+                case 'I':
+                case 'J':
+                case 'S':
+                case 'Z':
+                case 'V':
+                case '(':
+                case ')':
+                case ';':
+                    newDesc.append(ch);
+                    break;
 
-            case 'L':
-                newDesc.append(ch);
-                int pos = descriptor.indexOf(';', i);
-                if (pos < 0)
-                {
+                case 'L':
+                    newDesc.append(ch);
+                    int pos = descriptor.indexOf(';', i);
+                    if (pos < 0)
+                    {
+                        throw new Exception("Invalid descriptor string encountered.");
+                    }
+                    newDesc.append(mapClass(descriptor.substring(i, pos)));
+                    i = pos;
+                    break;
+
+                default:
                     throw new Exception("Invalid descriptor string encountered.");
-                }
-                newDesc.append(mapClass(descriptor.substring(i, pos)));
-                i = pos;
-                break;
-
-            default:
-                throw new Exception("Invalid descriptor string encountered.");
             }
         }
         return newDesc.toString();
@@ -1079,7 +1061,8 @@ public class ClassTree implements NameMapper
         if (invert)
         {
             // error to force package level obfuscation
-            if (!(ti instanceof Pk)) {
+            if (!(ti instanceof Pk))
+            {
                 ti.setOutName(null);
                 ti.clearFromScript();
             }

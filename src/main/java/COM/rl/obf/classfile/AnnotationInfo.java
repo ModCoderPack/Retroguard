@@ -48,10 +48,15 @@ public class AnnotationInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private AnnotationInfo() {}
+    private AnnotationInfo()
+    {
+    }
 
     /** Return type index into Constant Pool. */
-    protected int getTypeIndex() {return u2typeIndex;}
+    protected int getTypeIndex()
+    {
+        return u2typeIndex;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception

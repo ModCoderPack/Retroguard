@@ -49,8 +49,7 @@ public class Header
             int pos = line.indexOf(':');
             if (pos != -1)
             {
-                header = new Header(line.substring(0, pos).trim(),
-                                    line.substring(pos + 1).trim());
+                header = new Header(line.substring(0, pos).trim(), line.substring(pos + 1).trim());
             }
         }
         return header;
@@ -65,10 +64,16 @@ public class Header
     }
 
     /** Return the tag. */
-    public String getTag() { return tag; }
+    public String getTag()
+    {
+        return tag;
+    }
 
     /** Return the value. */
-    public String getValue() { return value; }
+    public String getValue()
+    {
+        return value;
+    }
 
     /** Test equality of headers. */
     @Override
@@ -77,8 +82,7 @@ public class Header
         if (o instanceof Header)
         {
             Header header = (Header)o;
-            if (header.getTag().equals(getTag())
-                && header.getValue().equals(getValue()))
+            if (header.getTag().equals(getTag()) && header.getValue().equals(getValue()))
             {
                 return true;
             }
@@ -101,13 +105,11 @@ public class Header
     {
         String prefix = getTag() + ": ";
         String value = getValue();
-        for (int index = 0; index < value.length();
-             prefix = " ") // continuation lines are prefixed with single space
+        for (int index = 0; index < value.length(); prefix = " ") // continuation lines are prefixed with single space
         {
             int start = index;
             // Compute length of value that can be appended to this line
-            index += Math.min(value.length() - index,
-                              Header.MAX_HEADER_LINE_LENGTH - prefix.length());
+            index += Math.min(value.length() - index, Header.MAX_HEADER_LINE_LENGTH - prefix.length());
             // Write tag or continuation space, (part of) value, EOL
             writer.write(prefix + value.substring(start, index) + "\015\012");
         }

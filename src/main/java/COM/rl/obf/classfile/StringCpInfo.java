@@ -46,10 +46,16 @@ public class StringCpInfo extends CpInfo
     }
 
     /** Return the string index. */
-    protected int getStringIndex() {return u2stringIndex;}
+    protected int getStringIndex()
+    {
+        return u2stringIndex;
+    }
 
     /** Set the string index. */
-    protected void setStringIndex(int index) {u2stringIndex = index;}
+    protected void setStringIndex(int index)
+    {
+        u2stringIndex = index;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     @Override

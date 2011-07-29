@@ -53,10 +53,14 @@ public class DeprecatedAttrInfo extends AttrInfo
 
     /** Read the data following the header. */
     @Override
-    protected void readInfo(DataInput din) throws Exception {}
+    protected void readInfo(DataInput din) throws Exception
+    {
+    }
 
     /** Export data following the header to a DataOutput stream. */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception {}
+    public void writeInfo(DataOutput dout) throws Exception
+    {
+    }
 }
 

@@ -53,7 +53,9 @@ public class MemberValueInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private MemberValueInfo() {}
+    private MemberValueInfo()
+    {
+    }
 
     /** Return tag, defining member type. */
     protected int getTag() {return u1tag;}
@@ -63,30 +65,36 @@ public class MemberValueInfo
     {
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F':
-        case 'I': case 'J': case 'S': case 'Z':
-            break;
-        case 's':
-            pool.incRefCount(u2constValueIndex);
-            break;
-        case 'e':
-            pool.incRefCount(u2typeNameIndex);
-            pool.incRefCount(u2constNameIndex);
-            break;
-        case 'c':
-            pool.incRefCount(u2classInfoIndex);
-            break;
-        case '@':
-            annotationValue.markUtf8Refs(pool);
-            break;
-        case '[':
-            for (int i = 0; i < u2numValues; i++)
-            {
-                values[i].markUtf8Refs(pool);
-            }
-            break;
-        default:
-            throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'I':
+            case 'J':
+            case 'S':
+            case 'Z':
+                break;
+            case 's':
+                pool.incRefCount(u2constValueIndex);
+                break;
+            case 'e':
+                pool.incRefCount(u2typeNameIndex);
+                pool.incRefCount(u2constNameIndex);
+                break;
+            case 'c':
+                pool.incRefCount(u2classInfoIndex);
+                break;
+            case '@':
+                annotationValue.markUtf8Refs(pool);
+                break;
+            case '[':
+                for (int i = 0; i < u2numValues; i++)
+                {
+                    values[i].markUtf8Refs(pool);
+                }
+                break;
+            default:
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
         }
     }
 
@@ -95,31 +103,37 @@ public class MemberValueInfo
         u1tag = din.readUnsignedByte();
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F':
-        case 'I': case 'J': case 'S': case 'Z':
-        case 's':
-            u2constValueIndex = din.readUnsignedShort();
-            break;
-        case 'e':
-            u2typeNameIndex = din.readUnsignedShort();
-            u2constNameIndex = din.readUnsignedShort();
-            break;
-        case 'c':
-            u2classInfoIndex = din.readUnsignedShort();
-            break;
-        case '@':
-            annotationValue = AnnotationInfo.create(din);
-            break;
-        case '[':
-            u2numValues = din.readUnsignedShort();
-            values = new MemberValueInfo[u2numValues];
-            for (int i = 0; i < u2numValues; i++)
-            {
-                values[i] = MemberValueInfo.create(din);
-            }
-            break;
-        default:
-            throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'I':
+            case 'J':
+            case 'S':
+            case 'Z':
+            case 's':
+                u2constValueIndex = din.readUnsignedShort();
+                break;
+            case 'e':
+                u2typeNameIndex = din.readUnsignedShort();
+                u2constNameIndex = din.readUnsignedShort();
+                break;
+            case 'c':
+                u2classInfoIndex = din.readUnsignedShort();
+                break;
+            case '@':
+                annotationValue = AnnotationInfo.create(din);
+                break;
+            case '[':
+                u2numValues = din.readUnsignedShort();
+                values = new MemberValueInfo[u2numValues];
+                for (int i = 0; i < u2numValues; i++)
+                {
+                    values[i] = MemberValueInfo.create(din);
+                }
+                break;
+            default:
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
         }
     }
 
@@ -129,30 +143,36 @@ public class MemberValueInfo
         dout.writeByte(u1tag);
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F':
-        case 'I': case 'J': case 'S': case 'Z':
-        case 's':
-            dout.writeShort(u2constValueIndex);
-            break;
-        case 'e':
-            dout.writeShort(u2typeNameIndex);
-            dout.writeShort(u2constNameIndex);
-            break;
-        case 'c':
-            dout.writeShort(u2classInfoIndex);
-            break;
-        case '@':
-            annotationValue.write(dout);
-            break;
-        case '[':
-            dout.writeShort(u2numValues);
-            for (int i = 0; i < u2numValues; i++)
-            {
-                values[i].write(dout);
-            }
-            break;
-        default:
-            throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'I':
+            case 'J':
+            case 'S':
+            case 'Z':
+            case 's':
+                dout.writeShort(u2constValueIndex);
+                break;
+            case 'e':
+                dout.writeShort(u2typeNameIndex);
+                dout.writeShort(u2constNameIndex);
+                break;
+            case 'c':
+                dout.writeShort(u2classInfoIndex);
+                break;
+            case '@':
+                annotationValue.write(dout);
+                break;
+            case '[':
+                dout.writeShort(u2numValues);
+                for (int i = 0; i < u2numValues; i++)
+                {
+                    values[i].write(dout);
+                }
+                break;
+            default:
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
         }
     }
 
@@ -161,28 +181,34 @@ public class MemberValueInfo
     {
         switch (u1tag)
         {
-        case 'B': case 'C': case 'D': case 'F':
-        case 'I': case 'J': case 'S': case 'Z':
-        case 's':
-            break;
-        case 'e':
-            break;
-        case 'c':
-            String oldDesc = cf.getUtf8(u2classInfoIndex);
-            String newDesc = nm.mapDescriptor(oldDesc);
-            u2classInfoIndex = cf.remapUtf8To(newDesc, u2classInfoIndex);
-            break;
-        case '@':
-            annotationValue.remap(cf, nm);
-            break;
-        case '[':
-            for (int i = 0; i < u2numValues; i++)
-            {
-                values[i].remap(cf, nm);
-            }
-            break;
-        default:
-            throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'I':
+            case 'J':
+            case 'S':
+            case 'Z':
+            case 's':
+                break;
+            case 'e':
+                break;
+            case 'c':
+                String oldDesc = cf.getUtf8(u2classInfoIndex);
+                String newDesc = nm.mapDescriptor(oldDesc);
+                u2classInfoIndex = cf.remapUtf8To(newDesc, u2classInfoIndex);
+                break;
+            case '@':
+                annotationValue.remap(cf, nm);
+                break;
+            case '[':
+                for (int i = 0; i < u2numValues; i++)
+                {
+                    values[i].remap(cf, nm);
+                }
+                break;
+            default:
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
         }
     }
 

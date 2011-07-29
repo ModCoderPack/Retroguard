@@ -49,7 +49,9 @@ public class InnerClassesInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private InnerClassesInfo() {}
+    private InnerClassesInfo()
+    {
+    }
 
     /** Return the inner class index. */
     protected int getInnerClassIndex() {return u2innerClassInfoIndex;}
@@ -93,8 +95,7 @@ public class InnerClassesInfo
         if (u2innerNameIndex != 0)
         {
             // Get the full inner class name
-            ClassCpInfo innerClassInfo =
-                (ClassCpInfo)cf.getCpEntry(u2innerClassInfoIndex);
+            ClassCpInfo innerClassInfo = (ClassCpInfo)cf.getCpEntry(u2innerClassInfoIndex);
             String innerClassName = ((Utf8CpInfo)cf.getCpEntry(innerClassInfo.getNameIndex())).getString();
             // It is the remapped simple name that must be stored, so truncate
             String remapClass = nm.mapClass(innerClassName);

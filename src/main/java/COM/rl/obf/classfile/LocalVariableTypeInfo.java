@@ -50,13 +50,21 @@ public class LocalVariableTypeInfo
 
 
     // Instance Methods ------------------------------------------------------
-    private LocalVariableTypeInfo() {}
+    private LocalVariableTypeInfo()
+    {
+    }
 
     /** Return name index into Constant Pool. */
-    protected int getNameIndex() {return u2nameIndex;}
+    protected int getNameIndex()
+    {
+        return u2nameIndex;
+    }
 
     /** Return signature index into Constant Pool. */
-    protected int getSignatureIndex() {return u2signatureIndex;}
+    protected int getSignatureIndex()
+    {
+        return u2signatureIndex;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception

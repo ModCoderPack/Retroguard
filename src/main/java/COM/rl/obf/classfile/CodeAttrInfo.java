@@ -51,29 +51,29 @@ public class CodeAttrInfo extends AttrInfo
     {
         switch (opcode)
         {
-        case 0xAA: case 0xAB: case 0xC4:
-            return -1; // variable length opcode
-        case 0x10: case 0x12: case 0x15: case 0x16:
-        case 0x17: case 0x18: case 0x19: case 0x36:
-        case 0x37: case 0x38: case 0x39: case 0x3A:
-        case 0xBC:
-            return 1;
-        case 0x11: case 0x13: case 0x14: case 0x84:
-        case 0x99: case 0x9A: case 0x9B: case 0x9C:
-        case 0x9D: case 0x9E: case 0x9F: case 0xA0:
-        case 0xA1: case 0xA2: case 0xA3: case 0xA4:
-        case 0xA5: case 0xA6: case 0xA7: case 0xA8:
-        case 0xB2: case 0xB3: case 0xB4: case 0xB5:
-        case 0xB6: case 0xB7: case 0xB8: case 0xBB:
-        case 0xBD: case 0xC0: case 0xC1: case 0xC6:
-        case 0xC7:
-            return 2;
-        case 0xC5:
-            return 3;
-        case 0xB9: case 0xC8: case 0xC9:
-            return 4;
-        default:
-            return 0;
+            case 0xAA: case 0xAB: case 0xC4:
+                return -1; // variable length opcode
+            case 0x10: case 0x12: case 0x15: case 0x16:
+            case 0x17: case 0x18: case 0x19: case 0x36:
+            case 0x37: case 0x38: case 0x39: case 0x3A:
+            case 0xBC:
+                return 1;
+            case 0x11: case 0x13: case 0x14: case 0x84:
+            case 0x99: case 0x9A: case 0x9B: case 0x9C:
+            case 0x9D: case 0x9E: case 0x9F: case 0xA0:
+            case 0xA1: case 0xA2: case 0xA3: case 0xA4:
+            case 0xA5: case 0xA6: case 0xA7: case 0xA8:
+            case 0xB2: case 0xB3: case 0xB4: case 0xB5:
+            case 0xB6: case 0xB7: case 0xB8: case 0xBB:
+            case 0xBD: case 0xC0: case 0xC1: case 0xC6:
+            case 0xC7:
+                return 2;
+            case 0xC5:
+                return 3;
+            case 0xB9: case 0xC8: case 0xC9:
+                return 4;
+            default:
+                return 0;
         }
     }
 
@@ -88,8 +88,7 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected int getAttrInfoLength() throws Exception
     {
-        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + u4codeLength +
-            u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
+        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + u4codeLength + u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
         for (int i = 0; i < u2attributesCount; i++)
         {
             length += AttrInfo.CONSTANT_FIELD_SIZE + attributes[i].getAttrInfoLength();
@@ -219,8 +218,7 @@ public class CodeAttrInfo extends AttrInfo
     // constant pool in 1.5 (change from 1.4), not referenced by Utf8 name,
     // so .option MapClassString is not necessary for them.
     // Still needed for Class.forName("MyClass") though.
-    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag,
-                                           Hashtable cpUpdate) throws Exception
+    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Hashtable cpUpdate) throws Exception
     {
         int opcodePrev = -1;
         int ldcIndex = -1;
@@ -245,14 +243,12 @@ public class CodeAttrInfo extends AttrInfo
                     ldcIndex = -1;
                 }
             }
-            if (((opcodePrev == 0x12) || (opcodePrev == 0x13)) // ldc or ldc_w
-                && (ldcIndex != -1)) // and is a StringCpInfo
+            if (((opcodePrev == 0x12) || (opcodePrev == 0x13)) && (ldcIndex != -1)) // ldc or ldc_w and is a StringCpInfo
             {
                 boolean isClassForName = false;
                 if ((opcode == 0xB8) && (i+2 < code.length)) // invokestatic
                 {
-                    int invokeIndex =
-                        ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
+                    int invokeIndex = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
                     CpInfo cpInfo = cf.getCpEntry(invokeIndex);
                     if (cpInfo instanceof MethodrefCpInfo)
                     {
@@ -262,12 +258,7 @@ public class CodeAttrInfo extends AttrInfo
                         NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)cf.getCpEntry(entry.getNameAndTypeIndex());
                         String name = ((Utf8CpInfo)cf.getCpEntry(ntEntry.getNameIndex())).getString();
                         String descriptor = ((Utf8CpInfo)cf.getCpEntry(ntEntry.getDescriptorIndex())).getString();
-                        if (("class$".equals(name) &&
-                             ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor) ||
-                              "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor))) ||
-                            ("java/lang/Class".equals(className) &&
-                             "forName".equals(name) &&
-                             "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
+                        if (("class$".equals(name) && ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor) || "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor))) || ("java/lang/Class".equals(className) && "forName".equals(name) && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
                         {
                             isClassForName = true;
                             if (cpUpdate != null)
@@ -279,15 +270,14 @@ public class CodeAttrInfo extends AttrInfo
                                     int remapStringIndex = ((Integer)o).intValue();
                                     switch (opcodePrev)
                                     {
-                                    case 0x13: // ldc_w
-                                        code[i-2] = 0;
-                                        // fallthru
-                                        //$FALL-THROUGH$
-                                    case 0x12: // ldc
-                                        code[i-1] = (byte)remapStringIndex;
-                                        break;
-                                    default: // error
-                                        throw new Exception(".class or Class.forName remap of non-ldc/ldc_w - please report this error");
+                                        case 0x13: // ldc_w
+                                            code[i-2] = 0;
+                                            //$FALL-THROUGH$
+                                        case 0x12: // ldc
+                                            code[i-1] = (byte)remapStringIndex;
+                                            break;
+                                        default: // error
+                                            throw new Exception(".class or Class.forName remap of non-ldc/ldc_w - please report this error");
                                     }
                                 }
                             }
@@ -296,8 +286,7 @@ public class CodeAttrInfo extends AttrInfo
                 }
                 if (cpToFlag != null)
                 {
-                    cpToFlag.updateFlag(cf.getCpEntry(ldcIndex),
-                                        ldcIndex, isClassForName);
+                    cpToFlag.updateFlag(cf.getCpEntry(ldcIndex), ldcIndex, isClassForName);
                 }
             }
             int bytes = getOpcodeBytes(opcode, i);
@@ -315,66 +304,54 @@ public class CodeAttrInfo extends AttrInfo
         {
             switch (opcode)
             {
-            case 0xAA: // tableswitch
-                bytes = 3 - (i % 4); // 0-3 byte pad
-                bytes += 4; // default value
-                int low =
-                    ((code[i+1+bytes] & 0xFF) << 24) +
-                    ((code[i+1+bytes+1] & 0xFF) << 16) +
-                    ((code[i+1+bytes+2] & 0xFF) << 8) +
-                    (code[i+1+bytes+3] & 0xFF);
-                bytes += 4; // low value
-                int high =
-                    ((code[i+1+bytes] & 0xFF) << 24) +
-                    ((code[i+1+bytes+1] & 0xFF) << 16) +
-                    ((code[i+1+bytes+2] & 0xFF) << 8) +
-                    (code[i+1+bytes+3] & 0xFF);
-                bytes += 4; // high value
-                if (high >= low)
-                {
-                    bytes += (high - low + 1) * 4; // jump offsets
-                }
-                break;
-            case 0xAB: // lookupswitch
-                bytes = 3 - (i % 4); // 0-3 byte pad
-                bytes += 4; // default value
-                int npairs =
-                    ((code[i+1+bytes] & 0xFF) << 24) +
-                    ((code[i+1+bytes+1] & 0xFF) << 16) +
-                    ((code[i+1+bytes+2] & 0xFF) << 8) +
-                    (code[i+1+bytes+3] & 0xFF);
-                bytes += 4; // npairs value
-                if (npairs >= 0)
-                {
-                    bytes += npairs * 8; // match / offset pairs
-                }
-                break;
-            case 0xC4: // wide
-                int wideOpcode = code[i+1] & 0xFF;
-                switch (wideOpcode)
-                {
-                case 0x15: // iload
-                case 0x16: // lload
-                case 0x17: // fload
-                case 0x18: // dload
-                case 0x19: // aload
-                case 0x36: // istore
-                case 0x37: // lstore
-                case 0x38: // fstore
-                case 0x39: // dstore
-                case 0x3A: // astore
-                case 0xA9: // ret
-                    bytes = 3;
+                case 0xAA: // tableswitch
+                    bytes = 3 - (i % 4); // 0-3 byte pad
+                    bytes += 4; // default value
+                    int low = ((code[i+1+bytes] & 0xFF) << 24) + ((code[i+1+bytes+1] & 0xFF) << 16) + ((code[i+1+bytes+2] & 0xFF) << 8) + (code[i+1+bytes+3] & 0xFF);
+                    bytes += 4; // low value
+                    int high = ((code[i+1+bytes] & 0xFF) << 24) + ((code[i+1+bytes+1] & 0xFF) << 16) + ((code[i+1+bytes+2] & 0xFF) << 8) + (code[i+1+bytes+3] & 0xFF);
+                    bytes += 4; // high value
+                    if (high >= low)
+                    {
+                        bytes += (high - low + 1) * 4; // jump offsets
+                    }
                     break;
-                case 0x84: // iinc
-                    bytes = 5;
+                case 0xAB: // lookupswitch
+                    bytes = 3 - (i % 4); // 0-3 byte pad
+                    bytes += 4; // default value
+                    int npairs = ((code[i+1+bytes] & 0xFF) << 24) + ((code[i+1+bytes+1] & 0xFF) << 16) + ((code[i+1+bytes+2] & 0xFF) << 8) + (code[i+1+bytes+3] & 0xFF);
+                    bytes += 4; // npairs value
+                    if (npairs >= 0)
+                    {
+                        bytes += npairs * 8; // match / offset pairs
+                    }
+                    break;
+                case 0xC4: // wide
+                    int wideOpcode = code[i+1] & 0xFF;
+                    switch (wideOpcode)
+                    {
+                        case 0x15: // iload
+                        case 0x16: // lload
+                        case 0x17: // fload
+                        case 0x18: // dload
+                        case 0x19: // aload
+                        case 0x36: // istore
+                        case 0x37: // lstore
+                        case 0x38: // fstore
+                        case 0x39: // dstore
+                        case 0x3A: // astore
+                        case 0xA9: // ret
+                            bytes = 3;
+                            break;
+                        case 0x84: // iinc
+                            bytes = 5;
+                            break;
+                        default:
+                            throw new Exception("Illegal wide opcode");
+                    }
                     break;
                 default:
-                    throw new Exception("Illegal wide opcode");
-                }
-                break;
-            default:
-                throw new Exception("Illegal variable length opcode");
+                    throw new Exception("Illegal variable length opcode");
             }
         }
         return bytes;

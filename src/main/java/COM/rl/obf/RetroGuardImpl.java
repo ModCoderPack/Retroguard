@@ -63,19 +63,12 @@ public class RetroGuardImpl
      * @param rgsFilename valid RetroGuard Script data file name, or null (which implies default settings)
      * @param logFilename name for the log data file
      */
-    public static void obfuscate(String inFilename,
-                                 String outFilename,
-                                 String rgsFilename,
-                                 String logFilename) throws Exception
+    public static void obfuscate(String inFilename, String outFilename, String rgsFilename, String logFilename) throws Exception
     {
-        File inFile = new File(inFilename == null ?
-                               RetroGuardImpl.DEFAULT_IN_FILE_NAME : inFilename);
-        File outFile = new File(outFilename == null ?
-                                RetroGuardImpl.DEFAULT_OUT_FILE_NAME : outFilename);
-        File rgsFile = new File(rgsFilename == null ?
-                                RetroGuardImpl.DEFAULT_RGS_FILE_NAME : rgsFilename);
-        File logFile = new File(logFilename == null ?
-                                RetroGuardImpl.DEFAULT_LOG_FILE_NAME : logFilename);
+        File inFile = new File(inFilename == null ? RetroGuardImpl.DEFAULT_IN_FILE_NAME : inFilename);
+        File outFile = new File(outFilename == null ? RetroGuardImpl.DEFAULT_OUT_FILE_NAME : outFilename);
+        File rgsFile = new File(rgsFilename == null ? RetroGuardImpl.DEFAULT_RGS_FILE_NAME : rgsFilename);
+        File logFile = new File(logFilename == null ? RetroGuardImpl.DEFAULT_LOG_FILE_NAME : logFilename);
 
         // Input JAR file must exist and be readable
         if (!inFile.exists())
@@ -141,9 +134,7 @@ public class RetroGuardImpl
     private void run() throws Exception
     {
         // Create the session log file
-        PrintWriter log = new PrintWriter(
-            new BufferedOutputStream(
-                new FileOutputStream(logFile)));
+        PrintWriter log = new PrintWriter(new BufferedOutputStream(new FileOutputStream(logFile)));
         try
         {
             // Write out the log header
@@ -154,8 +145,7 @@ public class RetroGuardImpl
             GuardDB db = new GuardDB(inFile);
             try
             {
-                InputStream rgsInputStream =
-                    (rgsFile.exists() ? new FileInputStream(rgsFile) : null);
+                InputStream rgsInputStream = (rgsFile.exists() ? new FileInputStream(rgsFile) : null);
                 db.retain(new RgsEnum(rgsInputStream), log);
                 db.logWarnings(log);
                 if (rgsInputStream != null)
@@ -174,7 +164,8 @@ public class RetroGuardImpl
             // Log exceptions before exiting
             log.println();
             log.println(RetroGuardImpl.LOG_ERROR);
-            if (e instanceof java.util.zip.ZipException) {
+            if (e instanceof java.util.zip.ZipException)
+            {
                 log.println(RetroGuardImpl.LOG_ZIP_ERROR);
             }
             log.println("# " + e.toString());

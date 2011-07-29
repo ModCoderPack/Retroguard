@@ -56,6 +56,8 @@ class StringCpInfoFlags
     protected int stringIndex;
     protected boolean forNameFlag;
     protected boolean otherFlag;
-    protected StringCpInfoFlags() {}
+    protected StringCpInfoFlags()
+    {
+    }
 }
 

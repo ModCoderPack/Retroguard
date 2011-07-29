@@ -86,7 +86,10 @@ public class Pk extends PkCl
     }
 
     /** Return the repackage name of the entry. */
-    public String getRepackageName() { return this.repackageName; }
+    public String getRepackageName()
+    {
+        return this.repackageName;
+    }
 
     /** Get a package level by name. */
     public Pk getPackage(String name) throws Exception
@@ -134,7 +137,10 @@ public class Pk extends PkCl
     }
 
     /** Return number of packages. */
-    public int getPackageCount() {return pks.size();}
+    public int getPackageCount()
+    {
+        return pks.size();
+    }
 
     /** Add a sub-package level. */
     public Pk addPackage(String name) throws Exception

@@ -181,8 +181,7 @@ public class TreeItem
                 }
                 // check the merged central identifiers against the ** segment
                 int j = pl.scIndex() + sl.length() - pl.length();
-                if (!TreeItem.isMatch(pl.getSub(pl.scIndex()),
-                                      sl.getSub(pl.scIndex(), j)))
+                if (!TreeItem.isMatch(pl.getSub(pl.scIndex()), sl.getSub(pl.scIndex(), j)))
                 {
                     return false;
                 }
@@ -228,13 +227,22 @@ public class TreeItem
     }
 
     /** Return the output name of the entry, obfuscated or original. */
-    public String getOutName() {return outName != null ? outName : inName;}
+    public String getOutName()
+    {
+        return outName != null ? outName : inName;
+    }
 
     /** Return the obfuscated name of the entry. */
-    public String getObfName() {return outName;}
+    public String getObfName()
+    {
+        return outName;
+    }
 
     /** Signal that this constraint came from a user script line. */
-    public void setFromScript() {isFromScript = true;}
+    public void setFromScript()
+    {
+        isFromScript = true;
+    }
 
     /** Clear the signal that this constraint came from a user script line. */
     public void clearFromScript()
@@ -247,25 +255,46 @@ public class TreeItem
     }
 
     /** Signal that this constraint came from a map script line. */
-    public void setFromScriptMap() {isFromScriptMap = true;}
+    public void setFromScriptMap()
+    {
+        isFromScriptMap = true;
+    }
 
     /** Has the entry been fixed already? */
-    public boolean isFixed() {return isFixed;}
+    public boolean isFixed()
+    {
+        return isFixed;
+    }
 
     /** Is this constrained by a user script line? */
-    public boolean isFromScript() {return isFromScript;}
+    public boolean isFromScript()
+    {
+        return isFromScript;
+    }
 
     /** Is this constrained by a map script line? */
-    public boolean isFromScriptMap() {return isFromScriptMap;}
+    public boolean isFromScriptMap()
+    {
+        return isFromScriptMap;
+    }
 
     /** Is a method or field Synthetic? */
-    public boolean isSynthetic() {return isSynthetic;}
+    public boolean isSynthetic()
+    {
+        return isSynthetic;
+    }
 
     /** Set the parent in the tree -- used when stitching in a Cl to replace a PlaceholderCl. */
-    public void setParent(TreeItem parent) {this.parent = parent;}
+    public void setParent(TreeItem parent)
+    {
+        this.parent = parent;
+    }
 
     /** Get the parent in the tree. */
-    public TreeItem getParent() {return parent;}
+    public TreeItem getParent()
+    {
+        return parent;
+    }
 
     /** Construct and return the full original name of the entry. */
     public String getFullInName()
@@ -324,8 +353,14 @@ public class TreeItem
     }
 
     /** Set the trim-check status for this. */
-    public void setTrimCheck(boolean state) { isTrimCheck = state; }
+    public void setTrimCheck(boolean state)
+    {
+        isTrimCheck = state;
+    }
 
     /** Has this been checked for trimming? */
-    public boolean isTrimCheck() {return isTrimCheck; }
+    public boolean isTrimCheck()
+    {
+        return isTrimCheck;
+    }
 }
