@@ -55,7 +55,7 @@ public class TreeItem
     public static boolean isMatch(String pattern, String string)
     {
         // Sanity check
-        if (pattern == null || string == null)
+        if ((pattern == null) || (string == null))
         {
             return false;
         }
@@ -283,7 +283,7 @@ public class TreeItem
         else
         {
             String s = parent.getFullOutName();
-            if(s.equals("") || this instanceof Pk)
+            if(s.equals("") || (this instanceof Pk))
                 return getOutName();
             return s + sep + getOutName();
         }

@@ -57,27 +57,27 @@ public class ClassTree implements NameMapper
     {
         Vector vec = new Vector();
         String nameOrig = name;
-        while (name != null && !name.equals(""))
+        while ((name != null) && !name.equals(""))
         {
             int posP = name.indexOf(ClassTree.PACKAGE_LEVEL);
             int posC = name.indexOf(ClassTree.CLASS_LEVEL);
             SimpleName simpleName = null;
-            if (posP == -1 && posC == -1)
+            if ((posP == -1) && (posC == -1))
             {
                 simpleName = new SimpleName(name).setAsClass();
                 name = "";
             }
-            if (posP == -1 && posC != -1)
+            if ((posP == -1) && (posC != -1))
             {
                 simpleName = new SimpleName(name.substring(0, posC)).setAsClass();
                 name = name.substring(posC + 1, name.length());
             }
-            if (posP != -1 && posC == -1)
+            if ((posP != -1) && (posC == -1))
             {
                 simpleName = new SimpleName(name.substring(0, posP)).setAsPackage();
                 name = name.substring(posP + 1, name.length());
             }
-            if (posP != -1 && posC != -1)
+            if ((posP != -1) && (posC != -1))
             {
                 if (posP < posC)
                 {
@@ -272,7 +272,7 @@ public class ClassTree implements NameMapper
         for (Enumeration clEnum = getClEnum(name); clEnum.hasMoreElements(); )
         {
             Cl cl = (Cl)clEnum.nextElement();
-            if ((extendsName == null ||
+            if (((extendsName == null) ||
                  cl.hasAsSuperOrInterface(extendsName)) &&
                 cl.modifiersMatchMask(accessMask, accessSetting))
             {
@@ -354,7 +354,7 @@ public class ClassTree implements NameMapper
              enm.hasMoreElements(); ) {
             Md md = (Md)enm.nextElement();
             Cl thisCl = (Cl)md.getParent();
-            if ((extendsName == null ||
+            if (((extendsName == null) ||
                  thisCl.hasAsSuperOrInterface(extendsName)) &&
                 md.modifiersMatchMask(accessMask, accessSetting))
             {
@@ -389,7 +389,7 @@ public class ClassTree implements NameMapper
              enm.hasMoreElements(); ) {
             Fd fd = (Fd)enm.nextElement();
             Cl thisCl = (Cl)fd.getParent();
-            if ((extendsName == null ||
+            if (((extendsName == null) ||
                  thisCl.hasAsSuperOrInterface(extendsName)) &&
                 fd.modifiersMatchMask(accessMask, accessSetting))
             {
@@ -594,8 +594,8 @@ public class ClassTree implements NameMapper
         final Vector vec = new Vector();
         final String fDesc = descriptor;
         // Wildcard? then return list of all matching methods
-        if (fullName.indexOf('*') != -1 ||
-            descriptor.indexOf('*') != -1)
+        if ((fullName.indexOf('*') != -1) ||
+            (descriptor.indexOf('*') != -1))
         {
             // Old !a/b/* wildcard syntax, for backward compatibility
             // (acts as if every * becomes a ** in new-style match)
@@ -783,7 +783,7 @@ public class ClassTree implements NameMapper
     public String mapClass(String className) throws Exception
     {
         // Check for array -- requires special handling
-        if (className.length() > 0 && className.charAt(0) == '[')
+        if ((className.length() > 0) && (className.charAt(0) == '['))
         {
             StringBuffer newName = new StringBuffer();
             int i = 0;
@@ -1040,7 +1040,7 @@ public class ClassTree implements NameMapper
             @Override
             public void packageAction(Pk pk)
             {
-                if (!pk.isFromScript() && pk.getFullInName().length() > 0)
+                if (!pk.isFromScript() && (pk.getFullInName().length() > 0))
                 {
                     if (pk.getRepackageName() != null) {
                         log.println(".repackage_map " + pk.getFullInName() + " " + pk.getRepackageName());

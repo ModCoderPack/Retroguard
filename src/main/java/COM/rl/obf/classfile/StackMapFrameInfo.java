@@ -66,13 +66,13 @@ public class StackMapFrameInfo
     private void read(DataInput din) throws Exception
     {
         u1frameType = din.readUnsignedByte();
-        if (StackMapFrameInfo.SAME_MIN <= u1frameType &&
-            u1frameType <= StackMapFrameInfo.SAME_MAX)
+        if ((StackMapFrameInfo.SAME_MIN <= u1frameType) &&
+            (u1frameType <= StackMapFrameInfo.SAME_MAX))
         {
             // nothing else to read
         }
-        else if (StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
-                 u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX)
+        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType) &&
+                 (u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
             u2numberOfStackItems = 1;
             readStackItems(din);
@@ -83,8 +83,8 @@ public class StackMapFrameInfo
             u2numberOfStackItems = 1;
             readStackItems(din);
         }
-        else if (StackMapFrameInfo.CHOP_MIN <= u1frameType &&
-                 u1frameType <= StackMapFrameInfo.CHOP_MAX)
+        else if ((StackMapFrameInfo.CHOP_MIN <= u1frameType) &&
+                 (u1frameType <= StackMapFrameInfo.CHOP_MAX))
         {
             u2offsetDelta = din.readUnsignedShort();
         }
@@ -92,8 +92,8 @@ public class StackMapFrameInfo
         {
             u2offsetDelta = din.readUnsignedShort();
         }
-        else if (StackMapFrameInfo.APPEND_MIN <= u1frameType &&
-                 u1frameType <= StackMapFrameInfo.APPEND_MAX)
+        else if ((StackMapFrameInfo.APPEND_MIN <= u1frameType) &&
+                 (u1frameType <= StackMapFrameInfo.APPEND_MAX))
         {
             u2offsetDelta = din.readUnsignedShort();
             u2numberOfLocals = 1 + u1frameType - StackMapFrameInfo.APPEND_MIN;
@@ -126,13 +126,13 @@ public class StackMapFrameInfo
     public void write(DataOutput dout) throws Exception
     {
         dout.writeByte(u1frameType);
-        if (StackMapFrameInfo.SAME_MIN <= u1frameType &&
-            u1frameType <= StackMapFrameInfo.SAME_MAX)
+        if ((StackMapFrameInfo.SAME_MIN <= u1frameType) &&
+            (u1frameType <= StackMapFrameInfo.SAME_MAX))
         {
             // nothing else to write
         }
-        else if (StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
-                 u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX)
+        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType) &&
+                 (u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
             writeStackItems(dout);
         }
@@ -141,8 +141,8 @@ public class StackMapFrameInfo
             dout.writeShort(u2offsetDelta);
             writeStackItems(dout);
         }
-        else if (StackMapFrameInfo.CHOP_MIN <= u1frameType &&
-                 u1frameType <= StackMapFrameInfo.CHOP_MAX)
+        else if ((StackMapFrameInfo.CHOP_MIN <= u1frameType) &&
+                 (u1frameType <= StackMapFrameInfo.CHOP_MAX))
         {
             dout.writeShort(u2offsetDelta);
         }
@@ -150,8 +150,8 @@ public class StackMapFrameInfo
         {
             dout.writeShort(u2offsetDelta);
         }
-        else if (StackMapFrameInfo.APPEND_MIN <= u1frameType &&
-                 u1frameType <= StackMapFrameInfo.APPEND_MAX)
+        else if ((StackMapFrameInfo.APPEND_MIN <= u1frameType) &&
+                 (u1frameType <= StackMapFrameInfo.APPEND_MAX))
         {
             dout.writeShort(u2offsetDelta);
             writeLocals(dout);

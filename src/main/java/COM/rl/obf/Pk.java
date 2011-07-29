@@ -62,11 +62,11 @@ public class Pk extends PkCl
     public Pk(TreeItem parent, String name)
     {
         super(parent, name);
-        if (parent == null && !name.equals(""))
+        if ((parent == null) && !name.equals(""))
         {
             System.err.println("# Internal error: only the default package has no parent");
         }
-        else if (parent != null && name.equals(""))
+        else if ((parent != null) && name.equals(""))
         {
             System.err.println("# Internal error: the default package cannot have a parent");
         }

@@ -74,7 +74,7 @@ public class RetroGuard
             }
 
             // Get the arguments, or set their default values
-            if (args.length < 0 || args.length > 4)
+            if ((args.length < 0) || (args.length > 4))
             {
                 throw new IllegalArgumentException("Invalid number of arguments.");
             }

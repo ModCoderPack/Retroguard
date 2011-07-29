@@ -245,8 +245,8 @@ public class CodeAttrInfo extends AttrInfo
                     ldcIndex = -1;
                 }
             }
-            if ((opcodePrev == 0x12 || opcodePrev == 0x13) // ldc or ldc_w
-                && ldcIndex != -1) // and is a StringCpInfo
+            if (((opcodePrev == 0x12) || (opcodePrev == 0x13)) // ldc or ldc_w
+                && (ldcIndex != -1)) // and is a StringCpInfo
             {
                 boolean isClassForName = false;
                 if ((opcode == 0xB8) && (i+2 < code.length)) // invokestatic

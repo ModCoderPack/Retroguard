@@ -578,9 +578,9 @@ public class ClassFile implements ClassConstants
             for (Enumeration enm = pool.elements(); enm.hasMoreElements(); )
             {
                 Object o = enm.nextElement();
-                if (o instanceof NameAndTypeCpInfo ||
-                    o instanceof ClassCpInfo ||
-                    o instanceof StringCpInfo)
+                if ((o instanceof NameAndTypeCpInfo) ||
+                    (o instanceof ClassCpInfo) ||
+                    (o instanceof StringCpInfo))
                 {
                     ((CpInfo)o).markUtf8Refs(pool);
                 }
@@ -621,7 +621,7 @@ public class ClassFile implements ClassConstants
     {
         // Merge additional attributes with required list
         String[] keepAttrs = ClassConstants.REQUIRED_ATTRS;
-        if (extraAttrs != null && extraAttrs.length > 0)
+        if ((extraAttrs != null) && (extraAttrs.length > 0))
         {
             String[] tmp = new String[keepAttrs.length + extraAttrs.length];
             System.arraycopy(keepAttrs, 0, tmp, 0, keepAttrs.length);
@@ -985,7 +985,7 @@ public class ClassFile implements ClassConstants
     // Is this String a valid Java identifier?
     private static boolean isJavaIdentifier(String s) // throws Exception
     {
-        if (s.length() == 0 || !Character.isJavaIdentifierStart(s.charAt(0)))
+        if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
             return false;
         for (int i = 1; i < s.length(); i++)
             if (!Character.isJavaIdentifierPart(s.charAt(i)))

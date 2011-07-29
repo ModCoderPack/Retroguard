@@ -121,7 +121,7 @@ public class NameProvider
             while(line != null)
             {
                 line = reader.readLine();
-                if(line == null || line.trim().startsWith( "#" ))
+                if((line == null) || line.trim().startsWith( "#" ))
                     continue;
 
                 String[] defines = line.split( "=" );
@@ -247,7 +247,7 @@ public class NameProvider
             newArgs[1] = reoboutput;
         }
 
-        if(newArgs[0] == null || newArgs[1] == null || newArgs[2] == null || newArgs[3] == null)
+        if((newArgs[0] == null) || (newArgs[1] == null) || (newArgs[2] == null) || (newArgs[3] == null))
             return null;
 
         NameProvider.initLogfiles();
@@ -376,7 +376,7 @@ public class NameProvider
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
-            if(lineParts.length != 3 || !lineParts[0].startsWith( "PK:" ))
+            if((lineParts.length != 3) || !lineParts[0].startsWith( "PK:" ))
                 continue;
 
             PackageEntry entry = new PackageEntry();
@@ -405,7 +405,7 @@ public class NameProvider
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
-            if(lineParts.length != 3 || !lineParts[0].startsWith( "CL:" ))
+            if((lineParts.length != 3) || !lineParts[0].startsWith( "CL:" ))
                 continue;
 
             ClassEntry entry = new ClassEntry();
@@ -428,7 +428,7 @@ public class NameProvider
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
-            if(lineParts.length < 4 || !lineParts[0].startsWith( "MD:" ))
+            if((lineParts.length < 4) || !lineParts[0].startsWith( "MD:" ))
                 continue;
 
             MethodEntry entry = new MethodEntry();
@@ -454,7 +454,7 @@ public class NameProvider
         for(String line : lines)
         {
             String[] lineParts = line.split( " " );
-            if(lineParts.length != 3 || !lineParts[0].startsWith( "FD:" ))
+            if((lineParts.length != 3) || !lineParts[0].startsWith( "FD:" ))
                 continue;
 
             FieldEntry entry = new FieldEntry();
@@ -627,7 +627,7 @@ public class NameProvider
                 {
                     // check if parent got remapped
                     TreeItem parent = pk.getParent();
-                    if(parent != null && parent instanceof Pk && parent.getParent() != null)
+                    if((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
                         packageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                         pk.setRepackageName(packageName);
@@ -648,7 +648,7 @@ public class NameProvider
                 {
                     // check if parent got remapped
                     TreeItem parent = pk.getParent();
-                    if(parent != null && parent instanceof Pk && parent.getParent() != null)
+                    if((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
                         packageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                         pk.setRepackageName(packageName);
@@ -724,7 +724,7 @@ public class NameProvider
             }
             else
             {
-                if(!NameProvider.isInProtectedPackage(cl.getFullInName()) && NameProvider.uniqueStart > 0)
+                if(!NameProvider.isInProtectedPackage(cl.getFullInName()) && (NameProvider.uniqueStart > 0))
                 {
                     className = "C_" + (NameProvider.uniqueStart++) + "_" + className;
 
@@ -791,7 +791,7 @@ public class NameProvider
             }
             else
             {
-                if(!NameProvider.isInProtectedPackage(md.getFullInName()) && NameProvider.uniqueStart > 0)
+                if(!NameProvider.isInProtectedPackage(md.getFullInName()) && (NameProvider.uniqueStart > 0))
                     methodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
             }
 
@@ -1047,7 +1047,7 @@ public class NameProvider
             }
             else
             {
-                if(!NameProvider.isInProtectedPackage(fd.getFullInName()) && NameProvider.uniqueStart > 0)
+                if(!NameProvider.isInProtectedPackage(fd.getFullInName()) && (NameProvider.uniqueStart > 0))
                     fieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fieldName;
             }
         }

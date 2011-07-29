@@ -171,7 +171,7 @@ public class RgsEnum
     {
         int accessMask = 0;
         int accessSetting = 0;
-        while (accessString != null && accessString.length() >= 5) // ';enum'
+        while ((accessString != null) && (accessString.length() >= 5)) // ';enum'
         {
             boolean invert = false;
             if (accessString.charAt(0) != ';') throw new Exception();
@@ -193,14 +193,14 @@ public class RgsEnum
             {
                 accessString = accessString.substring(endIndex);
             }
-            if (((entryType == RgsEntry.TYPE_CLASS ||
-                  entryType == RgsEntry.TYPE_NOT_CLASS) &&
+            if ((((entryType == RgsEntry.TYPE_CLASS) ||
+                  (entryType == RgsEntry.TYPE_NOT_CLASS)) &&
                  !Tools.isInArray(flagString, RgsEnum.CLASS_ACCESS)) ||
-                ((entryType == RgsEntry.TYPE_METHOD ||
-                  entryType == RgsEntry.TYPE_NOT_METHOD) &&
+                (((entryType == RgsEntry.TYPE_METHOD) ||
+                  (entryType == RgsEntry.TYPE_NOT_METHOD)) &&
                  !Tools.isInArray(flagString, RgsEnum.METHOD_ACCESS)) ||
-                ((entryType == RgsEntry.TYPE_FIELD ||
-                  entryType == RgsEntry.TYPE_NOT_FIELD) &&
+                (((entryType == RgsEntry.TYPE_FIELD) ||
+                  (entryType == RgsEntry.TYPE_NOT_FIELD)) &&
                  !Tools.isInArray(flagString, RgsEnum.FIELD_ACCESS)))
             {
                 throw new Exception();
@@ -532,9 +532,9 @@ public class RgsEnum
                             break;
                         }
                     }
-                    else if (directive == RgsEntry.TYPE_CLASS ||
-                             directive == RgsEntry.TYPE_NOTRIM_CLASS ||
-                             directive == RgsEntry.TYPE_NOT_CLASS)
+                    else if ((directive == RgsEntry.TYPE_CLASS) ||
+                             (directive == RgsEntry.TYPE_NOTRIM_CLASS) ||
+                             (directive == RgsEntry.TYPE_NOT_CLASS))
                     {
                         if (tk.sval.equals(RgsEnum.OPTION_PUBLIC))
                         {
@@ -603,12 +603,12 @@ public class RgsEnum
                             throw new Exception();
                         }
                     }
-                    else if (directive == RgsEntry.TYPE_METHOD ||
-                             directive == RgsEntry.TYPE_NOTRIM_METHOD ||
-                             directive == RgsEntry.TYPE_NOT_METHOD ||
-                             directive == RgsEntry.TYPE_FIELD ||
-                             directive == RgsEntry.TYPE_NOTRIM_FIELD ||
-                             directive == RgsEntry.TYPE_NOT_FIELD)
+                    else if ((directive == RgsEntry.TYPE_METHOD) ||
+                             (directive == RgsEntry.TYPE_NOTRIM_METHOD) ||
+                             (directive == RgsEntry.TYPE_NOT_METHOD) ||
+                             (directive == RgsEntry.TYPE_FIELD) ||
+                             (directive == RgsEntry.TYPE_NOTRIM_FIELD) ||
+                             (directive == RgsEntry.TYPE_NOT_FIELD))
                     {
                         if (tk.sval.equals(RgsEnum.OPTION_AND_CLASS))
                         {
@@ -674,14 +674,14 @@ public class RgsEnum
     // Throw if invalid
     private void checkMethodDescriptor(String s) throws Exception
     {
-        if (s.length() == 0 || s.charAt(0) != '(')
+        if ((s.length() == 0) || (s.charAt(0) != '('))
         {
             throw new Exception();
         }
         s = s.substring(1);
 
         // Check each type
-        while (s.length() > 0 && s.charAt(0) != ')')
+        while ((s.length() > 0) && (s.charAt(0) != ')'))
         {
             s = checkFirstJavaType(s);
         }
@@ -793,7 +793,7 @@ public class RgsEnum
         {
             if (!s.equals("*"))
             {
-                if (s.length() < 3 || s.charAt(s.length() - 2) != '/')
+                if ((s.length() < 3) || (s.charAt(s.length() - 2) != '/'))
                 {
                     throw new Exception();
                 }
@@ -820,7 +820,7 @@ public class RgsEnum
     // Throw if invalid
     private void checkJavaIdentifier(String s) throws Exception
     {
-        if (s.length() == 0 || !Character.isJavaIdentifierStart(s.charAt(0)))
+        if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
         {
             throw new Exception();
         }

@@ -57,7 +57,7 @@ public class PatternList
             int oldpos = pos;
             pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, oldpos+1);
             if (pos == -1) pos = pattern.length();
-            if (scFirst >= 0 && oldpos+1 <= scFirst && scFirst+2 <= pos)
+            if ((scFirst >= 0) && (oldpos+1 <= scFirst) && (scFirst+2 <= pos))
             {
                 sc = length();
                 pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast+2);
@@ -94,7 +94,7 @@ public class PatternList
     /** Return the i'th through j'th segments, joined by package separators. */
     public String getSub(int i, int j)
     {
-        if (i < 0 || i > j || j >= length()) throw new IllegalArgumentException();
+        if ((i < 0) || (i > j) || (j >= length())) throw new IllegalArgumentException();
         StringBuffer sb = new StringBuffer();
         for (int k = i; k <= j; k++)
         {

@@ -95,7 +95,7 @@ public class GuardDB implements ClassConstants
             // Get the next entry from the input Jar
             ZipEntry inEntry = (ZipEntry)entries.nextElement();
             String name = inEntry.getName();
-            if (name.length() > GuardDB.CLASS_EXT.length() &&
+            if ((name.length() > GuardDB.CLASS_EXT.length()) &&
                 name.substring(name.length() - GuardDB.CLASS_EXT.length(), name.length()).equals(GuardDB.CLASS_EXT))
             {
                 // Create a full internal representation of the class file
@@ -138,7 +138,7 @@ public class GuardDB implements ClassConstants
     {
 
         // Build database if not already done, or if a mapping has already been generated
-        if (classTree == null || hasMap)
+        if ((classTree == null) || hasMap)
         {
             hasMap = false;
             buildClassTree(log);
@@ -506,7 +506,7 @@ public class GuardDB implements ClassConstants
                         new BufferedInputStream(
                             inJar.getInputStream(inEntry)));
                     String inName = inEntry.getName();
-                    if (inName.length() > GuardDB.CLASS_EXT.length() &&
+                    if ((inName.length() > GuardDB.CLASS_EXT.length()) &&
                         inName.substring(inName.length() - GuardDB.CLASS_EXT.length(), inName.length()).equals(GuardDB.CLASS_EXT))
                     {
                         // Write obfuscated class to the output Jar
@@ -561,8 +561,8 @@ public class GuardDB implements ClassConstants
                         }
                     }
                     else if (GuardDB.STREAM_NAME_MANIFEST.equals(inName.toUpperCase()) ||
-                             (inName.length() > (GuardDB.SIGNATURE_PREFIX.length() + 1 + GuardDB.SIGNATURE_EXT.length()) &&
-                              inName.indexOf(GuardDB.SIGNATURE_PREFIX) != -1 &&
+                             ((inName.length() > (GuardDB.SIGNATURE_PREFIX.length() + 1 + GuardDB.SIGNATURE_EXT.length())) &&
+                              (inName.indexOf(GuardDB.SIGNATURE_PREFIX) != -1) &&
                               inName.substring(inName.length() - GuardDB.SIGNATURE_EXT.length(), inName.length()).equals(GuardDB.SIGNATURE_EXT)))
                     {
                         // Don't pass through the manifest or signature files
@@ -682,7 +682,7 @@ public class GuardDB implements ClassConstants
              enm.hasMoreElements(); )
         {
             Section section = (Section)enm.nextElement();
-            if (section != null && section != version)
+            if ((section != null) && (section != version))
             {
                 Header name = section.findTag(GuardDB.MANIFEST_NAME_TAG);
                 if (name == null)
@@ -692,8 +692,8 @@ public class GuardDB implements ClassConstants
                 else
                 {
                     String value = name.getValue();
-                    if (value.length() > 0 &&
-                        value.charAt(value.length() - 1) == '/')
+                    if ((value.length() > 0) &&
+                        (value.charAt(value.length() - 1) == '/'))
                     {
                         newManifest.add(section);
                     }
@@ -720,14 +720,14 @@ public class GuardDB implements ClassConstants
             {
                 Header header = (Header)enm.nextElement();
                 if (!header.getTag().equals(GuardDB.MANIFEST_NAME_TAG) &&
-                    header.getTag().indexOf("Digest") == -1)
+                    (header.getTag().indexOf("Digest") == -1))
                 {
                     newSection.add(header);
                 }
             }
 
             // Create fresh digest entries in the new section
-            if (digests != null && digests.length > 0)
+            if ((digests != null) && (digests.length > 0))
             {
                 // Digest-Algorithms header
                 StringBuffer sb = new StringBuffer();
@@ -827,7 +827,7 @@ class TIStack extends Stack
     // Push item onto trim-preserve stack
     private void pushItem(TreeItem ti)
     {
-        if (ti != null && !ti.isTrimCheck())
+        if ((ti != null) && !ti.isTrimCheck())
         {
             ti.setTrimCheck(true);
             super.push(ti);

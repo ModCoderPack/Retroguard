@@ -59,14 +59,14 @@ public class SectionList
             while ((line = reader.readLine()) != null)
             {
                 // If at end of section, close section
-                if (section != null && line.indexOf(':') == -1)
+                if ((section != null) && (line.indexOf(':') == -1))
                 {
                     add(section);
                     section = null;
                 }
 
                 // If at start of section, skip non-header lines
-                if (section == null && line.indexOf(':') == -1)
+                if ((section == null) && (line.indexOf(':') == -1))
                 {
                     continue;
                 }

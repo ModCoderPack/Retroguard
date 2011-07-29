@@ -66,7 +66,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.superInterfaces = superInterfaces;
         this.isInnerClass = isInnerClass;
         this.access = access;
-        if (parent == null || "".equals(name))
+        if ((parent == null) || "".equals(name))
         {
             System.err.println("# Internal error: class must have parent and name");
         }
@@ -76,7 +76,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Do not obfuscate anonymous inner classes
-        if (isInnerClass && name != null && name.length() > 0
+        if (isInnerClass && (name != null) && (name.length() > 0)
             && Character.isDigit(name.charAt(0)))
         {
             setOutName(getInName());
@@ -102,7 +102,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /** Do we have non-suppressed warnings? */
     public boolean hasWarnings()
     {
-        return (!isNoWarn && warningList != null && warningList.size() > 0);
+        return (!isNoWarn && (warningList != null) && (warningList.size() > 0));
     }
 
     /** Log this class's warnings. */
@@ -267,7 +267,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         try
         {
             // Special case: is this java/lang/Object?
-            if (clExt == null ||
+            if ((clExt == null) ||
                 clExt.getName().equals("java.lang.Object")) return false;
             // Check our parents
             String queryNameExt = ClassFile.translate(queryName);
@@ -521,7 +521,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 for (int i = 0; i < superInterfaces.length; i++)
                 {
                     Cl interfaceItem = classTree.getCl(superInterfaces[i]);
-                    if (interfaceItem != null && interfaceItem != ignoreCl)
+                    if ((interfaceItem != null) && (interfaceItem != ignoreCl))
                     {
                         interfaceItem.scanNameSpaceExcept(this, methods, fields);
                     }
@@ -657,7 +657,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             // First step up to super classes, resolving them, since we depend on them
             Cl superCl = classTree.getCl(superClass);
-            if (superCl != null && superCl != ignoreCl)
+            if ((superCl != null) && (superCl != ignoreCl))
             {
                 superCl.resolveNameSpaceExcept(this);
             }
@@ -666,7 +666,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 for (int i = 0; i < superInterfaces.length; i++)
                 {
                     Cl interfaceItem = classTree.getCl(superInterfaces[i]);
-                    if (interfaceItem != null && interfaceItem != ignoreCl)
+                    if ((interfaceItem != null) && (interfaceItem != ignoreCl))
                     {
                         interfaceItem.resolveNameSpaceExcept(this);
                     }
@@ -819,7 +819,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Md md = getMethod(name, descriptor);
-        if (md != null && !Modifier.isPrivate(md.access))
+        if ((md != null) && !Modifier.isPrivate(md.access))
         {
             return md.getOutName();
         }
@@ -845,7 +845,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Md md = getMethod(name, descriptor);
-        if (md != null && !Modifier.isPrivate(md.access))
+        if ((md != null) && !Modifier.isPrivate(md.access))
         {
             return md.getObfName();
         }
@@ -871,7 +871,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Fd fd = getField(name);
-        if (fd != null && !Modifier.isPrivate(fd.access))
+        if ((fd != null) && !Modifier.isPrivate(fd.access))
         {
             return fd.getOutName();
         }
@@ -897,7 +897,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Fd fd = getField(name);
-        if (fd != null && !Modifier.isPrivate(fd.access))
+        if ((fd != null) && !Modifier.isPrivate(fd.access))
         {
             return fd.getObfName();
         }
@@ -913,7 +913,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     {
         // Check ourself for an explicit 'do not obfuscate'
         Md md = getMethod(name, descriptor);
-        if (md != null && md.isFixed())
+        if ((md != null) && md.isFixed())
         {
             return md.getOutName();
         }
@@ -970,7 +970,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     {
         // Check ourself for an explicit 'do not obfuscate'
         Fd fd = getField(name);
-        if (fd != null && fd.isFixed())
+        if ((fd != null) && fd.isFixed())
         {
             return fd.getOutName();
         }
