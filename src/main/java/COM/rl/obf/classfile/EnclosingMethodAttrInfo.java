@@ -50,7 +50,7 @@ public class EnclosingMethodAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_EnclosingMethod;
+        return ClassConstants.ATTR_EnclosingMethod;
     }
 
     /** Return the class index into the constant pool. */

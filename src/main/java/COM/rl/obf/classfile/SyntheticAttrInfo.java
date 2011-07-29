@@ -48,7 +48,7 @@ public class SyntheticAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_Synthetic;
+        return ClassConstants.ATTR_Synthetic;
     }
 
     /** Read the data following the header. */

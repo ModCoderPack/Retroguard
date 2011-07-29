@@ -34,8 +34,8 @@ public class Version
     private static final String RETROGUARD_REL_JAR_COMMENT =
         "Obfuscation by RetroGuard MCP";
     private static final String RETROGUARD_FULL_VERSION_COMMENT =
-        "RetroGuard MCP v" + REL_VERSION +"\n" +
-        "based on RetroGuard v" + ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
+        "RetroGuard MCP v" + Version.REL_VERSION +"\n" +
+        "based on RetroGuard v" + Version.ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
 
     public static final boolean isLite = true;
 
@@ -44,24 +44,24 @@ public class Version
     /** Return the current major.minor.patch version string. */
     public static String getVersion()
     {
-        return REL_VERSION;
+        return Version.REL_VERSION;
     }
 
     /** Return a major.minor.patch versioned comment string. */
     public static String getVersionComment()
     {
-        return RETROGUARD_FULL_VERSION_COMMENT;
+        return Version.RETROGUARD_FULL_VERSION_COMMENT;
     }
 
     /** Return the current class ID string. */
     public static String getClassIdString()
     {
-        return RETROGUARD_CLASS_ID;
+        return Version.RETROGUARD_CLASS_ID;
     }
 
     /** Return the default Jar comment string. */
     public static String getJarComment()
     {
-        return RETROGUARD_REL_JAR_COMMENT;
+        return Version.RETROGUARD_REL_JAR_COMMENT;
     }
 }

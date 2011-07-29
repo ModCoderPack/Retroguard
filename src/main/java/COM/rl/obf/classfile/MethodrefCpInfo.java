@@ -41,6 +41,6 @@ public class MethodrefCpInfo extends RefCpInfo
     // Instance Methods ------------------------------------------------------
     protected MethodrefCpInfo()
     {
-        super(CONSTANT_Methodref);
+        super(ClassConstants.CONSTANT_Methodref);
     }
 }

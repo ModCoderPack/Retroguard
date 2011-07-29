@@ -69,13 +69,13 @@ public class RetroGuardImpl
                                  String logFilename) throws Exception
     {
         File inFile = new File(inFilename == null ?
-                               DEFAULT_IN_FILE_NAME : inFilename);
+                               RetroGuardImpl.DEFAULT_IN_FILE_NAME : inFilename);
         File outFile = new File(outFilename == null ?
-                                DEFAULT_OUT_FILE_NAME : outFilename);
+                                RetroGuardImpl.DEFAULT_OUT_FILE_NAME : outFilename);
         File rgsFile = new File(rgsFilename == null ?
-                                DEFAULT_RGS_FILE_NAME : rgsFilename);
+                                RetroGuardImpl.DEFAULT_RGS_FILE_NAME : rgsFilename);
         File logFile = new File(logFilename == null ?
-                                DEFAULT_LOG_FILE_NAME : logFilename);
+                                RetroGuardImpl.DEFAULT_LOG_FILE_NAME : logFilename);
 
         // Input JAR file must exist and be readable
         if (!inFile.exists())
@@ -173,14 +173,14 @@ public class RetroGuardImpl
         {
             // Log exceptions before exiting
             log.println();
-            log.println(LOG_ERROR);
+            log.println(RetroGuardImpl.LOG_ERROR);
             if (e instanceof java.util.zip.ZipException) {
-                log.println(LOG_ZIP_ERROR);
+                log.println(RetroGuardImpl.LOG_ZIP_ERROR);
             }
             log.println("# " + e.toString());
             e.printStackTrace(log);
             log.println();
-            System.err.println(SEE_LOG_FILE);
+            System.err.println(RetroGuardImpl.SEE_LOG_FILE);
             throw e;
         }
         finally
@@ -199,13 +199,13 @@ public class RetroGuardImpl
         log.println();
         log.println("#-DO-NOT-EDIT-BELOW-THIS-LINE------------------DO-NOT-EDIT-BELOW-THIS-LINE--");
         log.println("#");
-        log.println(LOG_TITLE_PRE_VERSION + Version.getVersion() + LOG_TITLE_POST_VERSION);
+        log.println(RetroGuardImpl.LOG_TITLE_PRE_VERSION + Version.getVersion() + RetroGuardImpl.LOG_TITLE_POST_VERSION);
         log.println("#");
-        log.println(LOG_CREATED + new Date().toString());
+        log.println(RetroGuardImpl.LOG_CREATED + new Date().toString());
         log.println("#");
-        log.println(LOG_INPUT_FILE + inFile.getName());
-        log.println(LOG_OUTPUT_FILE + outFile.getName());
-        log.println(LOG_SCRIPT_FILE + (rgsFile.exists() ? rgsFile.getName() : LOG_NO_SCRIPT));
+        log.println(RetroGuardImpl.LOG_INPUT_FILE + inFile.getName());
+        log.println(RetroGuardImpl.LOG_OUTPUT_FILE + outFile.getName());
+        log.println(RetroGuardImpl.LOG_SCRIPT_FILE + (rgsFile.exists() ? rgsFile.getName() : RetroGuardImpl.LOG_NO_SCRIPT));
         log.println("#");
     }
 }

@@ -49,7 +49,7 @@ public class SignatureAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_Signature;
+        return ClassConstants.ATTR_Signature;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */

@@ -66,40 +66,40 @@ public class StackMapFrameInfo
     private void read(DataInput din) throws Exception
     {
         u1frameType = din.readUnsignedByte();
-        if (SAME_MIN <= u1frameType &&
-            u1frameType <= SAME_MAX)
+        if (StackMapFrameInfo.SAME_MIN <= u1frameType &&
+            u1frameType <= StackMapFrameInfo.SAME_MAX)
         {
             // nothing else to read
         }
-        else if (SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
-                 u1frameType <= SAME_LOCALS_1_STACK_ITEM_MAX)
+        else if (StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
+                 u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX)
         {
             u2numberOfStackItems = 1;
             readStackItems(din);
         }
-        else if (u1frameType == SAME_LOCALS_1_STACK_ITEM_EXTENDED)
+        else if (u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
         {
             u2offsetDelta = din.readUnsignedShort();
             u2numberOfStackItems = 1;
             readStackItems(din);
         }
-        else if (CHOP_MIN <= u1frameType &&
-                 u1frameType <= CHOP_MAX)
+        else if (StackMapFrameInfo.CHOP_MIN <= u1frameType &&
+                 u1frameType <= StackMapFrameInfo.CHOP_MAX)
         {
             u2offsetDelta = din.readUnsignedShort();
         }
-        else if (u1frameType == SAME_FRAME_EXTENDED)
+        else if (u1frameType == StackMapFrameInfo.SAME_FRAME_EXTENDED)
         {
             u2offsetDelta = din.readUnsignedShort();
         }
-        else if (APPEND_MIN <= u1frameType &&
-                 u1frameType <= APPEND_MAX)
+        else if (StackMapFrameInfo.APPEND_MIN <= u1frameType &&
+                 u1frameType <= StackMapFrameInfo.APPEND_MAX)
         {
             u2offsetDelta = din.readUnsignedShort();
-            u2numberOfLocals = 1 + u1frameType - APPEND_MIN;
+            u2numberOfLocals = 1 + u1frameType - StackMapFrameInfo.APPEND_MIN;
             readLocals(din);
         }
-        else if (u1frameType == FULL_FRAME)
+        else if (u1frameType == StackMapFrameInfo.FULL_FRAME)
         {
             u2offsetDelta = din.readUnsignedShort();
             u2numberOfLocals = din.readUnsignedShort();
@@ -126,37 +126,37 @@ public class StackMapFrameInfo
     public void write(DataOutput dout) throws Exception
     {
         dout.writeByte(u1frameType);
-        if (SAME_MIN <= u1frameType &&
-            u1frameType <= SAME_MAX)
+        if (StackMapFrameInfo.SAME_MIN <= u1frameType &&
+            u1frameType <= StackMapFrameInfo.SAME_MAX)
         {
             // nothing else to write
         }
-        else if (SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
-                 u1frameType <= SAME_LOCALS_1_STACK_ITEM_MAX)
+        else if (StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType &&
+                 u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX)
         {
             writeStackItems(dout);
         }
-        else if (u1frameType == SAME_LOCALS_1_STACK_ITEM_EXTENDED)
+        else if (u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
         {
             dout.writeShort(u2offsetDelta);
             writeStackItems(dout);
         }
-        else if (CHOP_MIN <= u1frameType &&
-                 u1frameType <= CHOP_MAX)
+        else if (StackMapFrameInfo.CHOP_MIN <= u1frameType &&
+                 u1frameType <= StackMapFrameInfo.CHOP_MAX)
         {
             dout.writeShort(u2offsetDelta);
         }
-        else if (u1frameType == SAME_FRAME_EXTENDED)
+        else if (u1frameType == StackMapFrameInfo.SAME_FRAME_EXTENDED)
         {
             dout.writeShort(u2offsetDelta);
         }
-        else if (APPEND_MIN <= u1frameType &&
-                 u1frameType <= APPEND_MAX)
+        else if (StackMapFrameInfo.APPEND_MIN <= u1frameType &&
+                 u1frameType <= StackMapFrameInfo.APPEND_MAX)
         {
             dout.writeShort(u2offsetDelta);
             writeLocals(dout);
         }
-        else if (u1frameType == FULL_FRAME)
+        else if (u1frameType == StackMapFrameInfo.FULL_FRAME)
         {
             dout.writeShort(u2offsetDelta);
             dout.writeShort(u2numberOfLocals);

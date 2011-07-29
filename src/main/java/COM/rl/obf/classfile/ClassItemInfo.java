@@ -139,7 +139,7 @@ abstract public class ClassItemInfo implements ClassConstants
         for (int i = 0; i < u2attributesCount; i++)
         {
             attributes[i] = AttrInfo.create(din, cf);
-            if (attributes[i].getAttrName().equals(ATTR_Synthetic))
+            if (attributes[i].getAttrName().equals(ClassConstants.ATTR_Synthetic))
             {
                 isSynthetic = true;
             }

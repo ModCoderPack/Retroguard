@@ -59,8 +59,8 @@ public class ClassTree implements NameMapper
         String nameOrig = name;
         while (name != null && !name.equals(""))
         {
-            int posP = name.indexOf(PACKAGE_LEVEL);
-            int posC = name.indexOf(CLASS_LEVEL);
+            int posP = name.indexOf(ClassTree.PACKAGE_LEVEL);
+            int posC = name.indexOf(ClassTree.CLASS_LEVEL);
             SimpleName simpleName = null;
             if (posP == -1 && posC == -1)
             {
@@ -113,7 +113,7 @@ public class ClassTree implements NameMapper
         {
             TreeItem ti = root;
             StringBuffer sb = new StringBuffer();
-            for (Enumeration nameEnum = getNameEnum(inName); nameEnum.hasMoreElements(); )
+            for (Enumeration nameEnum = ClassTree.getNameEnum(inName); nameEnum.hasMoreElements(); )
             {
                 SimpleName simpleName = (SimpleName)nameEnum.nextElement();
                 String name = simpleName.getName();
@@ -140,7 +140,7 @@ public class ClassTree implements NameMapper
                     {
                         sb.append(name);
                     }
-                    sb.append(PACKAGE_LEVEL);
+                    sb.append(ClassTree.PACKAGE_LEVEL);
                 }
                 else if (simpleName.isAsClass())
                 {
@@ -165,7 +165,7 @@ public class ClassTree implements NameMapper
     {
         // Add the fully qualified class name
         TreeItem ti = root;
-        for (Enumeration nameEnum = getNameEnum(cf.getName()); nameEnum.hasMoreElements(); )
+        for (Enumeration nameEnum = ClassTree.getNameEnum(cf.getName()); nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -239,9 +239,9 @@ public class ClassTree implements NameMapper
         if (hasWarnings.size() > 0)
         {
             log.println("#");
-            log.println(LOG_DANGER_HEADER1);
-            log.println(LOG_DANGER_HEADER2);
-            log.println(LOG_DANGER_HEADER3);
+            log.println(ClassTree.LOG_DANGER_HEADER1);
+            log.println(ClassTree.LOG_DANGER_HEADER2);
+            log.println(ClassTree.LOG_DANGER_HEADER3);
             final PrintWriter flog = log;
             walkTree(new TreeAction() {
                 @Override
@@ -701,7 +701,7 @@ public class ClassTree implements NameMapper
     public Cl getCl(String fullName) throws Exception
     {
         TreeItem ti = root;
-        for (Enumeration nameEnum = getNameEnum(fullName); nameEnum.hasMoreElements(); )
+        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -739,7 +739,7 @@ public class ClassTree implements NameMapper
     public Pk getPk(String fullName) throws Exception
     {
         TreeItem ti = root;
-        for (Enumeration nameEnum = getNameEnum(fullName); nameEnum.hasMoreElements(); )
+        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -763,7 +763,7 @@ public class ClassTree implements NameMapper
     public Md getMd(String fullName, String descriptor) throws Exception
     {
         // Split into class and method names
-        int pos = fullName.lastIndexOf(METHOD_FIELD_LEVEL);
+        int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
         Cl cl = getCl(fullName.substring(0, pos));
         return cl.getMethod(fullName.substring(pos + 1), descriptor);
     }
@@ -772,7 +772,7 @@ public class ClassTree implements NameMapper
     public Fd getFd(String fullName) throws Exception
     {
         // Split into class and field names
-        int pos = fullName.lastIndexOf(METHOD_FIELD_LEVEL);
+        int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
         Cl cl = getCl(fullName.substring(0, pos));
         return cl.getField(fullName.substring(pos + 1));
     }
@@ -973,7 +973,7 @@ public class ClassTree implements NameMapper
     public void dump(final PrintWriter log) throws Exception
     {
         log.println("#");
-        log.println(LOG_PRE_UNOBFUSCATED);
+        log.println(ClassTree.LOG_PRE_UNOBFUSCATED);
         log.println("#");
         walkTree(new TreeAction()
         {
@@ -1009,7 +1009,7 @@ public class ClassTree implements NameMapper
         });
         log.println("#");
         log.println("#");
-        log.println(LOG_PRE_OBFUSCATED);
+        log.println(ClassTree.LOG_PRE_OBFUSCATED);
         log.println("#");
         walkTree(new TreeAction()
         {

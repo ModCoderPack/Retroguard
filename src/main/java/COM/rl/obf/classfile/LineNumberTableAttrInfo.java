@@ -50,7 +50,7 @@ public class LineNumberTableAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_LineNumberTable;
+        return ClassConstants.ATTR_LineNumberTable;
     }
 
     /** Read the data following the header. */

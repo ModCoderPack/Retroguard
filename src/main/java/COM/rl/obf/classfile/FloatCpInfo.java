@@ -42,7 +42,7 @@ public class FloatCpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected FloatCpInfo()
     {
-        super(CONSTANT_Float);
+        super(ClassConstants.CONSTANT_Float);
     }
 
     /** Read the 'info' data following the u1tag byte. */

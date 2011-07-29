@@ -49,7 +49,7 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_AnnotationDefault;
+        return ClassConstants.ATTR_AnnotationDefault;
     }
 
     /** Return the default value. */

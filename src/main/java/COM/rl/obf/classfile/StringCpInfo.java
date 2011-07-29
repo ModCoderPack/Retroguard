@@ -42,7 +42,7 @@ public class StringCpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected StringCpInfo()
     {
-        super(CONSTANT_String);
+        super(ClassConstants.CONSTANT_String);
     }
 
     /** Return the string index. */

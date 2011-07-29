@@ -50,7 +50,7 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_StackMapTable;
+        return ClassConstants.ATTR_StackMapTable;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */

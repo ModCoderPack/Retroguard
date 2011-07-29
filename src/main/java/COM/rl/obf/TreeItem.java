@@ -147,7 +147,7 @@ public class TreeItem
                 // check each string identifier against the non-** pattern
                 for (int i = 0; i < pl.length(); i++)
                 {
-                    if (!isMatch(pl.getSub(i), sl.getSub(i))) return false;
+                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i))) return false;
                 }
             }
             else
@@ -156,18 +156,18 @@ public class TreeItem
                 // check the head identifiers (pre-** segment)
                 for (int i = 0; i < pl.scIndex(); i++)
                 {
-                    if (!isMatch(pl.getSub(i), sl.getSub(i))) return false;
+                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i))) return false;
                 }
                 // check the tail identifiers (post-** segment)
                 for (int i = pl.scIndex() + 1; i < pl.length(); i++)
                 {
                     int j = i + sl.length() - pl.length();
-                    if (!isMatch(pl.getSub(i), sl.getSub(j))) return false;
+                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(j))) return false;
                 }
                 // check the merged central identifiers against the ** segment
                 int j = pl.scIndex() + sl.length() - pl.length();
-                if (!isMatch(pl.getSub(pl.scIndex()),
-                             sl.getSub(pl.scIndex(), j))) return false;
+                if (!TreeItem.isMatch(pl.getSub(pl.scIndex()),
+                                      sl.getSub(pl.scIndex(), j))) return false;
             }
         }
         catch (Exception e)
@@ -292,13 +292,13 @@ public class TreeItem
     /** Does this name match the wildcard pattern? (compatibility mode) */
     public boolean isOldStyleMatch(String pattern)
     {
-        return isMatch(pattern, getFullInName());
+        return TreeItem.isMatch(pattern, getFullInName());
     }
 
     /** Does this name match the wildcard pattern? (** and * supported) */
     public boolean isWildcardMatch(String pattern)
     {
-        return isGMatch(pattern, getFullInName());
+        return TreeItem.isGMatch(pattern, getFullInName());
     }
 
     /** Set the trim-check status for this. */

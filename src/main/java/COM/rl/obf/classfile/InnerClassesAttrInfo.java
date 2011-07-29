@@ -50,7 +50,7 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_InnerClasses;
+        return ClassConstants.ATTR_InnerClasses;
     }
 
     /** Return the array of inner classes data. */

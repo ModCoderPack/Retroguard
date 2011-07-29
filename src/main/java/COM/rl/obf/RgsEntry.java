@@ -88,23 +88,23 @@ public class RgsEntry
     public String debugString()
     {
         return
-            (type == TYPE_OPTION ? ".option " :
-             (type == TYPE_ATTR ? ".attribute " :
-              (type == TYPE_CLASS ? ".class " :
-               (type == TYPE_NOTRIM_CLASS ? "^class " :
-                (type == TYPE_NOT_CLASS ? "!class " :
-                 (type == TYPE_METHOD ? ".method " :
-                  (type == TYPE_NOTRIM_METHOD ? "^method " :
-                   (type == TYPE_NOT_METHOD ? "!method " :
-                    (type == TYPE_FIELD ? ".field " :
-                     (type == TYPE_NOTRIM_FIELD ? "^field " :
-                      (type == TYPE_NOT_FIELD ? "!field " :
-                       (type == TYPE_PACKAGE_MAP ? ".package_map " :
-                        (type == TYPE_REPACKAGE_MAP ? ".repackage_map " :
-                         (type == TYPE_CLASS_MAP ? ".class_map " :
-                          (type == TYPE_METHOD_MAP ? ".method_map " :
-                           (type == TYPE_FIELD_MAP ? ".field_map " :
-                            (type == TYPE_NOWARN ? ".nowarn " : "")))))))))))))))))
+            (type == RgsEntry.TYPE_OPTION ? ".option " :
+             (type == RgsEntry.TYPE_ATTR ? ".attribute " :
+              (type == RgsEntry.TYPE_CLASS ? ".class " :
+               (type == RgsEntry.TYPE_NOTRIM_CLASS ? "^class " :
+                (type == RgsEntry.TYPE_NOT_CLASS ? "!class " :
+                 (type == RgsEntry.TYPE_METHOD ? ".method " :
+                  (type == RgsEntry.TYPE_NOTRIM_METHOD ? "^method " :
+                   (type == RgsEntry.TYPE_NOT_METHOD ? "!method " :
+                    (type == RgsEntry.TYPE_FIELD ? ".field " :
+                     (type == RgsEntry.TYPE_NOTRIM_FIELD ? "^field " :
+                      (type == RgsEntry.TYPE_NOT_FIELD ? "!field " :
+                       (type == RgsEntry.TYPE_PACKAGE_MAP ? ".package_map " :
+                        (type == RgsEntry.TYPE_REPACKAGE_MAP ? ".repackage_map " :
+                         (type == RgsEntry.TYPE_CLASS_MAP ? ".class_map " :
+                          (type == RgsEntry.TYPE_METHOD_MAP ? ".method_map " :
+                           (type == RgsEntry.TYPE_FIELD_MAP ? ".field_map " :
+                            (type == RgsEntry.TYPE_NOWARN ? ".nowarn " : "")))))))))))))))))
             + name + " "
             + (descriptor != null ? descriptor + " " : "")
             + (retainToPublic ? "public " : "")

@@ -88,35 +88,35 @@ public interface ClassConstants
     // List of known attributes
     public static final String[] KNOWN_ATTRS =
     {
-        ATTR_Code,
-        ATTR_ConstantValue,
-        ATTR_Exceptions,
-        ATTR_LineNumberTable,
-        ATTR_SourceFile,
-        ATTR_LocalVariableTable,
-        ATTR_InnerClasses,
-        ATTR_Synthetic,
-        ATTR_Deprecated,
-        ATTR_Signature,
-        ATTR_LocalVariableTypeTable,
-        ATTR_RuntimeVisibleAnnotations,
-        ATTR_RuntimeInvisibleAnnotations,
-        ATTR_RuntimeVisibleParameterAnnotations,
-        ATTR_RuntimeInvisibleParameterAnnotations,
-        ATTR_AnnotationDefault,
-        ATTR_EnclosingMethod,
-        ATTR_StackMapTable,
+        ClassConstants.ATTR_Code,
+        ClassConstants.ATTR_ConstantValue,
+        ClassConstants.ATTR_Exceptions,
+        ClassConstants.ATTR_LineNumberTable,
+        ClassConstants.ATTR_SourceFile,
+        ClassConstants.ATTR_LocalVariableTable,
+        ClassConstants.ATTR_InnerClasses,
+        ClassConstants.ATTR_Synthetic,
+        ClassConstants.ATTR_Deprecated,
+        ClassConstants.ATTR_Signature,
+        ClassConstants.ATTR_LocalVariableTypeTable,
+        ClassConstants.ATTR_RuntimeVisibleAnnotations,
+        ClassConstants.ATTR_RuntimeInvisibleAnnotations,
+        ClassConstants.ATTR_RuntimeVisibleParameterAnnotations,
+        ClassConstants.ATTR_RuntimeInvisibleParameterAnnotations,
+        ClassConstants.ATTR_AnnotationDefault,
+        ClassConstants.ATTR_EnclosingMethod,
+        ClassConstants.ATTR_StackMapTable,
     };
 
     // List of required attributes
     public static final String[] REQUIRED_ATTRS =
     {
-        ATTR_Code,
-        ATTR_ConstantValue,
-        ATTR_Exceptions,
-        ATTR_InnerClasses,
-        ATTR_Synthetic,
-        ATTR_StackMapTable,
+        ClassConstants.ATTR_Code,
+        ClassConstants.ATTR_ConstantValue,
+        ClassConstants.ATTR_Exceptions,
+        ClassConstants.ATTR_InnerClasses,
+        ClassConstants.ATTR_Synthetic,
+        ClassConstants.ATTR_StackMapTable,
     };
 
 
@@ -135,18 +135,18 @@ public interface ClassConstants
     public static final String OPTION_Generic           = "Generic";
 
     // List of known script options
-    public static final String[] KNOWN_OPTIONS = {OPTION_Application,
-                                                  OPTION_Applet,
-                                                  OPTION_Serializable,
-                                                  OPTION_RMI,
-                                                  OPTION_Enumeration,
-                                                  OPTION_Annotations,
-                                                  OPTION_RuntimeAnnotations,
-                                                  OPTION_MapClassString,
-                                                  OPTION_DigestSHA,
-                                                  OPTION_DigestMD5,
-                                                  OPTION_LineNumberDebug,
-                                                  OPTION_Repackage,
-                                                  OPTION_Generic,
+    public static final String[] KNOWN_OPTIONS = {ClassConstants.OPTION_Application,
+                                                  ClassConstants.OPTION_Applet,
+                                                  ClassConstants.OPTION_Serializable,
+                                                  ClassConstants.OPTION_RMI,
+                                                  ClassConstants.OPTION_Enumeration,
+                                                  ClassConstants.OPTION_Annotations,
+                                                  ClassConstants.OPTION_RuntimeAnnotations,
+                                                  ClassConstants.OPTION_MapClassString,
+                                                  ClassConstants.OPTION_DigestSHA,
+                                                  ClassConstants.OPTION_DigestMD5,
+                                                  ClassConstants.OPTION_LineNumberDebug,
+                                                  ClassConstants.OPTION_Repackage,
+                                                  ClassConstants.OPTION_Generic,
     };
 }

@@ -48,7 +48,7 @@ public class RuntimeVisibleAnnotationsAttrInfo extends AnnotationsAttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_RuntimeVisibleAnnotations;
+        return ClassConstants.ATTR_RuntimeVisibleAnnotations;
     }
 }
 

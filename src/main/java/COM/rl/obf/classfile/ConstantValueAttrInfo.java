@@ -49,7 +49,7 @@ public class ConstantValueAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_ConstantValue;
+        return ClassConstants.ATTR_ConstantValue;
     }
 
     /** Read the data following the header. */

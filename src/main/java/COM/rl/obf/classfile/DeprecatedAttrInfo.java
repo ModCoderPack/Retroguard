@@ -48,7 +48,7 @@ public class DeprecatedAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_Deprecated;
+        return ClassConstants.ATTR_Deprecated;
     }
 
     /** Read the data following the header. */

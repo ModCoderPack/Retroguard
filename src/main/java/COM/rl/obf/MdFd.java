@@ -165,6 +165,6 @@ abstract public class MdFd extends TreeItem
     {
         return
             isWildcardMatch(namePattern) &&
-            isMatch(descPattern, getDescriptor());
+            TreeItem.isMatch(descPattern, getDescriptor());
     }
 }

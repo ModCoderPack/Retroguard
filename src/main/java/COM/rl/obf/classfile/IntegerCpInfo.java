@@ -42,7 +42,7 @@ public class IntegerCpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected IntegerCpInfo()
     {
-        super(CONSTANT_Integer);
+        super(ClassConstants.CONSTANT_Integer);
     }
 
     /** Read the 'info' data following the u1tag byte. */

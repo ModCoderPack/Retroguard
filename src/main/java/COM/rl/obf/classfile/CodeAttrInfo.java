@@ -88,7 +88,7 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected int getAttrInfoLength() throws Exception
     {
-        int length = CONSTANT_FIELD_SIZE + u4codeLength +
+        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + u4codeLength +
             u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
         for (int i = 0; i < u2attributesCount; i++)
         {
@@ -101,7 +101,7 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_Code;
+        return ClassConstants.ATTR_Code;
     }
 
     /**
@@ -310,7 +310,7 @@ public class CodeAttrInfo extends AttrInfo
     // Compute length of opcode arguments at offset
     private int getOpcodeBytes(int opcode, int i) throws Exception
     {
-        int bytes = opcodeBytes(opcode);
+        int bytes = CodeAttrInfo.opcodeBytes(opcode);
         if (bytes < 0) // variable length instructions
         {
             switch (opcode)

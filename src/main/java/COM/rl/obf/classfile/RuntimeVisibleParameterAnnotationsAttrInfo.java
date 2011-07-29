@@ -48,7 +48,7 @@ public class RuntimeVisibleParameterAnnotationsAttrInfo extends ParameterAnnotat
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_RuntimeVisibleParameterAnnotations;
+        return ClassConstants.ATTR_RuntimeVisibleParameterAnnotations;
     }
 }
 

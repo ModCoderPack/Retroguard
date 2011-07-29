@@ -41,6 +41,6 @@ public class FieldrefCpInfo extends RefCpInfo
     // Instance Methods ------------------------------------------------------
     protected FieldrefCpInfo()
     {
-        super(CONSTANT_Fieldref);
+        super(ClassConstants.CONSTANT_Fieldref);
     }
 }

@@ -75,7 +75,7 @@ public class Md extends MdFd
     {
         return
             isOldStyleMatch(namePattern) &&
-            isMatch(descPattern, getDescriptor());
+            TreeItem.isMatch(descPattern, getDescriptor());
     }
 }
 

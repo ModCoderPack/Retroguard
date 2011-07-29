@@ -43,7 +43,7 @@ public class LongCpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected LongCpInfo()
     {
-        super(CONSTANT_Long);
+        super(ClassConstants.CONSTANT_Long);
     }
 
     /** Read the 'info' data following the u1tag byte. */

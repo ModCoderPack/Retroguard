@@ -57,26 +57,26 @@ public class Tools
         StringBuffer sb = new StringBuffer();
         for (int ptr = 0; ptr < b.length; ptr += 3)
         {
-            sb.append(base64[(b[ptr] >> 2) & 0x3F]);
+            sb.append(Tools.base64[(b[ptr] >> 2) & 0x3F]);
             if (ptr + 1 < b.length)
             {
-                sb.append(base64[((b[ptr] << 4) & 0x30) | ((b[ptr + 1] >> 4) & 0x0F)]);
+                sb.append(Tools.base64[((b[ptr] << 4) & 0x30) | ((b[ptr + 1] >> 4) & 0x0F)]);
                 if (ptr + 2 < b.length)
                 {
-                    sb.append(base64[((b[ptr + 1] << 2) & 0x3C) | ((b[ptr + 2] >> 6) & 0x03)]);
-                    sb.append(base64[b[ptr + 2] & 0x3F]);
+                    sb.append(Tools.base64[((b[ptr + 1] << 2) & 0x3C) | ((b[ptr + 2] >> 6) & 0x03)]);
+                    sb.append(Tools.base64[b[ptr + 2] & 0x3F]);
                 }
                 else
                 {
-                    sb.append(base64[(b[ptr + 1] << 2) & 0x3C]);
-                    sb.append(pad);
+                    sb.append(Tools.base64[(b[ptr + 1] << 2) & 0x3C]);
+                    sb.append(Tools.pad);
                 }
             }
             else
             {
-                sb.append(base64[((b[ptr] << 4) & 0x30)]);
-                sb.append(pad);
-                sb.append(pad);
+                sb.append(Tools.base64[((b[ptr] << 4) & 0x30)]);
+                sb.append(Tools.pad);
+                sb.append(Tools.pad);
             }
         }
         return sb.toString();

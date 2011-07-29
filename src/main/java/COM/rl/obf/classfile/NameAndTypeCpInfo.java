@@ -43,7 +43,7 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
     // Instance Methods ------------------------------------------------------
     protected NameAndTypeCpInfo()
     {
-        super(CONSTANT_NameAndType);
+        super(ClassConstants.CONSTANT_NameAndType);
     }
 
     /** Clone the entry. */

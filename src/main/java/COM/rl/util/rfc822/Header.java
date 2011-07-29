@@ -107,7 +107,7 @@ public class Header
             int start = index;
             // Compute length of value that can be appended to this line
             index += Math.min(value.length() - index,
-                              MAX_HEADER_LINE_LENGTH - prefix.length());
+                              Header.MAX_HEADER_LINE_LENGTH - prefix.length());
             // Write tag or continuation space, (part of) value, EOL
             writer.write(prefix + value.substring(start, index) + "\015\012");
         }

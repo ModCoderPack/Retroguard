@@ -43,7 +43,7 @@ public class DoubleCpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected DoubleCpInfo()
     {
-        super(CONSTANT_Double);
+        super(ClassConstants.CONSTANT_Double);
     }
 
 

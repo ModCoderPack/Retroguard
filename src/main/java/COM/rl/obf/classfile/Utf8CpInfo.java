@@ -44,13 +44,13 @@ public class Utf8CpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected Utf8CpInfo()
     {
-        super(CONSTANT_Utf8);
+        super(ClassConstants.CONSTANT_Utf8);
     }
 
     /** Ctor used when appending fresh Utf8 entries to the constant pool. */
     public Utf8CpInfo(String s) throws Exception
     {
-        super(CONSTANT_Utf8);
+        super(ClassConstants.CONSTANT_Utf8);
         setString(s);
         refCount = 1;
     }

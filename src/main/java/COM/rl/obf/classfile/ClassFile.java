@@ -99,14 +99,14 @@ public class ClassFile implements ClassConstants
      *  and a return type, in same format as the Class.forName() method returns . */
     public static String[] parseDescriptor(String descriptor) throws Exception
     {
-        return parseDescriptor(descriptor, false, true);
+        return ClassFile.parseDescriptor(descriptor, false, true);
     }
 
     /** Parse a method or field descriptor into a list of parameter names (for methods)
      *  and a return type, optionally in same format as the Class.forName() method returns . */
     public static String[] parseDescriptor(String descriptor, boolean isDisplay) throws Exception
     {
-        return parseDescriptor(descriptor, isDisplay, true);
+        return ClassFile.parseDescriptor(descriptor, isDisplay, true);
     }
 
     /** Parse a method or field descriptor into a list of parameter names (for methods)
@@ -179,7 +179,7 @@ public class ClassFile implements ClassConstants
             String[] translatedNames = new String[names.length];
             for (int i = 0; i < names.length; i++)
             {
-                translatedNames[i] = translateType(names[i], isDisplay);
+                translatedNames[i] = ClassFile.translateType(names[i], isDisplay);
             }
             return translatedNames;
         }
@@ -200,12 +200,12 @@ public class ClassFile implements ClassConstants
             if (!isDisplay)
             {
                 // return the Class.forName() form
-                outName = translate(inName);
+                outName = ClassFile.translate(inName);
             }
             else
             {
                 // return the pretty display form
-                outName = translateType(inName.substring(1), true) + "[]";
+                outName = ClassFile.translateType(inName.substring(1), true) + "[]";
             }
             break;
 
@@ -248,7 +248,7 @@ public class ClassFile implements ClassConstants
         case 'L':
         {
             int pos = inName.indexOf(';');
-            outName = translate(inName.substring(1, inName.indexOf(';')));
+            outName = ClassFile.translate(inName.substring(1, inName.indexOf(';')));
         }
         break;
 
@@ -273,7 +273,7 @@ public class ClassFile implements ClassConstants
     /** Is this class in an unsupported version of the file format? */
     public boolean hasIncompatibleVersion()
     {
-        return (u2majorVersion > MAJOR_VERSION);
+        return (u2majorVersion > ClassConstants.MAJOR_VERSION);
     }
 
     /** Return major version of this class's file format. */
@@ -296,7 +296,7 @@ public class ClassFile implements ClassConstants
         u2majorVersion = din.readUnsignedShort();
 
         // Check this is a valid classfile that we can handle
-        if (u4magic != MAGIC)
+        if (u4magic != ClassConstants.MAGIC)
         {
             throw new IOException("Invalid magic number in class file.");
         }
@@ -385,7 +385,7 @@ public class ClassFile implements ClassConstants
 
                 // Check if this is Class.forName
                 if (className.equals("java/lang/Class") &&
-                    CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
+                    ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                 {
                     hasReflection = true;
                 }
@@ -537,18 +537,18 @@ public class ClassFile implements ClassConstants
                 // Check if this is on the proscribed list
                 if (className.equals("java/lang/Class"))
                 {
-                    if (CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
+                    if (ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                     {
-                        list.addElement(LOG_DANGER_CLASS_PRE + getName() + LOG_CLASS_FORNAME_MID + CLASS_FORNAME_NAME_DESCRIPTOR);
+                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + getName() + ClassFile.LOG_CLASS_FORNAME_MID + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
                     }
-                    else if (Tools.isInArray(name + descriptor, DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY))
+                    else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY))
                     {
-                        list.addElement(LOG_DANGER_CLASS_PRE + getName() + LOG_DANGER_CLASS_MID + name + descriptor);
+                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + getName() + ClassFile.LOG_DANGER_CLASS_MID + name + descriptor);
                     }
                 }
-                else if (Tools.isInArray(name + descriptor, DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY))
+                else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY))
                 {
-                    list.addElement(LOG_DANGER_CLASSLOADER_PRE + getName() + LOG_DANGER_CLASSLOADER_MID + name + descriptor);
+                    list.addElement(ClassFile.LOG_DANGER_CLASSLOADER_PRE + getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID + name + descriptor);
                 }
             }
         }
@@ -620,7 +620,7 @@ public class ClassFile implements ClassConstants
     public void trimAttrsExcept(String[] extraAttrs) throws Exception
     {
         // Merge additional attributes with required list
-        String[] keepAttrs = REQUIRED_ATTRS;
+        String[] keepAttrs = ClassConstants.REQUIRED_ATTRS;
         if (extraAttrs != null && extraAttrs.length > 0)
         {
             String[] tmp = new String[keepAttrs.length + extraAttrs.length];
@@ -687,7 +687,7 @@ public class ClassFile implements ClassConstants
     {
         for (int i = 0; i < attributes.length; i++)
         {
-            if (ATTR_SourceFile.equals(attributes[i].getAttrName()))
+            if (ClassConstants.ATTR_SourceFile.equals(attributes[i].getAttrName()))
             {
                 ((SourceFileAttrInfo)attributes[i]).setAsDummy(constantPool);
             }
@@ -900,9 +900,9 @@ public class ClassFile implements ClassConstants
             StringCpInfo stringCpInfo = (StringCpInfo)enm.nextElement();
             StringCpInfoFlags flags =
                 (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
-            String name = backTranslate(((Utf8CpInfo)getCpEntry(stringCpInfo.getStringIndex())).getString());
+            String name = ClassFile.backTranslate(((Utf8CpInfo)getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
-            if (isClassSpec(name) && flags.forNameFlag)
+            if (ClassFile.isClassSpec(name) && flags.forNameFlag)
             {
                 String remapName = nm.mapClass(name);
                 if (!remapName.equals(name)) // skip if no remap needed
@@ -913,7 +913,7 @@ public class ClassFile implements ClassConstants
                     {
                         // Create a new String/Utf8 for remapped Class-name
                         int remapUtf8Index =
-                            constantPool.addUtf8Entry(translate(remapName));
+                            constantPool.addUtf8Entry(ClassFile.translate(remapName));
                         StringCpInfo remapStringInfo = new StringCpInfo();
                         remapStringInfo.setStringIndex(remapUtf8Index);
                         int remapStringIndex =
@@ -947,7 +947,7 @@ public class ClassFile implements ClassConstants
                         // Just remap the existing String/Utf8, since it is
                         // only used for Class.forName or .class, or maybe
                         // ldc_w was needed (which gives improper String remap)
-                        int remapIndex = constantPool.remapUtf8To(translate(remapName), stringCpInfo.getStringIndex());
+                        int remapIndex = constantPool.remapUtf8To(ClassFile.translate(remapName), stringCpInfo.getStringIndex());
                         stringCpInfo.setStringIndex(remapIndex);
                     }
                 }
@@ -975,10 +975,10 @@ public class ClassFile implements ClassConstants
         int pos = -1;
         while ((pos = s.lastIndexOf('/')) != -1)
         {
-            if (!isJavaIdentifier(s.substring(pos + 1))) return false;
+            if (!ClassFile.isJavaIdentifier(s.substring(pos + 1))) return false;
             s = s.substring(0, pos);
         }
-        if (!isJavaIdentifier(s)) return false;
+        if (!ClassFile.isJavaIdentifier(s)) return false;
         return true;
     }
 

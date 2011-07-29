@@ -88,7 +88,7 @@ public class VerificationTypeInfo
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        if (u1tag == ITEM_Object)
+        if (u1tag == VerificationTypeInfo.ITEM_Object)
         {
             pool.incRefCount(u2cpoolIndex);
         }

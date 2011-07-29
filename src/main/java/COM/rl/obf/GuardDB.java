@@ -95,8 +95,8 @@ public class GuardDB implements ClassConstants
             // Get the next entry from the input Jar
             ZipEntry inEntry = (ZipEntry)entries.nextElement();
             String name = inEntry.getName();
-            if (name.length() > CLASS_EXT.length() &&
-                name.substring(name.length() - CLASS_EXT.length(), name.length()).equals(CLASS_EXT))
+            if (name.length() > GuardDB.CLASS_EXT.length() &&
+                name.substring(name.length() - GuardDB.CLASS_EXT.length(), name.length()).equals(GuardDB.CLASS_EXT))
             {
                 // Create a full internal representation of the class file
                 DataInputStream inStream = new DataInputStream(
@@ -109,7 +109,7 @@ public class GuardDB implements ClassConstants
                 }
                 catch (Exception e)
                 {
-                    log.println(ERROR_CORRUPT_CLASS + name + " (" + e.getMessage() + ")");
+                    log.println(GuardDB.ERROR_CORRUPT_CLASS + name + " (" + e.getMessage() + ")");
                 }
                 finally
                 {
@@ -125,8 +125,8 @@ public class GuardDB implements ClassConstants
         // Warn if classes are incompatible version of class file format
         if (incompatibleVersion != 0)
         {
-            log.println(WARNING_INCOMPATIBLE_VERSION_1 + incompatibleVersion);
-            log.println(WARNING_INCOMPATIBLE_VERSION_2 + MAJOR_VERSION);
+            log.println(GuardDB.WARNING_INCOMPATIBLE_VERSION_1 + incompatibleVersion);
+            log.println(GuardDB.WARNING_INCOMPATIBLE_VERSION_2 + ClassConstants.MAJOR_VERSION);
         }
     }
 
@@ -353,8 +353,8 @@ public class GuardDB implements ClassConstants
                                           entry.retainFieldsOnly,
                                           entry.retainMethodsOnly,
                                           entry.extendsName,
-                                          entry.type == entry.TYPE_NOT_CLASS,
-                                          entry.type == entry.TYPE_NOTRIM_CLASS,
+                                          entry.type == RgsEntry.TYPE_NOT_CLASS,
+                                          entry.type == RgsEntry.TYPE_NOTRIM_CLASS,
                                           entry.accessMask,
                                           entry.accessSetting);
                     break;
@@ -365,8 +365,8 @@ public class GuardDB implements ClassConstants
                     classTree.retainMethod(entry.name, entry.descriptor,
                                            entry.retainAndClass,
                                            entry.extendsName,
-                                           entry.type == entry.TYPE_NOT_METHOD,
-                                           entry.type == entry.TYPE_NOTRIM_METHOD,
+                                           entry.type == RgsEntry.TYPE_NOT_METHOD,
+                                           entry.type == RgsEntry.TYPE_NOTRIM_METHOD,
                                            entry.accessMask,
                                            entry.accessSetting);
                     break;
@@ -376,8 +376,8 @@ public class GuardDB implements ClassConstants
                     classTree.retainField(entry.name, entry.descriptor,
                                           entry.retainAndClass,
                                           entry.extendsName,
-                                          entry.type == entry.TYPE_NOT_FIELD,
-                                          entry.type == entry.TYPE_NOTRIM_FIELD,
+                                          entry.type == RgsEntry.TYPE_NOT_FIELD,
+                                          entry.type == RgsEntry.TYPE_NOTRIM_FIELD,
                                           entry.accessMask,
                                           entry.accessSetting);
                     break;
@@ -409,7 +409,7 @@ public class GuardDB implements ClassConstants
             }
             catch (Exception e)
             {
-                log.println(WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
+                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
             }
         }
     }
@@ -457,8 +457,8 @@ public class GuardDB implements ClassConstants
         Runtime rt = Runtime.getRuntime();
         rt.gc();
         log.println("#");
-        log.println(LOG_MEMORY_USED + Long.toString(rt.totalMemory() - rt.freeMemory()) + LOG_MEMORY_BYTES);
-        log.println(LOG_MEMORY_TOTAL + Long.toString(rt.totalMemory()) + LOG_MEMORY_BYTES);
+        log.println(GuardDB.LOG_MEMORY_USED + Long.toString(rt.totalMemory() - rt.freeMemory()) + GuardDB.LOG_MEMORY_BYTES);
+        log.println(GuardDB.LOG_MEMORY_TOTAL + Long.toString(rt.totalMemory()) + GuardDB.LOG_MEMORY_BYTES);
         log.println("#");
     }
 
@@ -506,8 +506,8 @@ public class GuardDB implements ClassConstants
                         new BufferedInputStream(
                             inJar.getInputStream(inEntry)));
                     String inName = inEntry.getName();
-                    if (inName.length() > CLASS_EXT.length() &&
-                        inName.substring(inName.length() - CLASS_EXT.length(), inName.length()).equals(CLASS_EXT))
+                    if (inName.length() > GuardDB.CLASS_EXT.length() &&
+                        inName.substring(inName.length() - GuardDB.CLASS_EXT.length(), inName.length()).equals(GuardDB.CLASS_EXT))
                     {
                         // Write obfuscated class to the output Jar
                         ClassFile cf = ClassFile.create(inStream);
@@ -525,7 +525,7 @@ public class GuardDB implements ClassConstants
                             cf.remap(classTree, log, enableMapClassString,
                                      enableDummySourceFile);
                             ZipEntry outEntry =
-                                new ZipEntry(cf.getName() + CLASS_EXT);
+                                new ZipEntry(cf.getName() + GuardDB.CLASS_EXT);
                             outJar.putNextEntry(outEntry);
 
                             // Create an OutputStream piped through a number of digest generators for the manifest
@@ -556,14 +556,14 @@ public class GuardDB implements ClassConstants
 
                             // Now update the manifest entry for the class with new name and new digests
                             MessageDigest[] digests = {shaDigest, md5Digest};
-                            updateManifest(inName, cf.getName() + CLASS_EXT,
+                            updateManifest(inName, cf.getName() + GuardDB.CLASS_EXT,
                                            digests);
                         }
                     }
-                    else if (STREAM_NAME_MANIFEST.equals(inName.toUpperCase()) ||
-                             (inName.length() > (SIGNATURE_PREFIX.length() + 1 + SIGNATURE_EXT.length()) &&
-                              inName.indexOf(SIGNATURE_PREFIX) != -1 &&
-                              inName.substring(inName.length() - SIGNATURE_EXT.length(), inName.length()).equals(SIGNATURE_EXT)))
+                    else if (GuardDB.STREAM_NAME_MANIFEST.equals(inName.toUpperCase()) ||
+                             (inName.length() > (GuardDB.SIGNATURE_PREFIX.length() + 1 + GuardDB.SIGNATURE_EXT.length()) &&
+                              inName.indexOf(GuardDB.SIGNATURE_PREFIX) != -1 &&
+                              inName.substring(inName.length() - GuardDB.SIGNATURE_EXT.length(), inName.length()).equals(GuardDB.SIGNATURE_EXT)))
                     {
                         // Don't pass through the manifest or signature files
                         continue;
@@ -622,7 +622,7 @@ public class GuardDB implements ClassConstants
             }
 
             // Finally, write the new manifest file
-            ZipEntry outEntry = new ZipEntry(STREAM_NAME_MANIFEST);
+            ZipEntry outEntry = new ZipEntry(GuardDB.STREAM_NAME_MANIFEST);
             outJar.putNextEntry(outEntry);
             PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outJar)));
             newManifest.writeString(writer);
@@ -659,7 +659,7 @@ public class GuardDB implements ClassConstants
             // Get the first entry only from the input Jar
             ZipEntry inEntry = (ZipEntry)entries.nextElement();
             String name = inEntry.getName();
-            if (STREAM_NAME_MANIFEST.equals(name.toUpperCase()))
+            if (GuardDB.STREAM_NAME_MANIFEST.equals(name.toUpperCase()))
             {
                 oldManifest.parse(inJar.getInputStream(inEntry));
                 break;
@@ -668,12 +668,12 @@ public class GuardDB implements ClassConstants
 
         // Create a fresh manifest, with a version header
         newManifest = new SectionList();
-        Section version = oldManifest.find(MANIFEST_VERSION_TAG,
-                                           MANIFEST_VERSION_VALUE);
+        Section version = oldManifest.find(GuardDB.MANIFEST_VERSION_TAG,
+                                           GuardDB.MANIFEST_VERSION_VALUE);
         if (version == null)
         {
             version = new Section();
-            version.add(MANIFEST_VERSION_TAG, MANIFEST_VERSION_VALUE);
+            version.add(GuardDB.MANIFEST_VERSION_TAG, GuardDB.MANIFEST_VERSION_VALUE);
         }
         newManifest.add(version);
 
@@ -684,7 +684,7 @@ public class GuardDB implements ClassConstants
             Section section = (Section)enm.nextElement();
             if (section != null && section != version)
             {
-                Header name = section.findTag(MANIFEST_NAME_TAG);
+                Header name = section.findTag(GuardDB.MANIFEST_NAME_TAG);
                 if (name == null)
                 {
                     newManifest.add(section);
@@ -707,19 +707,19 @@ public class GuardDB implements ClassConstants
                                 MessageDigest[] digests)
     {
         // Check for section in old manifest
-        Section oldSection = oldManifest.find(MANIFEST_NAME_TAG, inName);
+        Section oldSection = oldManifest.find(GuardDB.MANIFEST_NAME_TAG, inName);
         if (oldSection != null)
         {
             // Create fresh section for entry, and enter "Name" header
             Section newSection = new Section();
-            newSection.add(MANIFEST_NAME_TAG, outName);
+            newSection.add(GuardDB.MANIFEST_NAME_TAG, outName);
 
             // Copy over non-"Name", non-digest entries
             for (Enumeration enm = oldSection.elements();
                  enm.hasMoreElements(); )
             {
                 Header header = (Header)enm.nextElement();
-                if (!header.getTag().equals(MANIFEST_NAME_TAG) &&
+                if (!header.getTag().equals(GuardDB.MANIFEST_NAME_TAG) &&
                     header.getTag().indexOf("Digest") == -1)
                 {
                     newSection.add(header);
@@ -741,7 +741,7 @@ public class GuardDB implements ClassConstants
                 }
                 if (sb.length() > 0)
                 {
-                    newSection.add(MANIFEST_DIGESTALG_TAG, sb.toString());
+                    newSection.add(GuardDB.MANIFEST_DIGESTALG_TAG, sb.toString());
                 }
 
                 // *-Digest headers

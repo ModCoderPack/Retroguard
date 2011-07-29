@@ -50,7 +50,7 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_LocalVariableTypeTable;
+        return ClassConstants.ATTR_LocalVariableTypeTable;
     }
 
     /** Return the array of local variable type table entries. */

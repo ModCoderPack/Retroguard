@@ -50,7 +50,7 @@ public class ExceptionsAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_Exceptions;
+        return ClassConstants.ATTR_Exceptions;
     }
 
     /** Return the number of exception class indices. */

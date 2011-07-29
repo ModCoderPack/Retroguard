@@ -42,7 +42,7 @@ public class ClassCpInfo extends CpInfo
     // Instance Methods ------------------------------------------------------
     protected ClassCpInfo()
     {
-        super(CONSTANT_Class);
+        super(ClassConstants.CONSTANT_Class);
     }
 
     /** Return the name index. */

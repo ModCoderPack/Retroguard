@@ -49,7 +49,7 @@ public class SourceFileAttrInfo extends AttrInfo
     @Override
     protected String getAttrName() throws Exception
     {
-        return ATTR_SourceFile;
+        return ClassConstants.ATTR_SourceFile;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
@@ -77,7 +77,7 @@ public class SourceFileAttrInfo extends AttrInfo
         .option LineNumberDebug */
     public void setAsDummy(ConstantPool pool) throws Exception
     {
-        u2sourceFileIndex = pool.remapUtf8To(ATTR_SourceFile, u2sourceFileIndex);
+        u2sourceFileIndex = pool.remapUtf8To(ClassConstants.ATTR_SourceFile, u2sourceFileIndex);
     }
 }
 
