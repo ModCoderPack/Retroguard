@@ -101,7 +101,7 @@ abstract public class CpInfo implements ClassConstants
     // Instance Methods ------------------------------------------------------
     protected CpInfo(int tag)
     {
-        u1tag = tag;
+        this.u1tag = tag;
     }
 
     /** Read the 'info' data following the u1tag byte; over-ride this in sub-classes. */
@@ -124,8 +124,8 @@ abstract public class CpInfo implements ClassConstants
         {
             throw new IOException("No output stream was provided.");
         }
-        dout.writeByte(u1tag);
-        writeInfo(dout);
+        dout.writeByte(this.u1tag);
+        this.writeInfo(dout);
     }
 
     /** Write the 'info' data following the u1tag byte; over-ride this in sub-classes. */
@@ -134,29 +134,29 @@ abstract public class CpInfo implements ClassConstants
     /** Return the reference count. */
     public int getRefCount()
     {
-        return refCount;
+        return this.refCount;
     }
 
     /** Increment the reference count. */
     public void incRefCount()
     {
-        refCount++;
+        this.refCount++;
     }
 
     /** Decrement the reference count. */
     public void decRefCount() throws Exception
     {
-        if (refCount == 0)
+        if (this.refCount == 0)
         {
             throw new Exception("Illegal to decrement ref count that is already zero.");
         }
-        refCount--;
+        this.refCount--;
     }
 
     /** Reset the reference count to zero. */
     public void resetRefCount()
     {
-        refCount = 0;
+        this.refCount = 0;
     }
 
     /** Dump the content of the class file to the specified file (used for debugging). */

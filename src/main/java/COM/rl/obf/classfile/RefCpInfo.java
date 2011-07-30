@@ -49,38 +49,38 @@ abstract public class RefCpInfo extends CpInfo
     /** Return the class index. */
     protected int getClassIndex()
     {
-        return u2classIndex;
+        return this.u2classIndex;
     }
 
     /** Return the name-and-type index. */
     protected int getNameAndTypeIndex()
     {
-        return u2nameAndTypeIndex;
+        return this.u2nameAndTypeIndex;
     }
 
     /** Set the name-and-type index. */
     protected void setNameAndTypeIndex(int index)
     {
-        u2nameAndTypeIndex = index;
+        this.u2nameAndTypeIndex = index;
     }
 
     /** Return the method's class string name. */
     public String getClassName(ClassFile cf) throws Exception
     {
-        return ((ClassCpInfo)cf.getCpEntry(u2classIndex)).getName(cf);
+        return ((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getName(cf);
     }
 
     /** Return the method's string name. */
     public String getName(ClassFile cf) throws Exception
     {
-        NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
+        NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
         return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getNameIndex())).getString();
     }
 
     /** Return the method's string descriptor. */
     public String getDescriptor(ClassFile cf) throws Exception
     {
-        NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex);
+        NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
         return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getDescriptorIndex())).getString();
     }
 
@@ -88,29 +88,29 @@ abstract public class RefCpInfo extends CpInfo
     @Override
     protected void markNTRefs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2nameAndTypeIndex);
+        pool.incRefCount(this.u2nameAndTypeIndex);
     }
 
     /** Read the 'info' data following the u1tag byte. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2classIndex = din.readUnsignedShort();
-        u2nameAndTypeIndex = din.readUnsignedShort();
+        this.u2classIndex = din.readUnsignedShort();
+        this.u2nameAndTypeIndex = din.readUnsignedShort();
     }
 
     /** Write the 'info' data following the u1tag byte. */
     @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2classIndex);
-        dout.writeShort(u2nameAndTypeIndex);
+        dout.writeShort(this.u2classIndex);
+        dout.writeShort(this.u2nameAndTypeIndex);
     }
 
     /** Dump the content of the class file to the specified file (used for debugging). */
     @Override
     public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
     {
-        pw.println("  Ref " + Integer.toString(index) + ": " + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(u2classIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(u2nameAndTypeIndex)).getDescriptorIndex())).getString());
+        pw.println("  Ref " + Integer.toString(index) + ": " + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getDescriptorIndex())).getString());
     }
 }

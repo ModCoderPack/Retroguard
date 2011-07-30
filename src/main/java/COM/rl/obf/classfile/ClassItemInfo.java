@@ -48,39 +48,57 @@ abstract public class ClassItemInfo implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
-    protected ClassItemInfo(ClassFile cf) {this.cf = cf;}
+    protected ClassItemInfo(ClassFile cf)
+    {
+        this.cf = cf;
+    }
 
     /** Is the field or method 'Synthetic'? */
-    public boolean isSynthetic() {return isSynthetic;}
+    public boolean isSynthetic()
+    {
+        return this.isSynthetic;
+    }
 
     /** Return method/field name index into Constant Pool. */
-    protected int getNameIndex() {return u2nameIndex;}
+    protected int getNameIndex()
+    {
+        return this.u2nameIndex;
+    }
 
     /** Set the method/field name index. */
-    protected void setNameIndex(int index) {u2nameIndex = index;}
+    protected void setNameIndex(int index)
+    {
+        this.u2nameIndex = index;
+    }
 
     /** Return method/field descriptor index into Constant Pool. */
-    protected int getDescriptorIndex() {return u2descriptorIndex;}
+    protected int getDescriptorIndex()
+    {
+        return this.u2descriptorIndex;
+    }
 
     /** Set the method/field descriptor index. */
-    protected void setDescriptorIndex(int index) {u2descriptorIndex = index;}
+    protected void setDescriptorIndex(int index)
+    {
+        this.u2descriptorIndex = index;
+    }
 
     /** Return method/field string name. */
     public String getName() throws Exception
     {
-        return ((Utf8CpInfo)cf.getCpEntry(u2nameIndex)).getString();
+        return ((Utf8CpInfo)this.cf.getCpEntry(this.u2nameIndex)).getString();
     }
 
     /** Return descriptor string. */
     public String getDescriptor() throws Exception
     {
-        return ((Utf8CpInfo)cf.getCpEntry(u2descriptorIndex)).getString();
+        return ((Utf8CpInfo)this.cf.getCpEntry(this.u2descriptorIndex)).getString();
     }
 
     /** Return access flags. */
     public int getAccessFlags() throws Exception
     {
-        return u2accessFlags;
+        return this.u2accessFlags;
     }
 
     /**
@@ -90,58 +108,58 @@ abstract public class ClassItemInfo implements ClassConstants
     protected void trimAttrsExcept(String[] keepAttrs) throws Exception
     {
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (Tools.isInArray(attributes[i].getAttrName(), keepAttrs))
+            if (Tools.isInArray(this.attributes[i].getAttrName(), keepAttrs))
             {
-                attributes[i].trimAttrsExcept(keepAttrs);
+                this.attributes[i].trimAttrsExcept(keepAttrs);
             }
             else
             {
-                attributes[i] = null;
+                this.attributes[i] = null;
             }
         }
 
         // Delete the marked attributes
-        AttrInfo[] left = new AttrInfo[attributes.length];
+        AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (attributes[i] != null)
+            if (this.attributes[i] != null)
             {
-                left[j++] = attributes[i];
+                left[j++] = this.attributes[i];
             }
         }
-        attributes = new AttrInfo[j];
-        System.arraycopy(left, 0, attributes, 0, j);
-        u2attributesCount = j;
+        this.attributes = new AttrInfo[j];
+        System.arraycopy(left, 0, this.attributes, 0, j);
+        this.u2attributesCount = j;
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2nameIndex);
-        pool.incRefCount(u2descriptorIndex);
-        for (int i = 0; i < attributes.length; i++)
+        pool.incRefCount(this.u2nameIndex);
+        pool.incRefCount(this.u2descriptorIndex);
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            attributes[i].markUtf8Refs(pool);
+            this.attributes[i].markUtf8Refs(pool);
         }
     }
 
     /** Import the field or method data to internal representation. */
     protected void read(DataInput din) throws Exception
     {
-        u2accessFlags = din.readUnsignedShort();
-        u2nameIndex = din.readUnsignedShort();
-        u2descriptorIndex = din.readUnsignedShort();
-        u2attributesCount = din.readUnsignedShort();
-        attributes = new AttrInfo[u2attributesCount];
-        for (int i = 0; i < u2attributesCount; i++)
+        this.u2accessFlags = din.readUnsignedShort();
+        this.u2nameIndex = din.readUnsignedShort();
+        this.u2descriptorIndex = din.readUnsignedShort();
+        this.u2attributesCount = din.readUnsignedShort();
+        this.attributes = new AttrInfo[this.u2attributesCount];
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            attributes[i] = AttrInfo.create(din, cf);
-            if (attributes[i].getAttrName().equals(ClassConstants.ATTR_Synthetic))
+            this.attributes[i] = AttrInfo.create(din, this.cf);
+            if (this.attributes[i].getAttrName().equals(ClassConstants.ATTR_Synthetic))
             {
-                isSynthetic = true;
+                this.isSynthetic = true;
             }
         }
     }
@@ -153,13 +171,13 @@ abstract public class ClassItemInfo implements ClassConstants
         {
             throw new IOException("No output stream was provided.");
         }
-        dout.writeShort(u2accessFlags);
-        dout.writeShort(u2nameIndex);
-        dout.writeShort(u2descriptorIndex);
-        dout.writeShort(u2attributesCount);
-        for (int i = 0; i < u2attributesCount; i++)
+        dout.writeShort(this.u2accessFlags);
+        dout.writeShort(this.u2nameIndex);
+        dout.writeShort(this.u2descriptorIndex);
+        dout.writeShort(this.u2attributesCount);
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            attributes[i].write(dout);
+            this.attributes[i].write(dout);
         }
     }
 }

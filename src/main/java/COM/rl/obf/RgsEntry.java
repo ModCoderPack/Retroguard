@@ -82,11 +82,11 @@ public class RgsEntry
     @Override
     public String toString()
     {
-        return name;
+        return this.name;
     }
 
     public String debugString()
     {
-        return (type == RgsEntry.TYPE_OPTION ? ".option " : (type == RgsEntry.TYPE_ATTR ? ".attribute " : (type == RgsEntry.TYPE_CLASS ? ".class " : (type == RgsEntry.TYPE_NOTRIM_CLASS ? "^class " : (type == RgsEntry.TYPE_NOT_CLASS ? "!class " : (type == RgsEntry.TYPE_METHOD ? ".method " : (type == RgsEntry.TYPE_NOTRIM_METHOD ? "^method " : (type == RgsEntry.TYPE_NOT_METHOD ? "!method " : (type == RgsEntry.TYPE_FIELD ? ".field " : (type == RgsEntry.TYPE_NOTRIM_FIELD ? "^field " : (type == RgsEntry.TYPE_NOT_FIELD ? "!field " : (type == RgsEntry.TYPE_PACKAGE_MAP ? ".package_map " : (type == RgsEntry.TYPE_REPACKAGE_MAP ? ".repackage_map " : (type == RgsEntry.TYPE_CLASS_MAP ? ".class_map " : (type == RgsEntry.TYPE_METHOD_MAP ? ".method_map " : (type == RgsEntry.TYPE_FIELD_MAP ? ".field_map " : (type == RgsEntry.TYPE_NOWARN ? ".nowarn " : ""))))))))))))))))) + name + " " + (descriptor != null ? descriptor + " " : "") + (retainToPublic ? "public " : "") + (retainToProtected ? "protected " : "") + (retainPubProtOnly ? "pub_prot_only " : "") + (retainFieldsOnly ? "field " : "") + (retainMethodsOnly ? "method " : "") + (retainAndClass ? "and_class " : "") + (extendsName != null ? "extends " + extendsName : "");
+        return (this.type == RgsEntry.TYPE_OPTION ? ".option " : (this.type == RgsEntry.TYPE_ATTR ? ".attribute " : (this.type == RgsEntry.TYPE_CLASS ? ".class " : (this.type == RgsEntry.TYPE_NOTRIM_CLASS ? "^class " : (this.type == RgsEntry.TYPE_NOT_CLASS ? "!class " : (this.type == RgsEntry.TYPE_METHOD ? ".method " : (this.type == RgsEntry.TYPE_NOTRIM_METHOD ? "^method " : (this.type == RgsEntry.TYPE_NOT_METHOD ? "!method " : (this.type == RgsEntry.TYPE_FIELD ? ".field " : (this.type == RgsEntry.TYPE_NOTRIM_FIELD ? "^field " : (this.type == RgsEntry.TYPE_NOT_FIELD ? "!field " : (this.type == RgsEntry.TYPE_PACKAGE_MAP ? ".package_map " : (this.type == RgsEntry.TYPE_REPACKAGE_MAP ? ".repackage_map " : (this.type == RgsEntry.TYPE_CLASS_MAP ? ".class_map " : (this.type == RgsEntry.TYPE_METHOD_MAP ? ".method_map " : (this.type == RgsEntry.TYPE_FIELD_MAP ? ".field_map " : (this.type == RgsEntry.TYPE_NOWARN ? ".nowarn " : ""))))))))))))))))) + this.name + " " + (this.descriptor != null ? this.descriptor + " " : "") + (this.retainToPublic ? "public " : "") + (this.retainToProtected ? "protected " : "") + (this.retainPubProtOnly ? "pub_prot_only " : "") + (this.retainFieldsOnly ? "field " : "") + (this.retainMethodsOnly ? "method " : "") + (this.retainAndClass ? "and_class " : "") + (this.extendsName != null ? "extends " + this.extendsName : "");
     }
 }

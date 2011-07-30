@@ -48,7 +48,7 @@ public class PatternList
     // Ctor.
     private PatternList(String pattern) throws Exception
     {
-        subs = new Vector();
+        this.subs = new Vector();
         int scFirst = pattern.indexOf("**");
         int scLast = pattern.lastIndexOf("**");
         int pos = -1;
@@ -62,52 +62,52 @@ public class PatternList
             }
             if ((scFirst >= 0) && (oldpos+1 <= scFirst) && (scFirst+2 <= pos))
             {
-                sc = length();
+                this.sc = this.length();
                 pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast+2);
                 if (pos == -1)
                 {
                     pos = pattern.length();
                 }
             }
-            subs.addElement(pattern.substring(oldpos+1, pos));
+            this.subs.addElement(pattern.substring(oldpos+1, pos));
         }
     }
 
     /** Number of segments in the list. */
     public int length()
     {
-        return subs.size();
+        return this.subs.size();
     }
 
     /** Does a '**' wildcard segment exist? */
     public boolean scExists()
     {
-        return sc >= 0;
+        return this.sc >= 0;
     }
 
     /** Index of the '**' wildcard segment. */
     public int scIndex()
     {
-        return sc;
+        return this.sc;
     }
 
     /** Return the i'th segment. */
     public String getSub(int i)
     {
-        return (String)subs.elementAt(i);
+        return (String)this.subs.elementAt(i);
     }
 
     /** Return the i'th through j'th segments, joined by package separators. */
     public String getSub(int i, int j)
     {
-        if ((i < 0) || (i > j) || (j >= length()))
+        if ((i < 0) || (i > j) || (j >= this.length()))
         {
             throw new IllegalArgumentException();
         }
         StringBuffer sb = new StringBuffer();
         for (int k = i; k <= j; k++)
         {
-            sb.append(getSub(k));
+            sb.append(this.getSub(k));
             if (k < j)
             {
                 sb.append(ClassTree.PACKAGE_LEVEL);

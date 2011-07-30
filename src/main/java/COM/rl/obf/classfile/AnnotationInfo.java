@@ -55,61 +55,61 @@ public class AnnotationInfo
     /** Return type index into Constant Pool. */
     protected int getTypeIndex()
     {
-        return u2typeIndex;
+        return this.u2typeIndex;
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2typeIndex);
-        for (int i = 0; i < memberValuePairTable.length; i++)
+        pool.incRefCount(this.u2typeIndex);
+        for (int i = 0; i < this.memberValuePairTable.length; i++)
         {
-            memberValuePairTable[i].markUtf8Refs(pool);
+            this.memberValuePairTable[i].markUtf8Refs(pool);
         }
     }
 
     private void read(DataInput din) throws Exception
     {
-        u2typeIndex = din.readUnsignedShort();
-        u2numMemberValuePairs = din.readUnsignedShort();
-        memberValuePairTable = new MemberValuePairInfo[u2numMemberValuePairs];
-        for (int i = 0; i < u2numMemberValuePairs; i++)
+        this.u2typeIndex = din.readUnsignedShort();
+        this.u2numMemberValuePairs = din.readUnsignedShort();
+        this.memberValuePairTable = new MemberValuePairInfo[this.u2numMemberValuePairs];
+        for (int i = 0; i < this.u2numMemberValuePairs; i++)
         {
-            memberValuePairTable[i] = MemberValuePairInfo.create(din);
+            this.memberValuePairTable[i] = MemberValuePairInfo.create(din);
         }
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2typeIndex);
-        dout.writeShort(u2numMemberValuePairs);
-        for (int i = 0; i < u2numMemberValuePairs; i++)
+        dout.writeShort(this.u2typeIndex);
+        dout.writeShort(this.u2numMemberValuePairs);
+        for (int i = 0; i < this.u2numMemberValuePairs; i++)
         {
-            memberValuePairTable[i].write(dout);
+            this.memberValuePairTable[i].write(dout);
         }
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        String oldType = cf.getUtf8(u2typeIndex);
+        String oldType = cf.getUtf8(this.u2typeIndex);
         String newType = nm.mapDescriptor(oldType);
-        u2typeIndex = cf.remapUtf8To(newType, u2typeIndex);
-        for (int i = 0; i < u2numMemberValuePairs; i++)
+        this.u2typeIndex = cf.remapUtf8To(newType, this.u2typeIndex);
+        for (int i = 0; i < this.u2numMemberValuePairs; i++)
         {
-            memberValuePairTable[i].remap(cf, nm);
+            this.memberValuePairTable[i].remap(cf, nm);
         }
     }
 
     /** Provide debugging dump of this object. */
     public void dump(PrintStream ps, ClassFile cf) throws Exception
     {
-        ps.println("u2typeIndex : " + u2typeIndex + " " + cf.getUtf8(u2typeIndex));
-        ps.println("u2numMemberValuePairs : " + u2numMemberValuePairs);
-        for (int i = 0; i < u2numMemberValuePairs; i++)
+        ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8(this.u2typeIndex));
+        ps.println("u2numMemberValuePairs : " + this.u2numMemberValuePairs);
+        for (int i = 0; i < this.u2numMemberValuePairs; i++)
         {
-            memberValuePairTable[i].dump(ps, cf);
+            this.memberValuePairTable[i].dump(ps, cf);
         }
     }
 }

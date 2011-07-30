@@ -49,13 +49,13 @@ public class IntegerCpInfo extends CpInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u4bytes = din.readInt();
+        this.u4bytes = din.readInt();
     }
 
     /** Write the 'info' data following the u1tag byte. */
     @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeInt(u4bytes);
+        dout.writeInt(this.u4bytes);
     }
 }

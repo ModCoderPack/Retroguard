@@ -57,47 +57,47 @@ public class LocalVariableTypeInfo
     /** Return name index into Constant Pool. */
     protected int getNameIndex()
     {
-        return u2nameIndex;
+        return this.u2nameIndex;
     }
 
     /** Return signature index into Constant Pool. */
     protected int getSignatureIndex()
     {
-        return u2signatureIndex;
+        return this.u2signatureIndex;
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2nameIndex);
-        pool.incRefCount(u2signatureIndex);
+        pool.incRefCount(this.u2nameIndex);
+        pool.incRefCount(this.u2signatureIndex);
     }
 
     private void read(DataInput din) throws Exception
     {
-        u2startpc = din.readUnsignedShort();
-        u2length = din.readUnsignedShort();
-        u2nameIndex = din.readUnsignedShort();
-        u2signatureIndex = din.readUnsignedShort();
-        u2index = din.readUnsignedShort();
+        this.u2startpc = din.readUnsignedShort();
+        this.u2length = din.readUnsignedShort();
+        this.u2nameIndex = din.readUnsignedShort();
+        this.u2signatureIndex = din.readUnsignedShort();
+        this.u2index = din.readUnsignedShort();
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2startpc);
-        dout.writeShort(u2length);
-        dout.writeShort(u2nameIndex);
-        dout.writeShort(u2signatureIndex);
-        dout.writeShort(u2index);
+        dout.writeShort(this.u2startpc);
+        dout.writeShort(this.u2length);
+        dout.writeShort(this.u2nameIndex);
+        dout.writeShort(this.u2signatureIndex);
+        dout.writeShort(this.u2index);
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
         // NOTE - mapSignature does nothing for now; implement if interest
-        String oldDesc = cf.getUtf8(u2signatureIndex);
+        String oldDesc = cf.getUtf8(this.u2signatureIndex);
         String newDesc = nm.mapSignature(oldDesc);
-        u2signatureIndex = cf.remapUtf8To(newDesc, u2signatureIndex);
+        this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }

@@ -54,53 +54,62 @@ public class InnerClassesInfo
     }
 
     /** Return the inner class index. */
-    protected int getInnerClassIndex() {return u2innerClassInfoIndex;}
+    protected int getInnerClassIndex()
+    {
+        return this.u2innerClassInfoIndex;
+    }
 
     /** Return the name index. */
-    protected int getInnerNameIndex() {return u2innerNameIndex;}
+    protected int getInnerNameIndex()
+    {
+        return this.u2innerNameIndex;
+    }
 
     /** Set the name index. */
-    protected void setInnerNameIndex(int index) {u2innerNameIndex = index;}
+    protected void setInnerNameIndex(int index)
+    {
+        this.u2innerNameIndex = index;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
         // BUGFIX: a Swing1.1beta3 class has name index of zero - this is valid
-        if (u2innerNameIndex != 0)
+        if (this.u2innerNameIndex != 0)
         {
-            pool.incRefCount(u2innerNameIndex);
+            pool.incRefCount(this.u2innerNameIndex);
         }
     }
 
     private void read(DataInput din) throws Exception
     {
-        u2innerClassInfoIndex = din.readUnsignedShort();
-        u2outerClassInfoIndex = din.readUnsignedShort();
-        u2innerNameIndex = din.readUnsignedShort();
-        u2innerClassAccessFlags = din.readUnsignedShort();
+        this.u2innerClassInfoIndex = din.readUnsignedShort();
+        this.u2outerClassInfoIndex = din.readUnsignedShort();
+        this.u2innerNameIndex = din.readUnsignedShort();
+        this.u2innerClassAccessFlags = din.readUnsignedShort();
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2innerClassInfoIndex);
-        dout.writeShort(u2outerClassInfoIndex);
-        dout.writeShort(u2innerNameIndex);
-        dout.writeShort(u2innerClassAccessFlags);
+        dout.writeShort(this.u2innerClassInfoIndex);
+        dout.writeShort(this.u2outerClassInfoIndex);
+        dout.writeShort(this.u2innerNameIndex);
+        dout.writeShort(this.u2innerClassAccessFlags);
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        if (u2innerNameIndex != 0)
+        if (this.u2innerNameIndex != 0)
         {
             // Get the full inner class name
-            ClassCpInfo innerClassInfo = (ClassCpInfo)cf.getCpEntry(u2innerClassInfoIndex);
+            ClassCpInfo innerClassInfo = (ClassCpInfo)cf.getCpEntry(this.u2innerClassInfoIndex);
             String innerClassName = ((Utf8CpInfo)cf.getCpEntry(innerClassInfo.getNameIndex())).getString();
             // It is the remapped simple name that must be stored, so truncate
             String remapClass = nm.mapClass(innerClassName);
             remapClass = remapClass.substring(remapClass.lastIndexOf('$') + 1);
-            u2innerNameIndex = cf.remapUtf8To(remapClass, u2innerNameIndex);
+            this.u2innerNameIndex = cf.remapUtf8To(remapClass, this.u2innerNameIndex);
         }
     }
 }

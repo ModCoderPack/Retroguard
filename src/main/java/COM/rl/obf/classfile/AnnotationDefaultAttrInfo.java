@@ -55,35 +55,35 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
     /** Return the default value. */
     protected MemberValueInfo getDefaultValue() throws Exception
     {
-        return defaultValue;
+        return this.defaultValue;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        defaultValue.markUtf8Refs(pool);
+        this.defaultValue.markUtf8Refs(pool);
     }
 
     /** Read the data following the header. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        defaultValue = MemberValueInfo.create(din);
+        this.defaultValue = MemberValueInfo.create(din);
     }
 
     /** Export data following the header to a DataOutput stream. */
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        defaultValue.write(dout);
+        this.defaultValue.write(dout);
     }
 
     /** Do necessary name remapping. */
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        defaultValue.remap(cf, nm);
+        this.defaultValue.remap(cf, nm);
     }
 }
 

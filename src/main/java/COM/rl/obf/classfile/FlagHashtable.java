@@ -33,12 +33,12 @@ public class FlagHashtable extends Hashtable
 
     public void updateFlag(CpInfo cpInfo, int index, boolean forNameFlag)
     {
-        StringCpInfoFlags flags = (StringCpInfoFlags)get(cpInfo);
+        StringCpInfoFlags flags = (StringCpInfoFlags)this.get(cpInfo);
         if (flags == null)
         {
             flags = new StringCpInfoFlags();
             flags.stringIndex = index;
-            put(cpInfo, flags);
+            this.put(cpInfo, flags);
         }
         if (forNameFlag)
         {

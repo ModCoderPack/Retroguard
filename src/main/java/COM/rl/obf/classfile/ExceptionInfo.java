@@ -55,18 +55,18 @@ public class ExceptionInfo
     }
     private void read(DataInput din) throws Exception
     {
-        u2startpc = din.readUnsignedShort();
-        u2endpc = din.readUnsignedShort();
-        u2handlerpc = din.readUnsignedShort();
-        u2catchType = din.readUnsignedShort();
+        this.u2startpc = din.readUnsignedShort();
+        this.u2endpc = din.readUnsignedShort();
+        this.u2handlerpc = din.readUnsignedShort();
+        this.u2catchType = din.readUnsignedShort();
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2startpc);
-        dout.writeShort(u2endpc);
-        dout.writeShort(u2handlerpc);
-        dout.writeShort(u2catchType);
+        dout.writeShort(this.u2startpc);
+        dout.writeShort(this.u2endpc);
+        dout.writeShort(this.u2handlerpc);
+        dout.writeShort(this.u2catchType);
     }
 }

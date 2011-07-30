@@ -63,8 +63,8 @@ public class VerificationTypeInfo
 
     private void read(DataInput din) throws Exception
     {
-        u1tag = din.readUnsignedByte();
-        switch (u1tag)
+        this.u1tag = din.readUnsignedByte();
+        switch (this.u1tag)
         {
             case ITEM_Top:
             case ITEM_Integer:
@@ -76,32 +76,32 @@ public class VerificationTypeInfo
                 break;
 
             case ITEM_Object:
-                u2cpoolIndex = din.readUnsignedShort();
+                this.u2cpoolIndex = din.readUnsignedShort();
                 break;
 
             case ITEM_Uninitialized:
-                u2offset = din.readUnsignedShort();
+                this.u2offset = din.readUnsignedShort();
                 break;
 
             default:
-                throw new Exception("Illegal Verification Type Info tag: " + u1tag);
+                throw new Exception("Illegal Verification Type Info tag: " + this.u1tag);
         }
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        if (u1tag == VerificationTypeInfo.ITEM_Object)
+        if (this.u1tag == VerificationTypeInfo.ITEM_Object)
         {
-            pool.incRefCount(u2cpoolIndex);
+            pool.incRefCount(this.u2cpoolIndex);
         }
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeByte(u1tag);
-        switch (u1tag)
+        dout.writeByte(this.u1tag);
+        switch (this.u1tag)
         {
             case ITEM_Top:
             case ITEM_Integer:
@@ -113,15 +113,15 @@ public class VerificationTypeInfo
                 break;
 
             case ITEM_Object:
-                dout.writeShort(u2cpoolIndex);
+                dout.writeShort(this.u2cpoolIndex);
                 break;
 
             case ITEM_Uninitialized:
-                dout.writeShort(u2offset);
+                dout.writeShort(this.u2offset);
                 break;
 
             default:
-                throw new Exception("Illegal Verification Type Info tag: " + u1tag);
+                throw new Exception("Illegal Verification Type Info tag: " + this.u1tag);
         }
     }
 }

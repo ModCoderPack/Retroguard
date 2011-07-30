@@ -57,11 +57,11 @@ public class LineNumberTableAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2lineNumberTableLength = din.readUnsignedShort();
-        lineNumberTable = new LineNumberInfo[u2lineNumberTableLength];
-        for (int i = 0; i < u2lineNumberTableLength; i++)
+        this.u2lineNumberTableLength = din.readUnsignedShort();
+        this.lineNumberTable = new LineNumberInfo[this.u2lineNumberTableLength];
+        for (int i = 0; i < this.u2lineNumberTableLength; i++)
         {
-            lineNumberTable[i] = LineNumberInfo.create(din);
+            this.lineNumberTable[i] = LineNumberInfo.create(din);
         }
     }
 
@@ -69,10 +69,10 @@ public class LineNumberTableAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2lineNumberTableLength);
-        for (int i = 0; i < u2lineNumberTableLength; i++)
+        dout.writeShort(this.u2lineNumberTableLength);
+        for (int i = 0; i < this.u2lineNumberTableLength; i++)
         {
-            lineNumberTable[i].write(dout);
+            this.lineNumberTable[i].write(dout);
         }
     }
 }

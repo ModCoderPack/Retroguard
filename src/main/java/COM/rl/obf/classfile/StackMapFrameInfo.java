@@ -67,134 +67,134 @@ public class StackMapFrameInfo
     }
     private void read(DataInput din) throws Exception
     {
-        u1frameType = din.readUnsignedByte();
-        if ((StackMapFrameInfo.SAME_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.SAME_MAX))
+        this.u1frameType = din.readUnsignedByte();
+        if ((StackMapFrameInfo.SAME_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_MAX))
         {
             // nothing else to read
         }
-        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
+        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
-            u2numberOfStackItems = 1;
-            readStackItems(din);
+            this.u2numberOfStackItems = 1;
+            this.readStackItems(din);
         }
-        else if (u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
+        else if (this.u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
         {
-            u2offsetDelta = din.readUnsignedShort();
-            u2numberOfStackItems = 1;
-            readStackItems(din);
+            this.u2offsetDelta = din.readUnsignedShort();
+            this.u2numberOfStackItems = 1;
+            this.readStackItems(din);
         }
-        else if ((StackMapFrameInfo.CHOP_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.CHOP_MAX))
+        else if ((StackMapFrameInfo.CHOP_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.CHOP_MAX))
         {
-            u2offsetDelta = din.readUnsignedShort();
+            this.u2offsetDelta = din.readUnsignedShort();
         }
-        else if (u1frameType == StackMapFrameInfo.SAME_FRAME_EXTENDED)
+        else if (this.u1frameType == StackMapFrameInfo.SAME_FRAME_EXTENDED)
         {
-            u2offsetDelta = din.readUnsignedShort();
+            this.u2offsetDelta = din.readUnsignedShort();
         }
-        else if ((StackMapFrameInfo.APPEND_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.APPEND_MAX))
+        else if ((StackMapFrameInfo.APPEND_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.APPEND_MAX))
         {
-            u2offsetDelta = din.readUnsignedShort();
-            u2numberOfLocals = 1 + u1frameType - StackMapFrameInfo.APPEND_MIN;
-            readLocals(din);
+            this.u2offsetDelta = din.readUnsignedShort();
+            this.u2numberOfLocals = 1 + this.u1frameType - StackMapFrameInfo.APPEND_MIN;
+            this.readLocals(din);
         }
-        else if (u1frameType == StackMapFrameInfo.FULL_FRAME)
+        else if (this.u1frameType == StackMapFrameInfo.FULL_FRAME)
         {
-            u2offsetDelta = din.readUnsignedShort();
-            u2numberOfLocals = din.readUnsignedShort();
-            readLocals(din);
-            u2numberOfStackItems = din.readUnsignedShort();
-            readStackItems(din);
+            this.u2offsetDelta = din.readUnsignedShort();
+            this.u2numberOfLocals = din.readUnsignedShort();
+            this.readLocals(din);
+            this.u2numberOfStackItems = din.readUnsignedShort();
+            this.readStackItems(din);
         }
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < u2numberOfStackItems; i++)
+        for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
-            stack[i].markUtf8Refs(pool);
+            this.stack[i].markUtf8Refs(pool);
         }
-        for (int i = 0; i < u2numberOfLocals; i++)
+        for (int i = 0; i < this.u2numberOfLocals; i++)
         {
-            locals[i].markUtf8Refs(pool);
+            this.locals[i].markUtf8Refs(pool);
         }
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeByte(u1frameType);
-        if ((StackMapFrameInfo.SAME_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.SAME_MAX))
+        dout.writeByte(this.u1frameType);
+        if ((StackMapFrameInfo.SAME_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_MAX))
         {
             // nothing else to write
         }
-        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
+        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
-            writeStackItems(dout);
+            this.writeStackItems(dout);
         }
-        else if (u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
+        else if (this.u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
         {
-            dout.writeShort(u2offsetDelta);
-            writeStackItems(dout);
+            dout.writeShort(this.u2offsetDelta);
+            this.writeStackItems(dout);
         }
-        else if ((StackMapFrameInfo.CHOP_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.CHOP_MAX))
+        else if ((StackMapFrameInfo.CHOP_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.CHOP_MAX))
         {
-            dout.writeShort(u2offsetDelta);
+            dout.writeShort(this.u2offsetDelta);
         }
-        else if (u1frameType == StackMapFrameInfo.SAME_FRAME_EXTENDED)
+        else if (this.u1frameType == StackMapFrameInfo.SAME_FRAME_EXTENDED)
         {
-            dout.writeShort(u2offsetDelta);
+            dout.writeShort(this.u2offsetDelta);
         }
-        else if ((StackMapFrameInfo.APPEND_MIN <= u1frameType) && (u1frameType <= StackMapFrameInfo.APPEND_MAX))
+        else if ((StackMapFrameInfo.APPEND_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.APPEND_MAX))
         {
-            dout.writeShort(u2offsetDelta);
-            writeLocals(dout);
+            dout.writeShort(this.u2offsetDelta);
+            this.writeLocals(dout);
         }
-        else if (u1frameType == StackMapFrameInfo.FULL_FRAME)
+        else if (this.u1frameType == StackMapFrameInfo.FULL_FRAME)
         {
-            dout.writeShort(u2offsetDelta);
-            dout.writeShort(u2numberOfLocals);
-            writeLocals(dout);
-            dout.writeShort(u2numberOfStackItems);
-            writeStackItems(dout);
+            dout.writeShort(this.u2offsetDelta);
+            dout.writeShort(this.u2numberOfLocals);
+            this.writeLocals(dout);
+            dout.writeShort(this.u2numberOfStackItems);
+            this.writeStackItems(dout);
         }
     }
 
     /** Read 'locals' VerificationTypeInfo */
     private void readLocals(DataInput din) throws Exception
     {
-        locals = new VerificationTypeInfo[u2numberOfLocals];
-        for (int i = 0; i < u2numberOfLocals; i++)
+        this.locals = new VerificationTypeInfo[this.u2numberOfLocals];
+        for (int i = 0; i < this.u2numberOfLocals; i++)
         {
-            locals[i] = VerificationTypeInfo.create(din);
+            this.locals[i] = VerificationTypeInfo.create(din);
         }
     }
 
     /** Write 'locals' VerificationTypeInfo */
     private void writeLocals(DataOutput dout) throws Exception
     {
-        for (int i = 0; i < u2numberOfLocals; i++)
+        for (int i = 0; i < this.u2numberOfLocals; i++)
         {
-            locals[i].write(dout);
+            this.locals[i].write(dout);
         }
     }
 
     /** Read 'stack items' VerificationTypeInfo */
     private void readStackItems(DataInput din) throws Exception
     {
-        stack = new VerificationTypeInfo[u2numberOfStackItems];
-        for (int i = 0; i < u2numberOfStackItems; i++)
+        this.stack = new VerificationTypeInfo[this.u2numberOfStackItems];
+        for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
-            stack[i] = VerificationTypeInfo.create(din);
+            this.stack[i] = VerificationTypeInfo.create(din);
         }
     }
 
     /** Write 'stack items' VerificationTypeInfo */
     private void writeStackItems(DataOutput dout) throws Exception
     {
-        for (int i = 0; i < u2numberOfStackItems; i++)
+        for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
-            stack[i].write(dout);
+            this.stack[i].write(dout);
         }
     }
 }

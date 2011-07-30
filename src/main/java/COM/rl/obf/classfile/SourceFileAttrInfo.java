@@ -56,27 +56,27 @@ public class SourceFileAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2sourceFileIndex);
+        pool.incRefCount(this.u2sourceFileIndex);
     }
 
     /** Read the data following the header. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2sourceFileIndex = din.readUnsignedShort();
+        this.u2sourceFileIndex = din.readUnsignedShort();
     }
 
     /** Export data following the header to a DataOutput stream. */
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2sourceFileIndex);
+        dout.writeShort(this.u2sourceFileIndex);
     }
 
     /** Set content to the dummy string "SourceFile" for use in .option LineNumberDebug */
     public void setAsDummy(ConstantPool pool) throws Exception
     {
-        u2sourceFileIndex = pool.remapUtf8To(ClassConstants.ATTR_SourceFile, u2sourceFileIndex);
+        this.u2sourceFileIndex = pool.remapUtf8To(ClassConstants.ATTR_SourceFile, this.u2sourceFileIndex);
     }
 }
 

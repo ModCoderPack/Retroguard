@@ -57,58 +57,58 @@ public class LocalVariableInfo
     /** Return name index into Constant Pool. */
     protected int getNameIndex()
     {
-        return u2nameIndex;
+        return this.u2nameIndex;
     }
 
     /** Set the name index. */
     protected void setNameIndex(int index)
     {
-        u2nameIndex = index;
+        this.u2nameIndex = index;
     }
 
     /** Return descriptor index into Constant Pool. */
     protected int getDescriptorIndex()
     {
-        return u2descriptorIndex;
+        return this.u2descriptorIndex;
     }
 
     /** Set the descriptor index. */
     protected void setDescriptorIndex(int index)
     {
-        u2descriptorIndex = index;
+        this.u2descriptorIndex = index;
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2nameIndex);
-        pool.incRefCount(u2descriptorIndex);
+        pool.incRefCount(this.u2nameIndex);
+        pool.incRefCount(this.u2descriptorIndex);
     }
 
     private void read(DataInput din) throws Exception
     {
-        u2startpc = din.readUnsignedShort();
-        u2length = din.readUnsignedShort();
-        u2nameIndex = din.readUnsignedShort();
-        u2descriptorIndex = din.readUnsignedShort();
-        u2index = din.readUnsignedShort();
+        this.u2startpc = din.readUnsignedShort();
+        this.u2length = din.readUnsignedShort();
+        this.u2nameIndex = din.readUnsignedShort();
+        this.u2descriptorIndex = din.readUnsignedShort();
+        this.u2index = din.readUnsignedShort();
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2startpc);
-        dout.writeShort(u2length);
-        dout.writeShort(u2nameIndex);
-        dout.writeShort(u2descriptorIndex);
-        dout.writeShort(u2index);
+        dout.writeShort(this.u2startpc);
+        dout.writeShort(this.u2length);
+        dout.writeShort(this.u2nameIndex);
+        dout.writeShort(this.u2descriptorIndex);
+        dout.writeShort(this.u2index);
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        String oldDesc = cf.getUtf8(u2descriptorIndex);
+        String oldDesc = cf.getUtf8(this.u2descriptorIndex);
         String newDesc = nm.mapDescriptor(oldDesc);
-        u2descriptorIndex = cf.remapUtf8To(newDesc, u2descriptorIndex);
+        this.u2descriptorIndex = cf.remapUtf8To(newDesc, this.u2descriptorIndex);
     }
 }

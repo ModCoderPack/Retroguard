@@ -56,29 +56,29 @@ public class EnclosingMethodAttrInfo extends AttrInfo
     /** Return the class index into the constant pool. */
     protected int getClassIndex() throws Exception
     {
-        return u2classIndex;
+        return this.u2classIndex;
     }
 
     /** Return the method index into the constant pool. */
     protected int getMethodIndex() throws Exception
     {
-        return u2methodIndex;
+        return this.u2methodIndex;
     }
 
     /** Read the data following the header. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2classIndex = din.readUnsignedShort();
-        u2methodIndex = din.readUnsignedShort();
+        this.u2classIndex = din.readUnsignedShort();
+        this.u2methodIndex = din.readUnsignedShort();
     }
 
     /** Export data following the header to a DataOutput stream. */
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2classIndex);
-        dout.writeShort(u2methodIndex);
+        dout.writeShort(this.u2classIndex);
+        dout.writeShort(this.u2methodIndex);
     }
 
     /** Do necessary name remapping. */

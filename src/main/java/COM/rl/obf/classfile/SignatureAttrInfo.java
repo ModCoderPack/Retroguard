@@ -56,21 +56,21 @@ public class SignatureAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2signatureIndex);
+        pool.incRefCount(this.u2signatureIndex);
     }
 
     /** Read the data following the header. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2signatureIndex = din.readUnsignedShort();
+        this.u2signatureIndex = din.readUnsignedShort();
     }
 
     /** Export data following the header to a DataOutput stream. */
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2signatureIndex);
+        dout.writeShort(this.u2signatureIndex);
     }
 
     /** Do necessary name remapping. */
@@ -78,9 +78,9 @@ public class SignatureAttrInfo extends AttrInfo
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
         // NOTE - mapSignature does nothing for now; implement if interest
-        String oldDesc = cf.getUtf8(u2signatureIndex);
+        String oldDesc = cf.getUtf8(this.u2signatureIndex);
         String newDesc = nm.mapSignature(oldDesc);
-        u2signatureIndex = cf.remapUtf8To(newDesc, u2signatureIndex);
+        this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }
 

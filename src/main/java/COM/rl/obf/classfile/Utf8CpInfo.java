@@ -51,8 +51,8 @@ public class Utf8CpInfo extends CpInfo
     public Utf8CpInfo(String s) throws Exception
     {
         super(ClassConstants.CONSTANT_Utf8);
-        setString(s);
-        refCount = 1;
+        this.setString(s);
+        this.refCount = 1;
     }
 
     /** Decrement the reference count, blanking the entry if no more references. */
@@ -60,57 +60,57 @@ public class Utf8CpInfo extends CpInfo
     public void decRefCount() throws Exception
     {
         super.decRefCount();
-        if (refCount == 0)
+        if (this.refCount == 0)
         {
-            clearString();
+            this.clearString();
         }
     }
 
     /** Return UTF8 data as a String. */
     public String getString() throws Exception
     {
-        if (utf8string == null)
+        if (this.utf8string == null)
         {
-            utf8string = new String(bytes, "UTF8");
+            this.utf8string = new String(this.bytes, "UTF8");
         }
-        return utf8string;
+        return this.utf8string;
     }
 
     /** Set UTF8 data as String. */
     public void setString(String str) throws Exception
     {
-        utf8string = str;
-        bytes = str.getBytes("UTF8");
-        u2length = bytes.length;
+        this.utf8string = str;
+        this.bytes = str.getBytes("UTF8");
+        this.u2length = this.bytes.length;
     }
 
     /** Set the UTF8 data to empty. */
     public void clearString() throws Exception
     {
-        u2length = 0;
-        bytes = new byte[0];
-        utf8string = null;
-        getString();
+        this.u2length = 0;
+        this.bytes = new byte[0];
+        this.utf8string = null;
+        this.getString();
     }
 
     /** Read the 'info' data following the u1tag byte. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2length = din.readUnsignedShort();
-        bytes = new byte[u2length];
-        din.readFully(bytes);
-        getString();
+        this.u2length = din.readUnsignedShort();
+        this.bytes = new byte[this.u2length];
+        din.readFully(this.bytes);
+        this.getString();
     }
 
     /** Write the 'info' data following the u1tag byte. */
     @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2length);
-        if (bytes.length > 0)
+        dout.writeShort(this.u2length);
+        if (this.bytes.length > 0)
         {
-            dout.write(bytes);
+            dout.write(this.bytes);
         }
     }
 }

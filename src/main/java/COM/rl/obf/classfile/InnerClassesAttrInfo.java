@@ -56,16 +56,16 @@ public class InnerClassesAttrInfo extends AttrInfo
     /** Return the array of inner classes data. */
     protected InnerClassesInfo[] getInfo() throws Exception
     {
-        return classes;
+        return this.classes;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < classes.length; i++)
+        for (int i = 0; i < this.classes.length; i++)
         {
-            classes[i].markUtf8Refs(pool);
+            this.classes[i].markUtf8Refs(pool);
         }
     }
 
@@ -73,11 +73,11 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2numberOfClasses = din.readUnsignedShort();
-        classes = new InnerClassesInfo[u2numberOfClasses];
-        for (int i = 0; i < u2numberOfClasses; i++)
+        this.u2numberOfClasses = din.readUnsignedShort();
+        this.classes = new InnerClassesInfo[this.u2numberOfClasses];
+        for (int i = 0; i < this.u2numberOfClasses; i++)
         {
-            classes[i] = InnerClassesInfo.create(din);
+            this.classes[i] = InnerClassesInfo.create(din);
         }
     }
 
@@ -85,10 +85,10 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2numberOfClasses);
-        for (int i = 0; i < u2numberOfClasses; i++)
+        dout.writeShort(this.u2numberOfClasses);
+        for (int i = 0; i < this.u2numberOfClasses; i++)
         {
-            classes[i].write(dout);
+            this.classes[i].write(dout);
         }
     }
 
@@ -96,9 +96,9 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < u2numberOfClasses; i++)
+        for (int i = 0; i < this.u2numberOfClasses; i++)
         {
-            classes[i].remap(cf, nm);
+            this.classes[i].remap(cf, nm);
         }
     }
 }

@@ -66,13 +66,13 @@ public class Header
     /** Return the tag. */
     public String getTag()
     {
-        return tag;
+        return this.tag;
     }
 
     /** Return the value. */
     public String getValue()
     {
-        return value;
+        return this.value;
     }
 
     /** Test equality of headers. */
@@ -82,7 +82,7 @@ public class Header
         if (o instanceof Header)
         {
             Header header = (Header)o;
-            if (header.getTag().equals(getTag()) && header.getValue().equals(getValue()))
+            if (header.getTag().equals(this.getTag()) && header.getValue().equals(this.getValue()))
             {
                 return true;
             }
@@ -103,8 +103,8 @@ public class Header
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        String prefix = getTag() + ": ";
-        String value = getValue();
+        String prefix = this.getTag() + ": ";
+        String value = this.getValue();
         for (int index = 0; index < value.length(); prefix = " ") // continuation lines are prefixed with single space
         {
             int start = index;
@@ -119,6 +119,6 @@ public class Header
     @Override
     public String toString()
     {
-        return getTag() + ": " + getValue();
+        return this.getTag() + ": " + this.getValue();
     }
 }

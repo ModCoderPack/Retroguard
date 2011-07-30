@@ -281,13 +281,13 @@ public class ClassFile implements ClassConstants
     /** Is this class in an unsupported version of the file format? */
     public boolean hasIncompatibleVersion()
     {
-        return (u2majorVersion > ClassConstants.MAJOR_VERSION);
+        return (this.u2majorVersion > ClassConstants.MAJOR_VERSION);
     }
 
     /** Return major version of this class's file format. */
     public int getMajorVersion()
     {
-        return u2majorVersion;
+        return this.u2majorVersion;
     }
 
 
@@ -301,16 +301,16 @@ public class ClassFile implements ClassConstants
     private void read(DataInput din) throws Exception
     {
         // Read the class file
-        u4magic = din.readInt();
-        u2minorVersion = din.readUnsignedShort();
-        u2majorVersion = din.readUnsignedShort();
+        this.u4magic = din.readInt();
+        this.u2minorVersion = din.readUnsignedShort();
+        this.u2majorVersion = din.readUnsignedShort();
 
         // Check this is a valid classfile that we can handle
-        if (u4magic != ClassConstants.MAGIC)
+        if (this.u4magic != ClassConstants.MAGIC)
         {
             throw new IOException("Invalid magic number in class file.");
         }
-//        if (u2majorVersion > MAJOR_VERSION)
+//        if (this.u2majorVersion > ClassConstants.MAJOR_VERSION)
 //        {
 //            throw new IOException("Incompatible version number for class file format.");
 //        }
@@ -326,36 +326,36 @@ public class ClassFile implements ClassConstants
                 i++;
             }
         }
-        constantPool = new ConstantPool(this, cpInfo);
+        this.constantPool = new ConstantPool(this, cpInfo);
 
-        u2accessFlags = din.readUnsignedShort();
-        u2thisClass = din.readUnsignedShort();
-        u2superClass = din.readUnsignedShort();
-        u2interfacesCount = din.readUnsignedShort();
-        u2interfaces = new int[u2interfacesCount];
-        for (int i = 0; i < u2interfacesCount; i++)
+        this.u2accessFlags = din.readUnsignedShort();
+        this.u2thisClass = din.readUnsignedShort();
+        this.u2superClass = din.readUnsignedShort();
+        this.u2interfacesCount = din.readUnsignedShort();
+        this.u2interfaces = new int[this.u2interfacesCount];
+        for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            u2interfaces[i] = din.readUnsignedShort();
+            this.u2interfaces[i] = din.readUnsignedShort();
         }
-        u2fieldsCount = din.readUnsignedShort();
-        fields = new FieldInfo[u2fieldsCount];
-        for (int i = 0; i < u2fieldsCount; i++)
+        this.u2fieldsCount = din.readUnsignedShort();
+        this.fields = new FieldInfo[this.u2fieldsCount];
+        for (int i = 0; i < this.u2fieldsCount; i++)
         {
-            fields[i] = FieldInfo.create(din, this);
+            this.fields[i] = FieldInfo.create(din, this);
         }
-        u2methodsCount = din.readUnsignedShort();
-        methods = new MethodInfo[u2methodsCount];
-        for (int i = 0; i < u2methodsCount; i++)
+        this.u2methodsCount = din.readUnsignedShort();
+        this.methods = new MethodInfo[this.u2methodsCount];
+        for (int i = 0; i < this.u2methodsCount; i++)
         {
-            methods[i] = MethodInfo.create(din, this);
+            this.methods[i] = MethodInfo.create(din, this);
         }
-        u2attributesCount = din.readUnsignedShort();
-        attributes = new AttrInfo[u2attributesCount];
-        for (int i = 0; i < u2attributesCount; i++)
+        this.u2attributesCount = din.readUnsignedShort();
+        this.attributes = new AttrInfo[this.u2attributesCount];
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            attributes[i] = AttrInfo.create(din, this);
+            this.attributes[i] = AttrInfo.create(din, this);
         }
-        checkReflection();
+        this.checkReflection();
     }
 
     /** Define a constant String to include in this output class file. */
@@ -363,11 +363,11 @@ public class ClassFile implements ClassConstants
     {
         if (id != null)
         {
-            cpIdString = new Utf8CpInfo(id);
+            this.cpIdString = new Utf8CpInfo(id);
         }
         else
         {
-            cpIdString = null;
+            this.cpIdString = null;
         }
     }
 
@@ -376,55 +376,55 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
         // not interfaces.
-        for (Enumeration enm = constantPool.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements(); )
         {
             Object o = enm.nextElement();
             if (o instanceof MethodrefCpInfo)
             {
                 // Get the method class name, simple name and descriptor
                 MethodrefCpInfo entry = (MethodrefCpInfo)o;
-                ClassCpInfo classEntry = (ClassCpInfo)getCpEntry(entry.getClassIndex());
-                String className = ((Utf8CpInfo)getCpEntry(classEntry.getNameIndex())).getString();
-                NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)getCpEntry(entry.getNameAndTypeIndex());
-                String name = ((Utf8CpInfo)getCpEntry(ntEntry.getNameIndex())).getString();
-                String descriptor = ((Utf8CpInfo)getCpEntry(ntEntry.getDescriptorIndex())).getString();
+                ClassCpInfo classEntry = (ClassCpInfo)this.getCpEntry(entry.getClassIndex());
+                String className = ((Utf8CpInfo)this.getCpEntry(classEntry.getNameIndex())).getString();
+                NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)this.getCpEntry(entry.getNameAndTypeIndex());
+                String name = ((Utf8CpInfo)this.getCpEntry(ntEntry.getNameIndex())).getString();
+                String descriptor = ((Utf8CpInfo)this.getCpEntry(ntEntry.getDescriptorIndex())).getString();
 
                 // Check if this is Class.forName
                 if (className.equals("java/lang/Class") && ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                 {
-                    hasReflection = true;
+                    this.hasReflection = true;
                 }
             }
         }
-        return hasReflection;
+        return this.hasReflection;
     }
 
     /** Return the access modifiers for this classfile. */
     public int getModifiers() throws Exception
     {
-        return u2accessFlags;
+        return this.u2accessFlags;
     }
 
     /** Return the name of this classfile. */
     public String getName() throws Exception
     {
-        return toName(u2thisClass);
+        return this.toName(this.u2thisClass);
     }
 
     /** Return the name of this class's superclass. */
     public String getSuper() throws Exception
     {
         // This may be java/lang/Object, in which case there is no super
-        return (u2superClass == 0) ? null : toName(u2superClass);
+        return (this.u2superClass == 0) ? null : this.toName(this.u2superClass);
     }
 
     /** Return the names of this class's interfaces. */
     public String[] getInterfaces() throws Exception
     {
-        String[] interfaces = new String[u2interfacesCount];
-        for (int i = 0; i < u2interfacesCount; i++)
+        String[] interfaces = new String[this.u2interfacesCount];
+        for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            interfaces[i] = toName(u2interfaces[i]);
+            interfaces[i] = this.toName(this.u2interfaces[i]);
         }
         return interfaces;
     }
@@ -432,10 +432,10 @@ public class ClassFile implements ClassConstants
     /** Convert a CP index to a class name. */
     private String toName(int u2index) throws Exception
     {
-        CpInfo classEntry = getCpEntry(u2index);
+        CpInfo classEntry = this.getCpEntry(u2index);
         if (classEntry instanceof ClassCpInfo)
         {
-            CpInfo nameEntry = getCpEntry(((ClassCpInfo)classEntry).getNameIndex());
+            CpInfo nameEntry = this.getCpEntry(((ClassCpInfo)classEntry).getNameIndex());
             if (nameEntry instanceof Utf8CpInfo)
             {
                 return ((Utf8CpInfo)nameEntry).getString();
@@ -454,43 +454,43 @@ public class ClassFile implements ClassConstants
     /** Return number of methods in class. */
     public int getMethodCount() throws Exception
     {
-        return methods.length;
+        return this.methods.length;
     }
 
     /** Return i'th method in class. */
     public MethodInfo getMethod(int i) throws Exception
     {
-        return methods[i];
+        return this.methods[i];
     }
 
     /** Return number of fields in class. */
     public int getFieldCount() throws Exception
     {
-        return fields.length;
+        return this.fields.length;
     }
 
     /** Return i'th field in class. */
     public FieldInfo getField(int i) throws Exception
     {
-        return fields[i];
+        return this.fields[i];
     }
 
     /** Lookup the entry in the constant pool and return as an Object. */
     protected CpInfo getCpEntry(int cpIndex) throws Exception
     {
-        return constantPool.getCpEntry(cpIndex);
+        return this.constantPool.getCpEntry(cpIndex);
     }
 
     /** Remap a specified Utf8 entry to the given value and return its new index. */
     public int remapUtf8To(String newString, int oldIndex) throws Exception
     {
-        return constantPool.remapUtf8To(newString, oldIndex);
+        return this.constantPool.remapUtf8To(newString, oldIndex);
     }
 
     /** Lookup the UTF8 string in the constant pool. Used in debugging. */
     protected String getUtf8(int cpIndex) throws Exception
     {
-        CpInfo i = getCpEntry(cpIndex);
+        CpInfo i = this.getCpEntry(cpIndex);
         if (i instanceof Utf8CpInfo)
         {
             return ((Utf8CpInfo)i).getString();
@@ -504,14 +504,14 @@ public class ClassFile implements ClassConstants
     /** Does this class contain reflection methods? */
     public boolean hasReflection()
     {
-        return hasReflection;
+        return this.hasReflection;
     }
 
     /** List methods which can break obfuscated code, and log to a String[]. */
     public String[] getDangerousMethods() throws Exception
     {
         Vector list = new Vector();
-        list = listDangerMethods(list);
+        list = this.listDangerMethods(list);
         // Copy any warnings to a String[]
         String[] warnings = new String[list.size()];
         for (int i = 0; i < warnings.length; i++)
@@ -526,34 +526,34 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
-        for (Enumeration enm = constantPool.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements(); )
         {
             Object o = enm.nextElement();
             if (o instanceof MethodrefCpInfo)
             {
                 // Get the method class name, simple name and descriptor
                 MethodrefCpInfo entry = (MethodrefCpInfo)o;
-                ClassCpInfo classEntry = (ClassCpInfo)getCpEntry(entry.getClassIndex());
-                String className = ((Utf8CpInfo)getCpEntry(classEntry.getNameIndex())).getString();
-                NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)getCpEntry(entry.getNameAndTypeIndex());
-                String name = ((Utf8CpInfo)getCpEntry(ntEntry.getNameIndex())).getString();
-                String descriptor = ((Utf8CpInfo)getCpEntry(ntEntry.getDescriptorIndex())).getString();
+                ClassCpInfo classEntry = (ClassCpInfo)this.getCpEntry(entry.getClassIndex());
+                String className = ((Utf8CpInfo)this.getCpEntry(classEntry.getNameIndex())).getString();
+                NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)this.getCpEntry(entry.getNameAndTypeIndex());
+                String name = ((Utf8CpInfo)this.getCpEntry(ntEntry.getNameIndex())).getString();
+                String descriptor = ((Utf8CpInfo)this.getCpEntry(ntEntry.getDescriptorIndex())).getString();
 
                 // Check if this is on the proscribed list
                 if (className.equals("java/lang/Class"))
                 {
                     if (ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                     {
-                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + getName() + ClassFile.LOG_CLASS_FORNAME_MID + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
+                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_CLASS_FORNAME_MID + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
                     }
                     else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY))
                     {
-                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + getName() + ClassFile.LOG_DANGER_CLASS_MID + name + descriptor);
+                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_DANGER_CLASS_MID + name + descriptor);
                     }
                 }
                 else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY))
                 {
-                    list.addElement(ClassFile.LOG_DANGER_CLASSLOADER_PRE + getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID + name + descriptor);
+                    list.addElement(ClassFile.LOG_DANGER_CLASSLOADER_PRE + this.getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID + name + descriptor);
                 }
             }
         }
@@ -566,17 +566,17 @@ public class ClassFile implements ClassConstants
         try
         {
             // Check for references to Utf8 from outside the constant pool
-            for (int i = 0; i < fields.length; i++)
+            for (int i = 0; i < this.fields.length; i++)
             {
-                fields[i].markUtf8Refs(pool);
+                this.fields[i].markUtf8Refs(pool);
             }
-            for (int i = 0; i < methods.length; i++)
+            for (int i = 0; i < this.methods.length; i++)
             {
-                methods[i].markUtf8Refs(pool); // also checks Code/LVT attrs here
+                this.methods[i].markUtf8Refs(pool); // also checks Code/LVT attrs here
             }
-            for (int i = 0; i < attributes.length; i++)
+            for (int i = 0; i < this.attributes.length; i++)
             {
-                attributes[i].markUtf8Refs(pool); // checks InnerClasses, SourceFile and all attr names
+                this.attributes[i].markUtf8Refs(pool); // checks InnerClasses, SourceFile and all attr names
             }
 
             // Now check for references from other CP entries
@@ -633,64 +633,64 @@ public class ClassFile implements ClassConstants
         }
 
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < fields.length; i++)
+        for (int i = 0; i < this.fields.length; i++)
         {
-            fields[i].trimAttrsExcept(keepAttrs);
+            this.fields[i].trimAttrsExcept(keepAttrs);
         }
-        for (int i = 0; i < methods.length; i++)
+        for (int i = 0; i < this.methods.length; i++)
         {
-            methods[i].trimAttrsExcept(keepAttrs);
+            this.methods[i].trimAttrsExcept(keepAttrs);
         }
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (Tools.isInArray(attributes[i].getAttrName(), keepAttrs))
+            if (Tools.isInArray(this.attributes[i].getAttrName(), keepAttrs))
             {
-                attributes[i].trimAttrsExcept(keepAttrs);
+                this.attributes[i].trimAttrsExcept(keepAttrs);
             }
             else
             {
-                attributes[i] = null;
+                this.attributes[i] = null;
             }
         }
 
         // Delete the marked attributes
-        AttrInfo[] left = new AttrInfo[attributes.length];
+        AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (attributes[i] != null)
+            if (this.attributes[i] != null)
             {
-                left[j++] = attributes[i];
+                left[j++] = this.attributes[i];
             }
         }
-        attributes = new AttrInfo[j];
-        System.arraycopy(left, 0, attributes, 0, j);
-        u2attributesCount = j;
+        this.attributes = new AttrInfo[j];
+        System.arraycopy(left, 0, this.attributes, 0, j);
+        this.u2attributesCount = j;
 
         // Signal that unknown attributes are gone
-        isUnkAttrGone = true;
+        this.isUnkAttrGone = true;
     }
 
     /** Update the constant pool reference counts. */
     public void updateRefCount() throws Exception
     {
-        constantPool.updateRefCount();
+        this.constantPool.updateRefCount();
     }
 
     /** Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed). */
     public void trimAttrs() throws Exception
     {
-        trimAttrsExcept(null);
+        this.trimAttrsExcept(null);
     }
 
     /** Remap SourceFile attribute to constant string "SourceFile" */
     public void setDummySourceFile() throws Exception
     {
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (ClassConstants.ATTR_SourceFile.equals(attributes[i].getAttrName()))
+            if (ClassConstants.ATTR_SourceFile.equals(this.attributes[i].getAttrName()))
             {
-                ((SourceFileAttrInfo)attributes[i]).setAsDummy(constantPool);
+                ((SourceFileAttrInfo)this.attributes[i]).setAsDummy(this.constantPool);
             }
         }
     }
@@ -701,11 +701,11 @@ public class ClassFile implements ClassConstants
         String[] attrs = nm.getAttrsToKeep();
         if (attrs.length > 0)
         {
-            trimAttrsExcept(attrs);
+            this.trimAttrsExcept(attrs);
         }
         else
         {
-            trimAttrs();
+            this.trimAttrs();
         }
     }
 
@@ -715,49 +715,49 @@ public class ClassFile implements ClassConstants
         // If requested by '.option LineNumberDebug' make SourceFile attribute into dummy constant string "SourceFile"
         if (enableDummySourceFile)
         {
-            setDummySourceFile();
+            this.setDummySourceFile();
         }
 
         // Go through all of class's fields and methods mapping 'name' and 'descriptor' references
-        String thisClassName = ((Utf8CpInfo)getCpEntry(((ClassCpInfo)getCpEntry(u2thisClass)).getNameIndex())).getString();
-        for (int i = 0; i < u2fieldsCount; i++)
+        String thisClassName = ((Utf8CpInfo)this.getCpEntry(((ClassCpInfo)this.getCpEntry(this.u2thisClass)).getNameIndex())).getString();
+        for (int i = 0; i < this.u2fieldsCount; i++)
         {
             // Remap field 'name', unless it is 'Synthetic'
-            FieldInfo field = fields[i];
+            FieldInfo field = this.fields[i];
             if (!field.isSynthetic())
             {
-                Utf8CpInfo nameUtf = (Utf8CpInfo)getCpEntry(field.getNameIndex());
+                Utf8CpInfo nameUtf = (Utf8CpInfo)this.getCpEntry(field.getNameIndex());
                 String remapName = nm.mapField(thisClassName, nameUtf.getString());
-                field.setNameIndex(constantPool.remapUtf8To(remapName, field.getNameIndex()));
+                field.setNameIndex(this.constantPool.remapUtf8To(remapName, field.getNameIndex()));
             }
 
             // Remap field 'descriptor'
-            Utf8CpInfo descUtf = (Utf8CpInfo)getCpEntry(field.getDescriptorIndex());
+            Utf8CpInfo descUtf = (Utf8CpInfo)this.getCpEntry(field.getDescriptorIndex());
             String remapDesc = nm.mapDescriptor(descUtf.getString());
-            field.setDescriptorIndex(constantPool.remapUtf8To(remapDesc, field.getDescriptorIndex()));
+            field.setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, field.getDescriptorIndex()));
         }
-        for (int i = 0; i < u2methodsCount; i++)
+        for (int i = 0; i < this.u2methodsCount; i++)
         {
             // Remap method 'name', unless it is 'Synthetic'
-            MethodInfo method = methods[i];
-            Utf8CpInfo descUtf = (Utf8CpInfo)getCpEntry(method.getDescriptorIndex());
+            MethodInfo method = this.methods[i];
+            Utf8CpInfo descUtf = (Utf8CpInfo)this.getCpEntry(method.getDescriptorIndex());
             if (!method.isSynthetic())
             {
-                Utf8CpInfo nameUtf = (Utf8CpInfo)getCpEntry(method.getNameIndex());
+                Utf8CpInfo nameUtf = (Utf8CpInfo)this.getCpEntry(method.getNameIndex());
                 String remapName = nm.mapMethod(thisClassName, nameUtf.getString(), descUtf.getString());
-                method.setNameIndex(constantPool.remapUtf8To(remapName, method.getNameIndex()));
+                method.setNameIndex(this.constantPool.remapUtf8To(remapName, method.getNameIndex()));
             }
 
             // Remap method 'descriptor'
             String remapDesc = nm.mapDescriptor(descUtf.getString());
-            method.setDescriptorIndex(constantPool.remapUtf8To(remapDesc, method.getDescriptorIndex()));
+            method.setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, method.getDescriptorIndex()));
         }
 
         // Remap all field/method names and descriptors in the constant pool (depends on class names)
-        int currentCpLength = constantPool.length(); // constant pool can be extended (never contracted) during loop
+        int currentCpLength = this.constantPool.length(); // constant pool can be extended (never contracted) during loop
         for (int i = 0; i < currentCpLength; i++)
         {
-            CpInfo cpInfo = getCpEntry(i);
+            CpInfo cpInfo = this.getCpEntry(i);
             if (cpInfo != null)
             {
                 // If this is a CONSTANT_Fieldref, CONSTANT_Methodref or CONSTANT_InterfaceMethodref get the CONSTANT_NameAndType
@@ -765,15 +765,15 @@ public class ClassFile implements ClassConstants
                 if (cpInfo instanceof RefCpInfo)
                 {
                     // Get the unmodified class name
-                    ClassCpInfo classInfo = (ClassCpInfo)getCpEntry(((RefCpInfo)cpInfo).getClassIndex());
-                    Utf8CpInfo classUtf = (Utf8CpInfo)getCpEntry(classInfo.getNameIndex());
+                    ClassCpInfo classInfo = (ClassCpInfo)this.getCpEntry(((RefCpInfo)cpInfo).getClassIndex());
+                    Utf8CpInfo classUtf = (Utf8CpInfo)this.getCpEntry(classInfo.getNameIndex());
                     String className = classUtf.getString();
 
                     // Get the current N&T reference and its 'name' and 'descriptor' utf's
                     int ntIndex = ((RefCpInfo)cpInfo).getNameAndTypeIndex();
-                    NameAndTypeCpInfo nameTypeInfo = (NameAndTypeCpInfo)getCpEntry(ntIndex);
-                    Utf8CpInfo refUtf = (Utf8CpInfo)getCpEntry(nameTypeInfo.getNameIndex());
-                    Utf8CpInfo descUtf = (Utf8CpInfo)getCpEntry(nameTypeInfo.getDescriptorIndex());
+                    NameAndTypeCpInfo nameTypeInfo = (NameAndTypeCpInfo)this.getCpEntry(ntIndex);
+                    Utf8CpInfo refUtf = (Utf8CpInfo)this.getCpEntry(nameTypeInfo.getNameIndex());
+                    Utf8CpInfo descUtf = (Utf8CpInfo)this.getCpEntry(nameTypeInfo.getDescriptorIndex());
 
                     // Get the remapped versions of 'name' and 'descriptor'
                     String remapRef;
@@ -803,11 +803,11 @@ public class ClassFile implements ClassConstants
                             newNameTypeInfo = (NameAndTypeCpInfo)nameTypeInfo.clone();
 
                             // Adjust its reference counts of its utf's
-                            getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
-                            getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
+                            this.getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
+                            this.getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
 
                             // Append it to the Constant Pool, and point the RefCpInfo entry to the new N&T data
-                            ((RefCpInfo)cpInfo).setNameAndTypeIndex(constantPool.addEntry(newNameTypeInfo));
+                            ((RefCpInfo)cpInfo).setNameAndTypeIndex(this.constantPool.addEntry(newNameTypeInfo));
 
                             // Adjust reference counts from RefCpInfo
                             newNameTypeInfo.incRefCount();
@@ -815,48 +815,48 @@ public class ClassFile implements ClassConstants
                         }
 
                         // Remap the 'name' and 'descriptor' utf's in N&T
-                        newNameTypeInfo.setNameIndex(constantPool.remapUtf8To(remapRef, newNameTypeInfo.getNameIndex()));
-                        newNameTypeInfo.setDescriptorIndex(constantPool.remapUtf8To(remapDesc, newNameTypeInfo.getDescriptorIndex()));
+                        newNameTypeInfo.setNameIndex(this.constantPool.remapUtf8To(remapRef, newNameTypeInfo.getNameIndex()));
+                        newNameTypeInfo.setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, newNameTypeInfo.getDescriptorIndex()));
                     }
                 }
             }
         }
 
         // Remap all class references to Utf
-        for (int i = 0; i < constantPool.length(); i++)
+        for (int i = 0; i < this.constantPool.length(); i++)
         {
-            CpInfo cpInfo = getCpEntry(i);
+            CpInfo cpInfo = this.getCpEntry(i);
             if (cpInfo != null)
             {
                 // If this is CONSTANT_Class, remap the class-name Utf8 entry
                 if (cpInfo instanceof ClassCpInfo)
                 {
                     ClassCpInfo classInfo = (ClassCpInfo)cpInfo;
-                    Utf8CpInfo utf = (Utf8CpInfo)getCpEntry(classInfo.getNameIndex());
+                    Utf8CpInfo utf = (Utf8CpInfo)this.getCpEntry(classInfo.getNameIndex());
                     String remapClass = nm.mapClass(utf.getString());
-                    int remapIndex = constantPool.remapUtf8To(remapClass, classInfo.getNameIndex());
+                    int remapIndex = this.constantPool.remapUtf8To(remapClass, classInfo.getNameIndex());
                     classInfo.setNameIndex(remapIndex);
                 }
             }
         }
 
         // Remap all annotation type references to Utf8 classes
-        for (int j = 0; j < u2attributesCount; j++)
+        for (int j = 0; j < this.u2attributesCount; j++)
         {
-            attributes[j].remap(this, nm);
+            this.attributes[j].remap(this, nm);
         }
-        for (int i = 0; i < u2methodsCount; i++)
+        for (int i = 0; i < this.u2methodsCount; i++)
         {
-            for (int j = 0; j < methods[i].u2attributesCount; j++)
+            for (int j = 0; j < this.methods[i].u2attributesCount; j++)
             {
-                methods[i].attributes[j].remap(this, nm);
+                this.methods[i].attributes[j].remap(this, nm);
             }
         }
-        for (int i = 0; i < u2fieldsCount; i++)
+        for (int i = 0; i < this.u2fieldsCount; i++)
         {
-            for (int j = 0; j < fields[i].u2attributesCount; j++)
+            for (int j = 0; j < this.fields[i].u2attributesCount; j++)
             {
-                fields[i].attributes[j].remap(this, nm);
+                this.fields[i].attributes[j].remap(this, nm);
             }
         }
 
@@ -867,7 +867,7 @@ public class ClassFile implements ClassConstants
 //        if (hasReflection && enableMapClassString)
         if (enableMapClassString)
         {
-            remapClassStrings(nm, log);
+            this.remapClassStrings(nm, log);
         }
     }
 
@@ -876,9 +876,9 @@ public class ClassFile implements ClassConstants
     {
         // Visit all method Code attributes, collecting information on remap
         FlagHashtable cpToFlag = new FlagHashtable();
-        for (int i = 0; i < methods.length; i++)
+        for (int i = 0; i < this.methods.length; i++)
         {
-            MethodInfo methodInfo = methods[i];
+            MethodInfo methodInfo = this.methods[i];
             for (int j = 0; j < methodInfo.attributes.length; j++)
             {
                 AttrInfo attrInfo = methodInfo.attributes[j];
@@ -894,7 +894,7 @@ public class ClassFile implements ClassConstants
         {
             StringCpInfo stringCpInfo = (StringCpInfo)enm.nextElement();
             StringCpInfoFlags flags = (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
-            String name = ClassFile.backTranslate(((Utf8CpInfo)getCpEntry(stringCpInfo.getStringIndex())).getString());
+            String name = ClassFile.backTranslate(((Utf8CpInfo)this.getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
             if (ClassFile.isClassSpec(name) && flags.forNameFlag)
             {
@@ -906,10 +906,10 @@ public class ClassFile implements ClassConstants
                     if (flags.otherFlag)
                     {
                         // Create a new String/Utf8 for remapped Class-name
-                        int remapUtf8Index = constantPool.addUtf8Entry(ClassFile.translate(remapName));
+                        int remapUtf8Index = this.constantPool.addUtf8Entry(ClassFile.translate(remapName));
                         StringCpInfo remapStringInfo = new StringCpInfo();
                         remapStringInfo.setStringIndex(remapUtf8Index);
-                        int remapStringIndex = constantPool.addEntry(remapStringInfo);
+                        int remapStringIndex = this.constantPool.addEntry(remapStringInfo);
                         // Default to full remap if new String would require ldc_w to access - we can't cope with that yet
                         if (remapStringIndex > 0xFF)
                         {
@@ -918,7 +918,7 @@ public class ClassFile implements ClassConstants
                         }
                         else
                         {
-                            log.println("# MapClassString (partial) in class " + getName() + ": " + name + " -> " + remapName);
+                            log.println("# MapClassString (partial) in class " + this.getName() + ": " + name + " -> " + remapName);
                             // Add to cpUpdate hash for later remap in Code
                             cpUpdate.put(new Integer(flags.stringIndex), new Integer(remapStringIndex));
                         }
@@ -929,19 +929,19 @@ public class ClassFile implements ClassConstants
                     }
                     if (simpleRemap)
                     {
-                        log.println("# MapClassString (full) in class " + getName() + ": " + name + " -> " + remapName);
+                        log.println("# MapClassString (full) in class " + this.getName() + ": " + name + " -> " + remapName);
                         // Just remap the existing String/Utf8, since it is only used for Class.forName or .class, or maybe ldc_w
                         // was needed (which gives improper String remap)
-                        int remapIndex = constantPool.remapUtf8To(ClassFile.translate(remapName), stringCpInfo.getStringIndex());
+                        int remapIndex = this.constantPool.remapUtf8To(ClassFile.translate(remapName), stringCpInfo.getStringIndex());
                         stringCpInfo.setStringIndex(remapIndex);
                     }
                 }
             }
         }
         // Visit all method Code attributes, remapping .class/Class.forName
-        for (int i = 0; i < methods.length; i++)
+        for (int i = 0; i < this.methods.length; i++)
         {
-            MethodInfo methodInfo = methods[i];
+            MethodInfo methodInfo = this.methods[i];
             for (int j = 0; j < methodInfo.attributes.length; j++)
             {
                 AttrInfo attrInfo = methodInfo.attributes[j];
@@ -1000,11 +1000,11 @@ public class ClassFile implements ClassConstants
         {
             throw new IOException("No output stream was provided.");
         }
-        dout.writeInt(u4magic);
-        dout.writeShort(u2minorVersion);
-        dout.writeShort(u2majorVersion);
-        dout.writeShort(constantPool.length() + (cpIdString != null ? 1 : 0));
-        for (Enumeration enm = constantPool.elements(); enm.hasMoreElements(); )
+        dout.writeInt(this.u4magic);
+        dout.writeShort(this.u2minorVersion);
+        dout.writeShort(this.u2majorVersion);
+        dout.writeShort(this.constantPool.length() + (this.cpIdString != null ? 1 : 0));
+        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements(); )
         {
             CpInfo cpInfo = (CpInfo)enm.nextElement();
             if (cpInfo != null)
@@ -1012,31 +1012,32 @@ public class ClassFile implements ClassConstants
                 cpInfo.write(dout);
             }
         }
-        if (cpIdString != null) {
-            cpIdString.write(dout);
-        }
-        dout.writeShort(u2accessFlags);
-        dout.writeShort(u2thisClass);
-        dout.writeShort(u2superClass);
-        dout.writeShort(u2interfacesCount);
-        for (int i = 0; i < u2interfacesCount; i++)
+        if (this.cpIdString != null)
         {
-            dout.writeShort(u2interfaces[i]);
+            this.cpIdString.write(dout);
         }
-        dout.writeShort(u2fieldsCount);
-        for (int i = 0; i < u2fieldsCount; i++)
+        dout.writeShort(this.u2accessFlags);
+        dout.writeShort(this.u2thisClass);
+        dout.writeShort(this.u2superClass);
+        dout.writeShort(this.u2interfacesCount);
+        for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            fields[i].write(dout);
+            dout.writeShort(this.u2interfaces[i]);
         }
-        dout.writeShort(u2methodsCount);
-        for (int i = 0; i < u2methodsCount; i++)
+        dout.writeShort(this.u2fieldsCount);
+        for (int i = 0; i < this.u2fieldsCount; i++)
         {
-            methods[i].write(dout);
+            this.fields[i].write(dout);
         }
-        dout.writeShort(u2attributesCount);
-        for (int i = 0; i < u2attributesCount; i++)
+        dout.writeShort(this.u2methodsCount);
+        for (int i = 0; i < this.u2methodsCount; i++)
         {
-            attributes[i].write(dout);
+            this.methods[i].write(dout);
+        }
+        dout.writeShort(this.u2attributesCount);
+        for (int i = 0; i < this.u2attributesCount; i++)
+        {
+            this.attributes[i].write(dout);
         }
     }
 
@@ -1044,47 +1045,47 @@ public class ClassFile implements ClassConstants
     public void dump(PrintWriter pw) throws Exception
     {
         pw.println("_____________________________________________________________________");
-        pw.println("CLASS: " + getName());
-        pw.println("Magic: " + Integer.toHexString(u4magic));
-        pw.println("Minor version: " + Integer.toHexString(u2minorVersion));
-        pw.println("Major version: " + Integer.toHexString(u2majorVersion));
+        pw.println("CLASS: " + this.getName());
+        pw.println("Magic: " + Integer.toHexString(this.u4magic));
+        pw.println("Minor version: " + Integer.toHexString(this.u2minorVersion));
+        pw.println("Major version: " + Integer.toHexString(this.u2majorVersion));
         pw.println();
-        pw.println("CP length: " + Integer.toHexString(constantPool.length()));
-        for (int i = 0; i < constantPool.length(); i++)
+        pw.println("CP length: " + Integer.toHexString(this.constantPool.length()));
+        for (int i = 0; i < this.constantPool.length(); i++)
         {
-            CpInfo cpInfo = constantPool.getCpEntry(i);
+            CpInfo cpInfo = this.constantPool.getCpEntry(i);
             if (cpInfo != null)
             {
                 cpInfo.dump(pw, this, i);
             }
         }
-        pw.println("Access: " + Integer.toHexString(u2accessFlags));
-        pw.println("This class: " + getName());
-        pw.println("Superclass: " + getSuper());
-        pw.println("Interfaces count: " + Integer.toHexString(u2interfacesCount));
-        for (int i = 0; i < u2interfacesCount; i++)
+        pw.println("Access: " + Integer.toHexString(this.u2accessFlags));
+        pw.println("This class: " + this.getName());
+        pw.println("Superclass: " + this.getSuper());
+        pw.println("Interfaces count: " + Integer.toHexString(this.u2interfacesCount));
+        for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            CpInfo info = getCpEntry(u2interfaces[i]);
+            CpInfo info = this.getCpEntry(this.u2interfaces[i]);
             if (info == null)
             {
                 pw.println("  Interface " + Integer.toHexString(i) + ": (null)");
             }
             else
             {
-                pw.println("  Interface " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)getCpEntry(((ClassCpInfo)info).getNameIndex())).getString());
+                pw.println("  Interface " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)this.getCpEntry(((ClassCpInfo)info).getNameIndex())).getString());
             }
         }
-        pw.println("Fields count: " + Integer.toHexString(u2fieldsCount));
-        for (int i = 0; i < u2fieldsCount; i++)
+        pw.println("Fields count: " + Integer.toHexString(this.u2fieldsCount));
+        for (int i = 0; i < this.u2fieldsCount; i++)
         {
-            ClassItemInfo info = fields[i];
+            ClassItemInfo info = this.fields[i];
             if (info == null)
             {
                 pw.println("  Field " + Integer.toHexString(i) + ": (null)");
             }
             else
             {
-                pw.println("  Field " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)getCpEntry(info.getNameIndex())).getString() + " " + ((Utf8CpInfo)getCpEntry(info.getDescriptorIndex())).getString());
+                pw.println("  Field " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)this.getCpEntry(info.getNameIndex())).getString() + " " + ((Utf8CpInfo)this.getCpEntry(info.getDescriptorIndex())).getString());
             }
 //            pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
 //            for (int j = 0; j < info.u2attributesCount; j++)
@@ -1092,17 +1093,17 @@ public class ClassFile implements ClassConstants
 //                info.attributes[j].dump(pw, this);
 //            }
         }
-        pw.println("Methods count: " + Integer.toHexString(u2methodsCount));
-        for (int i = 0; i < u2methodsCount; i++)
+        pw.println("Methods count: " + Integer.toHexString(this.u2methodsCount));
+        for (int i = 0; i < this.u2methodsCount; i++)
         {
-            ClassItemInfo info = methods[i];
+            ClassItemInfo info = this.methods[i];
             if (info == null)
             {
                 pw.println("  Method " + Integer.toHexString(i) + ": (null)");
             }
             else
             {
-                pw.println("  Method " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)getCpEntry(info.getNameIndex())).getString() + " " + ((Utf8CpInfo)getCpEntry(info.getDescriptorIndex())).getString() + " " + Integer.toHexString(info.getAccessFlags()));
+                pw.println("  Method " + Integer.toHexString(i) + ": " + ((Utf8CpInfo)this.getCpEntry(info.getNameIndex())).getString() + " " + ((Utf8CpInfo)this.getCpEntry(info.getDescriptorIndex())).getString() + " " + Integer.toHexString(info.getAccessFlags()));
             }
 //            pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
 //            for (int j = 0; j < info.u2attributesCount; j++)
@@ -1110,8 +1111,8 @@ public class ClassFile implements ClassConstants
 //                info.attributes[j].dump(pw, this);
 //            }
         }
-//        pw.println("Attrs count: " + Integer.toHexString(u2attributesCount));
-//        for (int i = 0; i < u2attributesCount; i++)
+//        pw.println("Attrs count: " + Integer.toHexString(this.u2attributesCount));
+//        for (int i = 0; i < this.u2attributesCount; i++)
 //        {
 //            attributes[i].dump(pw, this);
 //        }

@@ -46,34 +46,34 @@ public class ConstantPool
     /** Ctor, which initializes Constant Pool using an array of CpInfo. */
     public ConstantPool(ClassFile classFile, CpInfo[] cpInfo) throws Exception
     {
-        myClassFile = classFile;
+        this.myClassFile = classFile;
         int length = cpInfo.length;
-        pool = new Vector(length);
-        pool.setSize(length);
+        this.pool = new Vector(length);
+        this.pool.setSize(length);
         for (int i = 0; i < length; i++)
         {
-            pool.setElementAt(cpInfo[i], i);
+            this.pool.setElementAt(cpInfo[i], i);
         }
     }
 
     /** Return an Enumeration of all Constant Pool entries. */
     public Enumeration elements()
     {
-        return pool.elements();
+        return this.pool.elements();
     }
 
     /** Return the Constant Pool length. */
     public int length()
     {
-        return pool.size();
+        return this.pool.size();
     }
 
     /** Return the specified Constant Pool entry. */
     public CpInfo getCpEntry(int i) throws Exception
     {
-        if (i < pool.size())
+        if (i < this.pool.size())
         {
-            return (CpInfo)pool.elementAt(i);
+            return (CpInfo)this.pool.elementAt(i);
         }
         throw new Exception("Constant Pool index out of range.");
     }
@@ -82,7 +82,7 @@ public class ConstantPool
     public void updateRefCount() throws Exception
     {
         // Reset all reference counts to zero
-        walkPool(new PoolAction()
+        this.walkPool(new PoolAction()
         {
             @Override
             public void defaultAction(CpInfo cpInfo) throws Exception
@@ -92,13 +92,13 @@ public class ConstantPool
         });
 
         // Count the direct references to Utf8 entries
-        myClassFile.markUtf8Refs(this);
+        this.myClassFile.markUtf8Refs(this);
 
         // Count the direct references to NameAndType entries
-        myClassFile.markNTRefs(this);
+        this.myClassFile.markNTRefs(this);
 
         // Go through pool, clearing the Utf8 entries which have no references
-        walkPool(new PoolAction()
+        this.walkPool(new PoolAction()
         {
             @Override
             public void utf8Action(Utf8CpInfo cpInfo) throws Exception
@@ -114,7 +114,7 @@ public class ConstantPool
     /** Increment the reference count for the specified element. */
     public void incRefCount(int i) throws Exception
     {
-        CpInfo cpInfo = (CpInfo)pool.elementAt(i);
+        CpInfo cpInfo = (CpInfo)this.pool.elementAt(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
@@ -129,14 +129,14 @@ public class ConstantPool
     /** Remap a specified Utf8 entry to the given value and return its new index. */
     public int remapUtf8To(String newString, int oldIndex) throws Exception
     {
-        decRefCount(oldIndex);
-        return addUtf8Entry(newString);
+        this.decRefCount(oldIndex);
+        return this.addUtf8Entry(newString);
     }
 
     /** Decrement the reference count for the specified element, blanking if Utf and refs are zero. */
     public void decRefCount(int i) throws Exception
     {
-        CpInfo cpInfo = (CpInfo)pool.elementAt(i);
+        CpInfo cpInfo = (CpInfo)this.pool.elementAt(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
@@ -152,9 +152,9 @@ public class ConstantPool
     public int addEntry(CpInfo entry) throws Exception
     {
         // Try to replace an old, blanked Utf8 entry
-        int index = pool.size();
-        pool.setSize(index + 1);
-        pool.setElementAt(entry, index);
+        int index = this.pool.size();
+        this.pool.setSize(index + 1);
+        this.pool.setElementAt(entry, index);
         return index;
     }
 
@@ -162,9 +162,9 @@ public class ConstantPool
     protected int addUtf8Entry(String s) throws Exception
     {
         // Search pool for the string. If found, just increment the reference count and return the index
-        for (int i = 0; i < pool.size(); i++)
+        for (int i = 0; i < this.pool.size(); i++)
         {
-            Object o = pool.elementAt(i);
+            Object o = this.pool.elementAt(i);
             if (o instanceof Utf8CpInfo)
             {
                 Utf8CpInfo entry = (Utf8CpInfo)o;
@@ -177,9 +177,9 @@ public class ConstantPool
         }
 
         // No luck, so try to overwrite an old, blanked entry
-        for (int i = 0; i < pool.size(); i++)
+        for (int i = 0; i < this.pool.size(); i++)
         {
-            Object o = pool.elementAt(i);
+            Object o = this.pool.elementAt(i);
             if (o instanceof Utf8CpInfo)
             {
                 Utf8CpInfo entry = (Utf8CpInfo)o;
@@ -193,7 +193,7 @@ public class ConstantPool
         }
 
         // Still no luck, so append a fresh Utf8CpInfo entry to the pool
-        return addEntry(new Utf8CpInfo(s));
+        return this.addEntry(new Utf8CpInfo(s));
     }
 
     /** Data walker */
@@ -201,7 +201,7 @@ public class ConstantPool
     {
         public void utf8Action(Utf8CpInfo cpInfo) throws Exception
         {
-            defaultAction(cpInfo);
+            this.defaultAction(cpInfo);
         }
         public void defaultAction(CpInfo cpInfo) throws Exception
         {
@@ -209,7 +209,7 @@ public class ConstantPool
     }
     private void walkPool(PoolAction pa) throws Exception
     {
-        for (Enumeration enm = pool.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.pool.elements(); enm.hasMoreElements(); )
         {
             Object o = enm.nextElement();
             if (o instanceof Utf8CpInfo)

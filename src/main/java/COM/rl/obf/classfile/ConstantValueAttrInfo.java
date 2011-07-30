@@ -56,14 +56,14 @@ public class ConstantValueAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2constantValueIndex = din.readUnsignedShort();
+        this.u2constantValueIndex = din.readUnsignedShort();
     }
 
     /** Export data following the header to a DataOutput stream. */
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2constantValueIndex);
+        dout.writeShort(this.u2constantValueIndex);
     }
 }
 

@@ -44,40 +44,40 @@ public class SimpleName
     /** Ctor. */
     public SimpleName(String simpleName)
     {
-        name = simpleName;
-        isAsPackage = true;
+        this.name = simpleName;
+        this.isAsPackage = true;
     }
 
     /** Set simple name as package level. */
     public SimpleName setAsPackage()
     {
-        isAsPackage = true;
+        this.isAsPackage = true;
         return this;
     }
 
     /** Set simple name as class level. */
     public SimpleName setAsClass()
     {
-        isAsPackage = false;
+        this.isAsPackage = false;
         return this;
     }
 
     /** Is this a package level simple name? */
     public boolean isAsPackage()
     {
-        return isAsPackage;
+        return this.isAsPackage;
     }
 
     /** Is this a class level simple name? */
     public boolean isAsClass()
     {
-        return !isAsPackage;
+        return !this.isAsPackage;
     }
 
     /** Return the simple name. */
     public String getName()
     {
-        return name;
+        return this.name;
     }
 }
 

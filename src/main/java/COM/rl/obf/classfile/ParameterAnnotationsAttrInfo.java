@@ -49,16 +49,16 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     /** Return the array of parameter annotations table entries. */
     protected ParameterAnnotationsInfo[] getParameterAnnotationsTable() throws Exception
     {
-        return parameterAnnotationsTable;
+        return this.parameterAnnotationsTable;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < parameterAnnotationsTable.length; i++)
+        for (int i = 0; i < this.parameterAnnotationsTable.length; i++)
         {
-            parameterAnnotationsTable[i].markUtf8Refs(pool);
+            this.parameterAnnotationsTable[i].markUtf8Refs(pool);
         }
     }
 
@@ -66,11 +66,11 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u1numParameters = din.readUnsignedByte();
-        parameterAnnotationsTable = new ParameterAnnotationsInfo[u1numParameters];
-        for (int i = 0; i < u1numParameters; i++)
+        this.u1numParameters = din.readUnsignedByte();
+        this.parameterAnnotationsTable = new ParameterAnnotationsInfo[this.u1numParameters];
+        for (int i = 0; i < this.u1numParameters; i++)
         {
-            parameterAnnotationsTable[i] = ParameterAnnotationsInfo.create(din);
+            this.parameterAnnotationsTable[i] = ParameterAnnotationsInfo.create(din);
         }
     }
 
@@ -78,10 +78,10 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeByte(u1numParameters);
-        for (int i = 0; i < u1numParameters; i++)
+        dout.writeByte(this.u1numParameters);
+        for (int i = 0; i < this.u1numParameters; i++)
         {
-            parameterAnnotationsTable[i].write(dout);
+            this.parameterAnnotationsTable[i].write(dout);
         }
     }
 
@@ -89,9 +89,9 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < u1numParameters; i++)
+        for (int i = 0; i < this.u1numParameters; i++)
         {
-            parameterAnnotationsTable[i].remap(cf, nm);
+            this.parameterAnnotationsTable[i].remap(cf, nm);
         }
     }
 }

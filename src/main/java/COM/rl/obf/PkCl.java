@@ -55,13 +55,13 @@ abstract public class PkCl extends TreeItem
     /** Get a class by name. */
     public Cl getClass(String name) throws Exception
     {
-        return (Cl)cls.get(name);
+        return (Cl)this.cls.get(name);
     }
 
     /** Get a class by obfuscated name. */
     public Cl getObfClass(String name) throws Exception
     {
-        for (Enumeration enm = cls.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements(); )
         {
             Cl cl = (Cl)enm.nextElement();
             if (name.equals(cl.getOutName()))
@@ -75,20 +75,20 @@ abstract public class PkCl extends TreeItem
     /** Get an Enumeration of classes directly beneath this PkCl. */
     public Enumeration getClassEnum()
     {
-        return cls.elements();
+        return this.cls.elements();
     }
 
     /** Get an Enumeration of all classes (outer and inner) in the tree beneath this PkCl. */
     public Enumeration getAllClassEnum()
     {
         Vector allClasses = new Vector();
-        addAllClasses(allClasses);
+        this.addAllClasses(allClasses);
         return allClasses.elements();
     }
     /** List classes and recursively compose a list of all inner classes. */
     protected void addAllClasses(Vector allClasses)
     {
-        for (Enumeration enm = cls.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements(); )
         {
             Cl cl = (Cl)enm.nextElement();
             allClasses.addElement(cl);
@@ -99,7 +99,7 @@ abstract public class PkCl extends TreeItem
     /** Return number of classes. */
     public int getClassCount()
     {
-        return cls.size();
+        return this.cls.size();
     }
 
     /** Add a class to the list of owned classes. */
@@ -108,14 +108,14 @@ abstract public class PkCl extends TreeItem
     /** Add a class to the list of owned classes. */
     public Cl addClass(boolean isInnerClass, String name, String superName, String[] interfaceNames, int access) throws Exception
     {
-        Cl cl = getClass(name);
+        Cl cl = this.getClass(name);
 
         // Remove placeholder if present
         PlaceholderCl plClassItem = null;
         if (cl instanceof PlaceholderCl)
         {
             plClassItem = (PlaceholderCl)cl;
-            cls.remove(name);
+            this.cls.remove(name);
             cl = null;
         }
 
@@ -123,7 +123,7 @@ abstract public class PkCl extends TreeItem
         if (cl == null)
         {
             cl = new Cl(this, isInnerClass, name, superName, interfaceNames, access);
-            cls.put(name, cl);
+            this.cls.put(name, cl);
         }
 
         // Copy over the inner class data from the placeholder, if any
@@ -145,11 +145,11 @@ abstract public class PkCl extends TreeItem
     /** Add a placeholder class to our list of owned classes, to be replaced later by the full class. */
     public Cl addPlaceholderClass(boolean isInnerClass, String name) throws Exception
     {
-        Cl cl = getClass(name);
+        Cl cl = this.getClass(name);
         if (cl == null)
         {
             cl = new PlaceholderCl(this, isInnerClass, name);
-            cls.put(name, cl);
+            this.cls.put(name, cl);
         }
         return cl;
     }
@@ -157,7 +157,7 @@ abstract public class PkCl extends TreeItem
     /** Generate unique obfuscated names for this namespace. */
     public void generateNames() throws Exception
     {
-        generateNames(cls);
+        this.generateNames(this.cls);
     }
 
     /** Generate unique obfuscated names for a given namespace. */

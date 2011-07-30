@@ -63,12 +63,15 @@ public class MemberValueInfo
     }
 
     /** Return tag, defining member type. */
-    protected int getTag() {return u1tag;}
+    protected int getTag()
+    {
+        return this.u1tag;
+    }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        switch (u1tag)
+        switch (this.u1tag)
         {
             case 'B':
             case 'C':
@@ -80,33 +83,33 @@ public class MemberValueInfo
             case 'Z':
                 break;
             case 's':
-                pool.incRefCount(u2constValueIndex);
+                pool.incRefCount(this.u2constValueIndex);
                 break;
             case 'e':
-                pool.incRefCount(u2typeNameIndex);
-                pool.incRefCount(u2constNameIndex);
+                pool.incRefCount(this.u2typeNameIndex);
+                pool.incRefCount(this.u2constNameIndex);
                 break;
             case 'c':
-                pool.incRefCount(u2classInfoIndex);
+                pool.incRefCount(this.u2classInfoIndex);
                 break;
             case '@':
-                annotationValue.markUtf8Refs(pool);
+                this.annotationValue.markUtf8Refs(pool);
                 break;
             case '[':
-                for (int i = 0; i < u2numValues; i++)
+                for (int i = 0; i < this.u2numValues; i++)
                 {
-                    values[i].markUtf8Refs(pool);
+                    this.values[i].markUtf8Refs(pool);
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
     private void read(DataInput din) throws Exception
     {
-        u1tag = din.readUnsignedByte();
-        switch (u1tag)
+        this.u1tag = din.readUnsignedByte();
+        switch (this.u1tag)
         {
             case 'B':
             case 'C':
@@ -117,36 +120,36 @@ public class MemberValueInfo
             case 'S':
             case 'Z':
             case 's':
-                u2constValueIndex = din.readUnsignedShort();
+                this.u2constValueIndex = din.readUnsignedShort();
                 break;
             case 'e':
-                u2typeNameIndex = din.readUnsignedShort();
-                u2constNameIndex = din.readUnsignedShort();
+                this.u2typeNameIndex = din.readUnsignedShort();
+                this.u2constNameIndex = din.readUnsignedShort();
                 break;
             case 'c':
-                u2classInfoIndex = din.readUnsignedShort();
+                this.u2classInfoIndex = din.readUnsignedShort();
                 break;
             case '@':
-                annotationValue = AnnotationInfo.create(din);
+                this.annotationValue = AnnotationInfo.create(din);
                 break;
             case '[':
-                u2numValues = din.readUnsignedShort();
-                values = new MemberValueInfo[u2numValues];
-                for (int i = 0; i < u2numValues; i++)
+                this.u2numValues = din.readUnsignedShort();
+                this.values = new MemberValueInfo[this.u2numValues];
+                for (int i = 0; i < this.u2numValues; i++)
                 {
-                    values[i] = MemberValueInfo.create(din);
+                    this.values[i] = MemberValueInfo.create(din);
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeByte(u1tag);
-        switch (u1tag)
+        dout.writeByte(this.u1tag);
+        switch (this.u1tag)
         {
             case 'B':
             case 'C':
@@ -157,34 +160,34 @@ public class MemberValueInfo
             case 'S':
             case 'Z':
             case 's':
-                dout.writeShort(u2constValueIndex);
+                dout.writeShort(this.u2constValueIndex);
                 break;
             case 'e':
-                dout.writeShort(u2typeNameIndex);
-                dout.writeShort(u2constNameIndex);
+                dout.writeShort(this.u2typeNameIndex);
+                dout.writeShort(this.u2constNameIndex);
                 break;
             case 'c':
-                dout.writeShort(u2classInfoIndex);
+                dout.writeShort(this.u2classInfoIndex);
                 break;
             case '@':
-                annotationValue.write(dout);
+                this.annotationValue.write(dout);
                 break;
             case '[':
-                dout.writeShort(u2numValues);
-                for (int i = 0; i < u2numValues; i++)
+                dout.writeShort(this.u2numValues);
+                for (int i = 0; i < this.u2numValues; i++)
                 {
-                    values[i].write(dout);
+                    this.values[i].write(dout);
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        switch (u1tag)
+        switch (this.u1tag)
         {
             case 'B':
             case 'C':
@@ -199,27 +202,27 @@ public class MemberValueInfo
             case 'e':
                 break;
             case 'c':
-                String oldDesc = cf.getUtf8(u2classInfoIndex);
+                String oldDesc = cf.getUtf8(this.u2classInfoIndex);
                 String newDesc = nm.mapDescriptor(oldDesc);
-                u2classInfoIndex = cf.remapUtf8To(newDesc, u2classInfoIndex);
+                this.u2classInfoIndex = cf.remapUtf8To(newDesc, this.u2classInfoIndex);
                 break;
             case '@':
-                annotationValue.remap(cf, nm);
+                this.annotationValue.remap(cf, nm);
                 break;
             case '[':
-                for (int i = 0; i < u2numValues; i++)
+                for (int i = 0; i < this.u2numValues; i++)
                 {
-                    values[i].remap(cf, nm);
+                    this.values[i].remap(cf, nm);
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + u1tag);
+                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
     /** Provide debugging dump of this object. */
     public void dump(PrintStream ps, ClassFile cf) throws Exception
     {
-        ps.println("u1tag : " + u1tag);
+        ps.println("u1tag : " + this.u1tag);
     }
 }

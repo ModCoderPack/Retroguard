@@ -88,10 +88,10 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected int getAttrInfoLength() throws Exception
     {
-        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + u4codeLength + u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
-        for (int i = 0; i < u2attributesCount; i++)
+        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength + this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            length += AttrInfo.CONSTANT_FIELD_SIZE + attributes[i].getAttrInfoLength();
+            length += AttrInfo.CONSTANT_FIELD_SIZE + this.attributes[i].getAttrInfoLength();
         }
         return length;
     }
@@ -111,40 +111,40 @@ public class CodeAttrInfo extends AttrInfo
     protected void trimAttrsExcept(String[] keepAttrs) throws Exception
     {
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (Tools.isInArray(attributes[i].getAttrName(), keepAttrs))
+            if (Tools.isInArray(this.attributes[i].getAttrName(), keepAttrs))
             {
-                attributes[i].trimAttrsExcept(keepAttrs);
+                this.attributes[i].trimAttrsExcept(keepAttrs);
             }
             else
             {
-                attributes[i] = null;
+                this.attributes[i] = null;
             }
         }
 
         // Delete the marked attributes
-        AttrInfo[] left = new AttrInfo[attributes.length];
+        AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (attributes[i] != null)
+            if (this.attributes[i] != null)
             {
-                left[j++] = attributes[i];
+                left[j++] = this.attributes[i];
             }
         }
-        attributes = new AttrInfo[j];
-        System.arraycopy(left, 0, attributes, 0, j);
-        u2attributesCount = j;
+        this.attributes = new AttrInfo[j];
+        System.arraycopy(left, 0, this.attributes, 0, j);
+        this.u2attributesCount = j;
     }
 
     /** Check for references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < attributes.length; i++)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            attributes[i].markUtf8Refs(pool);
+            this.attributes[i].markUtf8Refs(pool);
         }
     }
 
@@ -152,22 +152,22 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2maxStack = din.readUnsignedShort();
-        u2maxLocals = din.readUnsignedShort();
-        u4codeLength = din.readInt();
-        code = new byte[u4codeLength];
-        din.readFully(code);
-        u2exceptionTableLength = din.readUnsignedShort();
-        exceptionTable = new ExceptionInfo[u2exceptionTableLength];
-        for (int i = 0; i < u2exceptionTableLength; i++)
+        this.u2maxStack = din.readUnsignedShort();
+        this.u2maxLocals = din.readUnsignedShort();
+        this.u4codeLength = din.readInt();
+        this.code = new byte[this.u4codeLength];
+        din.readFully(this.code);
+        this.u2exceptionTableLength = din.readUnsignedShort();
+        this.exceptionTable = new ExceptionInfo[this.u2exceptionTableLength];
+        for (int i = 0; i < this.u2exceptionTableLength; i++)
         {
-            exceptionTable[i] = ExceptionInfo.create(din);
+            this.exceptionTable[i] = ExceptionInfo.create(din);
         }
-        u2attributesCount = din.readUnsignedShort();
-        attributes = new AttrInfo[u2attributesCount];
-        for (int i = 0; i < u2attributesCount; i++)
+        this.u2attributesCount = din.readUnsignedShort();
+        this.attributes = new AttrInfo[this.u2attributesCount];
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            attributes[i] = AttrInfo.create(din, cf);
+            this.attributes[i] = AttrInfo.create(din, this.cf);
         }
     }
 
@@ -175,19 +175,19 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2maxStack);
-        dout.writeShort(u2maxLocals);
-        dout.writeInt(u4codeLength);
-        dout.write(code);
-        dout.writeShort(u2exceptionTableLength);
-        for (int i = 0; i < u2exceptionTableLength; i++)
+        dout.writeShort(this.u2maxStack);
+        dout.writeShort(this.u2maxLocals);
+        dout.writeInt(this.u4codeLength);
+        dout.write(this.code);
+        dout.writeShort(this.u2exceptionTableLength);
+        for (int i = 0; i < this.u2exceptionTableLength; i++)
         {
-            exceptionTable[i].write(dout);
+            this.exceptionTable[i].write(dout);
         }
-        dout.writeShort(u2attributesCount);
-        for (int i = 0; i < u2attributesCount; i++)
+        dout.writeShort(this.u2attributesCount);
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            attributes[i].write(dout);
+            this.attributes[i].write(dout);
         }
     }
 
@@ -195,48 +195,50 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < u2attributesCount; i++)
+        for (int i = 0; i < this.u2attributesCount; i++)
         {
-            attributes[i].remap(cf, nm);
+            this.attributes[i].remap(cf, nm);
         }
     }
 
     /** Walk the code, finding .class and Class.forName to update. */
     protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws Exception
     {
-        return walkClassStrings(cpToFlag, null);
+        return this.walkClassStrings(cpToFlag, null);
     }
 
     /** Walk the code, updating .class and Class.forName strings. */
     protected void walkUpdateClassStrings(Hashtable cpUpdate) throws Exception
     {
-        walkClassStrings(null, cpUpdate);
+        this.walkClassStrings(null, cpUpdate);
     }
 
-    /** Walk the code, updating .class and Class.forName strings. */
-    // Note that class literals MyClass.class are stored directly in the constant pool in 1.5 (change from 1.4), not referenced by
-    // Utf8 name, so .option MapClassString is not necessary for them.
-    // Still needed for Class.forName("MyClass") though.
+    /**
+     * Walk the code, updating .class and Class.forName strings.
+     * Note that class literals MyClass.class are stored directly in the constant pool in 1.5 (change from 1.4), not referenced
+     * by Utf8 name, so .option MapClassString is not necessary for them.
+     * Still needed for Class.forName("MyClass") though.
+     */
     private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Hashtable cpUpdate) throws Exception
     {
         int opcodePrev = -1;
         int ldcIndex = -1;
-        for (int i = 0; i < code.length; i++)
+        for (int i = 0; i < this.code.length; i++)
         {
-            int opcode = code[i] & 0xFF;
-            if ((opcode == 0x12) && (i+1 < code.length)) // ldc
+            int opcode = this.code[i] & 0xFF;
+            if ((opcode == 0x12) && (i+1 < this.code.length)) // ldc
             {
-                ldcIndex = code[i+1] & 0xFF;
-                CpInfo ldcCpInfo = cf.getCpEntry(ldcIndex);
+                ldcIndex = this.code[i+1] & 0xFF;
+                CpInfo ldcCpInfo = this.cf.getCpEntry(ldcIndex);
                 if (!(ldcCpInfo instanceof StringCpInfo))
                 {
                     ldcIndex = -1;
                 }
             }
-            else if ((opcode == 0x13) && (i+2 < code.length)) // ldc_w
+            else if ((opcode == 0x13) && (i+2 < this.code.length)) // ldc_w
             {
-                ldcIndex = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
-                CpInfo ldcCpInfo = cf.getCpEntry(ldcIndex);
+                ldcIndex = ((this.code[i+1] & 0xFF) << 8) + (this.code[i+2] & 0xFF);
+                CpInfo ldcCpInfo = this.cf.getCpEntry(ldcIndex);
                 if (!(ldcCpInfo instanceof StringCpInfo))
                 {
                     ldcIndex = -1;
@@ -245,18 +247,18 @@ public class CodeAttrInfo extends AttrInfo
             if (((opcodePrev == 0x12) || (opcodePrev == 0x13)) && (ldcIndex != -1)) // ldc or ldc_w and is a StringCpInfo
             {
                 boolean isClassForName = false;
-                if ((opcode == 0xB8) && (i+2 < code.length)) // invokestatic
+                if ((opcode == 0xB8) && (i+2 < this.code.length)) // invokestatic
                 {
-                    int invokeIndex = ((code[i+1] & 0xFF) << 8) + (code[i+2] & 0xFF);
-                    CpInfo cpInfo = cf.getCpEntry(invokeIndex);
+                    int invokeIndex = ((this.code[i+1] & 0xFF) << 8) + (this.code[i+2] & 0xFF);
+                    CpInfo cpInfo = this.cf.getCpEntry(invokeIndex);
                     if (cpInfo instanceof MethodrefCpInfo)
                     {
                         MethodrefCpInfo entry = (MethodrefCpInfo)cpInfo;
-                        ClassCpInfo classEntry = (ClassCpInfo)cf.getCpEntry(entry.getClassIndex());
-                        String className = ((Utf8CpInfo)cf.getCpEntry(classEntry.getNameIndex())).getString();
-                        NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)cf.getCpEntry(entry.getNameAndTypeIndex());
-                        String name = ((Utf8CpInfo)cf.getCpEntry(ntEntry.getNameIndex())).getString();
-                        String descriptor = ((Utf8CpInfo)cf.getCpEntry(ntEntry.getDescriptorIndex())).getString();
+                        ClassCpInfo classEntry = (ClassCpInfo)this.cf.getCpEntry(entry.getClassIndex());
+                        String className = ((Utf8CpInfo)this.cf.getCpEntry(classEntry.getNameIndex())).getString();
+                        NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)this.cf.getCpEntry(entry.getNameAndTypeIndex());
+                        String name = ((Utf8CpInfo)this.cf.getCpEntry(ntEntry.getNameIndex())).getString();
+                        String descriptor = ((Utf8CpInfo)this.cf.getCpEntry(ntEntry.getDescriptorIndex())).getString();
                         if (("class$".equals(name) && ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor) || "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor))) || ("java/lang/Class".equals(className) && "forName".equals(name) && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
                         {
                             isClassForName = true;
@@ -270,10 +272,10 @@ public class CodeAttrInfo extends AttrInfo
                                     switch (opcodePrev)
                                     {
                                         case 0x13: // ldc_w
-                                            code[i-2] = 0;
+                                            this.code[i-2] = 0;
                                             //$FALL-THROUGH$
                                         case 0x12: // ldc
-                                            code[i-1] = (byte)remapStringIndex;
+                                            this.code[i-1] = (byte)remapStringIndex;
                                             break;
                                         default: // error
                                             throw new Exception(".class or Class.forName remap of non-ldc/ldc_w - please report this error");
@@ -285,10 +287,10 @@ public class CodeAttrInfo extends AttrInfo
                 }
                 if (cpToFlag != null)
                 {
-                    cpToFlag.updateFlag(cf.getCpEntry(ldcIndex), ldcIndex, isClassForName);
+                    cpToFlag.updateFlag(this.cf.getCpEntry(ldcIndex), ldcIndex, isClassForName);
                 }
             }
-            int bytes = getOpcodeBytes(opcode, i);
+            int bytes = this.getOpcodeBytes(opcode, i);
             i += bytes;
             opcodePrev = opcode;
         }
@@ -306,9 +308,9 @@ public class CodeAttrInfo extends AttrInfo
                 case 0xAA: // tableswitch
                     bytes = 3 - (i % 4); // 0-3 byte pad
                     bytes += 4; // default value
-                    int low = ((code[i+1+bytes] & 0xFF) << 24) + ((code[i+1+bytes+1] & 0xFF) << 16) + ((code[i+1+bytes+2] & 0xFF) << 8) + (code[i+1+bytes+3] & 0xFF);
+                    int low = ((this.code[i+1+bytes] & 0xFF) << 24) + ((this.code[i+1+bytes+1] & 0xFF) << 16) + ((this.code[i+1+bytes+2] & 0xFF) << 8) + (this.code[i+1+bytes+3] & 0xFF);
                     bytes += 4; // low value
-                    int high = ((code[i+1+bytes] & 0xFF) << 24) + ((code[i+1+bytes+1] & 0xFF) << 16) + ((code[i+1+bytes+2] & 0xFF) << 8) + (code[i+1+bytes+3] & 0xFF);
+                    int high = ((this.code[i+1+bytes] & 0xFF) << 24) + ((this.code[i+1+bytes+1] & 0xFF) << 16) + ((this.code[i+1+bytes+2] & 0xFF) << 8) + (this.code[i+1+bytes+3] & 0xFF);
                     bytes += 4; // high value
                     if (high >= low)
                     {
@@ -318,7 +320,7 @@ public class CodeAttrInfo extends AttrInfo
                 case 0xAB: // lookupswitch
                     bytes = 3 - (i % 4); // 0-3 byte pad
                     bytes += 4; // default value
-                    int npairs = ((code[i+1+bytes] & 0xFF) << 24) + ((code[i+1+bytes+1] & 0xFF) << 16) + ((code[i+1+bytes+2] & 0xFF) << 8) + (code[i+1+bytes+3] & 0xFF);
+                    int npairs = ((this.code[i+1+bytes] & 0xFF) << 24) + ((this.code[i+1+bytes+1] & 0xFF) << 16) + ((this.code[i+1+bytes+2] & 0xFF) << 8) + (this.code[i+1+bytes+3] & 0xFF);
                     bytes += 4; // npairs value
                     if (npairs >= 0)
                     {
@@ -326,7 +328,7 @@ public class CodeAttrInfo extends AttrInfo
                     }
                     break;
                 case 0xC4: // wide
-                    int wideOpcode = code[i+1] & 0xFF;
+                    int wideOpcode = this.code[i+1] & 0xFF;
                     switch (wideOpcode)
                     {
                         case 0x15: // iload
@@ -554,7 +556,7 @@ public class CodeAttrInfo extends AttrInfo
 //        "invokespecial", // 0xB7
 //        "invokestatic", // 0xB8
 //        "invokeinterface", // 0xB9
-//        OPCODE_UNUSED, // 0xBA
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xBA
 //        "new", // 0xBB
 //        "newarray", // 0xBC
 //        "anewarray", // 0xBD
@@ -570,59 +572,59 @@ public class CodeAttrInfo extends AttrInfo
 //        "ifnonnull", // 0xC7
 //        "goto_w", // 0xC8
 //        "jsr_w", // 0xC9
-//        OPCODE_RESERVED, // 0xCA
-//        OPCODE_UNUSED, // 0xCB
-//        OPCODE_UNUSED, // 0xCC
-//        OPCODE_UNUSED, // 0xCD
-//        OPCODE_UNUSED, // 0xCE
-//        OPCODE_UNUSED, // 0xCF
-//        OPCODE_UNUSED, // 0xD0
-//        OPCODE_UNUSED, // 0xD1
-//        OPCODE_UNUSED, // 0xD2
-//        OPCODE_UNUSED, // 0xD3
-//        OPCODE_UNUSED, // 0xD4
-//        OPCODE_UNUSED, // 0xD5
-//        OPCODE_UNUSED, // 0xD6
-//        OPCODE_UNUSED, // 0xD7
-//        OPCODE_UNUSED, // 0xD8
-//        OPCODE_UNUSED, // 0xD9
-//        OPCODE_UNUSED, // 0xDA
-//        OPCODE_UNUSED, // 0xDB
-//        OPCODE_UNUSED, // 0xDC
-//        OPCODE_UNUSED, // 0xDD
-//        OPCODE_UNUSED, // 0xDE
-//        OPCODE_UNUSED, // 0xDF
-//        OPCODE_UNUSED, // 0xE0
-//        OPCODE_UNUSED, // 0xE1
-//        OPCODE_UNUSED, // 0xE2
-//        OPCODE_UNUSED, // 0xE3
-//        OPCODE_UNUSED, // 0xE4
-//        OPCODE_UNUSED, // 0xE5
-//        OPCODE_UNUSED, // 0xE6
-//        OPCODE_UNUSED, // 0xE7
-//        OPCODE_UNUSED, // 0xE8
-//        OPCODE_UNUSED, // 0xE9
-//        OPCODE_UNUSED, // 0xEA
-//        OPCODE_UNUSED, // 0xEB
-//        OPCODE_UNUSED, // 0xEC
-//        OPCODE_UNUSED, // 0xED
-//        OPCODE_UNUSED, // 0xEE
-//        OPCODE_UNUSED, // 0xEF
-//        OPCODE_UNUSED, // 0xF0
-//        OPCODE_UNUSED, // 0xF1
-//        OPCODE_UNUSED, // 0xF2
-//        OPCODE_UNUSED, // 0xF3
-//        OPCODE_UNUSED, // 0xF4
-//        OPCODE_UNUSED, // 0xF5
-//        OPCODE_UNUSED, // 0xF6
-//        OPCODE_UNUSED, // 0xF7
-//        OPCODE_UNUSED, // 0xF8
-//        OPCODE_UNUSED, // 0xF9
-//        OPCODE_UNUSED, // 0xFA
-//        OPCODE_UNUSED, // 0xFB
-//        OPCODE_UNUSED, // 0xFC
-//        OPCODE_UNUSED, // 0xFD
-//        OPCODE_RESERVED, // 0xFE
-//        OPCODE_RESERVED, // 0xFF
+//        CodeAttrInfo.OPCODE_RESERVED, // 0xCA
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xCB
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xCC
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xCD
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xCE
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xCF
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD0
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD1
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD2
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD3
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD4
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD5
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD6
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD7
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD8
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xD9
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xDA
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xDB
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xDC
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xDD
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xDE
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xDF
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE0
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE1
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE2
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE3
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE4
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE5
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE6
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE7
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE8
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xE9
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xEA
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xEB
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xEC
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xED
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xEE
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xEF
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF0
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF1
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF2
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF3
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF4
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF5
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF6
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF7
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF8
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xF9
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xFA
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xFB
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xFC
+//        CodeAttrInfo.OPCODE_UNUSED, // 0xFD
+//        CodeAttrInfo.OPCODE_RESERVED, // 0xFE
+//        CodeAttrInfo.OPCODE_RESERVED, // 0xFF
 //    };
 }

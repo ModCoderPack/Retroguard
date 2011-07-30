@@ -57,9 +57,9 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < u2numberOfEntries; i++)
+        for (int i = 0; i < this.u2numberOfEntries; i++)
         {
-            entries[i].markUtf8Refs(pool);
+            this.entries[i].markUtf8Refs(pool);
         }
     }
 
@@ -67,11 +67,11 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2numberOfEntries = din.readUnsignedShort();
-        entries = new StackMapFrameInfo[u2numberOfEntries];
-        for (int i = 0; i < u2numberOfEntries; i++)
+        this.u2numberOfEntries = din.readUnsignedShort();
+        this.entries = new StackMapFrameInfo[this.u2numberOfEntries];
+        for (int i = 0; i < this.u2numberOfEntries; i++)
         {
-            entries[i] = StackMapFrameInfo.create(din);
+            this.entries[i] = StackMapFrameInfo.create(din);
         }
     }
 
@@ -79,10 +79,10 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2numberOfEntries);
-        for (int i = 0; i < u2numberOfEntries; i++)
+        dout.writeShort(this.u2numberOfEntries);
+        for (int i = 0; i < this.u2numberOfEntries; i++)
         {
-            entries[i].write(dout);
+            this.entries[i].write(dout);
         }
     }
 }

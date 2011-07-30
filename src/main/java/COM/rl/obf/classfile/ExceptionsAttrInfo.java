@@ -56,24 +56,24 @@ public class ExceptionsAttrInfo extends AttrInfo
     /** Return the number of exception class indices. */
     public int count()
     {
-        return u2exceptionIndexTable.length;
+        return this.u2exceptionIndexTable.length;
     }
 
     /** Return the i'th exception class indices. */
     public int getIndex(int i)
     {
-        return u2exceptionIndexTable[i];
+        return this.u2exceptionIndexTable[i];
     }
 
     /** Read the data following the header. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2numberOfExceptions = din.readUnsignedShort();
-        u2exceptionIndexTable = new int[u2numberOfExceptions];
-        for (int i = 0; i < u2numberOfExceptions; i++)
+        this.u2numberOfExceptions = din.readUnsignedShort();
+        this.u2exceptionIndexTable = new int[this.u2numberOfExceptions];
+        for (int i = 0; i < this.u2numberOfExceptions; i++)
         {
-            u2exceptionIndexTable[i] = din.readUnsignedShort();
+            this.u2exceptionIndexTable[i] = din.readUnsignedShort();
         }
     }
 
@@ -81,10 +81,10 @@ public class ExceptionsAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2numberOfExceptions);
-        for (int i = 0; i < u2numberOfExceptions; i++)
+        dout.writeShort(this.u2numberOfExceptions);
+        for (int i = 0; i < this.u2numberOfExceptions; i++)
         {
-            dout.writeShort(u2exceptionIndexTable[i]);
+            dout.writeShort(this.u2exceptionIndexTable[i]);
         }
     }
 }

@@ -56,16 +56,16 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     /** Return the array of local variable table entries. */
     protected LocalVariableInfo[] getLocalVariableTable() throws Exception
     {
-        return localVariableTable;
+        return this.localVariableTable;
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < localVariableTable.length; i++)
+        for (int i = 0; i < this.localVariableTable.length; i++)
         {
-            localVariableTable[i].markUtf8Refs(pool);
+            this.localVariableTable[i].markUtf8Refs(pool);
         }
     }
 
@@ -73,11 +73,11 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2localVariableTableLength = din.readUnsignedShort();
-        localVariableTable = new LocalVariableInfo[u2localVariableTableLength];
-        for (int i = 0; i < u2localVariableTableLength; i++)
+        this.u2localVariableTableLength = din.readUnsignedShort();
+        this.localVariableTable = new LocalVariableInfo[this.u2localVariableTableLength];
+        for (int i = 0; i < this.u2localVariableTableLength; i++)
         {
-            localVariableTable[i] = LocalVariableInfo.create(din);
+            this.localVariableTable[i] = LocalVariableInfo.create(din);
         }
     }
 
@@ -85,10 +85,10 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2localVariableTableLength);
-        for (int i = 0; i < u2localVariableTableLength; i++)
+        dout.writeShort(this.u2localVariableTableLength);
+        for (int i = 0; i < this.u2localVariableTableLength; i++)
         {
-            localVariableTable[i].write(dout);
+            this.localVariableTable[i].write(dout);
         }
     }
 
@@ -96,9 +96,9 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < u2localVariableTableLength; i++)
+        for (int i = 0; i < this.u2localVariableTableLength; i++)
         {
-            localVariableTable[i].remap(cf, nm);
+            this.localVariableTable[i].remap(cf, nm);
         }
     }
 }

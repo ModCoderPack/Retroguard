@@ -52,7 +52,7 @@ public class Md extends MdFd
     @Override
     protected String getDescriptorName()
     {
-        String[] types = parseTypes();
+        String[] types = this.parseTypes();
         StringBuffer sb = new StringBuffer();
         sb.append("(");
         if (types.length > 0)
@@ -73,7 +73,7 @@ public class Md extends MdFd
     /** Does this method match the wildcard pattern? (compatibility mode) */
     public boolean isOldStyleMatch(String namePattern, String descPattern)
     {
-        return isOldStyleMatch(namePattern) && TreeItem.isMatch(descPattern, getDescriptor());
+        return this.isOldStyleMatch(namePattern) && TreeItem.isMatch(descPattern, this.getDescriptor());
     }
 }
 

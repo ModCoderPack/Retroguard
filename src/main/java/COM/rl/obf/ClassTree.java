@@ -99,18 +99,21 @@ public class ClassTree implements NameMapper
     /** Ctor. */
     public ClassTree()
     {
-        root = Pk.createRoot(this);
+        this.root = Pk.createRoot(this);
     }
 
     /** Return the root node. */
-    public Pk getRoot() {return root;}
+    public Pk getRoot()
+    {
+        return this.root;
+    }
 
     /** Update the path of the passed filename, if that path corresponds to a package. */
     public String getOutName(String inName)
     {
         try
         {
-            TreeItem ti = root;
+            TreeItem ti = this.root;
             StringBuffer sb = new StringBuffer();
             for (Enumeration nameEnum = ClassTree.getNameEnum(inName); nameEnum.hasMoreElements(); )
             {
@@ -166,7 +169,7 @@ public class ClassTree implements NameMapper
     public void addClassFile(ClassFile cf) throws Exception
     {
         // Add the fully qualified class name
-        TreeItem ti = root;
+        TreeItem ti = this.root;
         for (Enumeration nameEnum = ClassTree.getNameEnum(cf.getName()); nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
@@ -223,7 +226,7 @@ public class ClassTree implements NameMapper
     public void noWarnClass(String name) throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Enumeration clEnum = getClEnum(name); clEnum.hasMoreElements(); )
+        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements(); )
         {
             Cl cl = (Cl)clEnum.nextElement();
             cl.setNoWarn();
@@ -234,7 +237,7 @@ public class ClassTree implements NameMapper
     public void logWarnings(PrintWriter log) throws Exception
     {
         final Vector hasWarnings = new Vector();
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void classAction(Cl cl) throws Exception
@@ -252,7 +255,7 @@ public class ClassTree implements NameMapper
             log.println(ClassTree.LOG_DANGER_HEADER2);
             log.println(ClassTree.LOG_DANGER_HEADER3);
             final PrintWriter flog = log;
-            walkTree(new TreeAction()
+            this.walkTree(new TreeAction()
             {
                 @Override
                 public void classAction(Cl cl) throws Exception
@@ -266,19 +269,19 @@ public class ClassTree implements NameMapper
     /** Mark an attribute type for retention. */
     public void retainAttribute(String name) throws Exception
     {
-        retainAttrs.addElement(name);
+        this.retainAttrs.addElement(name);
     }
 
     /** Mark a class/interface type (and possibly methods and fields defined in class) for retention. */
     public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly, boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Enumeration clEnum = getClEnum(name); clEnum.hasMoreElements(); )
+        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements(); )
         {
             Cl cl = (Cl)clEnum.nextElement();
             if (((extendsName == null) || cl.hasAsSuperOrInterface(extendsName)) && cl.modifiersMatchMask(accessMask, accessSetting))
             {
-                retainHierarchy(cl, invert);
+                this.retainHierarchy(cl, invert);
                 if (retainToPublic || retainToProtected || retainPubProtOnly)
                 {
                     // Retain methods if requested
@@ -332,7 +335,7 @@ public class ClassTree implements NameMapper
     /** Mark a method type for retention. */
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = getMdEnum(name, descriptor); enm.hasMoreElements(); )
+        for (Enumeration enm = this.getMdEnum(name, descriptor); enm.hasMoreElements(); )
         {
             Md md = (Md)enm.nextElement();
             Cl thisCl = (Cl)md.getParent();
@@ -350,7 +353,7 @@ public class ClassTree implements NameMapper
                 }
                 if (retainAndClass)
                 {
-                    retainHierarchy(thisCl, invert);
+                    this.retainHierarchy(thisCl, invert);
                 }
             }
         }
@@ -359,7 +362,7 @@ public class ClassTree implements NameMapper
     /** Mark a field type for retention. */
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = getFdEnum(name, descriptor); enm.hasMoreElements(); )
+        for (Enumeration enm = this.getFdEnum(name, descriptor); enm.hasMoreElements(); )
         {
             Fd fd = (Fd)enm.nextElement();
             Cl thisCl = (Cl)fd.getParent();
@@ -377,7 +380,7 @@ public class ClassTree implements NameMapper
                 }
                 if (retainAndClass)
                 {
-                    retainHierarchy(thisCl, invert);
+                    this.retainHierarchy(thisCl, invert);
                 }
             }
         }
@@ -386,13 +389,13 @@ public class ClassTree implements NameMapper
     /** Mark a package for retention, and specify its new name. */
     public void retainPackageMap(String name, String obfName) throws Exception
     {
-        retainItemMap(getPk(name), obfName);
+        this.retainItemMap(this.getPk(name), obfName);
     }
 
     /** Mark a package for repackaging under this new name. */
     public void retainRepackageMap(String name, String obfName) throws Exception
     {
-        Pk pk = getPk(name);
+        Pk pk = this.getPk(name);
         if (!pk.isFixed())
         {
             pk.setRepackageName(obfName);
@@ -403,19 +406,19 @@ public class ClassTree implements NameMapper
     /** Mark a class/interface type for retention, and specify its new name. */
     public void retainClassMap(String name, String obfName) throws Exception
     {
-        retainItemMap(getCl(name), obfName);
+        this.retainItemMap(this.getCl(name), obfName);
     }
 
     /** Mark a method type for retention, and specify its new name. */
     public void retainMethodMap(String name, String descriptor, String obfName) throws Exception
     {
-        retainItemMap(getMd(name, descriptor), obfName);
+        this.retainItemMap(this.getMd(name, descriptor), obfName);
     }
 
     /** Mark a field type for retention, and specify its new name. */
     public void retainFieldMap(String name, String obfName) throws Exception
     {
-        retainItemMap(getFd(name), obfName);
+        this.retainItemMap(this.getFd(name), obfName);
     }
 
     /** Mark an item for retention, and specify its new name. */
@@ -440,7 +443,7 @@ public class ClassTree implements NameMapper
         if (enableRepackage)
         {
             // Generate single-level package names, unique across jar
-            walkTree(new TreeAction()
+            this.walkTree(new TreeAction()
             {
                 @Override
                 public void packageAction(Pk pk) throws Exception
@@ -450,7 +453,7 @@ public class ClassTree implements NameMapper
             });
         }
         // Now rename everything in the traditional way (no repackaging)
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void packageAction(Pk pk) throws Exception
@@ -469,7 +472,7 @@ public class ClassTree implements NameMapper
     private String[] getRootPackageNames() throws Exception
     {
         Vector vec = new Vector();
-        for (Enumeration enm = root.getPackageEnum(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.root.getPackageEnum(); enm.hasMoreElements(); )
         {
             Pk pk = (Pk)enm.nextElement();
             if (pk.isFixed())
@@ -488,7 +491,7 @@ public class ClassTree implements NameMapper
     /** Resolve the polymorphic dependencies of each class. */
     public void resolveClasses() throws Exception
     {
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void classAction(Cl cl) throws Exception
@@ -496,7 +499,7 @@ public class ClassTree implements NameMapper
                 cl.resetResolve();
             }
         });
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void classAction(Cl cl) throws Exception
@@ -505,7 +508,7 @@ public class ClassTree implements NameMapper
             }
         });
         Cl.nameSpace = 0;
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void classAction(Cl cl) throws Exception
@@ -519,10 +522,10 @@ public class ClassTree implements NameMapper
     @Override
     public String[] getAttrsToKeep() throws Exception
     {
-        String[] attrs = new String[retainAttrs.size()];
+        String[] attrs = new String[this.retainAttrs.size()];
         for (int i = 0; i < attrs.length; i++)
         {
-            attrs[i] = (String)retainAttrs.elementAt(i);
+            attrs[i] = (String)this.retainAttrs.elementAt(i);
         }
         return attrs;
     }
@@ -542,7 +545,7 @@ public class ClassTree implements NameMapper
             if (fullName.indexOf('!') == 0)
             {
                 final String fName = fullName.substring(1);
-                walkTree(new TreeAction()
+                this.walkTree(new TreeAction()
                 {
                     @Override
                     public void classAction(Cl cl) throws Exception
@@ -558,7 +561,7 @@ public class ClassTree implements NameMapper
             else
             {
                 final String fName = fullName;
-                walkTree(new TreeAction()
+                this.walkTree(new TreeAction()
                 {
                     @Override
                     public void classAction(Cl cl) throws Exception
@@ -574,7 +577,7 @@ public class ClassTree implements NameMapper
         else
         {
             // Single class
-            Cl cl = getCl(fullName);
+            Cl cl = this.getCl(fullName);
             if (cl != null)
             {
                 vec.addElement(cl);
@@ -596,7 +599,7 @@ public class ClassTree implements NameMapper
             if (fullName.indexOf('!') == 0)
             {
                 final String fName = fullName.substring(1);
-                walkTree(new TreeAction()
+                this.walkTree(new TreeAction()
                 {
                     @Override
                     public void methodAction(Md md) throws Exception
@@ -612,7 +615,7 @@ public class ClassTree implements NameMapper
             else
             {
                 final String fName = fullName;
-                walkTree(new TreeAction()
+                this.walkTree(new TreeAction()
                 {
                     @Override
                     public void methodAction(Md md) throws Exception
@@ -627,7 +630,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            Md md = getMd(fullName, descriptor);
+            Md md = this.getMd(fullName, descriptor);
             if (md != null)
             {
                 vec.addElement(md);
@@ -648,7 +651,7 @@ public class ClassTree implements NameMapper
             if (fullName.indexOf('!') == 0)
             {
                 final String fName = fullName.substring(1);
-                walkTree(new TreeAction()
+                this.walkTree(new TreeAction()
                 {
                     @Override
                     public void fieldAction(Fd fd) throws Exception
@@ -665,7 +668,7 @@ public class ClassTree implements NameMapper
             {
                 final String fName = fullName;
                 final String fDesc = descriptor;
-                walkTree(new TreeAction()
+                this.walkTree(new TreeAction()
                 {
                     @Override
                     public void fieldAction(Fd fd) throws Exception
@@ -680,7 +683,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            Fd fd = getFd(fullName);
+            Fd fd = this.getFd(fullName);
             if (fd != null)
             {
                 vec.addElement(fd);
@@ -692,7 +695,7 @@ public class ClassTree implements NameMapper
     /** Get class in tree from the fully qualified name, returning null if name not found. */
     public Cl getCl(String fullName) throws Exception
     {
-        TreeItem ti = root;
+        TreeItem ti = this.root;
         for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
@@ -731,7 +734,7 @@ public class ClassTree implements NameMapper
     /** Get package in tree from the fully qualified name, returning null if name not found. */
     public Pk getPk(String fullName) throws Exception
     {
-        TreeItem ti = root;
+        TreeItem ti = this.root;
         for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements(); )
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
@@ -757,7 +760,7 @@ public class ClassTree implements NameMapper
     {
         // Split into class and method names
         int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
-        Cl cl = getCl(fullName.substring(0, pos));
+        Cl cl = this.getCl(fullName.substring(0, pos));
         return cl.getMethod(fullName.substring(pos + 1), descriptor);
     }
 
@@ -766,7 +769,7 @@ public class ClassTree implements NameMapper
     {
         // Split into class and field names
         int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
-        Cl cl = getCl(fullName.substring(0, pos));
+        Cl cl = this.getCl(fullName.substring(0, pos));
         return cl.getField(fullName.substring(pos + 1));
     }
 
@@ -799,7 +802,7 @@ public class ClassTree implements NameMapper
                         {
                             throw new Exception("Invalid class name encountered: " + className);
                         }
-                        newName.append(mapClass(className.substring(i, pos)));
+                        newName.append(this.mapClass(className.substring(i, pos)));
                         i = pos;
                         break;
 
@@ -811,7 +814,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            Cl cl = getCl(className);
+            Cl cl = this.getCl(className);
             return cl != null ? cl.getFullOutName() : className;
         }
     }
@@ -827,7 +830,7 @@ public class ClassTree implements NameMapper
         if (!methodName.equals("<init>"))
         {
             Stack s = new Stack();
-            Cl nextCl = getCl(className);
+            Cl nextCl = this.getCl(className);
             if (nextCl != null)
             {
                 s.push(nextCl);
@@ -874,7 +877,7 @@ public class ClassTree implements NameMapper
         if (!fieldName.equals("<init>"))
         {
             Stack s = new Stack();
-            Cl nextCl = getCl(className);
+            Cl nextCl = this.getCl(className);
             if (nextCl != null)
             {
                 s.push(nextCl);
@@ -959,7 +962,7 @@ public class ClassTree implements NameMapper
                     {
                         throw new Exception("Invalid descriptor string encountered.");
                     }
-                    newDesc.append(mapClass(descriptor.substring(i, pos)));
+                    newDesc.append(this.mapClass(descriptor.substring(i, pos)));
                     i = pos;
                     break;
 
@@ -976,7 +979,7 @@ public class ClassTree implements NameMapper
         log.println("#");
         log.println(ClassTree.LOG_PRE_UNOBFUSCATED);
         log.println("#");
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void classAction(Cl cl)
@@ -1012,7 +1015,7 @@ public class ClassTree implements NameMapper
         log.println("#");
         log.println(ClassTree.LOG_PRE_OBFUSCATED);
         log.println("#");
-        walkTree(new TreeAction()
+        this.walkTree(new TreeAction()
         {
             @Override
             public void classAction(Cl cl)
@@ -1043,7 +1046,8 @@ public class ClassTree implements NameMapper
             {
                 if (!pk.isFromScript() && (pk.getFullInName().length() > 0))
                 {
-                    if (pk.getRepackageName() != null) {
+                    if (pk.getRepackageName() != null)
+                    {
                         log.println(".repackage_map " + pk.getFullInName() + " " + pk.getRepackageName());
                     }
                     else
@@ -1089,14 +1093,14 @@ public class ClassTree implements NameMapper
         }
         if (ti.parent != null)
         {
-            retainHierarchy(ti.parent, invert);
+            this.retainHierarchy(ti.parent, invert);
         }
     }
 
     /** Walk the whole tree taking action once only on each package level, class, method and field. */
     public void walkTree(TreeAction ta) throws Exception
     {
-        walkTree(ta, root);
+        this.walkTree(ta, this.root);
     }
 
     /** Walk the tree which has TreeItem as its root taking action once only on each package level, class, method and field. */
@@ -1108,7 +1112,7 @@ public class ClassTree implements NameMapper
             ta.packageAction((Pk)ti);
             while (packageEnum.hasMoreElements())
             {
-                walkTree(ta, (TreeItem)packageEnum.nextElement());
+                this.walkTree(ta, (TreeItem)packageEnum.nextElement());
             }
         }
         if (ti instanceof PkCl)
@@ -1116,7 +1120,7 @@ public class ClassTree implements NameMapper
             Enumeration classEnum = ((PkCl)ti).getClassEnum();
             while (classEnum.hasMoreElements())
             {
-                walkTree(ta, (TreeItem)classEnum.nextElement());
+                this.walkTree(ta, (TreeItem)classEnum.nextElement());
             }
         }
         if (ti instanceof Cl)

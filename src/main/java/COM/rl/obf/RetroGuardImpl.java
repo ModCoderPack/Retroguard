@@ -134,24 +134,24 @@ public class RetroGuardImpl
     private void run() throws Exception
     {
         // Create the session log file
-        PrintWriter log = new PrintWriter(new BufferedOutputStream(new FileOutputStream(logFile)));
+        PrintWriter log = new PrintWriter(new BufferedOutputStream(new FileOutputStream(this.logFile)));
         try
         {
             // Write out the log header
-            writeLogHeader(log);
+            this.writeLogHeader(log);
 
             // Create the name mapping database for the input JAR, constrained by the options in the rgs script
-            GuardDB db = new GuardDB(inFile);
+            GuardDB db = new GuardDB(this.inFile);
             try
             {
-                InputStream rgsInputStream = (rgsFile.exists() ? new FileInputStream(rgsFile) : null);
+                InputStream rgsInputStream = (this.rgsFile.exists() ? new FileInputStream(this.rgsFile) : null);
                 db.retain(new RgsEnum(rgsInputStream), log);
                 db.logWarnings(log);
                 if (rgsInputStream != null)
                 {
                     rgsInputStream.close();
                 }
-                db.remapTo(outFile, log);
+                db.remapTo(this.outFile, log);
             }
             finally
             {
@@ -193,9 +193,9 @@ public class RetroGuardImpl
         log.println("#");
         log.println(RetroGuardImpl.LOG_CREATED + new Date().toString());
         log.println("#");
-        log.println(RetroGuardImpl.LOG_INPUT_FILE + inFile.getName());
-        log.println(RetroGuardImpl.LOG_OUTPUT_FILE + outFile.getName());
-        log.println(RetroGuardImpl.LOG_SCRIPT_FILE + (rgsFile.exists() ? rgsFile.getName() : RetroGuardImpl.LOG_NO_SCRIPT));
+        log.println(RetroGuardImpl.LOG_INPUT_FILE + this.inFile.getName());
+        log.println(RetroGuardImpl.LOG_OUTPUT_FILE + this.outFile.getName());
+        log.println(RetroGuardImpl.LOG_SCRIPT_FILE + (this.rgsFile.exists() ? this.rgsFile.getName() : RetroGuardImpl.LOG_NO_SCRIPT));
         log.println("#");
     }
 }

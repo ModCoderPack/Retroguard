@@ -53,14 +53,14 @@ public class LineNumberInfo
 
     private void read(DataInput din) throws Exception
     {
-        u2startpc = din.readUnsignedShort();
-        u2lineNumber = din.readUnsignedShort();
+        this.u2startpc = din.readUnsignedShort();
+        this.u2lineNumber = din.readUnsignedShort();
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2startpc);
-        dout.writeShort(u2lineNumber);
+        dout.writeShort(this.u2startpc);
+        dout.writeShort(this.u2lineNumber);
     }
 }

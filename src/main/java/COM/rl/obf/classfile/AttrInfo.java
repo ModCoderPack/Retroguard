@@ -159,7 +159,7 @@ public class AttrInfo implements ClassConstants
     /** Return the length in bytes of the attribute; over-ride this in sub-classes. */
     protected int getAttrInfoLength() throws Exception
     {
-        return u4attrLength;
+        return this.u4attrLength;
     }
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
@@ -176,8 +176,8 @@ public class AttrInfo implements ClassConstants
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2attrNameIndex);
-        markUtf8RefsInInfo(pool);
+        pool.incRefCount(this.u2attrNameIndex);
+        this.markUtf8RefsInInfo(pool);
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them; over-ride this in sub-classes. */
@@ -188,8 +188,8 @@ public class AttrInfo implements ClassConstants
     /** Read the data following the header; over-ride this in sub-classes. */
     protected void readInfo(DataInput din) throws Exception
     {
-        info = new byte[u4attrLength];
-        din.readFully(info);
+        this.info = new byte[this.u4attrLength];
+        din.readFully(this.info);
     }
 
     /** Export the representation to a DataOutput stream. */
@@ -199,15 +199,15 @@ public class AttrInfo implements ClassConstants
         {
             throw new IOException("No output stream was provided.");
         }
-        dout.writeShort(u2attrNameIndex);
-        dout.writeInt(getAttrInfoLength());
-        writeInfo(dout);
+        dout.writeShort(this.u2attrNameIndex);
+        dout.writeInt(this.getAttrInfoLength());
+        this.writeInfo(dout);
     }
 
     /** Export data following the header to a DataOutput stream; over-ride this in sub-classes. */
     public void writeInfo(DataOutput dout) throws Exception
     {
-        dout.write(info);
+        dout.write(this.info);
     }
 
     /** Do necessary name remapping. */
@@ -218,7 +218,7 @@ public class AttrInfo implements ClassConstants
     /** Provide debugging dump of this object. */
     public void dump(PrintStream ps) throws Exception
     {
-        ps.println("u2attrNameIndex : " + u2attrNameIndex + " " + cf.getUtf8(u2attrNameIndex));
-        ps.println("u4attrLength : " + u4attrLength);
+        ps.println("u2attrNameIndex : " + this.u2attrNameIndex + " " + this.cf.getUtf8(this.u2attrNameIndex));
+        ps.println("u4attrLength : " + this.u4attrLength);
     }
 }

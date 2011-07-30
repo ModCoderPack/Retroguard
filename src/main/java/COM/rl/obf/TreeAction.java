@@ -31,22 +31,22 @@ public class TreeAction
 {
     public void packageAction(Pk pk) throws Exception
     {
-        defaultAction(pk);
+        this.defaultAction(pk);
     }
 
     public void classAction(Cl cl) throws Exception
     {
-        defaultAction(cl);
+        this.defaultAction(cl);
     }
 
     public void methodAction(Md md) throws Exception
     {
-        defaultAction(md);
+        this.defaultAction(md);
     }
 
     public void fieldAction(Fd fd) throws Exception
     {
-        defaultAction(fd);
+        this.defaultAction(fd);
     }
 
     public void defaultAction(TreeItem ti) throws Exception

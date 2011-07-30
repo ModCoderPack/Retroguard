@@ -54,39 +54,39 @@ public class MemberValuePairInfo
     /** Return member name index into Constant Pool. */
     protected int getMemberNameIndex()
     {
-        return u2memberNameIndex;
+        return this.u2memberNameIndex;
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2memberNameIndex);
-        value.markUtf8Refs(pool);
+        pool.incRefCount(this.u2memberNameIndex);
+        this.value.markUtf8Refs(pool);
     }
 
     private void read(DataInput din) throws Exception
     {
-        u2memberNameIndex = din.readUnsignedShort();
-        value = MemberValueInfo.create(din);
+        this.u2memberNameIndex = din.readUnsignedShort();
+        this.value = MemberValueInfo.create(din);
     }
 
     /** Export the representation to a DataOutput stream. */
     public void write(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2memberNameIndex);
-        value.write(dout);
+        dout.writeShort(this.u2memberNameIndex);
+        this.value.write(dout);
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        value.remap(cf, nm);
+        this.value.remap(cf, nm);
     }
 
     /** Provide debugging dump of this object. */
     public void dump(PrintStream ps, ClassFile cf) throws Exception
     {
-        ps.println("u2memberNameIndex : " + u2memberNameIndex + " " + cf.getUtf8(u2memberNameIndex));
-        value.dump(ps, cf);
+        ps.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8(this.u2memberNameIndex));
+        this.value.dump(ps, cf);
     }
 }

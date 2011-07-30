@@ -59,31 +59,40 @@ abstract public class MdFd extends TreeItem
         // Disallow obfuscation of 'Synthetic' methods
         if (isSynthetic)
         {
-            setOutName(getInName());
+            this.setOutName(this.getInName());
         }
     }
 
     /** Return the method or field descriptor String. */
-    public String getDescriptor() {return descriptor;}
+    public String getDescriptor()
+    {
+        return this.descriptor;
+    }
 
     /** Is this member static? */
     public boolean isStatic()
     {
-        return Modifier.isStatic(getModifiers());
+        return Modifier.isStatic(this.getModifiers());
     }
 
     /** Set that this method or field is an override. */
-    public void setIsOverride() {isOverride = true;}
+    public void setIsOverride()
+    {
+        this.isOverride = true;
+    }
 
     /** Is this method or field an override? */
-    public boolean isOverride() {return isOverride;}
+    public boolean isOverride()
+    {
+        return this.isOverride;
+    }
 
     /** Return the display name for field. */
     @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        int modifiers = getModifiers();
+        int modifiers = this.getModifiers();
         // NOTE - could update with new JDK1.5 modifiers, but that would cause incompatibility with earlier systems for RG
         if (Modifier.isAbstract(modifiers))
         {
@@ -125,43 +134,43 @@ abstract public class MdFd extends TreeItem
         {
             sb.append("final ");
         }
-        sb.append(getReturnTypeName());
-        sb.append(getInName());
-        sb.append(getDescriptorName());
+        sb.append(this.getReturnTypeName());
+        sb.append(this.getInName());
+        sb.append(this.getDescriptorName());
         return sb.toString();
     }
 
     /** Return the display name of the return type. */
     protected String getReturnTypeName()
     {
-        String[] types = parseTypes();
+        String[] types = this.parseTypes();
         return (types.length > 0 ? types[types.length - 1] : "") + " ";
     }
 
     /** Return the display name of the descriptor types. */
     abstract protected String getDescriptorName();
 
-    /** Return the parsed descriptor types array. */
     private String[] parsedTypes = null;
+    /** Return the parsed descriptor types array. */
     protected String[] parseTypes()
     {
-        if (parsedTypes == null)
+        if (this.parsedTypes == null)
         {
             try
             {
-                parsedTypes = ClassFile.parseDescriptor(getDescriptor(), true);
+                this.parsedTypes = ClassFile.parseDescriptor(this.getDescriptor(), true);
             }
             catch (Exception e)
             {
-                parsedTypes = null;
+                this.parsedTypes = null;
             }
         }
-        return parsedTypes;
+        return this.parsedTypes;
     }
 
     /** Does this member match the wildcard pattern? (** and * supported) */
     public boolean isWildcardMatch(String namePattern, String descPattern)
     {
-        return isWildcardMatch(namePattern) && TreeItem.isMatch(descPattern, getDescriptor());
+        return this.isWildcardMatch(namePattern) && TreeItem.isMatch(descPattern, this.getDescriptor());
     }
 }

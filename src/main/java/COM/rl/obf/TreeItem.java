@@ -222,85 +222,91 @@ public class TreeItem
         this.inName = name;
         if (parent != null)
         {
-            classTree = parent.classTree;
+            this.classTree = parent.classTree;
         }
     }
 
     /** Return the modifiers. */
-    public int getModifiers() {return access;}
+    public int getModifiers()
+    {
+        return this.access;
+    }
 
     /** Do the modifiers specified by mask equal the settings? */
     public boolean modifiersMatchMask(int mask, int setting)
     {
-        return (getModifiers() & mask) == (setting & mask);
+        return (this.getModifiers() & mask) == (setting & mask);
     }
 
     /** Return the original name of the entry. */
-    public String getInName() {return inName;}
+    public String getInName()
+    {
+        return this.inName;
+    }
 
     /** Set the output name of the entry. */
     public void setOutName(String outName)
     {
         this.outName = outName;
-        isFixed = true;
+        this.isFixed = true;
     }
 
     /** Return the output name of the entry, obfuscated or original. */
     public String getOutName()
     {
-        return outName != null ? outName : inName;
+        return this.outName != null ? this.outName : this.inName;
     }
 
     /** Return the obfuscated name of the entry. */
     public String getObfName()
     {
-        return outName;
+        return this.outName;
     }
 
     /** Signal that this constraint came from a user script line. */
     public void setFromScript()
     {
-        isFromScript = true;
+        this.isFromScript = true;
     }
 
     /** Clear the signal that this constraint came from a user script line. */
     public void clearFromScript()
     {
-        if (isFromScript)
+        if (this.isFromScript)
         {
-            isFixed = false;
-            isFromScript = false;
+            this.isFixed = false;
+            this.isFromScript = false;
         }
     }
 
     /** Signal that this constraint came from a map script line. */
     public void setFromScriptMap()
     {
-        isFromScriptMap = true;
+        this.isFromScriptMap = true;
     }
 
     /** Has the entry been fixed already? */
     public boolean isFixed()
     {
-        return isFixed;
+        return this.isFixed;
     }
 
     /** Is this constrained by a user script line? */
     public boolean isFromScript()
     {
-        return isFromScript;
+        return this.isFromScript;
     }
 
     /** Is this constrained by a map script line? */
     public boolean isFromScriptMap()
     {
-        return isFromScriptMap;
+        return this.isFromScriptMap;
     }
 
     /** Is a method or field Synthetic? */
     public boolean isSynthetic()
     {
-        return isSynthetic;
+        return this.isSynthetic;
     }
 
     /** Set the parent in the tree -- used when stitching in a Cl to replace a PlaceholderCl. */
@@ -312,74 +318,74 @@ public class TreeItem
     /** Get the parent in the tree. */
     public TreeItem getParent()
     {
-        return parent;
+        return this.parent;
     }
 
     /** Construct and return the full original name of the entry. */
     public String getFullInName()
     {
-        if (parent == null)
+        if (this.parent == null)
         {
             return "";
         }
-        else if (parent.parent == null)
+        else if (this.parent.parent == null)
         {
-            return getInName();
+            return this.getInName();
         }
         else
         {
-            String s = parent.getFullInName();
+            String s = this.parent.getFullInName();
             if(s.equals(""))
             {
-                return getInName();
+                return this.getInName();
             }
-            return s + sep + getInName();
+            return s + this.sep + this.getInName();
         }
     }
 
     /** Construct and return the full obfuscated name of the entry. */
     public String getFullOutName()
     {
-        if (parent == null)
+        if (this.parent == null)
         {
             return "";
         }
-        else if (parent.parent == null)
+        else if (this.parent.parent == null)
         {
-            return getOutName();
+            return this.getOutName();
         }
         else
         {
-            String s = parent.getFullOutName();
+            String s = this.parent.getFullOutName();
             if(s.equals("") || (this instanceof Pk))
             {
-                return getOutName();
+                return this.getOutName();
             }
-            return s + sep + getOutName();
+            return s + this.sep + this.getOutName();
         }
     }
 
     /** Does this name match the wildcard pattern? (compatibility mode) */
     public boolean isOldStyleMatch(String pattern)
     {
-        return TreeItem.isMatch(pattern, getFullInName());
+        return TreeItem.isMatch(pattern, this.getFullInName());
     }
 
     /** Does this name match the wildcard pattern? (** and * supported) */
     public boolean isWildcardMatch(String pattern)
     {
-        return TreeItem.isGMatch(pattern, getFullInName());
+        return TreeItem.isGMatch(pattern, this.getFullInName());
     }
 
     /** Set the trim-check status for this. */
     public void setTrimCheck(boolean state)
     {
-        isTrimCheck = state;
+        this.isTrimCheck = state;
     }
 
     /** Has this been checked for trimming? */
     public boolean isTrimCheck()
     {
-        return isTrimCheck;
+        return this.isTrimCheck;
     }
 }

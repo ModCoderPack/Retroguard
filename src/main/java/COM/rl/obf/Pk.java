@@ -97,13 +97,13 @@ public class Pk extends PkCl
     /** Get a package level by name. */
     public Pk getPackage(String name) throws Exception
     {
-        return (Pk)pks.get(name);
+        return (Pk)this.pks.get(name);
     }
 
     /** Get a package level by obfuscated name. */
     public Pk getObfPackage(String name) throws Exception
     {
-        for (Enumeration enm = pks.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements(); )
         {
             Pk pk = (Pk)enm.nextElement();
             if (name.equals(pk.getOutName()))
@@ -117,7 +117,7 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated repackage name. */
     public Pk getObfRepackage(String name) throws Exception
     {
-        for (Enumeration enm = pks.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements(); )
         {
             Pk pk = (Pk)enm.nextElement();
             if (name.equals(pk.getRepackageName()))
@@ -136,23 +136,23 @@ public class Pk extends PkCl
     /** Get an Enumeration of packages. */
     public Enumeration getPackageEnum() throws Exception
     {
-        return pks.elements();
+        return this.pks.elements();
     }
 
     /** Return number of packages. */
     public int getPackageCount()
     {
-        return pks.size();
+        return this.pks.size();
     }
 
     /** Add a sub-package level. */
     public Pk addPackage(String name) throws Exception
     {
-        Pk pk = getPackage(name);
+        Pk pk = this.getPackage(name);
         if (pk == null)
         {
             pk = new Pk(this, name);
-            pks.put(name, pk);
+            this.pks.put(name, pk);
         }
         return pk;
     }
@@ -161,14 +161,14 @@ public class Pk extends PkCl
     @Override
     public Cl addClass(String name, String superName, String[] interfaceNames, int access) throws Exception
     {
-        return addClass(false, name, superName, interfaceNames, access);
+        return this.addClass(false, name, superName, interfaceNames, access);
     }
 
     /** Add a placeholder class. */
     @Override
     public Cl addPlaceholderClass(String name) throws Exception
     {
-        return addPlaceholderClass(false, name);
+        return this.addPlaceholderClass(false, name);
     }
 
     /** Generate unique obfuscated names for this namespace. */
@@ -176,7 +176,7 @@ public class Pk extends PkCl
     public void generateNames() throws Exception
     {
         super.generateNames();
-        generateNames(pks);
+        this.generateNames(this.pks);
     }
 
     /** Generate unique-across-run obfuscated repackage name. */
@@ -187,8 +187,8 @@ public class Pk extends PkCl
             String theOutName = NameProvider.getNewPackageName(this);
             if (theOutName != null)
             {
-                setRepackageName(theOutName);
-                setOutName(getInName());
+                this.setRepackageName(theOutName);
+                this.setOutName(this.getInName());
                 String fullInName = this.getFullInName();
                 if (fullInName == "")
                 {
@@ -208,13 +208,13 @@ public class Pk extends PkCl
     @Override
     public String getFullOutName()
     {
-        if (getRepackageName() == null)
+        if (this.getRepackageName() == null)
         {
             return super.getFullOutName();
         }
         else
         {
-            return getRepackageName();
+            return this.getRepackageName();
         }
     }
 }

@@ -48,45 +48,45 @@ public class ClassCpInfo extends CpInfo
     /** Return the name index. */
     protected int getNameIndex()
     {
-        return u2nameIndex;
+        return this.u2nameIndex;
     }
 
     /** Set the name index. */
     protected void setNameIndex(int index)
     {
-        u2nameIndex = index;
+        this.u2nameIndex = index;
     }
 
     /** Return the string name. */
     public String getName(ClassFile cf) throws Exception
     {
-        return ((Utf8CpInfo)cf.getCpEntry(u2nameIndex)).getString();
+        return ((Utf8CpInfo)cf.getCpEntry(this.u2nameIndex)).getString();
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     @Override
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        pool.incRefCount(u2nameIndex);
+        pool.incRefCount(this.u2nameIndex);
     }
 
     /** Read the 'info' data following the u1tag byte. */
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u2nameIndex = din.readUnsignedShort();
+        this.u2nameIndex = din.readUnsignedShort();
     }
 
     /** Write the 'info' data following the u1tag byte. */
     @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeShort(u2nameIndex);
+        dout.writeShort(this.u2nameIndex);
     }
 
     /** Dump the content of the class file to the specified file (used for debugging). */
     public void dump(PrintWriter pw, ClassFile cf) throws Exception
     {
-        pw.println("  Class: " + ((Utf8CpInfo)cf.getCpEntry(u2nameIndex)).getString());
+        pw.println("  Class: " + ((Utf8CpInfo)cf.getCpEntry(this.u2nameIndex)).getString());
     }
 }

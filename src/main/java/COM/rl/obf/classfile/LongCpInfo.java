@@ -50,15 +50,15 @@ public class LongCpInfo extends CpInfo
     @Override
     protected void readInfo(DataInput din) throws Exception
     {
-        u4highBytes = din.readInt();
-        u4lowBytes = din.readInt();
+        this.u4highBytes = din.readInt();
+        this.u4lowBytes = din.readInt();
     }
 
     /** Write the 'info' data following the u1tag byte. */
     @Override
     protected void writeInfo(DataOutput dout) throws Exception
     {
-        dout.writeInt(u4highBytes);
-        dout.writeInt(u4lowBytes);
+        dout.writeInt(this.u4highBytes);
+        dout.writeInt(this.u4lowBytes);
     }
 }
