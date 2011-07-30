@@ -34,7 +34,6 @@ abstract public class CpInfo implements ClassConstants
 
     // Fields ----------------------------------------------------------------
     private int u1tag;
-    private byte info[];
 
     /** Used for reference counting in Constant Pool */
     protected int refCount = 0;

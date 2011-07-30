@@ -38,7 +38,6 @@ public class ClassTree implements NameMapper
     public static final char METHOD_FIELD_LEVEL = '/';
     private static final String LOG_PRE_UNOBFUSCATED = "# Names reserved from obfuscation:";
     private static final String LOG_PRE_OBFUSCATED = "# Obfuscated name mappings (some of these may be unchanged due to polymorphism constraints):";
-    private static final String LOG_FREQUENCY_TABLE = "# Obfuscated name overloading frequency:";
     private static final String LOG_DANGER_HEADER1 = "# WARNING - Reflection methods are called which may unavoidably break in the";
     private static final String LOG_DANGER_HEADER2 = "# obfuscated version at runtime. Please review your source code to ensure";
     private static final String LOG_DANGER_HEADER3 = "# these methods do not act on classes in the obfuscated Jar file.";
@@ -466,26 +465,6 @@ public class ClassTree implements NameMapper
                 cl.generateNames();
             }
         });
-    }
-
-    /** Return list of currently fixed root package names */
-    private String[] getRootPackageNames() throws Exception
-    {
-        Vector vec = new Vector();
-        for (Enumeration enm = this.root.getPackageEnum(); enm.hasMoreElements(); )
-        {
-            Pk pk = (Pk)enm.nextElement();
-            if (pk.isFixed())
-            {
-                vec.addElement(pk.getOutName());
-            }
-        }
-        String[] noObfNames = new String[vec.size()];
-        for (int i = 0; i < noObfNames.length; i++)
-        {
-            noObfNames[i] = (String)vec.elementAt(i);
-        }
-        return noObfNames;
     }
 
     /** Resolve the polymorphic dependencies of each class. */

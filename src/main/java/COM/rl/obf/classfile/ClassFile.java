@@ -256,7 +256,7 @@ public class ClassFile implements ClassConstants
             case 'L':
             {
                 int pos = inName.indexOf(';');
-                outName = ClassFile.translate(inName.substring(1, inName.indexOf(';')));
+                outName = ClassFile.translate(inName.substring(1, pos));
             }
             break;
 
