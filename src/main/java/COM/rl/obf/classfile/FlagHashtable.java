@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Subclass of Hashtable used for storing flags while walking Code.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class FlagHashtable extends Hashtable
 {
@@ -56,8 +56,8 @@ class StringCpInfoFlags
     protected int stringIndex;
     protected boolean forNameFlag;
     protected boolean otherFlag;
+
     protected StringCpInfoFlags()
     {
     }
 }
-

@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * An RFC822 section is a list of 'header's (tag/value pairs).
- *
+ * 
  * @author Mark Welsh
  */
 public class Section
@@ -69,7 +69,7 @@ public class Section
     {
         if (queryHeader != null)
         {
-            for (Enumeration enm = this.headers.elements(); enm.hasMoreElements(); )
+            for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
             {
                 Header header = (Header)enm.nextElement();
                 if (queryHeader.equals(header))
@@ -91,7 +91,7 @@ public class Section
         }
 
         // For now, do linear search of headers
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
         {
             Header header = (Header)enm.nextElement();
             if (tag.equals(header.getTag()))
@@ -108,7 +108,7 @@ public class Section
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
         {
             ((Header)enm.nextElement()).writeString(writer);
         }
@@ -120,7 +120,7 @@ public class Section
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
         {
             sb.append(((Header)enm.nextElement()).toString());
             sb.append("\015\012");

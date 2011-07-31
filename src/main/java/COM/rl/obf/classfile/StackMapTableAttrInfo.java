@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class StackMapTableAttrInfo extends AttrInfo
 {
@@ -86,4 +86,3 @@ public class StackMapTableAttrInfo extends AttrInfo
         }
     }
 }
-

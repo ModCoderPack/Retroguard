@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * A Tools class containing generally useful, miscellaneous static methods.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class Tools
 {
@@ -58,6 +58,7 @@ public class Tools
         'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
     };
     private static final char pad = '=';
+
     public static String toBase64(byte[] b)
     {
         StringBuffer sb = new StringBuffer();

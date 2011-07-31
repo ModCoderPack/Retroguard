@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class SyntheticAttrInfo extends AttrInfo
 {
@@ -63,4 +63,3 @@ public class SyntheticAttrInfo extends AttrInfo
     {
     }
 }
-

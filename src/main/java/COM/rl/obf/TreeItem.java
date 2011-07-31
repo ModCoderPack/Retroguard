@@ -27,8 +27,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Item that forms a tree structure and can represent a package level, a class, or a method or field.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class TreeItem
 {
@@ -129,7 +129,7 @@ public class TreeItem
         Vector section = new Vector();
         pos = pattern.indexOf('*');
         int rpos = -1;
-        while ((rpos = pattern.indexOf('*', pos+1)) != -1)
+        while ((rpos = pattern.indexOf('*', pos + 1)) != -1)
         {
             if (rpos != pos + 1)
             {
@@ -138,7 +138,7 @@ public class TreeItem
             pos = rpos;
         }
         // Check each section for a non-overlapping match in the string
-        for (Enumeration enm = section.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = section.elements(); enm.hasMoreElements();)
         {
             String chunk = (String)enm.nextElement();
             pos = string.indexOf(chunk);
@@ -335,7 +335,7 @@ public class TreeItem
         else
         {
             String s = this.parent.getFullInName();
-            if(s.equals(""))
+            if (s.equals(""))
             {
                 return this.getInName();
             }
@@ -357,7 +357,7 @@ public class TreeItem
         else
         {
             String s = this.parent.getFullOutName();
-            if(s.equals("") || (this instanceof Pk))
+            if (s.equals("") || (this instanceof Pk))
             {
                 return this.getOutName();
             }

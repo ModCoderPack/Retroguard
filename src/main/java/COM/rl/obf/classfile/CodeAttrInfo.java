@@ -25,8 +25,8 @@ import COM.rl.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class CodeAttrInfo extends AttrInfo
 {
@@ -51,26 +51,63 @@ public class CodeAttrInfo extends AttrInfo
     {
         switch (opcode)
         {
-            case 0xAA: case 0xAB: case 0xC4:
+            case 0xAA:
+            case 0xAB:
+            case 0xC4:
                 return -1; // variable length opcode
-            case 0x10: case 0x12: case 0x15: case 0x16:
-            case 0x17: case 0x18: case 0x19: case 0x36:
-            case 0x37: case 0x38: case 0x39: case 0x3A:
+            case 0x10:
+            case 0x12:
+            case 0x15:
+            case 0x16:
+            case 0x17:
+            case 0x18:
+            case 0x19:
+            case 0x36:
+            case 0x37:
+            case 0x38:
+            case 0x39:
+            case 0x3A:
             case 0xBC:
                 return 1;
-            case 0x11: case 0x13: case 0x14: case 0x84:
-            case 0x99: case 0x9A: case 0x9B: case 0x9C:
-            case 0x9D: case 0x9E: case 0x9F: case 0xA0:
-            case 0xA1: case 0xA2: case 0xA3: case 0xA4:
-            case 0xA5: case 0xA6: case 0xA7: case 0xA8:
-            case 0xB2: case 0xB3: case 0xB4: case 0xB5:
-            case 0xB6: case 0xB7: case 0xB8: case 0xBB:
-            case 0xBD: case 0xC0: case 0xC1: case 0xC6:
+            case 0x11:
+            case 0x13:
+            case 0x14:
+            case 0x84:
+            case 0x99:
+            case 0x9A:
+            case 0x9B:
+            case 0x9C:
+            case 0x9D:
+            case 0x9E:
+            case 0x9F:
+            case 0xA0:
+            case 0xA1:
+            case 0xA2:
+            case 0xA3:
+            case 0xA4:
+            case 0xA5:
+            case 0xA6:
+            case 0xA7:
+            case 0xA8:
+            case 0xB2:
+            case 0xB3:
+            case 0xB4:
+            case 0xB5:
+            case 0xB6:
+            case 0xB7:
+            case 0xB8:
+            case 0xBB:
+            case 0xBD:
+            case 0xC0:
+            case 0xC1:
+            case 0xC6:
             case 0xC7:
                 return 2;
             case 0xC5:
                 return 3;
-            case 0xB9: case 0xC8: case 0xC9:
+            case 0xB9:
+            case 0xC8:
+            case 0xC9:
                 return 4;
             default:
                 return 0;
@@ -88,7 +125,8 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected int getAttrInfoLength() throws Exception
     {
-        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength + this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
+        int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength
+            + this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
         for (int i = 0; i < this.u2attributesCount; i++)
         {
             length += AttrInfo.CONSTANT_FIELD_SIZE + this.attributes[i].getAttrInfoLength();
@@ -226,18 +264,18 @@ public class CodeAttrInfo extends AttrInfo
         for (int i = 0; i < this.code.length; i++)
         {
             int opcode = this.code[i] & 0xFF;
-            if ((opcode == 0x12) && (i+1 < this.code.length)) // ldc
+            if ((opcode == 0x12) && (i + 1 < this.code.length)) // ldc
             {
-                ldcIndex = this.code[i+1] & 0xFF;
+                ldcIndex = this.code[i + 1] & 0xFF;
                 CpInfo ldcCpInfo = this.cf.getCpEntry(ldcIndex);
                 if (!(ldcCpInfo instanceof StringCpInfo))
                 {
                     ldcIndex = -1;
                 }
             }
-            else if ((opcode == 0x13) && (i+2 < this.code.length)) // ldc_w
+            else if ((opcode == 0x13) && (i + 2 < this.code.length)) // ldc_w
             {
-                ldcIndex = ((this.code[i+1] & 0xFF) << 8) + (this.code[i+2] & 0xFF);
+                ldcIndex = ((this.code[i + 1] & 0xFF) << 8) + (this.code[i + 2] & 0xFF);
                 CpInfo ldcCpInfo = this.cf.getCpEntry(ldcIndex);
                 if (!(ldcCpInfo instanceof StringCpInfo))
                 {
@@ -247,9 +285,9 @@ public class CodeAttrInfo extends AttrInfo
             if (((opcodePrev == 0x12) || (opcodePrev == 0x13)) && (ldcIndex != -1)) // ldc or ldc_w and is a StringCpInfo
             {
                 boolean isClassForName = false;
-                if ((opcode == 0xB8) && (i+2 < this.code.length)) // invokestatic
+                if ((opcode == 0xB8) && (i + 2 < this.code.length)) // invokestatic
                 {
-                    int invokeIndex = ((this.code[i+1] & 0xFF) << 8) + (this.code[i+2] & 0xFF);
+                    int invokeIndex = ((this.code[i + 1] & 0xFF) << 8) + (this.code[i + 2] & 0xFF);
                     CpInfo cpInfo = this.cf.getCpEntry(invokeIndex);
                     if (cpInfo instanceof MethodrefCpInfo)
                     {
@@ -259,7 +297,10 @@ public class CodeAttrInfo extends AttrInfo
                         NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)this.cf.getCpEntry(entry.getNameAndTypeIndex());
                         String name = ((Utf8CpInfo)this.cf.getCpEntry(ntEntry.getNameIndex())).getString();
                         String descriptor = ((Utf8CpInfo)this.cf.getCpEntry(ntEntry.getDescriptorIndex())).getString();
-                        if (("class$".equals(name) && ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor) || "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor))) || ("java/lang/Class".equals(className) && "forName".equals(name) && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
+                        if (("class$".equals(name) && ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)
+                            || "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor)))
+                            || ("java/lang/Class".equals(className) && "forName".equals(name)
+                                && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
                         {
                             isClassForName = true;
                             if (cpUpdate != null)
@@ -272,13 +313,14 @@ public class CodeAttrInfo extends AttrInfo
                                     switch (opcodePrev)
                                     {
                                         case 0x13: // ldc_w
-                                            this.code[i-2] = 0;
+                                            this.code[i - 2] = 0;
                                             //$FALL-THROUGH$
                                         case 0x12: // ldc
-                                            this.code[i-1] = (byte)remapStringIndex;
+                                            this.code[i - 1] = (byte)remapStringIndex;
                                             break;
                                         default: // error
-                                            throw new Exception(".class or Class.forName remap of non-ldc/ldc_w - please report this error");
+                                            throw new Exception(".class or Class.forName remap of non-ldc/ldc_w"
+                                                + " - please report this error");
                                     }
                                 }
                             }
@@ -308,9 +350,11 @@ public class CodeAttrInfo extends AttrInfo
                 case 0xAA: // tableswitch
                     bytes = 3 - (i % 4); // 0-3 byte pad
                     bytes += 4; // default value
-                    int low = ((this.code[i+1+bytes] & 0xFF) << 24) + ((this.code[i+1+bytes+1] & 0xFF) << 16) + ((this.code[i+1+bytes+2] & 0xFF) << 8) + (this.code[i+1+bytes+3] & 0xFF);
+                    int low = ((this.code[i + 1 + bytes] & 0xFF) << 24) + ((this.code[i + 1 + bytes + 1] & 0xFF) << 16)
+                        + ((this.code[i + 1 + bytes + 2] & 0xFF) << 8) + (this.code[i + 1 + bytes + 3] & 0xFF);
                     bytes += 4; // low value
-                    int high = ((this.code[i+1+bytes] & 0xFF) << 24) + ((this.code[i+1+bytes+1] & 0xFF) << 16) + ((this.code[i+1+bytes+2] & 0xFF) << 8) + (this.code[i+1+bytes+3] & 0xFF);
+                    int high = ((this.code[i + 1 + bytes] & 0xFF) << 24) + ((this.code[i + 1 + bytes + 1] & 0xFF) << 16)
+                        + ((this.code[i + 1 + bytes + 2] & 0xFF) << 8) + (this.code[i + 1 + bytes + 3] & 0xFF);
                     bytes += 4; // high value
                     if (high >= low)
                     {
@@ -320,7 +364,8 @@ public class CodeAttrInfo extends AttrInfo
                 case 0xAB: // lookupswitch
                     bytes = 3 - (i % 4); // 0-3 byte pad
                     bytes += 4; // default value
-                    int npairs = ((this.code[i+1+bytes] & 0xFF) << 24) + ((this.code[i+1+bytes+1] & 0xFF) << 16) + ((this.code[i+1+bytes+2] & 0xFF) << 8) + (this.code[i+1+bytes+3] & 0xFF);
+                    int npairs = ((this.code[i + 1 + bytes] & 0xFF) << 24) + ((this.code[i + 1 + bytes + 1] & 0xFF) << 16)
+                        + ((this.code[i + 1 + bytes + 2] & 0xFF) << 8) + (this.code[i + 1 + bytes + 3] & 0xFF);
                     bytes += 4; // npairs value
                     if (npairs >= 0)
                     {
@@ -328,7 +373,7 @@ public class CodeAttrInfo extends AttrInfo
                     }
                     break;
                 case 0xC4: // wide
-                    int wideOpcode = this.code[i+1] & 0xFF;
+                    int wideOpcode = this.code[i + 1] & 0xFF;
                     switch (wideOpcode)
                     {
                         case 0x15: // iload

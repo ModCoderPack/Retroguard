@@ -26,55 +26,55 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Parser for RGS script files which provides an enumeration of option entries.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class RgsEnum
 {
     // Constants -------------------------------------------------------------
-    public static final String DIRECTIVE_OPTION        = ".option";
-    public static final String DIRECTIVE_ATTR          = ".attribute";
-    public static final String DIRECTIVE_CLASS         = ".class";
-    public static final String DIRECTIVE_NOTRIM_CLASS  = "^class";
-    public static final String DIRECTIVE_NOT_CLASS     = "!class";
-    public static final String DIRECTIVE_FIELD         = ".field";
-    public static final String DIRECTIVE_NOTRIM_FIELD  = "^field";
-    public static final String DIRECTIVE_NOT_FIELD     = "!field";
-    public static final String DIRECTIVE_METHOD        = ".method";
+    public static final String DIRECTIVE_OPTION = ".option";
+    public static final String DIRECTIVE_ATTR = ".attribute";
+    public static final String DIRECTIVE_CLASS = ".class";
+    public static final String DIRECTIVE_NOTRIM_CLASS = "^class";
+    public static final String DIRECTIVE_NOT_CLASS = "!class";
+    public static final String DIRECTIVE_FIELD = ".field";
+    public static final String DIRECTIVE_NOTRIM_FIELD = "^field";
+    public static final String DIRECTIVE_NOT_FIELD = "!field";
+    public static final String DIRECTIVE_METHOD = ".method";
     public static final String DIRECTIVE_NOTRIM_METHOD = "^method";
-    public static final String DIRECTIVE_NOT_METHOD    = "!method";
-    public static final String DIRECTIVE_PACKAGE_MAP   = ".package_map";
+    public static final String DIRECTIVE_NOT_METHOD = "!method";
+    public static final String DIRECTIVE_PACKAGE_MAP = ".package_map";
     public static final String DIRECTIVE_REPACKAGE_MAP = ".repackage_map";
-    public static final String DIRECTIVE_CLASS_MAP     = ".class_map";
-    public static final String DIRECTIVE_FIELD_MAP     = ".field_map";
-    public static final String DIRECTIVE_METHOD_MAP    = ".method_map";
-    public static final String DIRECTIVE_NOWARN        = ".nowarn";
+    public static final String DIRECTIVE_CLASS_MAP = ".class_map";
+    public static final String DIRECTIVE_FIELD_MAP = ".field_map";
+    public static final String DIRECTIVE_METHOD_MAP = ".method_map";
+    public static final String DIRECTIVE_NOWARN = ".nowarn";
 
-    public static final String OPTION_PUBLIC        = "public";
-    public static final String OPTION_PROTECTED     = "protected";
+    public static final String OPTION_PUBLIC = "public";
+    public static final String OPTION_PROTECTED = "protected";
     public static final String OPTION_PUB_PROT_ONLY = "pub_prot_only";
-    public static final String OPTION_METHOD        = "method";
-    public static final String OPTION_FIELD         = "field";
-    public static final String OPTION_AND_CLASS     = "and_class";
-    public static final String OPTION_EXTENDS       = "extends";
+    public static final String OPTION_METHOD = "method";
+    public static final String OPTION_FIELD = "field";
+    public static final String OPTION_AND_CLASS = "and_class";
+    public static final String OPTION_EXTENDS = "extends";
 
-    public static final String ACCESS_PUBLIC       = "public";
-    public static final String ACCESS_PRIVATE      = "private";
-    public static final String ACCESS_PROTECTED    = "protected";
-    public static final String ACCESS_STATIC       = "static";
-    public static final String ACCESS_FINAL        = "final";
+    public static final String ACCESS_PUBLIC = "public";
+    public static final String ACCESS_PRIVATE = "private";
+    public static final String ACCESS_PROTECTED = "protected";
+    public static final String ACCESS_STATIC = "static";
+    public static final String ACCESS_FINAL = "final";
     public static final String ACCESS_SYNCHRONIZED = "synchronized";
-    public static final String ACCESS_BRIDGE       = "bridge";
-    public static final String ACCESS_VOLATILE     = "volatile";
-    public static final String ACCESS_VARARGS      = "varargs";
-    public static final String ACCESS_TRANSIENT    = "transient";
-    public static final String ACCESS_NATIVE       = "native";
-    public static final String ACCESS_INTERFACE    = "interface";
-    public static final String ACCESS_ABSTRACT     = "abstract";
-    public static final String ACCESS_STRICT       = "strict";
-    public static final String ACCESS_SYNTHETIC    = "synthetic";
-    public static final String ACCESS_ANNOTATION   = "annotation";
-    public static final String ACCESS_ENUM         = "enum";
+    public static final String ACCESS_BRIDGE = "bridge";
+    public static final String ACCESS_VOLATILE = "volatile";
+    public static final String ACCESS_VARARGS = "varargs";
+    public static final String ACCESS_TRANSIENT = "transient";
+    public static final String ACCESS_NATIVE = "native";
+    public static final String ACCESS_INTERFACE = "interface";
+    public static final String ACCESS_ABSTRACT = "abstract";
+    public static final String ACCESS_STRICT = "strict";
+    public static final String ACCESS_SYNTHETIC = "synthetic";
+    public static final String ACCESS_ANNOTATION = "annotation";
+    public static final String ACCESS_ENUM = "enum";
 
     public static final String[] CLASS_ACCESS =
     {
@@ -115,13 +115,13 @@ public class RgsEnum
 
     private static final String DEFAULT_RGS =
         ".option Applet\n" +
-        ".option Application\n" +
-        ".option Serializable\n" +
-        ".option RMI\n" +
-        ".option RuntimeAnnotations\n" +
-        ".option MapClassString\n" +
-        ".option Repackage\n" +
-        ".option Generic\n";
+            ".option Application\n" +
+            ".option Serializable\n" +
+            ".option RMI\n" +
+            ".option RuntimeAnnotations\n" +
+            ".option MapClassString\n" +
+            ".option Repackage\n" +
+            ".option Generic\n";
 
 
     // Fields ----------------------------------------------------------------
@@ -140,7 +140,7 @@ public class RgsEnum
     /** Translate a string access modifier from the script to bit flag */
     private static int toAccessFlag(String accessString) throws Exception
     {
-        if      (RgsEnum.ACCESS_PUBLIC.equals(accessString))
+        if (RgsEnum.ACCESS_PUBLIC.equals(accessString))
         {
             return ClassConstants.ACC_PUBLIC;
         }
@@ -242,7 +242,12 @@ public class RgsEnum
             {
                 accessString = accessString.substring(endIndex);
             }
-            if ((((entryType == RgsEntry.TYPE_CLASS) || (entryType == RgsEntry.TYPE_NOT_CLASS)) && !Tools.isInArray(flagString, RgsEnum.CLASS_ACCESS)) || (((entryType == RgsEntry.TYPE_METHOD) || (entryType == RgsEntry.TYPE_NOT_METHOD)) && !Tools.isInArray(flagString, RgsEnum.METHOD_ACCESS)) || (((entryType == RgsEntry.TYPE_FIELD) || (entryType == RgsEntry.TYPE_NOT_FIELD)) && !Tools.isInArray(flagString, RgsEnum.FIELD_ACCESS)))
+            if ((((entryType == RgsEntry.TYPE_CLASS) || (entryType == RgsEntry.TYPE_NOT_CLASS))
+                && !Tools.isInArray(flagString, RgsEnum.CLASS_ACCESS))
+                || (((entryType == RgsEntry.TYPE_METHOD) || (entryType == RgsEntry.TYPE_NOT_METHOD))
+                    && !Tools.isInArray(flagString, RgsEnum.METHOD_ACCESS))
+                || (((entryType == RgsEntry.TYPE_FIELD) || (entryType == RgsEntry.TYPE_NOT_FIELD))
+                    && !Tools.isInArray(flagString, RgsEnum.FIELD_ACCESS)))
             {
                 throw new Exception();
             }
@@ -261,7 +266,8 @@ public class RgsEnum
     /** Ctor. */
     public RgsEnum(InputStream rgs)
     {
-        this.tk = new StreamTokenizer(new BufferedReader(rgs != null ? (Reader)new InputStreamReader(rgs) : (Reader)new StringReader(RgsEnum.DEFAULT_RGS)));
+        this.tk = new StreamTokenizer(new BufferedReader(rgs != null ?
+            (Reader)new InputStreamReader(rgs) : (Reader)new StringReader(RgsEnum.DEFAULT_RGS)));
         this.tk.resetSyntax();
         this.tk.whitespaceChars(0x00, 0x20);
         this.tk.wordChars('^', '^');
@@ -361,63 +367,72 @@ public class RgsEnum
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_CLASS))
                         {
                             directive = RgsEntry.TYPE_CLASS;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_CLASS.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_CLASS.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOTRIM_CLASS))
                         {
                             directive = RgsEntry.TYPE_NOTRIM_CLASS;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_CLASS.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_CLASS.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOT_CLASS))
                         {
                             directive = RgsEntry.TYPE_NOT_CLASS;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_NOT_CLASS.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOT_CLASS.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_METHOD))
                         {
                             directive = RgsEntry.TYPE_METHOD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_METHOD.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_METHOD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOTRIM_METHOD))
                         {
                             directive = RgsEntry.TYPE_NOTRIM_METHOD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_METHOD.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_METHOD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOT_METHOD))
                         {
                             directive = RgsEntry.TYPE_NOT_METHOD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_NOT_METHOD.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOT_METHOD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_FIELD))
                         {
                             directive = RgsEntry.TYPE_FIELD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_FIELD.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOTRIM_FIELD))
                         {
                             directive = RgsEntry.TYPE_NOTRIM_FIELD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_FIELD.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOT_FIELD))
                         {
                             directive = RgsEntry.TYPE_NOT_FIELD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive, this.tk.sval.substring(RgsEnum.DIRECTIVE_NOT_FIELD.length()));
+                            accessMask = RgsEnum.decodeAccessFlags(directive,
+                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOT_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
@@ -554,7 +569,8 @@ public class RgsEnum
                                 break;
                         }
                     }
-                    else if ((directive == RgsEntry.TYPE_CLASS) || (directive == RgsEntry.TYPE_NOTRIM_CLASS) || (directive == RgsEntry.TYPE_NOT_CLASS))
+                    else if ((directive == RgsEntry.TYPE_CLASS) || (directive == RgsEntry.TYPE_NOTRIM_CLASS)
+                        || (directive == RgsEntry.TYPE_NOT_CLASS))
                     {
                         if (this.tk.sval.equals(RgsEnum.OPTION_PUBLIC))
                         {
@@ -582,7 +598,8 @@ public class RgsEnum
                         }
                         else if (this.tk.sval.equals(RgsEnum.OPTION_FIELD))
                         {
-                            if ((!entry.retainToPublic && !entry.retainPubProtOnly && !entry.retainToProtected) || entry.retainMethodsOnly)
+                            if ((!entry.retainToPublic && !entry.retainPubProtOnly && !entry.retainToProtected)
+                                || entry.retainMethodsOnly)
                             {
                                 throw new Exception();
                             }
@@ -590,7 +607,8 @@ public class RgsEnum
                         }
                         else if (this.tk.sval.equals(RgsEnum.OPTION_METHOD))
                         {
-                            if ((!entry.retainToPublic && !entry.retainPubProtOnly && !entry.retainToProtected) || entry.retainFieldsOnly)
+                            if ((!entry.retainToPublic && !entry.retainPubProtOnly && !entry.retainToProtected)
+                                || entry.retainFieldsOnly)
                             {
                                 throw new Exception();
                             }
@@ -611,7 +629,9 @@ public class RgsEnum
                             throw new Exception();
                         }
                     }
-                    else if ((directive == RgsEntry.TYPE_METHOD) || (directive == RgsEntry.TYPE_NOTRIM_METHOD) || (directive == RgsEntry.TYPE_NOT_METHOD) || (directive == RgsEntry.TYPE_FIELD) || (directive == RgsEntry.TYPE_NOTRIM_FIELD) || (directive == RgsEntry.TYPE_NOT_FIELD))
+                    else if ((directive == RgsEntry.TYPE_METHOD) || (directive == RgsEntry.TYPE_NOTRIM_METHOD)
+                        || (directive == RgsEntry.TYPE_NOT_METHOD) || (directive == RgsEntry.TYPE_FIELD)
+                        || (directive == RgsEntry.TYPE_NOTRIM_FIELD) || (directive == RgsEntry.TYPE_NOT_FIELD))
                     {
                         if (this.tk.sval.equals(RgsEnum.OPTION_AND_CLASS))
                         {

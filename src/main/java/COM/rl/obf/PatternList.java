@@ -24,8 +24,8 @@ import java.util.*;
 /**
  * Class used for limited pattern matching with '**' (matches across package boundaries) and '*' (does not match across package
  * boundaries) wildcards.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class PatternList
 {
@@ -45,7 +45,7 @@ public class PatternList
 
 
     // Instance Methods ------------------------------------------------------
-    // Ctor.
+    /** Ctor. */
     private PatternList(String pattern) throws Exception
     {
         this.subs = new Vector();
@@ -55,21 +55,21 @@ public class PatternList
         while (pos < pattern.length())
         {
             int oldpos = pos;
-            pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, oldpos+1);
+            pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, oldpos + 1);
             if (pos == -1)
             {
                 pos = pattern.length();
             }
-            if ((scFirst >= 0) && (oldpos+1 <= scFirst) && (scFirst+2 <= pos))
+            if ((scFirst >= 0) && (oldpos + 1 <= scFirst) && (scFirst + 2 <= pos))
             {
                 this.sc = this.length();
-                pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast+2);
+                pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast + 2);
                 if (pos == -1)
                 {
                     pos = pattern.length();
                 }
             }
-            this.subs.addElement(pattern.substring(oldpos+1, pos));
+            this.subs.addElement(pattern.substring(oldpos + 1, pos));
         }
     }
 

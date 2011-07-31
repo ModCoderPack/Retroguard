@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class SourceFileAttrInfo extends AttrInfo
 {
@@ -79,4 +79,3 @@ public class SourceFileAttrInfo extends AttrInfo
         this.u2sourceFileIndex = pool.remapUtf8To(ClassConstants.ATTR_SourceFile, this.u2sourceFileIndex);
     }
 }
-

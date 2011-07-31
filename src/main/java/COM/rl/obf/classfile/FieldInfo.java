@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a field from a class-file.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class FieldInfo extends ClassItemInfo
 {
@@ -38,8 +38,9 @@ public class FieldInfo extends ClassItemInfo
     // Class Methods ---------------------------------------------------------
     /**
      * Create a new FieldInfo from the file format data in the DataInput stream.
-     *
-     * @throws IOException if class file is corrupt or incomplete
+     * 
+     * @throws IOException
+     *             if class file is corrupt or incomplete
      */
     public static FieldInfo create(DataInput din, ClassFile cf) throws Exception
     {

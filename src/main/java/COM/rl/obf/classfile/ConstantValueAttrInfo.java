@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class ConstantValueAttrInfo extends AttrInfo
 {
@@ -66,4 +66,3 @@ public class ConstantValueAttrInfo extends AttrInfo
         dout.writeShort(this.u2constantValueIndex);
     }
 }
-

@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a 'integer' entry in the ConstantPool.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class IntegerCpInfo extends CpInfo
 {

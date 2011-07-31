@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an entry in the ConstantPool. Specific types of entry have their representations sub-classed from this.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 abstract public class CpInfo implements ClassConstants
 {
@@ -42,8 +42,9 @@ abstract public class CpInfo implements ClassConstants
     // Class Methods ---------------------------------------------------------
     /**
      * Create a new CpInfo from the data passed.
-     *
-     * @throws IOException if class file is corrupt or incomplete
+     * 
+     * @throws IOException
+     *             if class file is corrupt or incomplete
      */
     public static CpInfo create(DataInput din) throws Exception
     {

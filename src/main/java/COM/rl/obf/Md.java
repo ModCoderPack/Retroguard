@@ -27,8 +27,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Tree item representing a method.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class Md extends MdFd
 {
@@ -76,4 +76,3 @@ public class Md extends MdFd
         return this.isOldStyleMatch(namePattern) && TreeItem.isMatch(descPattern, this.getDescriptor());
     }
 }
-

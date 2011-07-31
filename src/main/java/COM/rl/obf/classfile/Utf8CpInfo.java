@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a 'UTF8' entry in the ConstantPool.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class Utf8CpInfo extends CpInfo
 {

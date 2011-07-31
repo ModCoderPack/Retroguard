@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Set of actions to be performed by a tree walker
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class TreeAction
 {
@@ -53,4 +53,3 @@ public class TreeAction
     {
     }
 }
-

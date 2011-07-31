@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an Stack Map Frame entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class StackMapFrameInfo
 {
@@ -65,6 +65,7 @@ public class StackMapFrameInfo
     private StackMapFrameInfo()
     {
     }
+
     private void read(DataInput din) throws Exception
     {
         this.u1frameType = din.readUnsignedByte();
@@ -72,7 +73,8 @@ public class StackMapFrameInfo
         {
             // nothing else to read
         }
-        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
+        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType)
+            && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
             this.u2numberOfStackItems = 1;
             this.readStackItems(din);
@@ -128,7 +130,8 @@ public class StackMapFrameInfo
         {
             // nothing else to write
         }
-        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
+        else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType)
+            && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
             this.writeStackItems(dout);
         }
@@ -198,4 +201,3 @@ public class StackMapFrameInfo
         }
     }
 }
-

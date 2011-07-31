@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class LineNumberTableAttrInfo extends AttrInfo
 {
@@ -76,4 +76,3 @@ public class LineNumberTableAttrInfo extends AttrInfo
         }
     }
 }
-

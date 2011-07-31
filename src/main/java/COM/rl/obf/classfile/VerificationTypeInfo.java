@@ -24,21 +24,21 @@ import java.util.*;
 
 /**
  * Representation of an Verification Type Info entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class VerificationTypeInfo
 {
     // Constants -------------------------------------------------------------
-    private static final int ITEM_Top               = 0;
-    private static final int ITEM_Integer           = 1;
-    private static final int ITEM_Float             = 2;
-    private static final int ITEM_Long              = 3;
-    private static final int ITEM_Double            = 4;
-    private static final int ITEM_Null              = 5;
+    private static final int ITEM_Top = 0;
+    private static final int ITEM_Integer = 1;
+    private static final int ITEM_Float = 2;
+    private static final int ITEM_Long = 3;
+    private static final int ITEM_Double = 4;
+    private static final int ITEM_Null = 5;
     private static final int ITEM_UninitializedThis = 6;
-    private static final int ITEM_Object            = 7;
-    private static final int ITEM_Uninitialized     = 8;
+    private static final int ITEM_Object = 7;
+    private static final int ITEM_Uninitialized = 8;
 
 
     // Fields ----------------------------------------------------------------
@@ -125,4 +125,3 @@ public class VerificationTypeInfo
         }
     }
 }
-

@@ -29,8 +29,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Base to package and class tree item.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 abstract public class PkCl extends TreeItem
 {
@@ -61,7 +61,7 @@ abstract public class PkCl extends TreeItem
     /** Get a class by obfuscated name. */
     public Cl getObfClass(String name) throws Exception
     {
-        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements();)
         {
             Cl cl = (Cl)enm.nextElement();
             if (name.equals(cl.getOutName()))
@@ -85,10 +85,11 @@ abstract public class PkCl extends TreeItem
         this.addAllClasses(allClasses);
         return allClasses.elements();
     }
+
     /** List classes and recursively compose a list of all inner classes. */
     protected void addAllClasses(Vector allClasses)
     {
-        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements();)
         {
             Cl cl = (Cl)enm.nextElement();
             allClasses.addElement(cl);
@@ -129,7 +130,7 @@ abstract public class PkCl extends TreeItem
         // Copy over the inner class data from the placeholder, if any
         if (plClassItem != null)
         {
-            for (Enumeration enm = plClassItem.getClassEnum(); enm.hasMoreElements(); )
+            for (Enumeration enm = plClassItem.getClassEnum(); enm.hasMoreElements();)
             {
                 Cl innerCl = (Cl)enm.nextElement();
                 innerCl.setParent(cl);
@@ -163,13 +164,13 @@ abstract public class PkCl extends TreeItem
     /** Generate unique obfuscated names for a given namespace. */
     protected void generateNames(Hashtable hash) throws Exception
     {
-        for (Enumeration enm = hash.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = hash.elements(); enm.hasMoreElements();)
         {
             TreeItem ti = (TreeItem)enm.nextElement();
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);
-                if(theOutName != null)
+                if (theOutName != null)
                 {
                     ti.setOutName(theOutName);
                     String fullInName = ti.getFullInName();
@@ -197,4 +198,3 @@ abstract public class PkCl extends TreeItem
         }
     }
 }
-

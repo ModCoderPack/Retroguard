@@ -27,8 +27,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Tree structure of package levels, classes, methods and fields used for obfuscation.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class ClassTree implements NameMapper
 {
@@ -114,7 +114,7 @@ public class ClassTree implements NameMapper
         {
             TreeItem ti = this.root;
             StringBuffer sb = new StringBuffer();
-            for (Enumeration nameEnum = ClassTree.getNameEnum(inName); nameEnum.hasMoreElements(); )
+            for (Enumeration nameEnum = ClassTree.getNameEnum(inName); nameEnum.hasMoreElements();)
             {
                 SimpleName simpleName = (SimpleName)nameEnum.nextElement();
                 String name = simpleName.getName();
@@ -169,7 +169,7 @@ public class ClassTree implements NameMapper
     {
         // Add the fully qualified class name
         TreeItem ti = this.root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(cf.getName()); nameEnum.hasMoreElements(); )
+        for (Enumeration nameEnum = ClassTree.getNameEnum(cf.getName()); nameEnum.hasMoreElements();)
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -225,7 +225,7 @@ public class ClassTree implements NameMapper
     public void noWarnClass(String name) throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements(); )
+        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements();)
         {
             Cl cl = (Cl)clEnum.nextElement();
             cl.setNoWarn();
@@ -272,13 +272,16 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a class/interface type (and possibly methods and fields defined in class) for retention. */
-    public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly, boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
+    public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly,
+        boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, boolean notrimOnly,
+        int accessMask, int accessSetting) throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements(); )
+        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements();)
         {
             Cl cl = (Cl)clEnum.nextElement();
-            if (((extendsName == null) || cl.hasAsSuperOrInterface(extendsName)) && cl.modifiersMatchMask(accessMask, accessSetting))
+            if (((extendsName == null) || cl.hasAsSuperOrInterface(extendsName))
+                && cl.modifiersMatchMask(accessMask, accessSetting))
             {
                 this.retainHierarchy(cl, invert);
                 if (retainToPublic || retainToProtected || retainPubProtOnly)
@@ -286,10 +289,13 @@ public class ClassTree implements NameMapper
                     // Retain methods if requested
                     if (!retainFieldsOnly)
                     {
-                        for (Enumeration enm = cl.getMethodEnum(); enm.hasMoreElements(); )
+                        for (Enumeration enm = cl.getMethodEnum(); enm.hasMoreElements();)
                         {
                             Md md = (Md)enm.nextElement();
-                            if ((retainToPublic && Modifier.isPublic(md.getModifiers())) || (retainToProtected && !Modifier.isPrivate(md.getModifiers())) || (retainPubProtOnly && (Modifier.isPublic(md.getModifiers()) || Modifier.isProtected(md.getModifiers()))))
+                            if ((retainToPublic && Modifier.isPublic(md.getModifiers()))
+                                || (retainToProtected && !Modifier.isPrivate(md.getModifiers()))
+                                || (retainPubProtOnly && (Modifier.isPublic(md.getModifiers())
+                                    || Modifier.isProtected(md.getModifiers()))))
                             {
                                 if (invert)
                                 {
@@ -308,10 +314,13 @@ public class ClassTree implements NameMapper
                     // Retain fields if requested
                     if (!retainMethodsOnly)
                     {
-                        for (Enumeration enm = cl.getFieldEnum(); enm.hasMoreElements(); )
+                        for (Enumeration enm = cl.getFieldEnum(); enm.hasMoreElements();)
                         {
                             Fd fd = (Fd)enm.nextElement();
-                            if ((retainToPublic && Modifier.isPublic(fd.getModifiers())) || (retainToProtected && !Modifier.isPrivate(fd.getModifiers())) || (retainPubProtOnly && (Modifier.isPublic(fd.getModifiers()) || Modifier.isProtected(fd.getModifiers()))))
+                            if ((retainToPublic && Modifier.isPublic(fd.getModifiers()))
+                                || (retainToProtected && !Modifier.isPrivate(fd.getModifiers()))
+                                || (retainPubProtOnly && (Modifier.isPublic(fd.getModifiers())
+                                    || Modifier.isProtected(fd.getModifiers()))))
                             {
                                 if (invert)
                                 {
@@ -332,13 +341,15 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a method type for retention. */
-    public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
+    public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
+        boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = this.getMdEnum(name, descriptor); enm.hasMoreElements(); )
+        for (Enumeration enm = this.getMdEnum(name, descriptor); enm.hasMoreElements();)
         {
             Md md = (Md)enm.nextElement();
             Cl thisCl = (Cl)md.getParent();
-            if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName)) && md.modifiersMatchMask(accessMask, accessSetting))
+            if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName))
+                && md.modifiersMatchMask(accessMask, accessSetting))
             {
                 if (invert)
                 {
@@ -359,13 +370,15 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark a field type for retention. */
-    public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert, boolean notrimOnly, int accessMask, int accessSetting) throws Exception
+    public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
+        boolean notrimOnly, int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = this.getFdEnum(name, descriptor); enm.hasMoreElements(); )
+        for (Enumeration enm = this.getFdEnum(name, descriptor); enm.hasMoreElements();)
         {
             Fd fd = (Fd)enm.nextElement();
             Cl thisCl = (Cl)fd.getParent();
-            if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName)) && fd.modifiersMatchMask(accessMask, accessSetting))
+            if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName))
+                && fd.modifiersMatchMask(accessMask, accessSetting))
             {
                 if (invert)
                 {
@@ -430,7 +443,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            System.out.println("# Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName()+ " to " + obfName);
+            System.out.println("# Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName() + " to " + obfName);
         }
     }
 
@@ -459,6 +472,7 @@ public class ClassTree implements NameMapper
             {
                 pk.generateNames();
             }
+
             @Override
             public void classAction(Cl cl) throws Exception
             {
@@ -675,7 +689,7 @@ public class ClassTree implements NameMapper
     public Cl getCl(String fullName) throws Exception
     {
         TreeItem ti = this.root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements(); )
+        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements();)
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -714,7 +728,7 @@ public class ClassTree implements NameMapper
     public Pk getPk(String fullName) throws Exception
     {
         TreeItem ti = this.root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements(); )
+        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements();)
         {
             SimpleName simpleName = (SimpleName)nameEnum.nextElement();
             String name = simpleName.getName();
@@ -754,6 +768,7 @@ public class ClassTree implements NameMapper
 
     /**
      * Mapping for fully qualified class name.
+     * 
      * @see NameMapper#mapClass
      */
     @Override
@@ -800,6 +815,7 @@ public class ClassTree implements NameMapper
 
     /**
      * Mapping for method name, of fully qualified class.
+     * 
      * @see NameMapper#mapMethod
      */
     @Override
@@ -847,6 +863,7 @@ public class ClassTree implements NameMapper
 
     /**
      * Mapping for field name, of fully qualified class.
+     * 
      * @see NameMapper#mapField
      */
     @Override
@@ -894,6 +911,7 @@ public class ClassTree implements NameMapper
 
     /**
      * Mapping for generic type signature.
+     * 
      * @see NameMapper#mapSignature
      */
     @Override
@@ -905,6 +923,7 @@ public class ClassTree implements NameMapper
 
     /**
      * Mapping for descriptor of field or method.
+     * 
      * @see NameMapper#mapDescriptor
      */
     @Override
@@ -968,6 +987,7 @@ public class ClassTree implements NameMapper
                     log.println(".class " + cl.getFullInName());
                 }
             }
+
             @Override
             public void methodAction(Md md)
             {
@@ -976,6 +996,7 @@ public class ClassTree implements NameMapper
                     log.println(".method " + md.getFullInName() + " " + md.getDescriptor());
                 }
             }
+
             @Override
             public void fieldAction(Fd fd)
             {
@@ -984,6 +1005,7 @@ public class ClassTree implements NameMapper
                     log.println(".field " + fd.getFullInName() + " " + fd.getDescriptor());
                 }
             }
+
             @Override
             public void packageAction(Pk pk)
             {
@@ -1004,6 +1026,7 @@ public class ClassTree implements NameMapper
                     log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
                 }
             }
+
             @Override
             public void methodAction(Md md)
             {
@@ -1012,6 +1035,7 @@ public class ClassTree implements NameMapper
                     log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
                 }
             }
+
             @Override
             public void fieldAction(Fd fd)
             {
@@ -1020,6 +1044,7 @@ public class ClassTree implements NameMapper
                     log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
                 }
             }
+
             @Override
             public void packageAction(Pk pk)
             {
@@ -1042,6 +1067,7 @@ public class ClassTree implements NameMapper
     {
         int useCount;
         String name;
+
         SortElement(String name, int useCount)
         {
             this.useCount = useCount;
@@ -1118,5 +1144,3 @@ public class ClassTree implements NameMapper
         }
     }
 }
-
-

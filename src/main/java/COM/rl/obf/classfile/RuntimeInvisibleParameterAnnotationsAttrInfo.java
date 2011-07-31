@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class RuntimeInvisibleParameterAnnotationsAttrInfo extends ParameterAnnotationsAttrInfo
 {
@@ -51,4 +51,3 @@ public class RuntimeInvisibleParameterAnnotationsAttrInfo extends ParameterAnnot
         return ClassConstants.ATTR_RuntimeInvisibleParameterAnnotations;
     }
 }
-

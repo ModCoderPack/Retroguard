@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Interface to a class, method, field remapping table.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public interface NameMapper
 {

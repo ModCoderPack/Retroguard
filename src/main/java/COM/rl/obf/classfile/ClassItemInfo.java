@@ -25,8 +25,8 @@ import COM.rl.util.*;
 
 /**
  * Representation of a field or method from a class-file.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 abstract public class ClassItemInfo implements ClassConstants
 {

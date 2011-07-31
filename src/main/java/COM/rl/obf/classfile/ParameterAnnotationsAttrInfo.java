@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
 {
@@ -95,4 +95,3 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
         }
     }
 }
-

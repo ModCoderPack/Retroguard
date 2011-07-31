@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a 'ref'-type entry in the ConstantPool.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 abstract public class RefCpInfo extends CpInfo
 {
@@ -111,6 +111,12 @@ abstract public class RefCpInfo extends CpInfo
     @Override
     public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
     {
-        pw.println("  Ref " + Integer.toString(index) + ": " + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getNameIndex())).getString() + " " + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getDescriptorIndex())).getString());
+        pw.println("  Ref " + Integer.toString(index) + ": "
+            + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getNameIndex())).getString()
+            + " "
+            + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getNameIndex())).getString()
+            + " "
+            + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getDescriptorIndex()))
+                .getString());
     }
 }

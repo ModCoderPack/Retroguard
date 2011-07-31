@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * An RFC822 'header' is a 'tag' / 'value' pair.
- *
+ * 
  * @author Mark Welsh
  */
 public class Header

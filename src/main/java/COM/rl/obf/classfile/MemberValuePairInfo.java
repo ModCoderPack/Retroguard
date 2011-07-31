@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an annotation's member-value-pair entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class MemberValuePairInfo
 {

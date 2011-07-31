@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an Inner Classes table entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class InnerClassesInfo
 {

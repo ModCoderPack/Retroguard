@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a 'nameandtype' entry in the ConstantPool.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class NameAndTypeCpInfo extends CpInfo implements Cloneable
 {

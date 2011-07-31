@@ -22,8 +22,8 @@ package COM.rl.obf;
 /**
  * Interface to a list of method and field names and descriptors -- used for checking if a name/descriptor is in the
  * public/protected lists of the super-class/interface hierarchy.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public interface NameListUp
 {
@@ -39,4 +39,3 @@ public interface NameListUp
     /** Get obfuscated field name from list, or null if no mapping exists. */
     public String getFieldObfNameUp(String name) throws Exception;
 }
-

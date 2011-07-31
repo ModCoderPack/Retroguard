@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class EnclosingMethodAttrInfo extends AttrInfo
 {
@@ -88,4 +88,3 @@ public class EnclosingMethodAttrInfo extends AttrInfo
         // No remap needed
     }
 }
-

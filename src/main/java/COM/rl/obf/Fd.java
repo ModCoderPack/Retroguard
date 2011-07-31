@@ -27,8 +27,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Tree item representing a field.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class Fd extends MdFd
 {
@@ -55,4 +55,3 @@ public class Fd extends MdFd
         return ";";
     }
 }
-

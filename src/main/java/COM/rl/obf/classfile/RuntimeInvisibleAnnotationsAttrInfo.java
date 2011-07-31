@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class RuntimeInvisibleAnnotationsAttrInfo extends AnnotationsAttrInfo
 {
@@ -51,4 +51,3 @@ public class RuntimeInvisibleAnnotationsAttrInfo extends AnnotationsAttrInfo
         return ClassConstants.ATTR_RuntimeInvisibleAnnotations;
     }
 }
-

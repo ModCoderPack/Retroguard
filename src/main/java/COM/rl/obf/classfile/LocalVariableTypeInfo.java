@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an Local Variable Type table entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class LocalVariableTypeInfo
 {

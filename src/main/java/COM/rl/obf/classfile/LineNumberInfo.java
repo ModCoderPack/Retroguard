@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an Line Number table entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class LineNumberInfo
 {

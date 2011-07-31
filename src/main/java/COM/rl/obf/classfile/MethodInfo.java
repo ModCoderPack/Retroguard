@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a method from a class-file.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class MethodInfo extends ClassItemInfo
 {
@@ -38,8 +38,9 @@ public class MethodInfo extends ClassItemInfo
     // Class Methods ---------------------------------------------------------
     /**
      * Create a new MethodInfo from the file format data in the DataInput stream.
-     *
-     * @throws IOException if class file is corrupt or incomplete
+     * 
+     * @throws IOException
+     *             if class file is corrupt or incomplete
      */
     public static MethodInfo create(DataInput din, ClassFile cf) throws Exception
     {

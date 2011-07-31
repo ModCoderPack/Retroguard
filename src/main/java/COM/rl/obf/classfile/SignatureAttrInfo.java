@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class SignatureAttrInfo extends AttrInfo
 {
@@ -83,4 +83,3 @@ public class SignatureAttrInfo extends AttrInfo
         this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }
-

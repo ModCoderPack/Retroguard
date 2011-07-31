@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute. Specific attributes have their representations sub-classed from this.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class AttrInfo implements ClassConstants
 {
@@ -44,8 +44,9 @@ public class AttrInfo implements ClassConstants
     // Class Methods ---------------------------------------------------------
     /**
      * Create a new AttrInfo from the data passed.
-     *
-     * @throws IOException if class file is corrupt or incomplete
+     * 
+     * @throws IOException
+     *             if class file is corrupt or incomplete
      */
     public static AttrInfo create(DataInput din, ClassFile cf) throws Exception
     {

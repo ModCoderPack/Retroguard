@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class InnerClassesAttrInfo extends AttrInfo
 {
@@ -102,4 +102,3 @@ public class InnerClassesAttrInfo extends AttrInfo
         }
     }
 }
-

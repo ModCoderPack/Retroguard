@@ -27,8 +27,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Placeholder class -- used to represent a class which has inner classes, before the class itself has been encountered.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class PlaceholderCl extends Cl
 {
@@ -48,4 +48,3 @@ public class PlaceholderCl extends Cl
         super(parent, isInnerClass, name, null, null, 0);
     }
 }
-

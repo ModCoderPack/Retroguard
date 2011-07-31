@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * A list of RFC822 sections, usually representing a file.
- *
+ * 
  * @author Mark Welsh
  */
 public class SectionList
@@ -92,7 +92,8 @@ public class SectionList
                     {
                         line = line.concat(nextLine.substring(1));
                     }
-                    else // new section, so reset in preparation for read.
+                    else
+                    // new section, so reset in preparation for read.
                     {
                         reader.reset();
                         done = true;
@@ -131,7 +132,7 @@ public class SectionList
     /** Find the first section in the list containing the matching header. */
     public Section find(Header header)
     {
-        for (Enumeration enm = this.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
         {
             Section section = (Section)enm.nextElement();
             if (section.hasHeader(header))
@@ -145,7 +146,7 @@ public class SectionList
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration enm = this.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
         {
             ((Section)enm.nextElement()).writeString(writer);
         }
@@ -156,7 +157,7 @@ public class SectionList
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration enm = this.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
         {
             sb.append(((Section)enm.nextElement()).toString());
         }

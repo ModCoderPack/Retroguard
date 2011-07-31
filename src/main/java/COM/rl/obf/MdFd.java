@@ -27,8 +27,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Base to method and field tree items.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 abstract public class MdFd extends TreeItem
 {
@@ -53,7 +53,8 @@ abstract public class MdFd extends TreeItem
         this.isSynthetic = isSynthetic;
         if (name.equals("") || descriptor.equals("") || !(parent instanceof Cl))
         {
-            System.err.println("# Internal error: method/field must have name and descriptor, and have Class or Interface as parent");
+            System.err.println("# Internal error: method/field must have name and descriptor, " +
+                "and have Class or Interface as parent");
         }
 
         // Disallow obfuscation of 'Synthetic' methods
@@ -151,6 +152,7 @@ abstract public class MdFd extends TreeItem
     abstract protected String getDescriptorName();
 
     private String[] parsedTypes = null;
+
     /** Return the parsed descriptor types array. */
     protected String[] parseTypes()
     {

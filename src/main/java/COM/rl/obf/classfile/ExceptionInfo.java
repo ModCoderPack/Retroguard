@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of an Exception table entry.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class ExceptionInfo
 {
@@ -53,6 +53,7 @@ public class ExceptionInfo
     private ExceptionInfo()
     {
     }
+
     private void read(DataInput din) throws Exception
     {
         this.u2startpc = din.readUnsignedShort();

@@ -25,8 +25,8 @@ import COM.rl.obf.classfile.ClassFile;
 
 /**
  * Main implementation class for obfuscator package.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class RetroGuardImpl
 {
@@ -38,7 +38,7 @@ public class RetroGuardImpl
     private static final String LOG_TITLE_PRE_VERSION = "# RetroGuard MCP v";
     private static final String LOG_TITLE_POST_VERSION = "";
     private static final String LOG_CREATED = "# Logfile created on ";
-    private static final String LOG_INPUT_FILE =  "# Jar file to be obfuscated:           ";
+    private static final String LOG_INPUT_FILE = "# Jar file to be obfuscated:           ";
     private static final String LOG_OUTPUT_FILE = "# Target Jar file for obfuscated code: ";
     private static final String LOG_SCRIPT_FILE = "# RetroGuard Script file used:         ";
     private static final String LOG_NO_SCRIPT = "(none, defaults used)";
@@ -57,11 +57,15 @@ public class RetroGuardImpl
     // Class Methods ---------------------------------------------------------
     /**
      * Main entry point for the obfuscator.
-     *
-     * @param inFilename a readable input JAR file name
-     * @param outFilename a writable JAR file name for obfuscated output
-     * @param rgsFilename valid RetroGuard Script data file name, or null (which implies default settings)
-     * @param logFilename name for the log data file
+     * 
+     * @param inFilename
+     *            a readable input JAR file name
+     * @param outFilename
+     *            a writable JAR file name for obfuscated output
+     * @param rgsFilename
+     *            valid RetroGuard Script data file name, or null (which implies default settings)
+     * @param logFilename
+     *            name for the log data file
      */
     public static void obfuscate(String inFilename, String outFilename, String rgsFilename, String logFilename) throws Exception
     {
@@ -108,11 +112,15 @@ public class RetroGuardImpl
 
     /**
      * Main entry point for the obfuscator.
-     *
-     * @param inFile a File pointing to a readable JAR
-     * @param outFile a writable JAR for obfuscated output
-     * @param rgsFile valid RetroGuard Script data, or null (which implies default settings)
-     * @param logFile file for the log data.
+     * 
+     * @param inFile
+     *            a File pointing to a readable JAR
+     * @param outFile
+     *            a writable JAR for obfuscated output
+     * @param rgsFile
+     *            valid RetroGuard Script data, or null (which implies default settings)
+     * @param logFile
+     *            file for the log data.
      */
     public static void obfuscate(File inFile, File outFile, File rgsFile, File logFile) throws Exception
     {
@@ -195,7 +203,8 @@ public class RetroGuardImpl
         log.println("#");
         log.println(RetroGuardImpl.LOG_INPUT_FILE + this.inFile.getName());
         log.println(RetroGuardImpl.LOG_OUTPUT_FILE + this.outFile.getName());
-        log.println(RetroGuardImpl.LOG_SCRIPT_FILE + (this.rgsFile.exists() ? this.rgsFile.getName() : RetroGuardImpl.LOG_NO_SCRIPT));
+        log.println(RetroGuardImpl.LOG_SCRIPT_FILE
+            + (this.rgsFile.exists() ? this.rgsFile.getName() : RetroGuardImpl.LOG_NO_SCRIPT));
         log.println("#");
     }
 }

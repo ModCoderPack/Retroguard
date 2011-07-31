@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a 'long' entry in the ConstantPool (takes up two indices).
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class LongCpInfo extends CpInfo
 {

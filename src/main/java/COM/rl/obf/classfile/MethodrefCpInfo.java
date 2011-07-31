@@ -24,8 +24,8 @@ import java.util.*;
 
 /**
  * Representation of a 'methodref' entry in the ConstantPool.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class MethodrefCpInfo extends RefCpInfo
 {

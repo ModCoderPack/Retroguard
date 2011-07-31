@@ -26,8 +26,8 @@ import COM.rl.util.*;
 /**
  * A representation of the data in a Java class-file's Constant Pool.
  * Constant Pool entries are managed by reference counting.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class ConstantPool
 {
@@ -203,13 +203,15 @@ public class ConstantPool
         {
             this.defaultAction(cpInfo);
         }
+
         public void defaultAction(CpInfo cpInfo) throws Exception
         {
         }
     }
+
     private void walkPool(PoolAction pa) throws Exception
     {
-        for (Enumeration enm = this.pool.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.pool.elements(); enm.hasMoreElements();)
         {
             Object o = enm.nextElement();
             if (o instanceof Utf8CpInfo)

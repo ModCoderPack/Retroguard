@@ -29,8 +29,8 @@ import COM.rl.obf.classfile.*;
 
 /**
  * Tree item representing a package.
- *
- * @author      Mark Welsh
+ * 
+ * @author Mark Welsh
  */
 public class Pk extends PkCl
 {
@@ -103,7 +103,7 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated name. */
     public Pk getObfPackage(String name) throws Exception
     {
-        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements();)
         {
             Pk pk = (Pk)enm.nextElement();
             if (name.equals(pk.getOutName()))
@@ -117,7 +117,7 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated repackage name. */
     public Pk getObfRepackage(String name) throws Exception
     {
-        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements(); )
+        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements();)
         {
             Pk pk = (Pk)enm.nextElement();
             if (name.equals(pk.getRepackageName()))
@@ -218,4 +218,3 @@ public class Pk extends PkCl
         }
     }
 }
-
