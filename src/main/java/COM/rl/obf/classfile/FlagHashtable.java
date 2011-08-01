@@ -27,13 +27,13 @@ import java.util.*;
  * 
  * @author Mark Welsh
  */
-public class FlagHashtable extends Hashtable
+public class FlagHashtable extends Hashtable<CpInfo, StringCpInfoFlags>
 {
     private static final long serialVersionUID = 1L;
 
     public void updateFlag(CpInfo cpInfo, int index, boolean forNameFlag)
     {
-        StringCpInfoFlags flags = (StringCpInfoFlags)this.get(cpInfo);
+        StringCpInfoFlags flags = this.get(cpInfo);
         if (flags == null)
         {
             flags = new StringCpInfoFlags();

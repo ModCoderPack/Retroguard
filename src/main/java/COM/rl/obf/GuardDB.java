@@ -687,18 +687,17 @@ public class GuardDB implements ClassConstants
 }
 
 /** Stack used for marking TreeItems that must not be trimmed */
-class TIStack extends Stack
+class TIStack extends Stack<TreeItem>
 {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public Object push(Object o)
+    public TreeItem push(TreeItem ti)
     {
         try
         {
-            if (o != null)
+            if (ti != null)
             {
-                TreeItem ti = (TreeItem)o;
                 if (ti instanceof Cl)
                 {
                     this.pushClTree((Cl)ti);
@@ -738,7 +737,7 @@ class TIStack extends Stack
         {
             /* ignore */
         }
-        return o;
+        return ti;
     }
 
     /** Push class and all supers onto trim-preserve stack */
@@ -749,7 +748,7 @@ class TIStack extends Stack
             this.pushItem(cl);
             // Propagate up supers in jar
             this.pushClTree(cl.getSuperCl());
-            for (Enumeration<Cl> enm = cl.getSuperInterfaces(); enm.hasMoreElements(); )
+            for (Enumeration<Cl> enm = cl.getSuperInterfaces(); enm.hasMoreElements();)
             {
                 Cl superInterface = enm.nextElement();
                 this.pushClTree(superInterface);

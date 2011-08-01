@@ -36,7 +36,7 @@ public class ConstantPool
 
     // Fields ----------------------------------------------------------------
     private ClassFile myClassFile;
-    private Vector pool;
+    private Vector<CpInfo> pool;
 
 
     // Class Methods ---------------------------------------------------------
@@ -48,7 +48,7 @@ public class ConstantPool
     {
         this.myClassFile = classFile;
         int length = cpInfo.length;
-        this.pool = new Vector(length);
+        this.pool = new Vector<CpInfo>(length);
         this.pool.setSize(length);
         for (int i = 0; i < length; i++)
         {
@@ -57,7 +57,7 @@ public class ConstantPool
     }
 
     /** Return an Enumeration of all Constant Pool entries. */
-    public Enumeration elements()
+    public Enumeration<CpInfo> elements()
     {
         return this.pool.elements();
     }
@@ -73,7 +73,7 @@ public class ConstantPool
     {
         if (i < this.pool.size())
         {
-            return (CpInfo)this.pool.elementAt(i);
+            return this.pool.elementAt(i);
         }
         throw new Exception("Constant Pool index out of range.");
     }
@@ -114,7 +114,7 @@ public class ConstantPool
     /** Increment the reference count for the specified element. */
     public void incRefCount(int i) throws Exception
     {
-        CpInfo cpInfo = (CpInfo)this.pool.elementAt(i);
+        CpInfo cpInfo = this.pool.elementAt(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
@@ -136,7 +136,7 @@ public class ConstantPool
     /** Decrement the reference count for the specified element, blanking if Utf and refs are zero. */
     public void decRefCount(int i) throws Exception
     {
-        CpInfo cpInfo = (CpInfo)this.pool.elementAt(i);
+        CpInfo cpInfo = this.pool.elementAt(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
@@ -211,7 +211,7 @@ public class ConstantPool
 
     private void walkPool(PoolAction pa) throws Exception
     {
-        for (Enumeration enm = this.pool.elements(); enm.hasMoreElements();)
+        for (Enumeration<CpInfo> enm = this.pool.elements(); enm.hasMoreElements();)
         {
             Object o = enm.nextElement();
             if (o instanceof Utf8CpInfo)

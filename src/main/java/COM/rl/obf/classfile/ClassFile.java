@@ -258,8 +258,8 @@ public class ClassFile implements ClassConstants
             {
                 int pos = inName.indexOf(';');
                 outName = ClassFile.translate(inName.substring(1, pos));
-            }
                 break;
+            }
 
             default:
                 throw new Exception("Illegal field or method name: " + inName);
@@ -377,9 +377,9 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
         // not interfaces.
-        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements();)
+        for (Enumeration<CpInfo> enm = this.constantPool.elements(); enm.hasMoreElements();)
         {
-            Object o = enm.nextElement();
+            CpInfo o = enm.nextElement();
             if (o instanceof MethodrefCpInfo)
             {
                 // Get the method class name, simple name and descriptor
@@ -527,9 +527,9 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
-        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements();)
+        for (Enumeration<CpInfo> enm = this.constantPool.elements(); enm.hasMoreElements();)
         {
-            Object o = enm.nextElement();
+            CpInfo o = enm.nextElement();
             if (o instanceof MethodrefCpInfo)
             {
                 // Get the method class name, simple name and descriptor
@@ -584,12 +584,12 @@ public class ClassFile implements ClassConstants
             }
 
             // Now check for references from other CP entries
-            for (Enumeration enm = pool.elements(); enm.hasMoreElements();)
+            for (Enumeration<CpInfo> enm = pool.elements(); enm.hasMoreElements();)
             {
-                Object o = enm.nextElement();
+                CpInfo o = enm.nextElement();
                 if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
                 {
-                    ((CpInfo)o).markUtf8Refs(pool);
+                    o.markUtf8Refs(pool);
                 }
             }
         }
@@ -605,12 +605,12 @@ public class ClassFile implements ClassConstants
         try
         {
             // Now check the method and field CP entries
-            for (Enumeration enm = pool.elements(); enm.hasMoreElements();)
+            for (Enumeration<CpInfo> enm = pool.elements(); enm.hasMoreElements();)
             {
-                Object o = enm.nextElement();
+                CpInfo o = enm.nextElement();
                 if (o instanceof RefCpInfo)
                 {
-                    ((CpInfo)o).markNTRefs(pool);
+                    o.markNTRefs(pool);
                 }
             }
         }
@@ -894,11 +894,11 @@ public class ClassFile implements ClassConstants
             }
         }
         // Analyse String mapping flags and generate updated Strings
-        Hashtable cpUpdate = new Hashtable();
-        for (Enumeration enm = cpToFlag.keys(); enm.hasMoreElements();)
+        Hashtable<Integer, Integer> cpUpdate = new Hashtable<Integer, Integer>();
+        for (Enumeration<CpInfo> enm = cpToFlag.keys(); enm.hasMoreElements();)
         {
             StringCpInfo stringCpInfo = (StringCpInfo)enm.nextElement();
-            StringCpInfoFlags flags = (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
+            StringCpInfoFlags flags = cpToFlag.get(stringCpInfo);
             String name = ClassFile.backTranslate(((Utf8CpInfo)this.getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
             if (ClassFile.isClassSpec(name) && flags.forNameFlag)
@@ -1011,9 +1011,9 @@ public class ClassFile implements ClassConstants
         dout.writeShort(this.u2minorVersion);
         dout.writeShort(this.u2majorVersion);
         dout.writeShort(this.constantPool.length() + (this.cpIdString != null ? 1 : 0));
-        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements();)
+        for (Enumeration<CpInfo> enm = this.constantPool.elements(); enm.hasMoreElements();)
         {
-            CpInfo cpInfo = (CpInfo)enm.nextElement();
+            CpInfo cpInfo = enm.nextElement();
             if (cpInfo != null)
             {
                 cpInfo.write(dout);
