@@ -33,7 +33,7 @@ public class Section
 
 
     // Fields ----------------------------------------------------------------
-    private Vector headers;
+    private Vector<Header> headers;
 
 
     // Class Methods ---------------------------------------------------------
@@ -43,7 +43,7 @@ public class Section
     /** Blank section. */
     public Section()
     {
-        this.headers = new Vector();
+        this.headers = new Vector<Header>();
     }
 
     /** Append a header to this section. */
@@ -59,7 +59,7 @@ public class Section
     }
 
     /** Return an Enumeration of headers. */
-    public Enumeration elements()
+    public Enumeration<Header> elements()
     {
         return this.headers.elements();
     }
@@ -69,9 +69,9 @@ public class Section
     {
         if (queryHeader != null)
         {
-            for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+            for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
             {
-                Header header = (Header)enm.nextElement();
+                Header header = enm.nextElement();
                 if (queryHeader.equals(header))
                 {
                     return true;
@@ -91,9 +91,9 @@ public class Section
         }
 
         // For now, do linear search of headers
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
         {
-            Header header = (Header)enm.nextElement();
+            Header header = enm.nextElement();
             if (tag.equals(header.getTag()))
             {
                 // Found
@@ -108,9 +108,9 @@ public class Section
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
         {
-            ((Header)enm.nextElement()).writeString(writer);
+            enm.nextElement().writeString(writer);
         }
         writer.write("\015\012");
     }
@@ -120,9 +120,9 @@ public class Section
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
         {
-            sb.append(((Header)enm.nextElement()).toString());
+            sb.append(enm.nextElement().toString());
             sb.append("\015\012");
         }
         sb.append("\015\012");

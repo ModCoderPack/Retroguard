@@ -132,7 +132,7 @@ public class ClassFile implements ClassConstants
         else
         {
             // Method descriptor
-            Vector namesVec = new Vector();
+            Vector<String> namesVec = new Vector<String>();
             descriptor = descriptor.substring(1);
             String type = "";
             while (descriptor.length() > 0)
@@ -178,7 +178,7 @@ public class ClassFile implements ClassConstants
             names = new String[namesVec.size()];
             for (int i = 0; i < names.length; i++)
             {
-                names[i] = (String)namesVec.elementAt(i);
+                names[i] = namesVec.elementAt(i);
             }
         }
 
@@ -511,19 +511,19 @@ public class ClassFile implements ClassConstants
     /** List methods which can break obfuscated code, and log to a String[]. */
     public String[] getDangerousMethods() throws Exception
     {
-        Vector list = new Vector();
+        Vector<String> list = new Vector<String>();
         list = this.listDangerMethods(list);
         // Copy any warnings to a String[]
         String[] warnings = new String[list.size()];
         for (int i = 0; i < warnings.length; i++)
         {
-            warnings[i] = (String)list.elementAt(i);
+            warnings[i] = list.elementAt(i);
         }
         return warnings;
     }
 
     /** List methods which can break obfuscated code, and log to a Vector. */
-    public Vector listDangerMethods(Vector list) throws Exception
+    public Vector<String> listDangerMethods(Vector<String> list) throws Exception
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.

@@ -101,17 +101,21 @@ public class RetroGuard
     private static void showUsage()
     {
         System.err.println("Usage: java RetroGuard [INPUT-FILE [OUTPUT-FILE [SCRIPT-FILE [LOG-FILE]]]]");
-        System.err.println("  where INPUT-FILE is the JAR to be obfuscated (default: '" + RetroGuard.DEFAULT_IN_FILE_NAME + "')");
-        System.err.println("        OUTPUT-FILE is name for the obfuscated JAR (default: '" + RetroGuard.DEFAULT_OUT_FILE_NAME
-            + "')");
-        System.err.println("        SCRIPT-FILE is a valid RetroGuard script (default: '" + RetroGuard.DEFAULT_RGS_FILE_NAME
-            + "').");
-        System.err.println("        LOG-FILE is the name for the log file (default: '" + RetroGuard.DEFAULT_LOG_FILE_NAME + "').");
+        System.err.println("  where INPUT-FILE is the JAR to be obfuscated (default: '"
+            + RetroGuard.DEFAULT_IN_FILE_NAME + "')");
+        System.err.println("        OUTPUT-FILE is name for the obfuscated JAR (default: '"
+            + RetroGuard.DEFAULT_OUT_FILE_NAME + "')");
+        System.err.println("        SCRIPT-FILE is a valid RetroGuard script (default: '"
+            + RetroGuard.DEFAULT_RGS_FILE_NAME + "').");
+        System.err.println("        LOG-FILE is the name for the log file (default: '"
+            + RetroGuard.DEFAULT_LOG_FILE_NAME + "').");
         System.err.println("or for de-obfuscation");
         System.err.println("Usage: java RetroGuard -searge [CONFIG-FILE]");
-        System.err.println("  where CONFIG-FILE is the config file (default: '" + RetroGuard.DEFAULT_CFG_FILE_NAME + "')");
+        System.err.println("  where CONFIG-FILE is the config file (default: '"
+            + RetroGuard.DEFAULT_CFG_FILE_NAME + "')");
         System.err.println("or for re-obfuscation");
         System.err.println("Usage: java RetroGuard -notch [CONFIG-FILE]");
-        System.err.println("  where CONFIG-FILE is the config file (default: '" + RetroGuard.DEFAULT_CFG_FILE_NAME + "')");
+        System.err.println("  where CONFIG-FILE is the config file (default: '"
+            + RetroGuard.DEFAULT_CFG_FILE_NAME + "')");
     }
 }

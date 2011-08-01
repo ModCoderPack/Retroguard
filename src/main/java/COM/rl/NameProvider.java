@@ -813,8 +813,8 @@ public class NameProvider
     {
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
-            NameProvider.log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getFullInName() + " "
-                + md.getDescriptor());
+            NameProvider.log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " "
+                + md.getFullInName() + " " + md.getDescriptor());
             return null;
         }
 
@@ -822,8 +822,8 @@ public class NameProvider
         {
             String methodName = "func_" + (++NameProvider.uniqueStart) + "_" + md.getInName();
             md.setOutName(methodName);
-            NameProvider.log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getFullOutName() + " "
-                + md.getDescriptor());
+            NameProvider.log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " "
+                + md.getFullOutName() + " " + md.getDescriptor());
             return methodName;
         }
 
@@ -892,7 +892,8 @@ public class NameProvider
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";");
+                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";",
+                                    "L" + newPkg + newCls + ";");
                             }
 
                             i = j;
@@ -933,7 +934,7 @@ public class NameProvider
                     tmpMd = null;
                 }
 
-                Enumeration children = cls.getDownClasses();
+                Enumeration<Cl> children = cls.getDownClasses();
 //                NameProvider.log("Children: " + children.hasMoreElements());
 
                 boolean goingDown = false;
@@ -956,7 +957,7 @@ public class NameProvider
                     }
 
 
-                    Enumeration en;
+                    Enumeration<Cl> en;
                     try
                     {
                         en = cls.getSuperInterfaces();
@@ -964,7 +965,7 @@ public class NameProvider
                     }
                     catch (Exception e1)
                     {
-                        en = new Enumeration()
+                        en = new Enumeration<Cl>()
                         {
 
                             @Override
@@ -974,7 +975,7 @@ public class NameProvider
                             }
 
                             @Override
-                            public Object nextElement()
+                            public Cl nextElement()
                             {
                                 return null;
                             }
@@ -984,7 +985,7 @@ public class NameProvider
                     boolean found = false;
                     while (en.hasMoreElements())
                     {
-                        Cl iface = (Cl)en.nextElement();
+                        Cl iface = en.nextElement();
 
                         tmpMd.setParent(iface);
 //                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
@@ -1032,7 +1033,7 @@ public class NameProvider
                     {
                         if (children.hasMoreElements())
                         {
-                            cls = (Cl)children.nextElement();
+                            cls = children.nextElement();
 //                            NameProvider.log("Child: " + cls.getFullInName());
                         }
                         else
@@ -1081,7 +1082,8 @@ public class NameProvider
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";", "L" + newPkg + newCls + ";");
+                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";",
+                                    "L" + newPkg + newCls + ";");
                             }
 
                             i = j;

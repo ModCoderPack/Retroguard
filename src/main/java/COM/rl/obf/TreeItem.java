@@ -126,7 +126,7 @@ public class TreeItem
             }
         }
         // Split the pattern at the wildcard positions
-        Vector section = new Vector();
+        Vector<String> section = new Vector<String>();
         pos = pattern.indexOf('*');
         int rpos = -1;
         while ((rpos = pattern.indexOf('*', pos + 1)) != -1)
@@ -138,9 +138,9 @@ public class TreeItem
             pos = rpos;
         }
         // Check each section for a non-overlapping match in the string
-        for (Enumeration enm = section.elements(); enm.hasMoreElements();)
+        for (Enumeration<String> enm = section.elements(); enm.hasMoreElements();)
         {
-            String chunk = (String)enm.nextElement();
+            String chunk = enm.nextElement();
             pos = string.indexOf(chunk);
             if (pos == -1)
             {
