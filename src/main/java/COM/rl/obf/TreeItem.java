@@ -22,6 +22,8 @@ package COM.rl.obf;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import COM.rl.NameProvider;
 import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 
@@ -355,7 +357,7 @@ public class TreeItem
         else
         {
             String s = this.parent.getFullOutName();
-            if (s.equals("") || (this instanceof Pk))
+            if (s.equals("") || ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) && (this instanceof Pk)))
             {
                 return this.getOutName();
             }

@@ -1306,21 +1306,24 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getFullOutName()
     {
         String clName = super.getFullOutName();
-
-        if (this.parent != null)
+        
+        if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
         {
-            if (this.parent.parent == null)
+            if (this.parent != null)
             {
-                if (this.parent instanceof Pk)
+                if (this.parent.parent == null)
                 {
-                    String pkName = this.parent.getFullOutName();
-
-                    if (pkName.equals(""))
+                    if (this.parent instanceof Pk)
                     {
-                        return clName;
+                        String pkName = this.parent.getFullOutName();
+    
+                        if (pkName.equals(""))
+                        {
+                            return clName;
+                        }
+    
+                        return pkName + this.sep + clName;
                     }
-
-                    return pkName + this.sep + clName;
                 }
             }
         }
