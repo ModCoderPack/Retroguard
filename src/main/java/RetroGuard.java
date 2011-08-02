@@ -69,20 +69,22 @@ public class RetroGuard
                 RetroGuard.showUsage();
                 System.exit(-1);
             }
-
-            // Get the arguments, or set their default values
-            if ((args.length < 0) || (args.length > 4))
+            else
             {
-                throw new IllegalArgumentException("Invalid number of arguments.");
-            }
-            String inFilename = (args.length < 1 ? null : args[0]);
-            String outFilename = (args.length < 2 ? null : args[1]);
-            String rgsFilename = (args.length < 3 ? null : args[2]);
-            String logFilename = (args.length < 4 ? null : args[3]);
+                // Get the arguments, or set their default values
+                if ((args.length < 0) || (args.length > 4))
+                {
+                    throw new IllegalArgumentException("Invalid number of arguments.");
+                }
+                String inFilename = (args.length < 1 ? null : args[0]);
+                String outFilename = (args.length < 2 ? null : args[1]);
+                String rgsFilename = (args.length < 3 ? null : args[2]);
+                String logFilename = (args.length < 4 ? null : args[3]);
 
-            // Call the main entry point on the obfuscator.
-            RetroGuardImpl.obfuscate(inFilename, outFilename, rgsFilename, logFilename);
-            System.exit(0);
+                // Call the main entry point on the obfuscator.
+                RetroGuardImpl.obfuscate(inFilename, outFilename, rgsFilename, logFilename);
+                System.exit(0);
+            }
         }
         catch (IllegalArgumentException e)
         {

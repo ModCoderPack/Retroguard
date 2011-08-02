@@ -37,10 +37,14 @@ public class ClassTree implements NameMapper
     public static final char CLASS_LEVEL = '$';
     public static final char METHOD_FIELD_LEVEL = '/';
     private static final String LOG_PRE_UNOBFUSCATED = "# Names reserved from obfuscation:";
-    private static final String LOG_PRE_OBFUSCATED = "# Obfuscated name mappings (some of these may be unchanged due to polymorphism constraints):";
-    private static final String LOG_DANGER_HEADER1 = "# WARNING - Reflection methods are called which may unavoidably break in the";
-    private static final String LOG_DANGER_HEADER2 = "# obfuscated version at runtime. Please review your source code to ensure";
-    private static final String LOG_DANGER_HEADER3 = "# these methods do not act on classes in the obfuscated Jar file.";
+    private static final String LOG_PRE_OBFUSCATED =
+        "# Obfuscated name mappings (some of these may be unchanged due to polymorphism constraints):";
+    private static final String LOG_DANGER_HEADER1 =
+        "# WARNING - Reflection methods are called which may unavoidably break in the";
+    private static final String LOG_DANGER_HEADER2 =
+        "# obfuscated version at runtime. Please review your source code to ensure";
+    private static final String LOG_DANGER_HEADER3 =
+        "# these methods do not act on classes in the obfuscated Jar file.";
 
 
     // Fields ----------------------------------------------------------------
@@ -203,13 +207,13 @@ public class ClassTree implements NameMapper
             // Add the class's methods to the database
             for (int i = 0; i < cf.getMethodCount(); i++)
             {
-                Md md = cl.addMethod(cf, cf.getMethod(i));
+                cl.addMethod(cf, cf.getMethod(i));
             }
 
             // Add the class's fields to the database
             for (int i = 0; i < cf.getFieldCount(); i++)
             {
-                Fd fd = cl.addField(cf, cf.getField(i));
+                cl.addField(cf, cf.getField(i));
             }
 
             // Add warnings about class
@@ -273,8 +277,8 @@ public class ClassTree implements NameMapper
 
     /** Mark a class/interface type (and possibly methods and fields defined in class) for retention. */
     public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly,
-        boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, boolean notrimOnly,
-        int accessMask, int accessSetting) throws Exception
+        boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, int accessMask, int accessSetting)
+        throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
         for (Enumeration<Cl> clEnum = this.getClEnum(name); clEnum.hasMoreElements();)
@@ -342,7 +346,7 @@ public class ClassTree implements NameMapper
 
     /** Mark a method type for retention. */
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
-        boolean notrimOnly, int accessMask, int accessSetting) throws Exception
+        int accessMask, int accessSetting) throws Exception
     {
         for (Enumeration<Md> enm = this.getMdEnum(name, descriptor); enm.hasMoreElements();)
         {
@@ -371,7 +375,7 @@ public class ClassTree implements NameMapper
 
     /** Mark a field type for retention. */
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
-        boolean notrimOnly, int accessMask, int accessSetting) throws Exception
+        int accessMask, int accessSetting) throws Exception
     {
         for (Enumeration<Fd> enm = this.getFdEnum(name, descriptor); enm.hasMoreElements();)
         {
@@ -806,11 +810,9 @@ public class ClassTree implements NameMapper
             }
             return newName.toString();
         }
-        else
-        {
-            Cl cl = this.getCl(className);
-            return cl != null ? cl.getFullOutName() : className;
-        }
+
+        Cl cl = this.getCl(className);
+        return cl != null ? cl.getFullOutName() : className;
     }
 
     /**
@@ -839,21 +841,19 @@ public class ClassTree implements NameMapper
                     outName = md.getOutName();
                     break;
                 }
-                else
+
+                nextCl = cl.getSuperCl();
+                if (nextCl != null)
                 {
-                    nextCl = cl.getSuperCl();
+                    s.push(nextCl);
+                }
+                Enumeration<Cl> enm = cl.getSuperInterfaces();
+                while (enm.hasMoreElements())
+                {
+                    nextCl = enm.nextElement();
                     if (nextCl != null)
                     {
                         s.push(nextCl);
-                    }
-                    Enumeration<Cl> enm = cl.getSuperInterfaces();
-                    while (enm.hasMoreElements())
-                    {
-                        nextCl = enm.nextElement();
-                        if (nextCl != null)
-                        {
-                            s.push(nextCl);
-                        }
                     }
                 }
             }
@@ -887,21 +887,19 @@ public class ClassTree implements NameMapper
                     outName = fd.getOutName();
                     break;
                 }
-                else
+
+                nextCl = cl.getSuperCl();
+                if (nextCl != null)
                 {
-                    nextCl = cl.getSuperCl();
+                    s.push(nextCl);
+                }
+                Enumeration<Cl> enm = cl.getSuperInterfaces();
+                while (enm.hasMoreElements())
+                {
+                    nextCl = enm.nextElement();
                     if (nextCl != null)
                     {
                         s.push(nextCl);
-                    }
-                    Enumeration<Cl> enm = cl.getSuperInterfaces();
-                    while (enm.hasMoreElements())
-                    {
-                        nextCl = enm.nextElement();
-                        if (nextCl != null)
-                        {
-                            s.push(nextCl);
-                        }
                     }
                 }
             }

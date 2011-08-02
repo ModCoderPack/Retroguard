@@ -96,15 +96,14 @@ public class TreeItem
             {
                 return false;
             }
+
             if (!string.substring(0, head.length()).equals(head))
             {
                 return false;
             }
-            else
-            {
-                pattern = pattern.substring(pos);
-                string = string.substring(pos);
-            }
+
+            pattern = pattern.substring(pos);
+            string = string.substring(pos);
         }
         // Check for match of tail
         if (pattern.charAt(pattern.length() - 1) != '*')
@@ -115,15 +114,14 @@ public class TreeItem
             {
                 return false;
             }
+
             if (!string.substring(string.length() - tail.length()).equals(tail))
             {
                 return false;
             }
-            else
-            {
-                pattern = pattern.substring(0, pos + 1);
-                string = string.substring(0, string.length() - tail.length());
-            }
+
+            pattern = pattern.substring(0, pos + 1);
+            string = string.substring(0, string.length() - tail.length());
         }
         // Split the pattern at the wildcard positions
         Vector<String> section = new Vector<String>();

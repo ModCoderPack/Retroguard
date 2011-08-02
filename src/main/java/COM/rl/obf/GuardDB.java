@@ -132,11 +132,14 @@ public class GuardDB implements ClassConstants
                 {
                     inStream.close();
                 }
-                if (cf.hasIncompatibleVersion())
+                if (cf != null)
                 {
-                    incompatibleVersion = cf.getMajorVersion();
+                    if (cf.hasIncompatibleVersion())
+                    {
+                        incompatibleVersion = cf.getMajorVersion();
+                    }
+                    this.classTree.addClassFile(cf);
                 }
-                this.classTree.addClassFile(cf);
             }
         }
         // Warn if classes are incompatible version of class file format
@@ -160,16 +163,17 @@ public class GuardDB implements ClassConstants
 
 // Always retain native methods and their classes, using script entry:
 // .method;native ** * and_class
-        this.classTree.retainMethod("**", "*", true, null, false, false, ClassConstants.ACC_NATIVE, ClassConstants.ACC_NATIVE);
+        this.classTree.retainMethod("**", "*", true, null, false, ClassConstants.ACC_NATIVE, ClassConstants.ACC_NATIVE);
 
 // Always retain the auto-generated values() and valueOf(...) methods in Enums, using script entries:
 // .method;public;static;final **/values * extends java/lang/Enum
 // .method;public;static **/valueOf * extends java/lang/Enum
-        this.classTree.retainMethod("**/values", "*", false, "java/lang/Enum", false, false, ClassConstants.ACC_PUBLIC
-            | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL, ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC
-            | ClassConstants.ACC_FINAL);
-        this.classTree.retainMethod("**/valueOf", "*", false, "java/lang/Enum", false, false, ClassConstants.ACC_PUBLIC
-            | ClassConstants.ACC_STATIC, ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC);
+        this.classTree.retainMethod("**/values", "*", false, "java/lang/Enum", false,
+            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL,
+            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
+        this.classTree.retainMethod("**/valueOf", "*", false, "java/lang/Enum", false,
+            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC,
+            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC);
 
         // Enumerate the entries in the RGS script
         while (rgsEnum.hasMoreEntries())
@@ -224,21 +228,19 @@ public class GuardDB implements ClassConstants
                         {
 // .option Enumeration - translates into
 // .class ** public extends java/lang/Enum
-                            this.classTree
-                                .retainClass("**", true, false, false, false, false, "java/lang/Enum", false, false, 0, 0);
+                            this.classTree.retainClass("**", true, false, false, false, false, "java/lang/Enum", false, 0, 0);
                         }
                         else if (ClassConstants.OPTION_Application.equals(entry.name))
                         {
 // .option Application - translates into
 // .method **/main ([Ljava/lang/String;)V and_class
-                            this.classTree.retainMethod("**/main", "([Ljava/lang/String;)V", true, null, false, false, 0, 0);
+                            this.classTree.retainMethod("**/main", "([Ljava/lang/String;)V", true, null, false, 0, 0);
                         }
                         else if (ClassConstants.OPTION_Applet.equals(entry.name))
                         {
 // .option Applet - translates into
 // .class ** extends java/applet/Applet
-                            this.classTree.retainClass("**", false, false, false, false, false, "java/applet/Applet", false, false,
-                                0, 0);
+                            this.classTree.retainClass("**", false, false, false, false, false, "java/applet/Applet", false, 0, 0);
                         }
                         else if (ClassConstants.OPTION_RMI.equals(entry.name))
                         {
@@ -247,10 +249,9 @@ public class GuardDB implements ClassConstants
 // .class ** protected extends java/rmi/Remote
 // .class **_Stub
 // .class **_Skel
-                            this.classTree.retainClass("**", false, true, false, false, false, "java/rmi/Remote", false, false, 0,
-                                0);
-                            this.classTree.retainClass("**_Stub", false, false, false, false, false, null, false, false, 0, 0);
-                            this.classTree.retainClass("**_Skel", false, false, false, false, false, null, false, false, 0, 0);
+                            this.classTree.retainClass("**", false, true, false, false, false, "java/rmi/Remote", false, 0, 0);
+                            this.classTree.retainClass("**_Stub", false, false, false, false, false, null, false, 0, 0);
+                            this.classTree.retainClass("**_Skel", false, false, false, false, false, null, false, 0, 0);
                         }
                         if (ClassConstants.OPTION_Serializable.equals(entry.name) || ClassConstants.OPTION_RMI.equals(entry.name))
                         {
@@ -264,23 +265,23 @@ public class GuardDB implements ClassConstants
 // .class ** extends java/io/Serializable
 // .field;!transient;!static ** * extends java/io/Serializable
                             this.classTree.retainMethod("**/writeObject", "(Ljava/io/ObjectOutputStream;)V", false,
-                                "java/io/Serializable", false, false, ClassConstants.ACC_PRIVATE, ClassConstants.ACC_PRIVATE);
+                                "java/io/Serializable", false, ClassConstants.ACC_PRIVATE, ClassConstants.ACC_PRIVATE);
                             this.classTree.retainMethod("**/readObject", "(Ljava/io/ObjectInputStream;)V", false,
-                                "java/io/Serializable", false, false, ClassConstants.ACC_PRIVATE, ClassConstants.ACC_PRIVATE);
+                                "java/io/Serializable", false, ClassConstants.ACC_PRIVATE, ClassConstants.ACC_PRIVATE);
                             this.classTree.retainMethod("**/writeReplace", "()Ljava/lang/Object;", false, "java/io/Serializable",
-                                false, false, 0, 0);
-                            this.classTree.retainMethod("**/readResolve", "()Ljava/lang/Object;", false, "java/io/Serializable",
-                                false, false, 0, 0);
-                            this.classTree.retainField("**/serialVersionUID", "J", false, "java/io/Serializable", false, false,
-                                ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL, ClassConstants.ACC_STATIC
-                                    | ClassConstants.ACC_FINAL);
-                            this.classTree.retainField("**/serialPersistentFields", "[Ljava/io/ObjectStreamField;", false,
-                                "java/io/Serializable", false, false, ClassConstants.ACC_PRIVATE | ClassConstants.ACC_STATIC
-                                    | ClassConstants.ACC_FINAL, ClassConstants.ACC_PRIVATE | ClassConstants.ACC_STATIC
-                                    | ClassConstants.ACC_FINAL);
-                            this.classTree.retainClass("**", false, false, false, false, false, "java/io/Serializable", false,
                                 false, 0, 0);
-                            this.classTree.retainField("**", "*", false, "java/io/Serializable", false, false,
+                            this.classTree.retainMethod("**/readResolve", "()Ljava/lang/Object;", false, "java/io/Serializable",
+                                false, 0, 0);
+                            this.classTree.retainField("**/serialVersionUID", "J", false, "java/io/Serializable", false,
+                                ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL,
+                                ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
+                            this.classTree.retainField("**/serialPersistentFields", "[Ljava/io/ObjectStreamField;", false,
+                                "java/io/Serializable", false,
+                                ClassConstants.ACC_PRIVATE | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL,
+                                ClassConstants.ACC_PRIVATE | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
+                            this.classTree
+                                .retainClass("**", false, false, false, false, false, "java/io/Serializable", false, 0, 0);
+                            this.classTree.retainField("**", "*", false, "java/io/Serializable", false,
                                 ClassConstants.ACC_TRANSIENT | ClassConstants.ACC_STATIC, 0);
                         }
                         break;
@@ -294,27 +295,22 @@ public class GuardDB implements ClassConstants
                         break;
 
                     case RgsEntry.TYPE_CLASS:
-                    case RgsEntry.TYPE_NOTRIM_CLASS:
                     case RgsEntry.TYPE_NOT_CLASS:
                         this.classTree.retainClass(entry.name, entry.retainToPublic, entry.retainToProtected,
                             entry.retainPubProtOnly, entry.retainFieldsOnly, entry.retainMethodsOnly, entry.extendsName,
-                            entry.type == RgsEntry.TYPE_NOT_CLASS, entry.type == RgsEntry.TYPE_NOTRIM_CLASS, entry.accessMask,
-                            entry.accessSetting);
+                            entry.type == RgsEntry.TYPE_NOT_CLASS, entry.accessMask, entry.accessSetting);
                         break;
 
                     case RgsEntry.TYPE_METHOD:
-                    case RgsEntry.TYPE_NOTRIM_METHOD:
                     case RgsEntry.TYPE_NOT_METHOD:
                         this.classTree.retainMethod(entry.name, entry.descriptor, entry.retainAndClass, entry.extendsName,
-                            entry.type == RgsEntry.TYPE_NOT_METHOD, entry.type == RgsEntry.TYPE_NOTRIM_METHOD, entry.accessMask,
-                            entry.accessSetting);
+                            entry.type == RgsEntry.TYPE_NOT_METHOD, entry.accessMask, entry.accessSetting);
                         break;
 
                     case RgsEntry.TYPE_FIELD:
                     case RgsEntry.TYPE_NOT_FIELD:
                         this.classTree.retainField(entry.name, entry.descriptor, entry.retainAndClass, entry.extendsName,
-                            entry.type == RgsEntry.TYPE_NOT_FIELD, entry.type == RgsEntry.TYPE_NOTRIM_FIELD, entry.accessMask,
-                            entry.accessSetting);
+                            entry.type == RgsEntry.TYPE_NOT_FIELD, entry.accessMask, entry.accessSetting);
                         break;
 
                     case RgsEntry.TYPE_PACKAGE_MAP:

@@ -35,13 +35,10 @@ public class RgsEnum
     public static final String DIRECTIVE_OPTION = ".option";
     public static final String DIRECTIVE_ATTR = ".attribute";
     public static final String DIRECTIVE_CLASS = ".class";
-    public static final String DIRECTIVE_NOTRIM_CLASS = "^class";
     public static final String DIRECTIVE_NOT_CLASS = "!class";
     public static final String DIRECTIVE_FIELD = ".field";
-    public static final String DIRECTIVE_NOTRIM_FIELD = "^field";
     public static final String DIRECTIVE_NOT_FIELD = "!field";
     public static final String DIRECTIVE_METHOD = ".method";
-    public static final String DIRECTIVE_NOTRIM_METHOD = "^method";
     public static final String DIRECTIVE_NOT_METHOD = "!method";
     public static final String DIRECTIVE_PACKAGE_MAP = ".package_map";
     public static final String DIRECTIVE_REPACKAGE_MAP = ".repackage_map";
@@ -372,14 +369,6 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOTRIM_CLASS))
-                        {
-                            directive = RgsEntry.TYPE_NOTRIM_CLASS;
-                            accessMask = RgsEnum.decodeAccessFlags(directive,
-                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_CLASS.length()));
-                            accessSetting = accessMask >> 16;
-                            accessMask &= 0xffff;
-                        }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOT_CLASS))
                         {
                             directive = RgsEntry.TYPE_NOT_CLASS;
@@ -396,14 +385,6 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOTRIM_METHOD))
-                        {
-                            directive = RgsEntry.TYPE_NOTRIM_METHOD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive,
-                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_METHOD.length()));
-                            accessSetting = accessMask >> 16;
-                            accessMask &= 0xffff;
-                        }
                         else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOT_METHOD))
                         {
                             directive = RgsEntry.TYPE_NOT_METHOD;
@@ -417,14 +398,6 @@ public class RgsEnum
                             directive = RgsEntry.TYPE_FIELD;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
                                 this.tk.sval.substring(RgsEnum.DIRECTIVE_FIELD.length()));
-                            accessSetting = accessMask >> 16;
-                            accessMask &= 0xffff;
-                        }
-                        else if (this.tk.sval.startsWith(RgsEnum.DIRECTIVE_NOTRIM_FIELD))
-                        {
-                            directive = RgsEntry.TYPE_NOTRIM_FIELD;
-                            accessMask = RgsEnum.decodeAccessFlags(directive,
-                                this.tk.sval.substring(RgsEnum.DIRECTIVE_NOTRIM_FIELD.length()));
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
@@ -464,7 +437,6 @@ public class RgsEnum
                                 entry = new RgsEntry(directive, this.tk.sval);
                                 break;
                             case RgsEntry.TYPE_CLASS:
-                            case RgsEntry.TYPE_NOTRIM_CLASS:
                             case RgsEntry.TYPE_NOT_CLASS:
 //                                this.checkClassWCSpec(this.tk.sval);
                                 entry = new RgsEntry(directive, this.tk.sval);
@@ -472,7 +444,6 @@ public class RgsEnum
                                 entry.accessSetting = accessSetting;
                                 break;
                             case RgsEntry.TYPE_METHOD:
-                            case RgsEntry.TYPE_NOTRIM_METHOD:
                             case RgsEntry.TYPE_NOT_METHOD:
                                 if (name == null)
                                 {
@@ -489,7 +460,6 @@ public class RgsEnum
                                 }
                                 break;
                             case RgsEntry.TYPE_FIELD:
-                            case RgsEntry.TYPE_NOTRIM_FIELD:
                             case RgsEntry.TYPE_NOT_FIELD:
                                 if (name == null)
                                 {
@@ -569,8 +539,7 @@ public class RgsEnum
                                 break;
                         }
                     }
-                    else if ((directive == RgsEntry.TYPE_CLASS) || (directive == RgsEntry.TYPE_NOTRIM_CLASS)
-                        || (directive == RgsEntry.TYPE_NOT_CLASS))
+                    else if ((directive == RgsEntry.TYPE_CLASS) || (directive == RgsEntry.TYPE_NOT_CLASS))
                     {
                         if (this.tk.sval.equals(RgsEnum.OPTION_PUBLIC))
                         {
@@ -629,9 +598,8 @@ public class RgsEnum
                             throw new Exception();
                         }
                     }
-                    else if ((directive == RgsEntry.TYPE_METHOD) || (directive == RgsEntry.TYPE_NOTRIM_METHOD)
-                        || (directive == RgsEntry.TYPE_NOT_METHOD) || (directive == RgsEntry.TYPE_FIELD)
-                        || (directive == RgsEntry.TYPE_NOTRIM_FIELD) || (directive == RgsEntry.TYPE_NOT_FIELD))
+                    else if ((directive == RgsEntry.TYPE_METHOD) || (directive == RgsEntry.TYPE_NOT_METHOD)
+                        || (directive == RgsEntry.TYPE_FIELD) || (directive == RgsEntry.TYPE_NOT_FIELD))
                     {
                         if (this.tk.sval.equals(RgsEnum.OPTION_AND_CLASS))
                         {
@@ -820,17 +788,15 @@ public class RgsEnum
                 {
                     throw new Exception();
                 }
-                else
+
+                s = s.substring(0, s.length() - 2);
+                int pos = -1;
+                while ((pos = s.lastIndexOf('/')) != -1)
                 {
-                    s = s.substring(0, s.length() - 2);
-                    int pos = -1;
-                    while ((pos = s.lastIndexOf('/')) != -1)
-                    {
-                        this.checkJavaIdentifier(s.substring(pos + 1));
-                        s = s.substring(0, pos);
-                    }
-                    this.checkJavaIdentifier(s);
+                    this.checkJavaIdentifier(s.substring(pos + 1));
+                    s = s.substring(0, pos);
                 }
+                this.checkJavaIdentifier(s);
             }
         }
         else

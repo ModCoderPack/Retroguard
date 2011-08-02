@@ -198,10 +198,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             return this.classTree.getCl(this.superClass);
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /** Return Enumeration of this Cl's super-interfaces */
@@ -528,16 +526,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             Vector<String> methods = new Vector<String>();
             Vector<String> fields = new Vector<String>();
             this.scanNameSpaceExcept(null, methods, fields);
-            String[] methodNames = new String[methods.size()];
-            for (int i = 0; i < methodNames.length; i++)
-            {
-                methodNames[i] = methods.elementAt(i);
-            }
-            String[] fieldNames = new String[fields.size()];
-            for (int i = 0; i < fieldNames.length; i++)
-            {
-                fieldNames[i] = fields.elementAt(i);
-            }
 
             // Resolve a full name space
             this.resolveNameSpaceExcept(null);
@@ -881,10 +869,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             return md.getOutName();
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /** Get obfuscated method name from list, or null if no mapping exists. */
@@ -907,10 +893,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             return md.getObfName();
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /** Get output field name from list, or null if no mapping exists. */
@@ -933,10 +917,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             return fd.getOutName();
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /** Get obfuscated field name from list, or null if no mapping exists. */
@@ -959,10 +941,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             return fd.getObfName();
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /** Is the method reserved because of its reservation down the class hierarchy? */

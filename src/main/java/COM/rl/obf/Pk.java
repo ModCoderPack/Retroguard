@@ -212,9 +212,7 @@ public class Pk extends PkCl
         {
             return super.getFullOutName();
         }
-        else
-        {
-            return this.getRepackageName();
-        }
+
+        return this.getRepackageName();
     }
 }

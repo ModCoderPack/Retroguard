@@ -192,10 +192,8 @@ public class ClassFile implements ClassConstants
             }
             return translatedNames;
         }
-        else
-        {
-            return names;
-        }
+
+        return names;
     }
 
     /** Translate a type specifier from the internal JVM convention to the Class.forName() one. */
@@ -441,15 +439,9 @@ public class ClassFile implements ClassConstants
             {
                 return ((Utf8CpInfo)nameEntry).getString();
             }
-            else
-            {
-                throw new Exception("Inconsistent Constant Pool in class file.");
-            }
         }
-        else
-        {
-            throw new Exception("Inconsistent Constant Pool in class file.");
-        }
+
+        throw new Exception("Inconsistent Constant Pool in class file.");
     }
 
     /** Return number of methods in class. */
@@ -496,10 +488,8 @@ public class ClassFile implements ClassConstants
         {
             return ((Utf8CpInfo)i).getString();
         }
-        else
-        {
-            return "[not UTF8]";
-        }
+
+        return "[not UTF8]";
     }
 
     /** Does this class contain reflection methods? */
