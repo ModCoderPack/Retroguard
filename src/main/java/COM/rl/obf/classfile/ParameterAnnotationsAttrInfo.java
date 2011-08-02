@@ -56,9 +56,9 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < this.parameterAnnotationsTable.length; i++)
+        for (ParameterAnnotationsInfo pa : this.parameterAnnotationsTable)
         {
-            this.parameterAnnotationsTable[i].markUtf8Refs(pool);
+            pa.markUtf8Refs(pool);
         }
     }
 

@@ -99,8 +99,7 @@ public class RgsEntry
                                                         : (this.type == RgsEntry.TYPE_FIELD_MAP ? ".field_map "
                                                             : (this.type == RgsEntry.TYPE_NOWARN ? ".nowarn "
                                                                 : ""))))))))))))))
-            + this.name
-            + " "
+            + this.name + " "
             + (this.descriptor != null ? this.descriptor + " " : "")
             + (this.retainToPublic ? "public " : "")
             + (this.retainToProtected ? "protected " : "")

@@ -39,9 +39,9 @@ public class Tools
     /** Is the string one of the ones in the array? */
     public static boolean isInArray(String s, String[] list)
     {
-        for (int i = 0; i < list.length; i++)
+        for (String str : list)
         {
-            if (s.equals(list[i]))
+            if (s.equals(str))
             {
                 return true;
             }

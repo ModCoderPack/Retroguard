@@ -535,19 +535,19 @@ public class ClassFile implements ClassConstants
                 {
                     if (ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                     {
-                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName()
-                            + ClassFile.LOG_CLASS_FORNAME_MID + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
+                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_CLASS_FORNAME_MID
+                            + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
                     }
                     else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY))
                     {
-                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName()
-                            + ClassFile.LOG_DANGER_CLASS_MID + name + descriptor);
+                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_DANGER_CLASS_MID
+                            + name + descriptor);
                     }
                 }
                 else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY))
                 {
-                    list.addElement(ClassFile.LOG_DANGER_CLASSLOADER_PRE + this.getName()
-                        + ClassFile.LOG_DANGER_CLASSLOADER_MID + name + descriptor);
+                    list.addElement(ClassFile.LOG_DANGER_CLASSLOADER_PRE + this.getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID
+                        + name + descriptor);
                 }
             }
         }
@@ -560,17 +560,17 @@ public class ClassFile implements ClassConstants
         try
         {
             // Check for references to Utf8 from outside the constant pool
-            for (int i = 0; i < this.fields.length; i++)
+            for (FieldInfo fd : this.fields)
             {
-                this.fields[i].markUtf8Refs(pool);
+                fd.markUtf8Refs(pool);
             }
-            for (int i = 0; i < this.methods.length; i++)
+            for (MethodInfo md : this.methods)
             {
-                this.methods[i].markUtf8Refs(pool); // also checks Code/LVT attrs here
+                md.markUtf8Refs(pool); // also checks Code/LVT attrs here
             }
-            for (int i = 0; i < this.attributes.length; i++)
+            for (AttrInfo at : this.attributes)
             {
-                this.attributes[i].markUtf8Refs(pool); // checks InnerClasses, SourceFile and all attr names
+                at.markUtf8Refs(pool); // checks InnerClasses, SourceFile and all attr names
             }
 
             // Now check for references from other CP entries
@@ -627,13 +627,13 @@ public class ClassFile implements ClassConstants
         }
 
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < this.fields.length; i++)
+        for (FieldInfo fd : this.fields)
         {
-            this.fields[i].trimAttrsExcept(keepAttrs);
+            fd.trimAttrsExcept(keepAttrs);
         }
-        for (int i = 0; i < this.methods.length; i++)
+        for (MethodInfo md : this.methods)
         {
-            this.methods[i].trimAttrsExcept(keepAttrs);
+            md.trimAttrsExcept(keepAttrs);
         }
         for (int i = 0; i < this.attributes.length; i++)
         {
@@ -650,11 +650,11 @@ public class ClassFile implements ClassConstants
         // Delete the marked attributes
         AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (int i = 0; i < this.attributes.length; i++)
+        for (AttrInfo at : this.attributes)
         {
-            if (this.attributes[i] != null)
+            if (at != null)
             {
-                left[j++] = this.attributes[i];
+                left[j++] = at;
             }
         }
         this.attributes = new AttrInfo[j];
@@ -680,11 +680,11 @@ public class ClassFile implements ClassConstants
     /** Remap SourceFile attribute to constant string "SourceFile" */
     public void setDummySourceFile() throws Exception
     {
-        for (int i = 0; i < this.attributes.length; i++)
+        for (AttrInfo at : this.attributes)
         {
-            if (ClassConstants.ATTR_SourceFile.equals(this.attributes[i].getAttrName()))
+            if (ClassConstants.ATTR_SourceFile.equals(at.getAttrName()))
             {
-                ((SourceFileAttrInfo)this.attributes[i]).setAsDummy(this.constantPool);
+                ((SourceFileAttrInfo)at).setAsDummy(this.constantPool);
             }
         }
     }
@@ -713,8 +713,8 @@ public class ClassFile implements ClassConstants
         }
 
         // Go through all of class's fields and methods mapping 'name' and 'descriptor' references
-        String thisClassName = ((Utf8CpInfo)this.getCpEntry(((ClassCpInfo)this.getCpEntry(this.u2thisClass)).getNameIndex()))
-            .getString();
+        String thisClassName = ((Utf8CpInfo)this.getCpEntry(
+            ((ClassCpInfo)this.getCpEntry(this.u2thisClass)).getNameIndex())).getString();
         for (int i = 0; i < this.u2fieldsCount; i++)
         {
             // Remap field 'name', unless it is 'Synthetic'
@@ -871,15 +871,13 @@ public class ClassFile implements ClassConstants
     {
         // Visit all method Code attributes, collecting information on remap
         FlagHashtable cpToFlag = new FlagHashtable();
-        for (int i = 0; i < this.methods.length; i++)
+        for (MethodInfo md : this.methods)
         {
-            MethodInfo methodInfo = this.methods[i];
-            for (int j = 0; j < methodInfo.attributes.length; j++)
+            for (AttrInfo at : md.attributes)
             {
-                AttrInfo attrInfo = methodInfo.attributes[j];
-                if (attrInfo instanceof CodeAttrInfo)
+                if (at instanceof CodeAttrInfo)
                 {
-                    cpToFlag = ((CodeAttrInfo)attrInfo).walkFindClassStrings(cpToFlag);
+                    cpToFlag = ((CodeAttrInfo)at).walkFindClassStrings(cpToFlag);
                 }
             }
         }
@@ -936,15 +934,13 @@ public class ClassFile implements ClassConstants
             }
         }
         // Visit all method Code attributes, remapping .class/Class.forName
-        for (int i = 0; i < this.methods.length; i++)
+        for (MethodInfo md : this.methods)
         {
-            MethodInfo methodInfo = this.methods[i];
-            for (int j = 0; j < methodInfo.attributes.length; j++)
+            for (AttrInfo at : md.attributes)
             {
-                AttrInfo attrInfo = methodInfo.attributes[j];
-                if (attrInfo instanceof CodeAttrInfo)
+                if (at instanceof CodeAttrInfo)
                 {
-                    ((CodeAttrInfo)attrInfo).walkUpdateClassStrings(cpUpdate);
+                    ((CodeAttrInfo)at).walkUpdateClassStrings(cpUpdate);
                 }
             }
         }

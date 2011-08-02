@@ -138,9 +138,8 @@ public class TreeItem
             pos = rpos;
         }
         // Check each section for a non-overlapping match in the string
-        for (Enumeration<String> enm = section.elements(); enm.hasMoreElements();)
+        for (String chunk : section)
         {
-            String chunk = enm.nextElement();
             pos = string.indexOf(chunk);
             if (pos == -1)
             {

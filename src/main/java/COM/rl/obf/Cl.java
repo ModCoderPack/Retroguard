@@ -139,9 +139,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     {
         if (this.hasWarnings())
         {
-            for (Enumeration<String> enm = this.warningList.elements(); enm.hasMoreElements();)
+            for (String string : this.warningList)
             {
-                log.println("# " + enm.nextElement());
+                log.println("# " + string);
             }
         }
     }
@@ -208,9 +208,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         Vector<Cl> v = new Vector<Cl>();
         if (this.superInterfaces != null)
         {
-            for (int i = 0; i < this.superInterfaces.length; i++)
+            for (String si : this.superInterfaces)
             {
-                Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                Cl interfaceItem = this.classTree.getCl(si);
                 if (interfaceItem != null)
                 {
                     v.addElement(interfaceItem);
@@ -239,9 +239,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 if (this.superInterfaces != null)
                 {
-                    for (int i = 0; i < this.superInterfaces.length; i++)
+                    for (String si : this.superInterfaces)
                     {
-                        if (queryName.equals(this.superInterfaces[i]))
+                        if (queryName.equals(si))
                         {
                             return true;
                         }
@@ -272,9 +272,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 if (this.superInterfaces != null)
                 {
-                    for (int i = 0; i < this.superInterfaces.length; i++)
+                    for (String si : this.superInterfaces)
                     {
-                        Cl interClInt = this.classTree.getCl(this.superInterfaces[i]);
+                        Cl interClInt = this.classTree.getCl(si);
                         if (interClInt != null)
                         {
                             if (interClInt.hasAsSuperInt(queryName, checkInterfaces))
@@ -284,7 +284,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         }
                         else
                         {
-                            Class<?> interClExt = Class.forName(ClassFile.translate(this.superInterfaces[i]));
+                            Class<?> interClExt = Class.forName(ClassFile.translate(si));
                             if (interClExt != null)
                             {
                                 if (Cl.hasAsSuperExt(queryName, checkInterfaces, this.classTree, interClExt))
@@ -326,9 +326,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 if (superInterfaces != null)
                 {
-                    for (int i = 0; i < superInterfaces.length; i++)
+                    for (Class<?> si : superInterfaces)
                     {
-                        if (queryNameExt.equals(superInterfaces[i].getName()))
+                        if (queryNameExt.equals(si.getName()))
                         {
                             return true;
                         }
@@ -359,9 +359,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 if (superInterfaces != null)
                 {
-                    for (int i = 0; i < superInterfaces.length; i++)
+                    for (Class<?> si : superInterfaces)
                     {
-                        Cl interClInt = classTree.getCl(ClassFile.backTranslate(superInterfaces[i].getName()));
+                        Cl interClInt = classTree.getCl(ClassFile.backTranslate(si.getName()));
                         if (interClInt != null)
                         {
                             if (interClInt.hasAsSuperInt(queryName, checkInterfaces))
@@ -371,7 +371,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         }
                         else
                         {
-                            Class<?> interClExt = superInterfaces[i];
+                            Class<?> interClExt = si;
                             if (interClExt != null)
                             {
                                 if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, interClExt))
@@ -502,9 +502,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
         if (this.superInterfaces != null)
         {
-            for (int i = 0; i < this.superInterfaces.length; i++)
+            for (String si : this.superInterfaces)
             {
-                Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                Cl interfaceItem = this.classTree.getCl(si);
                 if (interfaceItem != null)
                 {
                     interfaceItem.nameListDowns.addElement(this);
@@ -563,9 +563,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (this.superInterfaces != null)
             {
-                for (int i = 0; i < this.superInterfaces.length; i++)
+                for (String si : this.superInterfaces)
                 {
-                    Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                    Cl interfaceItem = this.classTree.getCl(si);
                     if ((interfaceItem != null) && (interfaceItem != ignoreCl))
                     {
                         interfaceItem.scanNameSpaceExcept(this, methods, fields);
@@ -583,9 +583,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
 
             // Finally step down to derived classes, resolving them
-            for (Enumeration<NameListDown> clEnum = this.nameListDowns.elements(); clEnum.hasMoreElements();)
+            for (NameListDown nl : this.nameListDowns)
             {
-                Cl cl = (Cl)clEnum.nextElement();
+                Cl cl = (Cl)nl;
                 if (cl != ignoreCl)
                 {
                     cl.scanNameSpaceExcept(this, methods, fields);
@@ -603,9 +603,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         Method[] allPubMethods = extClass.getMethods();
         if (allPubMethods != null)
         {
-            for (int i = 0; i < allPubMethods.length; i++)
+            for (Method md : allPubMethods)
             {
-                String methodName = allPubMethods[i].getName();
+                String methodName = md.getName();
                 if (methods.indexOf(methodName) == -1)
                 {
                     methods.addElement(methodName);
@@ -615,9 +615,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         Field[] allPubFields = extClass.getFields();
         if (allPubFields != null)
         {
-            for (int i = 0; i < allPubFields.length; i++)
+            for (Field fd : allPubFields)
             {
-                String fieldName = allPubFields[i].getName();
+                String fieldName = fd.getName();
                 if (fields.indexOf(fieldName) == -1)
                 {
                     fields.addElement(fieldName);
@@ -710,9 +710,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (this.superInterfaces != null)
             {
-                for (int i = 0; i < this.superInterfaces.length; i++)
+                for (String si : this.superInterfaces)
                 {
-                    Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                    Cl interfaceItem = this.classTree.getCl(si);
                     if ((interfaceItem != null) && (interfaceItem != ignoreCl))
                     {
                         interfaceItem.resolveNameSpaceExcept(this);
@@ -730,9 +730,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
 
             // Finally step down to derived classes, resolving them
-            for (Enumeration<NameListDown> clEnum = this.nameListDowns.elements(); clEnum.hasMoreElements();)
+            for (NameListDown nl : this.nameListDowns)
             {
-                Cl cl = (Cl)clEnum.nextElement();
+                Cl cl = (Cl)nl;
                 if (cl != ignoreCl)
                 {
                     cl.resolveNameSpaceExcept(this);
@@ -757,11 +757,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.nameListUps.addElement(superClassItem != null ? (NameListUp)superClassItem : this.getExtNameListUp(this.superClass));
         if (this.superInterfaces != null)
         {
-            for (int i = 0; i < this.superInterfaces.length; i++)
+            for (String si : this.superInterfaces)
             {
-                Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                Cl interfaceItem = this.classTree.getCl(si);
                 this.nameListUps.addElement(interfaceItem != null ?
-                    (NameListUp)interfaceItem : this.getExtNameListUp(this.superInterfaces[i]));
+                    (NameListUp)interfaceItem : this.getExtNameListUp(si));
             }
         }
 
@@ -773,10 +773,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (!md.isFixed())
             {
                 // Check for name reservation via derived classes
-                for (Enumeration<NameListDown> nlEnum = this.nameListDowns.elements(); nlEnum.hasMoreElements();)
+                for (NameListDown nl : this.nameListDowns)
                 {
-                    String theOutName = nlEnum.nextElement().getMethodObfNameDown(this, md.getInName(),
-                        md.getDescriptor());
+                    String theOutName = nl.getMethodObfNameDown(this, md.getInName(), md.getDescriptor());
                     if (theOutName != null)
                     {
                         md.setOutName(theOutName);
@@ -786,9 +785,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
                 // Check for name reservation via super classes
-                for (Enumeration<NameListUp> nlEnum = this.nameListUps.elements(); nlEnum.hasMoreElements();)
+                for (NameListUp nl : this.nameListUps)
                 {
-                    String theOutName = nlEnum.nextElement().getMethodOutNameUp(md.getInName(), md.getDescriptor());
+                    String theOutName = nl.getMethodOutNameUp(md.getInName(), md.getDescriptor());
                     if (theOutName != null)
                     {
                         md.setOutName(theOutName);
@@ -814,9 +813,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (!fd.isFixed())
             {
                 // Check for name reservation via derived classes
-                for (Enumeration<NameListDown> nlEnum = this.nameListDowns.elements(); nlEnum.hasMoreElements();)
+                for (NameListDown nl : this.nameListDowns)
                 {
-                    String theOutName = nlEnum.nextElement().getFieldObfNameDown(this, fd.getInName());
+                    String theOutName = nl.getFieldObfNameDown(this, fd.getInName());
                     if (theOutName != null)
                     {
                         fd.setOutName(theOutName);
@@ -826,9 +825,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
                 // Check for name reservation via super classes
-                for (Enumeration<NameListUp> nlEnum = this.nameListUps.elements(); nlEnum.hasMoreElements();)
+                for (NameListUp nl : this.nameListUps)
                 {
-                    String theOutName = nlEnum.nextElement().getFieldOutNameUp(fd.getInName());
+                    String theOutName = nl.getFieldOutNameUp(fd.getInName());
                     if (theOutName != null)
                     {
                         fd.setOutName(theOutName);
@@ -854,9 +853,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getMethodOutNameUp(String name, String descriptor) throws Exception
     {
         // Check supers
-        for (Enumeration<NameListUp> enm = this.nameListUps.elements(); enm.hasMoreElements();)
+        for (NameListUp nl : this.nameListUps)
         {
-            String superOutName = enm.nextElement().getMethodOutNameUp(name, descriptor);
+            String superOutName = nl.getMethodOutNameUp(name, descriptor);
             if (superOutName != null)
             {
                 return superOutName;
@@ -878,9 +877,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getMethodObfNameUp(String name, String descriptor) throws Exception
     {
         // Check supers
-        for (Enumeration<NameListUp> enm = this.nameListUps.elements(); enm.hasMoreElements();)
+        for (NameListUp nl : this.nameListUps)
         {
-            String superObfName = enm.nextElement().getMethodObfNameUp(name, descriptor);
+            String superObfName = nl.getMethodObfNameUp(name, descriptor);
             if (superObfName != null)
             {
                 return superObfName;
@@ -902,9 +901,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getFieldOutNameUp(String name) throws Exception
     {
         // Check supers
-        for (Enumeration<NameListUp> enm = this.nameListUps.elements(); enm.hasMoreElements();)
+        for (NameListUp nl : this.nameListUps)
         {
-            String superOutName = enm.nextElement().getFieldOutNameUp(name);
+            String superOutName = nl.getFieldOutNameUp(name);
             if (superOutName != null)
             {
                 return superOutName;
@@ -926,9 +925,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getFieldObfNameUp(String name) throws Exception
     {
         // Check supers
-        for (Enumeration<NameListUp> enm = this.nameListUps.elements(); enm.hasMoreElements();)
+        for (NameListUp nl : this.nameListUps)
         {
-            String superObfName = enm.nextElement().getFieldObfNameUp(name);
+            String superObfName = nl.getFieldObfNameUp(name);
             if (superObfName != null)
             {
                 return superObfName;
@@ -972,13 +971,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (this.superInterfaces != null)
             {
-                for (int i = 0; i < this.superInterfaces.length; i++)
+                for (String si : this.superInterfaces)
                 {
-                    Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                    Cl interfaceItem = this.classTree.getCl(si);
                     if (interfaceItem != caller)
                     {
-                        NameListUp nl = interfaceItem != null ? (NameListUp)interfaceItem
-                            : this.getExtNameListUp(this.superInterfaces[i]);
+                        NameListUp nl = interfaceItem != null ? (NameListUp)interfaceItem : this.getExtNameListUp(si);
                         theObfName = nl.getMethodObfNameUp(name, descriptor);
                         if (theObfName != null)
                         {
@@ -990,9 +988,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Check our derived classes
-        for (Enumeration<NameListDown> enm = this.nameListDowns.elements(); enm.hasMoreElements();)
+        for (NameListDown nl : this.nameListDowns)
         {
-            theObfName = enm.nextElement().getMethodObfNameDown(this, name, descriptor);
+            theObfName = nl.getMethodObfNameDown(this, name, descriptor);
             if (theObfName != null)
             {
                 return theObfName;
@@ -1030,13 +1028,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (this.superInterfaces != null)
             {
-                for (int i = 0; i < this.superInterfaces.length; i++)
+                for (String si : this.superInterfaces)
                 {
-                    Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
+                    Cl interfaceItem = this.classTree.getCl(si);
                     if (interfaceItem != caller)
                     {
-                        NameListUp nl = interfaceItem != null ? (NameListUp)interfaceItem
-                            : this.getExtNameListUp(this.superInterfaces[i]);
+                        NameListUp nl = interfaceItem != null ? (NameListUp)interfaceItem : this.getExtNameListUp(si);
                         theObfName = nl.getFieldObfNameUp(name);
                         if (theObfName != null)
                         {
@@ -1048,9 +1045,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Check our derived classes
-        for (Enumeration<NameListDown> enm = this.nameListDowns.elements(); enm.hasMoreElements();)
+        for (NameListDown nl : this.nameListDowns)
         {
-            theObfName = enm.nextElement().getFieldObfNameDown(this, name);
+            theObfName = nl.getFieldObfNameDown(this, name);
             if (theObfName != null)
             {
                 return theObfName;
@@ -1110,12 +1107,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 this.methods = this.getAllDeclaredMethods(this.extClass);
                 Vector<Method> pruned = new Vector<Method>();
-                for (int i = 0; i < this.methods.length; i++)
+                for (Method md : this.methods)
                 {
-                    int modifiers = this.methods[i].getModifiers();
+                    int modifiers = md.getModifiers();
                     if (!Modifier.isPrivate(modifiers))
                     {
-                        pruned.addElement(this.methods[i]);
+                        pruned.addElement(md);
                     }
                 }
                 this.methods = new Method[pruned.size()];
@@ -1209,9 +1206,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             // Merge the arrays
             Method[] allMethods = new Method[length];
             int pos = 0;
-            for (Enumeration<Method[]> enm = ma.elements(); enm.hasMoreElements();)
+            for (Method[] methods : ma)
             {
-                Method[] methods = enm.nextElement();
                 System.arraycopy(methods, 0, allMethods, pos, methods.length);
                 pos += methods.length;
             }
@@ -1274,26 +1270,28 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             done.addElement(cl);
             // Traverse super class
             Cl superCl = this.classTree.getCl(this.superClass);
-            if (superCl != null) // ignore external to JAR
+            // ignore external to JAR
+            if (superCl != null)
             {
                 this.walkGroup(ta, superCl, done);
             }
             // Traverse super interfaces
             if (this.superInterfaces != null)
             {
-                for (int i = 0; i < this.superInterfaces.length; i++)
+                for (String si : this.superInterfaces)
                 {
-                    Cl interfaceItem = this.classTree.getCl(this.superInterfaces[i]);
-                    if (interfaceItem != null) // ignore external to JAR
+                    Cl interfaceItem = this.classTree.getCl(si);
+                    // ignore external to JAR
+                    if (interfaceItem != null)
                     {
                         this.walkGroup(ta, interfaceItem, done);
                     }
                 }
             }
             // Traverse derived classes
-            for (Enumeration<NameListDown> clEnum = this.nameListDowns.elements(); clEnum.hasMoreElements();)
+            for (NameListDown nl : this.nameListDowns)
             {
-                Cl subCl = (Cl)clEnum.nextElement();
+                Cl subCl = (Cl)nl;
                 if (subCl != null)
                 {
                     this.walkGroup(ta, subCl, done);
@@ -1306,7 +1304,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getFullOutName()
     {
         String clName = super.getFullOutName();
-        
+
         if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
         {
             if (this.parent != null)
@@ -1316,12 +1314,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (this.parent instanceof Pk)
                     {
                         String pkName = this.parent.getFullOutName();
-    
+
                         if (pkName.equals(""))
                         {
                             return clName;
                         }
-    
+
                         return pkName + this.sep + clName;
                     }
                 }
@@ -1334,11 +1332,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public Enumeration<Cl> getDownClasses()
     {
         Vector<Cl> clsList = new Vector<Cl>();
-        for (Enumeration<NameListDown> enm = this.nameListDowns.elements(); enm.hasMoreElements();)
+        for (NameListDown nl : this.nameListDowns)
         {
             try
             {
-                Cl cl = (Cl)enm.nextElement();
+                Cl cl = (Cl)nl;
                 clsList.addElement(cl);
             }
             catch (Exception e)

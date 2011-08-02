@@ -123,11 +123,11 @@ abstract public class ClassItemInfo implements ClassConstants
         // Delete the marked attributes
         AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (int i = 0; i < this.attributes.length; i++)
+        for (AttrInfo at : this.attributes)
         {
-            if (this.attributes[i] != null)
+            if (at != null)
             {
-                left[j++] = this.attributes[i];
+                left[j++] = at;
             }
         }
         this.attributes = new AttrInfo[j];
@@ -140,9 +140,9 @@ abstract public class ClassItemInfo implements ClassConstants
     {
         pool.incRefCount(this.u2nameIndex);
         pool.incRefCount(this.u2descriptorIndex);
-        for (int i = 0; i < this.attributes.length; i++)
+        for (AttrInfo attribute : this.attributes)
         {
-            this.attributes[i].markUtf8Refs(pool);
+            attribute.markUtf8Refs(pool);
         }
     }
 

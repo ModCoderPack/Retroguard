@@ -43,7 +43,8 @@ public class RetroGuardImpl
     private static final String LOG_SCRIPT_FILE = "# RetroGuard Script file used:         ";
     private static final String LOG_NO_SCRIPT = "(none, defaults used)";
     private static final String LOG_ERROR = "# Unrecoverable error during obfuscation:";
-    private static final String LOG_ZIP_ERROR = "# Review input jar for duplicate classes (same classfile with two different filenames).";
+    private static final String LOG_ZIP_ERROR =
+        "# Review input jar for duplicate classes (same classfile with two different filenames).";
     private static final String SEE_LOG_FILE = "Unrecoverable error during obfuscation, see log file for details.";
 
 

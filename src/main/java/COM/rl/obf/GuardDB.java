@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 import java.security.*;
+
 import COM.rl.obf.classfile.*;
 import COM.rl.util.*;
 import COM.rl.util.rfc822.*;
@@ -48,8 +49,10 @@ public class GuardDB implements ClassConstants
     private static final String LOG_MEMORY_BYTES = " bytes";
     private static final String WARNING_SCRIPT_ENTRY_ABSENT = "# WARNING - identifier from script file not found in JAR: ";
     private static final String ERROR_CORRUPT_CLASS = "# ERROR - corrupt class file: ";
-    private static final String WARNING_INCOMPATIBLE_VERSION_1 = "# WARNING - class file format has incompatible major-version number: v";
-    private static final String WARNING_INCOMPATIBLE_VERSION_2 = "# WARNING - this version of RetroGuard supports up to class format:  v";
+    private static final String WARNING_INCOMPATIBLE_VERSION_1 =
+        "# WARNING - class file format has incompatible major-version number: v";
+    private static final String WARNING_INCOMPATIBLE_VERSION_2 =
+        "# WARNING - this version of RetroGuard supports up to class format:  v";
 
 
     // Fields ----------------------------------------------------------------
@@ -440,9 +443,8 @@ public class GuardDB implements ClassConstants
                 {
                     inStream = new DataInputStream(new BufferedInputStream(this.inJar.getInputStream(inEntry)));
                     String inName = inEntry.getName();
-                    if ((inName.length() > GuardDB.CLASS_EXT.length())
-                        && inName.substring(inName.length() - GuardDB.CLASS_EXT.length(), inName.length())
-                            .equals(GuardDB.CLASS_EXT))
+                    if ((inName.length() > GuardDB.CLASS_EXT.length()) && inName.substring(
+                        inName.length() - GuardDB.CLASS_EXT.length(), inName.length()).equals(GuardDB.CLASS_EXT))
                     {
                         // Write obfuscated class to the output Jar
                         ClassFile cf = ClassFile.create(inStream);
@@ -653,11 +655,11 @@ public class GuardDB implements ClassConstants
             {
                 // Digest-Algorithms header
                 StringBuffer sb = new StringBuffer();
-                for (int i = 0; i < digests.length; i++)
+                for (MessageDigest digest : digests)
                 {
-                    if (digests[i] != null)
+                    if (digest != null)
                     {
-                        sb.append(digests[i].getAlgorithm());
+                        sb.append(digest.getAlgorithm());
                         sb.append(" ");
                     }
                 }
@@ -667,11 +669,11 @@ public class GuardDB implements ClassConstants
                 }
 
                 // *-Digest headers
-                for (int i = 0; i < digests.length; i++)
+                for (MessageDigest digest : digests)
                 {
-                    if (digests[i] != null)
+                    if (digest != null)
                     {
-                        newSection.add(digests[i].getAlgorithm() + "-Digest", Tools.toBase64(digests[i].digest()));
+                        newSection.add(digest.getAlgorithm() + "-Digest", Tools.toBase64(digest.digest()));
                     }
                 }
             }
@@ -712,8 +714,8 @@ class TIStack extends Stack<TreeItem>
                         this.pushFdGroup(cl, mdfd.getInName());
                     }
                     else
-                    // method
                     {
+                        // method
                         Md md = (Md)mdfd;
                         String mdName = md.getInName();
                         // Treat special methods (<init> <clinit>) differently

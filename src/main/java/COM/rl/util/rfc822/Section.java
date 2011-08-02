@@ -69,9 +69,8 @@ public class Section
     {
         if (queryHeader != null)
         {
-            for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
+            for (Header header : this.headers)
             {
-                Header header = enm.nextElement();
                 if (queryHeader.equals(header))
                 {
                     return true;
@@ -91,9 +90,8 @@ public class Section
         }
 
         // For now, do linear search of headers
-        for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Header header : this.headers)
         {
-            Header header = enm.nextElement();
             if (tag.equals(header.getTag()))
             {
                 // Found
@@ -108,9 +106,9 @@ public class Section
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Header header : this.headers)
         {
-            enm.nextElement().writeString(writer);
+            header.writeString(writer);
         }
         writer.write("\015\012");
     }
@@ -120,9 +118,9 @@ public class Section
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration<Header> enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Header header : this.headers)
         {
-            sb.append(enm.nextElement().toString());
+            sb.append(header.toString());
             sb.append("\015\012");
         }
         sb.append("\015\012");

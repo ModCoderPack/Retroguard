@@ -62,9 +62,9 @@ public class AnnotationInfo
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
         pool.incRefCount(this.u2typeIndex);
-        for (int i = 0; i < this.memberValuePairTable.length; i++)
+        for (MemberValuePairInfo element : this.memberValuePairTable)
         {
-            this.memberValuePairTable[i].markUtf8Refs(pool);
+            element.markUtf8Refs(pool);
         }
     }
 
