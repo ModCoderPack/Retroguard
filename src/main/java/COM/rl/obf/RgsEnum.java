@@ -110,15 +110,14 @@ public class RgsEnum
         RgsEnum.ACCESS_ENUM
     };
 
-    private static final String DEFAULT_RGS =
-        ".option Applet\n" +
-            ".option Application\n" +
-            ".option Serializable\n" +
-            ".option RMI\n" +
-            ".option RuntimeAnnotations\n" +
-            ".option MapClassString\n" +
-            ".option Repackage\n" +
-            ".option Generic\n";
+    private static final String DEFAULT_RGS = ".option Applet\n"
+        + ".option Application\n"
+        + ".option Serializable\n"
+        + ".option RMI\n"
+        + ".option RuntimeAnnotations\n"
+        + ".option MapClassString\n"
+        + ".option Repackage\n"
+        + ".option Generic\n";
 
 
     // Fields ----------------------------------------------------------------
@@ -263,8 +262,8 @@ public class RgsEnum
     /** Ctor. */
     public RgsEnum(InputStream rgs)
     {
-        this.tk = new StreamTokenizer(new BufferedReader(rgs != null ?
-            (Reader)new InputStreamReader(rgs) : (Reader)new StringReader(RgsEnum.DEFAULT_RGS)));
+        this.tk = new StreamTokenizer(new BufferedReader(rgs != null ? (Reader)new InputStreamReader(rgs)
+            : (Reader)new StringReader(RgsEnum.DEFAULT_RGS)));
         this.tk.resetSyntax();
         this.tk.whitespaceChars(0x00, 0x20);
         this.tk.wordChars('^', '^');

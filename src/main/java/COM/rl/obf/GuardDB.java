@@ -77,9 +77,6 @@ public class GuardDB implements ClassConstants
     /** Repackage classes for size? */
     private boolean enableRepackage = false;
 
-    /** Remap SourceFile attribute to text "SourceFile"? */
-    private boolean enableDummySourceFile = false;
-
     /** Produce SHA-1 manifest digests? */
     private boolean enableDigestSHA = false;
 
@@ -211,7 +208,6 @@ public class GuardDB implements ClassConstants
                         {
                             this.classTree.retainAttribute(ClassConstants.ATTR_LineNumberTable);
                             this.classTree.retainAttribute(ClassConstants.ATTR_SourceFile);
-                            this.enableDummySourceFile = true;
                         }
                         else if (ClassConstants.OPTION_RuntimeAnnotations.equals(entry.name))
                         {
@@ -282,8 +278,8 @@ public class GuardDB implements ClassConstants
                                 "java/io/Serializable", false,
                                 ClassConstants.ACC_PRIVATE | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL,
                                 ClassConstants.ACC_PRIVATE | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
-                            this.classTree
-                                .retainClass("**", false, false, false, false, false, "java/io/Serializable", false, 0, 0);
+                            this.classTree.retainClass("**", false, false, false, false, false, "java/io/Serializable",
+                                false, 0, 0);
                             this.classTree.retainField("**", "*", false, "java/io/Serializable", false,
                                 ClassConstants.ACC_TRANSIENT | ClassConstants.ACC_STATIC, 0);
                         }
@@ -459,7 +455,7 @@ public class GuardDB implements ClassConstants
                         {
                             cf.trimAttrs(this.classTree);
                             cf.updateRefCount();
-                            cf.remap(this.classTree, log, this.enableMapClassString, this.enableDummySourceFile);
+                            cf.remap(this.classTree, log, this.enableMapClassString);
                             ZipEntry outEntry = new ZipEntry(cf.getName() + GuardDB.CLASS_EXT);
                             outJar.putNextEntry(outEntry);
 
@@ -680,125 +676,6 @@ public class GuardDB implements ClassConstants
 
             // Append the new section to the new manifest
             this.newManifest.add(newSection);
-        }
-    }
-}
-
-/** Stack used for marking TreeItems that must not be trimmed */
-class TIStack extends Stack<TreeItem>
-{
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public TreeItem push(TreeItem ti)
-    {
-        try
-        {
-            if (ti != null)
-            {
-                if (ti instanceof Cl)
-                {
-                    this.pushClTree((Cl)ti);
-                }
-                else if (ti instanceof MdFd)
-                {
-                    MdFd mdfd = (MdFd)ti;
-                    // Preserve class if method or field is static
-                    Cl cl = (Cl)mdfd.getParent();
-                    if (mdfd.isStatic())
-                    {
-                        this.pushClTree(cl);
-                    }
-                    if (mdfd instanceof Fd)
-                    {
-                        this.pushFdGroup(cl, mdfd.getInName());
-                    }
-                    else
-                    {
-                        // method
-                        Md md = (Md)mdfd;
-                        String mdName = md.getInName();
-                        // Treat special methods (<init> <clinit>) differently
-                        if (mdName.charAt(0) == '<')
-                        {
-                            this.pushItem(md);
-                        }
-                        else
-                        {
-                            this.pushMdGroup(cl, mdName, md.getDescriptor());
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            /* ignore */
-        }
-        return ti;
-    }
-
-    /** Push class and all supers onto trim-preserve stack */
-    private Object pushClTree(Cl cl) throws Exception
-    {
-        if (cl != null)
-        {
-            this.pushItem(cl);
-            // Propagate up supers in jar
-            this.pushClTree(cl.getSuperCl());
-            for (Enumeration<Cl> enm = cl.getSuperInterfaces(); enm.hasMoreElements();)
-            {
-                Cl superInterface = enm.nextElement();
-                this.pushClTree(superInterface);
-            }
-        }
-        return cl;
-    }
-
-    /** Push item onto trim-preserve stack */
-    private void pushItem(TreeItem ti)
-    {
-        if ((ti != null) && !ti.isTrimCheck())
-        {
-            ti.setTrimCheck(true);
-            super.push(ti);
-        }
-    }
-
-    /** Push method across inheritance group onto trim-preserve stack */
-    private void pushMdGroup(Cl cl, String mdName, String mdDesc) throws Exception
-    {
-        this.pushMdFdGroup(cl, mdName, mdDesc);
-    }
-
-    /** Push field across inheritance group onto trim-preserve stack */
-    private void pushFdGroup(Cl cl, String fdName) throws Exception
-    {
-        this.pushMdFdGroup(cl, fdName, null);
-    }
-
-    private void pushMdFdGroup(Cl cl, String name, String desc) throws Exception
-    {
-        if (cl != null)
-        {
-            final String fname = name;
-            final String fdesc = desc;
-            cl.walkGroup(new TreeAction()
-            {
-                @Override
-                public void classAction(Cl cl)
-                {
-                    try
-                    {
-                        MdFd mdfd = (fdesc == null ? (MdFd)cl.getField(fname) : (MdFd)cl.getMethod(fname, fdesc));
-                        TIStack.this.pushItem(mdfd);
-                    }
-                    catch (Exception e)
-                    {
-                        /* ignore */
-                    }
-                }
-            });
         }
     }
 }

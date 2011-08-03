@@ -32,8 +32,8 @@ public class Version
     private static final String ORIG_VERSION = "2.3.1";
     private static final String RETROGUARD_CLASS_ID = "RGMCP";
     private static final String RETROGUARD_REL_JAR_COMMENT = "Obfuscation by RetroGuard MCP";
-    private static final String RETROGUARD_FULL_VERSION_COMMENT = "RetroGuard MCP v" + Version.REL_VERSION + "\n" +
-        "based on RetroGuard v" + Version.ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
+    private static final String RETROGUARD_FULL_VERSION_COMMENT = "RetroGuard MCP v" + Version.REL_VERSION + "\n"
+        + "based on RetroGuard v" + Version.ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
 
     public static final boolean isLite = true;
 

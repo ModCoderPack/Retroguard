@@ -68,9 +68,6 @@ public class TreeItem
     /** Is this script_map constrained? */
     private boolean isFromScriptMap = false;
 
-    /** Has this been checked for trimming? */
-    private boolean isTrimCheck = false;
-
 
     // Class Methods ---------------------------------------------------------
     /** Do a wildcard String match. */
@@ -374,17 +371,5 @@ public class TreeItem
     public boolean isWildcardMatch(String pattern)
     {
         return TreeItem.isGMatch(pattern, this.getFullInName());
-    }
-
-    /** Set the trim-check status for this. */
-    public void setTrimCheck(boolean state)
-    {
-        this.isTrimCheck = state;
-    }
-
-    /** Has this been checked for trimming? */
-    public boolean isTrimCheck()
-    {
-        return this.isTrimCheck;
     }
 }

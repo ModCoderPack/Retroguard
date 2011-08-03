@@ -677,18 +677,6 @@ public class ClassFile implements ClassConstants
         this.trimAttrsExcept(null);
     }
 
-    /** Remap SourceFile attribute to constant string "SourceFile" */
-    public void setDummySourceFile() throws Exception
-    {
-        for (AttrInfo at : this.attributes)
-        {
-            if (ClassConstants.ATTR_SourceFile.equals(at.getAttrName()))
-            {
-                ((SourceFileAttrInfo)at).setAsDummy(this.constantPool);
-            }
-        }
-    }
-
     /** Remove unnecessary attributes from the class. */
     public void trimAttrs(NameMapper nm) throws Exception
     {
@@ -704,14 +692,8 @@ public class ClassFile implements ClassConstants
     }
 
     /** Remap the entities in the specified ClassFile. */
-    public void remap(NameMapper nm, PrintWriter log, boolean enableMapClassString, boolean enableDummySourceFile) throws Exception
+    public void remap(NameMapper nm, PrintWriter log, boolean enableMapClassString) throws Exception
     {
-        // If requested by '.option LineNumberDebug' make SourceFile attribute into dummy constant string "SourceFile"
-        if (enableDummySourceFile)
-        {
-            this.setDummySourceFile();
-        }
-
         // Go through all of class's fields and methods mapping 'name' and 'descriptor' references
         String thisClassName = ((Utf8CpInfo)this.getCpEntry(
             ((ClassCpInfo)this.getCpEntry(this.u2thisClass)).getNameIndex())).getString();
@@ -1082,12 +1064,12 @@ public class ClassFile implements ClassConstants
                 pw.println("  Field " + Integer.toHexString(i) + ": "
                     + ((Utf8CpInfo)this.getCpEntry(info.getNameIndex())).getString() + " "
                     + ((Utf8CpInfo)this.getCpEntry(info.getDescriptorIndex())).getString());
+                pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
+//                for (int j = 0; j < info.u2attributesCount; j++)
+//                {
+//                    info.attributes[j].dump(pw, this);
+//                }
             }
-//            pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
-//            for (int j = 0; j < info.u2attributesCount; j++)
-//            {
-//                info.attributes[j].dump(pw, this);
-//            }
         }
         pw.println("Methods count: " + Integer.toHexString(this.u2methodsCount));
         for (int i = 0; i < this.u2methodsCount; i++)
@@ -1103,17 +1085,17 @@ public class ClassFile implements ClassConstants
                     + ((Utf8CpInfo)this.getCpEntry(info.getNameIndex())).getString() + " "
                     + ((Utf8CpInfo)this.getCpEntry(info.getDescriptorIndex())).getString() + " "
                     + Integer.toHexString(info.getAccessFlags()));
+//                pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
+//                for (int j = 0; j < info.u2attributesCount; j++)
+//                {
+//                    info.attributes[j].dump(pw, this);
+//                }
             }
-//            pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
-//            for (int j = 0; j < info.u2attributesCount; j++)
-//            {
-//                info.attributes[j].dump(pw, this);
-//            }
         }
-//        pw.println("Attrs count: " + Integer.toHexString(this.u2attributesCount));
+        pw.println("Attrs count: " + Integer.toHexString(this.u2attributesCount));
 //        for (int i = 0; i < this.u2attributesCount; i++)
 //        {
-//            attributes[i].dump(pw, this);
+//            this.attributes[i].dump(pw, this);
 //        }
     }
 }
