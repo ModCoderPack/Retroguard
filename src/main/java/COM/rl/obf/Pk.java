@@ -39,7 +39,7 @@ public class Pk extends PkCl
 
     // Fields ----------------------------------------------------------------
     /** Owns a list of sub-package levels */
-    private Hashtable<String, PkCl> pks = new Hashtable<String, PkCl>();
+    private Hashtable pks = new Hashtable();
 
     /** Compact name for this package */
     private String repackageName = null;
@@ -103,7 +103,7 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated name. */
     public Pk getObfPackage(String name) throws Exception
     {
-        for (Enumeration<PkCl> enm = this.pks.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements();)
         {
             Pk pk = (Pk)enm.nextElement();
             if (name.equals(pk.getOutName()))
@@ -117,7 +117,7 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated repackage name. */
     public Pk getObfRepackage(String name) throws Exception
     {
-        for (Enumeration<PkCl> enm = this.pks.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements();)
         {
             Pk pk = (Pk)enm.nextElement();
             if (name.equals(pk.getRepackageName()))
@@ -134,7 +134,7 @@ public class Pk extends PkCl
     }
 
     /** Get an Enumeration of packages. */
-    public Enumeration<PkCl> getPackageEnum() throws Exception
+    public Enumeration getPackageEnum() throws Exception
     {
         return this.pks.elements();
     }

@@ -39,7 +39,7 @@ abstract public class PkCl extends TreeItem
 
     // Fields ----------------------------------------------------------------
     /** Owns a list of classes. */
-    protected Hashtable<String, PkCl> cls = new Hashtable<String, PkCl>();
+    protected Hashtable cls = new Hashtable();
 
 
     // Class Methods ---------------------------------------------------------
@@ -61,7 +61,7 @@ abstract public class PkCl extends TreeItem
     /** Get a class by obfuscated name. */
     public Cl getObfClass(String name) throws Exception
     {
-        for (Enumeration<PkCl> enm = this.cls.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements();)
         {
             Cl cl = (Cl)enm.nextElement();
             if (name.equals(cl.getOutName()))
@@ -73,23 +73,23 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Get an Enumeration of classes directly beneath this PkCl. */
-    public Enumeration<PkCl> getClassEnum()
+    public Enumeration getClassEnum()
     {
         return this.cls.elements();
     }
 
     /** Get an Enumeration of all classes (outer and inner) in the tree beneath this PkCl. */
-    public Enumeration<Cl> getAllClassEnum()
+    public Enumeration getAllClassEnum()
     {
-        Vector<Cl> allClasses = new Vector<Cl>();
+        Vector allClasses = new Vector();
         this.addAllClasses(allClasses);
         return allClasses.elements();
     }
 
     /** List classes and recursively compose a list of all inner classes. */
-    protected void addAllClasses(Vector<Cl> allClasses)
+    protected void addAllClasses(Vector allClasses)
     {
-        for (Enumeration<PkCl> enm = this.cls.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements();)
         {
             Cl cl = (Cl)enm.nextElement();
             allClasses.addElement(cl);
@@ -130,7 +130,7 @@ abstract public class PkCl extends TreeItem
         // Copy over the inner class data from the placeholder, if any
         if (plClassItem != null)
         {
-            for (Enumeration<PkCl> enm = plClassItem.getClassEnum(); enm.hasMoreElements();)
+            for (Enumeration enm = plClassItem.getClassEnum(); enm.hasMoreElements();)
             {
                 Cl innerCl = (Cl)enm.nextElement();
                 innerCl.setParent(cl);
@@ -162,11 +162,11 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Generate unique obfuscated names for a given namespace. */
-    protected void generateNames(Hashtable<String, PkCl> hash) throws Exception
+    protected void generateNames(Hashtable hash) throws Exception
     {
-        for (Enumeration<PkCl> enm = hash.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = hash.elements(); enm.hasMoreElements();)
         {
-            TreeItem ti = enm.nextElement();
+            TreeItem ti = (TreeItem)enm.nextElement();
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);

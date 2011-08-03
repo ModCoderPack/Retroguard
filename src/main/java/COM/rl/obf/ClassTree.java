@@ -1111,19 +1111,19 @@ public class ClassTree implements NameMapper
     {
         if (ti instanceof Pk)
         {
-            Enumeration<PkCl> packageEnum = ((Pk)ti).getPackageEnum();
+            Enumeration packageEnum = ((Pk)ti).getPackageEnum();
             ta.packageAction((Pk)ti);
             while (packageEnum.hasMoreElements())
             {
-                this.walkTree(ta, packageEnum.nextElement());
+                this.walkTree(ta, (TreeItem)packageEnum.nextElement());
             }
         }
         if (ti instanceof PkCl)
         {
-            Enumeration<PkCl> classEnum = ((PkCl)ti).getClassEnum();
+            Enumeration classEnum = ((PkCl)ti).getClassEnum();
             while (classEnum.hasMoreElements())
             {
-                this.walkTree(ta, classEnum.nextElement());
+                this.walkTree(ta, (TreeItem)classEnum.nextElement());
             }
         }
         if (ti instanceof Cl)

@@ -246,7 +246,7 @@ public class CodeAttrInfo extends AttrInfo
     }
 
     /** Walk the code, updating .class and Class.forName strings. */
-    protected void walkUpdateClassStrings(Hashtable<Integer, ?> cpUpdate) throws Exception
+    protected void walkUpdateClassStrings(Hashtable cpUpdate) throws Exception
     {
         this.walkClassStrings(null, cpUpdate);
     }
@@ -257,7 +257,7 @@ public class CodeAttrInfo extends AttrInfo
      * by Utf8 name, so .option MapClassString is not necessary for them.
      * Still needed for Class.forName("MyClass") though.
      */
-    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Hashtable<Integer, ?> cpUpdate) throws Exception
+    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Hashtable cpUpdate) throws Exception
     {
         int opcodePrev = -1;
         int ldcIndex = -1;
