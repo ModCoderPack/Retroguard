@@ -164,11 +164,11 @@ public class CodeAttrInfo extends AttrInfo
         // Delete the marked attributes
         AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (AttrInfo at : this.attributes)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (at != null)
+            if (this.attributes[i] != null)
             {
-                left[j++] = at;
+                left[j++] = this.attributes[i];
             }
         }
         this.attributes = new AttrInfo[j];
@@ -180,9 +180,9 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (AttrInfo attribute : this.attributes)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            attribute.markUtf8Refs(pool);
+            this.attributes[i].markUtf8Refs(pool);
         }
     }
 

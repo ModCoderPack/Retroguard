@@ -560,17 +560,19 @@ public class ClassFile implements ClassConstants
         try
         {
             // Check for references to Utf8 from outside the constant pool
-            for (FieldInfo fd : this.fields)
+            for (int i = 0; i < this.fields.length; i++)
             {
-                fd.markUtf8Refs(pool);
+                this.fields[i].markUtf8Refs(pool);
             }
-            for (MethodInfo md : this.methods)
+            for (int i = 0; i < this.methods.length; i++)
             {
-                md.markUtf8Refs(pool); // also checks Code/LVT attrs here
+                // also checks Code/LVT attrs here
+                this.methods[i].markUtf8Refs(pool);
             }
-            for (AttrInfo at : this.attributes)
+            for (int i = 0; i < this.attributes.length; i++)
             {
-                at.markUtf8Refs(pool); // checks InnerClasses, SourceFile and all attr names
+                // checks InnerClasses, SourceFile and all attr names
+                this.attributes[i].markUtf8Refs(pool);
             }
 
             // Now check for references from other CP entries
@@ -627,13 +629,13 @@ public class ClassFile implements ClassConstants
         }
 
         // Traverse all attributes, removing all except those on 'keep' list
-        for (FieldInfo fd : this.fields)
+        for (int i = 0; i < this.fields.length; i++)
         {
-            fd.trimAttrsExcept(keepAttrs);
+            this.fields[i].trimAttrsExcept(keepAttrs);
         }
-        for (MethodInfo md : this.methods)
+        for (int i = 0; i < this.methods.length; i++)
         {
-            md.trimAttrsExcept(keepAttrs);
+            this.methods[i].trimAttrsExcept(keepAttrs);
         }
         for (int i = 0; i < this.attributes.length; i++)
         {
@@ -650,11 +652,11 @@ public class ClassFile implements ClassConstants
         // Delete the marked attributes
         AttrInfo[] left = new AttrInfo[this.attributes.length];
         int j = 0;
-        for (AttrInfo at : this.attributes)
+        for (int i = 0; i < this.attributes.length; i++)
         {
-            if (at != null)
+            if (this.attributes[i] != null)
             {
-                left[j++] = at;
+                left[j++] = this.attributes[i];
             }
         }
         this.attributes = new AttrInfo[j];
@@ -853,13 +855,15 @@ public class ClassFile implements ClassConstants
     {
         // Visit all method Code attributes, collecting information on remap
         FlagHashtable cpToFlag = new FlagHashtable();
-        for (MethodInfo md : this.methods)
+        for (int i = 0; i < this.methods.length; i++)
         {
-            for (AttrInfo at : md.attributes)
+            MethodInfo methodInfo = this.methods[i];
+            for (int j = 0; j < methodInfo.attributes.length; j++)
             {
-                if (at instanceof CodeAttrInfo)
+                AttrInfo attrInfo = methodInfo.attributes[j];
+                if (attrInfo instanceof CodeAttrInfo)
                 {
-                    cpToFlag = ((CodeAttrInfo)at).walkFindClassStrings(cpToFlag);
+                    cpToFlag = ((CodeAttrInfo)attrInfo).walkFindClassStrings(cpToFlag);
                 }
             }
         }
@@ -916,13 +920,15 @@ public class ClassFile implements ClassConstants
             }
         }
         // Visit all method Code attributes, remapping .class/Class.forName
-        for (MethodInfo md : this.methods)
+        for (int i = 0; i < this.methods.length; i++)
         {
-            for (AttrInfo at : md.attributes)
+            MethodInfo methodInfo = this.methods[i];
+            for (int j = 0; j < methodInfo.attributes.length; j++)
             {
-                if (at instanceof CodeAttrInfo)
+                AttrInfo attrInfo = methodInfo.attributes[j];
+                if (attrInfo instanceof CodeAttrInfo)
                 {
-                    ((CodeAttrInfo)at).walkUpdateClassStrings(cpUpdate);
+                    ((CodeAttrInfo)attrInfo).walkUpdateClassStrings(cpUpdate);
                 }
             }
         }

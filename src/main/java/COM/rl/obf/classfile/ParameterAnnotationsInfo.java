@@ -60,9 +60,9 @@ public class ParameterAnnotationsInfo
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        for (AnnotationInfo a : this.annotationTable)
+        for (int i = 0; i < this.annotationTable.length; i++)
         {
-            a.markUtf8Refs(pool);
+            this.annotationTable[i].markUtf8Refs(pool);
         }
     }
 

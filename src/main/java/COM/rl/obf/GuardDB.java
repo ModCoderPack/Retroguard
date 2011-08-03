@@ -651,11 +651,11 @@ public class GuardDB implements ClassConstants
             {
                 // Digest-Algorithms header
                 StringBuffer sb = new StringBuffer();
-                for (MessageDigest digest : digests)
+                for (int i = 0; i < digests.length; i++)
                 {
-                    if (digest != null)
+                    if (digests[i] != null)
                     {
-                        sb.append(digest.getAlgorithm());
+                        sb.append(digests[i].getAlgorithm());
                         sb.append(" ");
                     }
                 }
@@ -665,11 +665,11 @@ public class GuardDB implements ClassConstants
                 }
 
                 // *-Digest headers
-                for (MessageDigest digest : digests)
+                for (int i = 0; i < digests.length; i++)
                 {
-                    if (digest != null)
+                    if (digests[i] != null)
                     {
-                        newSection.add(digest.getAlgorithm() + "-Digest", Tools.toBase64(digest.digest()));
+                        newSection.add(digests[i].getAlgorithm() + "-Digest", Tools.toBase64(digests[i].digest()));
                     }
                 }
             }

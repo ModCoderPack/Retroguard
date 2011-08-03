@@ -56,9 +56,9 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (AnnotationInfo element : this.annotationTable)
+        for (int i = 0; i < this.annotationTable.length; i++)
         {
-            element.markUtf8Refs(pool);
+            this.annotationTable[i].markUtf8Refs(pool);
         }
     }
 

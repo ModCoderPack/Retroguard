@@ -63,9 +63,9 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (InnerClassesInfo cl : this.classes)
+        for (int i = 0; i < this.classes.length; i++)
         {
-            cl.markUtf8Refs(pool);
+            this.classes[i].markUtf8Refs(pool);
         }
     }
 

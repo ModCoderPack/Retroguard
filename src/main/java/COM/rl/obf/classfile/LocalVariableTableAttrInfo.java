@@ -63,9 +63,9 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (LocalVariableInfo lv : this.localVariableTable)
+        for (int i = 0; i < this.localVariableTable.length; i++)
         {
-            lv.markUtf8Refs(pool);
+            this.localVariableTable[i].markUtf8Refs(pool);
         }
     }
 
