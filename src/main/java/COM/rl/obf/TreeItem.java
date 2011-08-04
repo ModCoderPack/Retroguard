@@ -123,14 +123,14 @@ public class TreeItem
             string = string.substring(0, string.length() - tail.length());
         }
         // Split the pattern at the wildcard positions
-        Vector section = new Vector();
+        List section = new ArrayList();
         pos = pattern.indexOf('*');
         int rpos = -1;
         while ((rpos = pattern.indexOf('*', pos + 1)) != -1)
         {
             if (rpos != pos + 1)
             {
-                section.addElement(pattern.substring(pos + 1, rpos));
+                section.add(pattern.substring(pos + 1, rpos));
             }
             pos = rpos;
         }

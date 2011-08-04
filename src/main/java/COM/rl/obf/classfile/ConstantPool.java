@@ -37,7 +37,7 @@ public class ConstantPool
 
     // Fields ----------------------------------------------------------------
     private ClassFile myClassFile;
-    private Vector pool;
+    private List pool;
 
 
     // Class Methods ---------------------------------------------------------
@@ -49,11 +49,10 @@ public class ConstantPool
     {
         this.myClassFile = classFile;
         int length = cpInfo.length;
-        this.pool = new Vector(length);
-        this.pool.setSize(length);
+        this.pool = new ArrayList(length);
         for (int i = 0; i < length; i++)
         {
-            this.pool.setElementAt(cpInfo[i], i);
+            this.pool.add(cpInfo[i]);
         }
     }
 
@@ -74,7 +73,7 @@ public class ConstantPool
     {
         if (i < this.pool.size())
         {
-            return (CpInfo)this.pool.elementAt(i);
+            return (CpInfo)this.pool.get(i);
         }
         throw new Exception("Constant Pool index out of range.");
     }
@@ -115,7 +114,7 @@ public class ConstantPool
     /** Increment the reference count for the specified element. */
     public void incRefCount(int i) throws Exception
     {
-        CpInfo cpInfo = (CpInfo)this.pool.elementAt(i);
+        CpInfo cpInfo = (CpInfo)this.pool.get(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
@@ -137,7 +136,7 @@ public class ConstantPool
     /** Decrement the reference count for the specified element, blanking if Utf and refs are zero. */
     public void decRefCount(int i) throws Exception
     {
-        CpInfo cpInfo = (CpInfo)this.pool.elementAt(i);
+        CpInfo cpInfo = (CpInfo)this.pool.get(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
@@ -154,8 +153,7 @@ public class ConstantPool
     {
         // Try to replace an old, blanked Utf8 entry
         int index = this.pool.size();
-        this.pool.setSize(index + 1);
-        this.pool.setElementAt(entry, index);
+        this.pool.add(entry);
         return index;
     }
 
@@ -165,7 +163,7 @@ public class ConstantPool
         // Search pool for the string. If found, just increment the reference count and return the index
         for (int i = 0; i < this.pool.size(); i++)
         {
-            Object o = this.pool.elementAt(i);
+            Object o = this.pool.get(i);
             if (o instanceof Utf8CpInfo)
             {
                 Utf8CpInfo entry = (Utf8CpInfo)o;
@@ -180,7 +178,7 @@ public class ConstantPool
         // No luck, so try to overwrite an old, blanked entry
         for (int i = 0; i < this.pool.size(); i++)
         {
-            Object o = this.pool.elementAt(i);
+            Object o = this.pool.get(i);
             if (o instanceof Utf8CpInfo)
             {
                 Utf8CpInfo entry = (Utf8CpInfo)o;

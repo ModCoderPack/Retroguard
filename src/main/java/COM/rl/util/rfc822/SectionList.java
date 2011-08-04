@@ -33,7 +33,7 @@ public class SectionList
 
 
     // Fields ----------------------------------------------------------------
-    private Vector sections;
+    private List sections;
 
     // Class Methods ---------------------------------------------------------
 
@@ -42,7 +42,7 @@ public class SectionList
     /** Construct with no initial sections. */
     public SectionList()
     {
-        this.sections = new Vector();
+        this.sections = new ArrayList();
     }
 
     /** Parse the stream, appending the sections found there to our list. */
@@ -114,7 +114,7 @@ public class SectionList
     /** Add a Section to the list. */
     public void add(Section section)
     {
-        this.sections.addElement(section);
+        this.sections.add(section);
     }
 
     /** Return an Iterator of sections. */

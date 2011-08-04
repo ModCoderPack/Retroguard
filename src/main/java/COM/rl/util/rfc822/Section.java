@@ -33,7 +33,7 @@ public class Section
 
 
     // Fields ----------------------------------------------------------------
-    private Vector headers;
+    private List headers;
 
 
     // Class Methods ---------------------------------------------------------
@@ -43,13 +43,13 @@ public class Section
     /** Blank section. */
     public Section()
     {
-        this.headers = new Vector();
+        this.headers = new ArrayList();
     }
 
     /** Append a header to this section. */
     public void add(Header header)
     {
-        this.headers.addElement(header);
+        this.headers.add(header);
     }
 
     /** Append a header to this section. */

@@ -81,18 +81,18 @@ abstract public class PkCl extends TreeItem
     /** Get an Iterator of all classes (outer and inner) in the tree beneath this PkCl. */
     public Iterator getAllClassIter()
     {
-        Vector allClasses = new Vector();
+        List allClasses = new ArrayList();
         this.addAllClasses(allClasses);
         return allClasses.iterator();
     }
 
     /** List classes and recursively compose a list of all inner classes. */
-    protected void addAllClasses(Vector allClasses)
+    protected void addAllClasses(List allClasses)
     {
         for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
         {
             Cl cl = (Cl)iter.next();
-            allClasses.addElement(cl);
+            allClasses.add(cl);
             cl.addAllClasses(allClasses);
         }
     }

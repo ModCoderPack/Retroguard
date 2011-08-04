@@ -33,7 +33,7 @@ public class PatternList
 
 
     // Fields ----------------------------------------------------------------
-    private Vector subs;
+    private List subs = new ArrayList();
     private int sc = -1;
 
 
@@ -48,7 +48,6 @@ public class PatternList
     /** Ctor. */
     private PatternList(String pattern) throws Exception
     {
-        this.subs = new Vector();
         int scFirst = pattern.indexOf("**");
         int scLast = pattern.lastIndexOf("**");
         int pos = -1;
@@ -69,7 +68,7 @@ public class PatternList
                     pos = pattern.length();
                 }
             }
-            this.subs.addElement(pattern.substring(oldpos + 1, pos));
+            this.subs.add(pattern.substring(oldpos + 1, pos));
         }
     }
 
@@ -94,7 +93,7 @@ public class PatternList
     /** Return the i'th segment. */
     public String getSub(int i)
     {
-        return (String)this.subs.elementAt(i);
+        return (String)this.subs.get(i);
     }
 
     /** Return the i'th through j'th segments, joined by package separators. */

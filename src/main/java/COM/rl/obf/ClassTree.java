@@ -49,7 +49,7 @@ public class ClassTree implements NameMapper
 
     // Fields ----------------------------------------------------------------
     /** List of attributes to retain */
-    private Vector retainAttrs = new Vector();
+    private List retainAttrs = new ArrayList();
 
     /** Root package in database (Java default package) */
     private Pk root = null;
@@ -58,7 +58,7 @@ public class ClassTree implements NameMapper
     /** Return a fully qualified name broken into package/class segments. */
     public static Iterator getNameIter(String name) throws Exception
     {
-        Vector vec = new Vector();
+        List list = new ArrayList();
         String nameOrig = name;
         while ((name != null) && !name.equals(""))
         {
@@ -92,9 +92,9 @@ public class ClassTree implements NameMapper
                     throw new IOException("Invalid fully qualified name (a): " + nameOrig);
                 }
             }
-            vec.addElement(simpleName);
+            list.add(simpleName);
         }
-        return vec.iterator();
+        return list.iterator();
     }
 
 
@@ -239,7 +239,7 @@ public class ClassTree implements NameMapper
     /** Write any non-suppressed warnings to the log. */
     public void logWarnings(PrintWriter log) throws Exception
     {
-        final Vector hasWarnings = new Vector();
+        final List hasWarnings = new ArrayList();
         this.walkTree(new TreeAction()
         {
             @Override
@@ -247,7 +247,7 @@ public class ClassTree implements NameMapper
             {
                 if (cl.hasWarnings())
                 {
-                    hasWarnings.addElement(Boolean.valueOf(true));
+                    hasWarnings.add(Boolean.valueOf(true));
                 }
             }
         });
@@ -272,7 +272,7 @@ public class ClassTree implements NameMapper
     /** Mark an attribute type for retention. */
     public void retainAttribute(String name) throws Exception
     {
-        this.retainAttrs.addElement(name);
+        this.retainAttrs.add(name);
     }
 
     /** Mark a class/interface type (and possibly methods and fields defined in class) for retention. */
@@ -522,7 +522,7 @@ public class ClassTree implements NameMapper
         String[] attrs = new String[this.retainAttrs.size()];
         for (int i = 0; i < attrs.length; i++)
         {
-            attrs[i] = (String)this.retainAttrs.elementAt(i);
+            attrs[i] = (String)this.retainAttrs.get(i);
         }
         return attrs;
     }
@@ -533,7 +533,7 @@ public class ClassTree implements NameMapper
      */
     public Iterator getClIter(String fullName) throws Exception
     {
-        final Vector vec = new Vector();
+        final List list = new ArrayList();
         // Wildcard? then return list of all matching classes (including inner)
         if (fullName.indexOf('*') != -1)
         {
@@ -549,7 +549,7 @@ public class ClassTree implements NameMapper
                     {
                         if (cl.isOldStyleMatch(fName))
                         {
-                            vec.addElement(cl);
+                            list.add(cl);
                         }
                     }
                 });
@@ -565,7 +565,7 @@ public class ClassTree implements NameMapper
                     {
                         if (cl.isWildcardMatch(fName))
                         {
-                            vec.addElement(cl);
+                            list.add(cl);
                         }
                     }
                 });
@@ -577,16 +577,16 @@ public class ClassTree implements NameMapper
             Cl cl = this.getCl(fullName);
             if (cl != null)
             {
-                vec.addElement(cl);
+                list.add(cl);
             }
         }
-        return vec.iterator();
+        return list.iterator();
     }
 
     /** Get methods in tree from the fully qualified, and possibly wildcarded, name. */
     public Iterator getMdIter(String fullName, String descriptor) throws Exception
     {
-        final Vector vec = new Vector();
+        final List list = new ArrayList();
         final String fDesc = descriptor;
         // Wildcard? then return list of all matching methods
         if ((fullName.indexOf('*') != -1) || (descriptor.indexOf('*') != -1))
@@ -603,7 +603,7 @@ public class ClassTree implements NameMapper
                     {
                         if (md.isOldStyleMatch(fName, fDesc))
                         {
-                            vec.addElement(md);
+                            list.add(md);
                         }
                     }
                 });
@@ -619,7 +619,7 @@ public class ClassTree implements NameMapper
                     {
                         if (md.isWildcardMatch(fName, fDesc))
                         {
-                            vec.addElement(md);
+                            list.add(md);
                         }
                     }
                 });
@@ -630,16 +630,16 @@ public class ClassTree implements NameMapper
             Md md = this.getMd(fullName, descriptor);
             if (md != null)
             {
-                vec.addElement(md);
+                list.add(md);
             }
         }
-        return vec.iterator();
+        return list.iterator();
     }
 
     /** Get fields in tree from the fully qualified, and possibly wildcarded, name. */
     public Iterator getFdIter(String fullName, String descriptor) throws Exception
     {
-        final Vector vec = new Vector();
+        final List list = new ArrayList();
         // Wildcard? then return list of all matching methods
         if (fullName.indexOf('*') != -1)
         {
@@ -655,7 +655,7 @@ public class ClassTree implements NameMapper
                     {
                         if (fd.isOldStyleMatch(fName))
                         {
-                            vec.addElement(fd);
+                            list.add(fd);
                         }
                     }
                 });
@@ -672,7 +672,7 @@ public class ClassTree implements NameMapper
                     {
                         if (fd.isWildcardMatch(fName, fDesc))
                         {
-                            vec.addElement(fd);
+                            list.add(fd);
                         }
                     }
                 });
@@ -683,10 +683,10 @@ public class ClassTree implements NameMapper
             Fd fd = this.getFd(fullName);
             if (fd != null)
             {
-                vec.addElement(fd);
+                list.add(fd);
             }
         }
-        return vec.iterator();
+        return list.iterator();
     }
 
     /** Get class in tree from the fully qualified name, returning null if name not found. */

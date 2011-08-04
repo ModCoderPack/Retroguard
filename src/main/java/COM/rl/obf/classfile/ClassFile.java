@@ -133,7 +133,7 @@ public class ClassFile implements ClassConstants
         else
         {
             // Method descriptor
-            Vector namesVec = new Vector();
+            List namesList = new ArrayList();
             descriptor = descriptor.substring(1);
             String type = "";
             while (descriptor.length() > 0)
@@ -154,7 +154,7 @@ public class ClassFile implements ClassConstants
                     case 'S':
                     case 'Z':
                     case 'V':
-                        namesVec.addElement(type + descriptor.substring(0, 1));
+                        namesList.add(type + descriptor.substring(0, 1));
                         descriptor = descriptor.substring(1);
                         type = "";
                         break;
@@ -166,7 +166,7 @@ public class ClassFile implements ClassConstants
                     case 'L':
                     {
                         int pos = descriptor.indexOf(';') + 1;
-                        namesVec.addElement(type + descriptor.substring(0, pos));
+                        namesList.add(type + descriptor.substring(0, pos));
                         descriptor = descriptor.substring(pos);
                         type = "";
                         break;
@@ -176,10 +176,10 @@ public class ClassFile implements ClassConstants
                         throw new Exception("Illegal field or method descriptor: " + descriptor);
                 }
             }
-            names = new String[namesVec.size()];
+            names = new String[namesList.size()];
             for (int i = 0; i < names.length; i++)
             {
-                names[i] = (String)namesVec.elementAt(i);
+                names[i] = (String)namesList.get(i);
             }
         }
 
@@ -502,19 +502,19 @@ public class ClassFile implements ClassConstants
     /** List methods which can break obfuscated code, and log to a String[]. */
     public String[] getDangerousMethods() throws Exception
     {
-        Vector list = new Vector();
+        List list = new ArrayList();
         list = this.listDangerMethods(list);
         // Copy any warnings to a String[]
         String[] warnings = new String[list.size()];
         for (int i = 0; i < warnings.length; i++)
         {
-            warnings[i] = (String)list.elementAt(i);
+            warnings[i] = (String)list.get(i);
         }
         return warnings;
     }
 
-    /** List methods which can break obfuscated code, and log to a Vector. */
-    public Vector listDangerMethods(Vector list) throws Exception
+    /** List methods which can break obfuscated code, and log to a List. */
+    public List listDangerMethods(List list) throws Exception
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
@@ -536,18 +536,18 @@ public class ClassFile implements ClassConstants
                 {
                     if (ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
                     {
-                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_CLASS_FORNAME_MID
+                        list.add(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_CLASS_FORNAME_MID
                             + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
                     }
                     else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY))
                     {
-                        list.addElement(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_DANGER_CLASS_MID
+                        list.add(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_DANGER_CLASS_MID
                             + name + descriptor);
                     }
                 }
                 else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY))
                 {
-                    list.addElement(ClassFile.LOG_DANGER_CLASSLOADER_PRE + this.getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID
+                    list.add(ClassFile.LOG_DANGER_CLASSLOADER_PRE + this.getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID
                         + name + descriptor);
                 }
             }
