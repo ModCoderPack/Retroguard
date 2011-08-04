@@ -934,7 +934,7 @@ public class NameProvider
                     tmpMd = null;
                 }
 
-                Enumeration<Cl> children = cls.getDownClasses();
+                Enumeration children = cls.getDownClasses();
 //                NameProvider.log("Children: " + children.hasMoreElements());
 
                 boolean goingDown = false;
@@ -957,7 +957,7 @@ public class NameProvider
                     }
 
 
-                    Enumeration<Cl> en;
+                    Enumeration en;
                     try
                     {
                         en = cls.getSuperInterfaces();
@@ -965,7 +965,7 @@ public class NameProvider
                     }
                     catch (Exception e1)
                     {
-                        en = new Enumeration<Cl>()
+                        en = new Enumeration()
                         {
 
                             @Override
@@ -975,7 +975,7 @@ public class NameProvider
                             }
 
                             @Override
-                            public Cl nextElement()
+                            public Object nextElement()
                             {
                                 return null;
                             }
@@ -985,7 +985,7 @@ public class NameProvider
                     boolean found = false;
                     while (en.hasMoreElements())
                     {
-                        Cl iface = en.nextElement();
+                        Cl iface = (Cl)en.nextElement();
 
                         tmpMd.setParent(iface);
 //                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
@@ -1033,7 +1033,7 @@ public class NameProvider
                     {
                         if (children.hasMoreElements())
                         {
-                            cls = children.nextElement();
+                            cls = (Cl)children.nextElement();
 //                            NameProvider.log("Child: " + cls.getFullInName());
                         }
                         else

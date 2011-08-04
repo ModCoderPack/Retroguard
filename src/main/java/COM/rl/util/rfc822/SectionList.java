@@ -33,7 +33,7 @@ public class SectionList
 
 
     // Fields ----------------------------------------------------------------
-    private Vector<Section> sections;
+    private Vector sections;
 
     // Class Methods ---------------------------------------------------------
 
@@ -42,7 +42,7 @@ public class SectionList
     /** Construct with no initial sections. */
     public SectionList()
     {
-        this.sections = new Vector<Section>();
+        this.sections = new Vector();
     }
 
     /** Parse the stream, appending the sections found there to our list. */
@@ -118,7 +118,7 @@ public class SectionList
     }
 
     /** Return an Enumeration of sections. */
-    public Enumeration<Section> elements()
+    public Enumeration elements()
     {
         return this.sections.elements();
     }
@@ -132,9 +132,9 @@ public class SectionList
     /** Find the first section in the list containing the matching header. */
     public Section find(Header header)
     {
-        for (Enumeration<Section> enm = this.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
         {
-            Section section = enm.nextElement();
+            Section section = (Section)enm.nextElement();
             if (section.hasHeader(header))
             {
                 return section;
@@ -146,9 +146,9 @@ public class SectionList
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration<Section> enm = this.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
         {
-            enm.nextElement().writeString(writer);
+            ((Section)enm.nextElement()).writeString(writer);
         }
     }
 
@@ -157,9 +157,9 @@ public class SectionList
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration<Section> enm = this.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
         {
-            sb.append(enm.nextElement().toString());
+            sb.append(((Section)enm.nextElement()).toString());
         }
         return sb.toString();
     }

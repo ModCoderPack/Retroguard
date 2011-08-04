@@ -108,11 +108,11 @@ public class GuardDB implements ClassConstants
         // Go through the input Jar, adding each class file to the database
         int incompatibleVersion = 0;
         this.classTree = new ClassTree();
-        Enumeration<? extends ZipEntry> entries = this.inJar.entries();
+        Enumeration entries = this.inJar.entries();
         while (entries.hasMoreElements())
         {
             // Get the next entry from the input Jar
-            ZipEntry inEntry = entries.nextElement();
+            ZipEntry inEntry = (ZipEntry)entries.nextElement();
             String name = inEntry.getName();
             if ((name.length() > GuardDB.CLASS_EXT.length())
                 && name.substring(name.length() - GuardDB.CLASS_EXT.length(), name.length()).equals(GuardDB.CLASS_EXT))
@@ -412,7 +412,7 @@ public class GuardDB implements ClassConstants
         // Go through the input Jar, removing attributes and remapping the Constant Pool for each class file. Other files are
         // copied through unchanged, except for manifest and any signature files - these are deleted and the manifest is
         // regenerated.
-        Enumeration<? extends ZipEntry> entries = this.inJar.entries();
+        Enumeration entries = this.inJar.entries();
         ZipOutputStream outJar = null;
         try
         {
@@ -425,7 +425,7 @@ public class GuardDB implements ClassConstants
             while (entries.hasMoreElements())
             {
                 // Get the next entry from the input Jar
-                ZipEntry inEntry = entries.nextElement();
+                ZipEntry inEntry = (ZipEntry)entries.nextElement();
 
                 // Ignore directories
                 if (inEntry.isDirectory())
@@ -579,11 +579,11 @@ public class GuardDB implements ClassConstants
     {
         // The manifest file is the first in the jar and is called (case insensitively) 'MANIFEST.MF'
         this.oldManifest = new SectionList();
-        Enumeration<? extends ZipEntry> entries = this.inJar.entries();
+        Enumeration entries = this.inJar.entries();
         while (entries.hasMoreElements())
         {
             // Get the first entry only from the input Jar
-            ZipEntry inEntry = entries.nextElement();
+            ZipEntry inEntry = (ZipEntry)entries.nextElement();
             String name = inEntry.getName();
             if (GuardDB.STREAM_NAME_MANIFEST.equals(name.toUpperCase()))
             {
@@ -603,9 +603,9 @@ public class GuardDB implements ClassConstants
         this.newManifest.add(version);
 
         // copy through all the none-filename sections, apart from the version
-        for (Enumeration<Section> enm = this.oldManifest.elements(); enm.hasMoreElements();)
+        for (Enumeration enm = this.oldManifest.elements(); enm.hasMoreElements();)
         {
-            Section section = enm.nextElement();
+            Section section = (Section)enm.nextElement();
             if ((section != null) && (section != version))
             {
                 Header name = section.findTag(GuardDB.MANIFEST_NAME_TAG);
@@ -637,9 +637,9 @@ public class GuardDB implements ClassConstants
             newSection.add(GuardDB.MANIFEST_NAME_TAG, outName);
 
             // Copy over non-"Name", non-digest entries
-            for (Enumeration<Header> enm = oldSection.elements(); enm.hasMoreElements();)
+            for (Enumeration enm = oldSection.elements(); enm.hasMoreElements();)
             {
-                Header header = enm.nextElement();
+                Header header = (Header)enm.nextElement();
                 if (!header.getTag().equals(GuardDB.MANIFEST_NAME_TAG) && (header.getTag().indexOf("Digest") == -1))
                 {
                     newSection.add(header);
