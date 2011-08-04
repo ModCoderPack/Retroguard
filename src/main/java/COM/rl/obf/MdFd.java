@@ -22,6 +22,7 @@ package COM.rl.obf;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
 import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 

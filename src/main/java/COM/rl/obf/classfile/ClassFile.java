@@ -21,6 +21,7 @@ package COM.rl.obf.classfile;
 
 import java.io.*;
 import java.util.*;
+
 import COM.rl.util.*;
 
 /**
@@ -375,9 +376,9 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
         // not interfaces.
-        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements();)
+        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
         {
-            Object o = enm.nextElement();
+            Object o = it.next();
             if (o instanceof MethodrefCpInfo)
             {
                 // Get the method class name, simple name and descriptor
@@ -517,9 +518,9 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
-        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements();)
+        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
         {
-            Object o = enm.nextElement();
+            Object o = it.next();
             if (o instanceof MethodrefCpInfo)
             {
                 // Get the method class name, simple name and descriptor
@@ -576,9 +577,9 @@ public class ClassFile implements ClassConstants
             }
 
             // Now check for references from other CP entries
-            for (Enumeration enm = pool.elements(); enm.hasMoreElements();)
+            for (Iterator it = pool.iterator(); it.hasNext();)
             {
-                Object o = enm.nextElement();
+                Object o = it.next();
                 if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
                 {
                     ((CpInfo)o).markUtf8Refs(pool);
@@ -597,9 +598,9 @@ public class ClassFile implements ClassConstants
         try
         {
             // Now check the method and field CP entries
-            for (Enumeration enm = pool.elements(); enm.hasMoreElements();)
+            for (Iterator it = pool.iterator(); it.hasNext();)
             {
-                Object o = enm.nextElement();
+                Object o = it.next();
                 if (o instanceof RefCpInfo)
                 {
                     ((CpInfo)o).markNTRefs(pool);
@@ -869,9 +870,9 @@ public class ClassFile implements ClassConstants
         }
         // Analyse String mapping flags and generate updated Strings
         Hashtable cpUpdate = new Hashtable();
-        for (Enumeration enm = cpToFlag.keys(); enm.hasMoreElements();)
+        for (Iterator iter = cpToFlag.keySet().iterator(); iter.hasNext();)
         {
-            StringCpInfo stringCpInfo = (StringCpInfo)enm.nextElement();
+            StringCpInfo stringCpInfo = (StringCpInfo)iter.next();
             StringCpInfoFlags flags = (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
             String name = ClassFile.backTranslate(((Utf8CpInfo)this.getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
@@ -985,9 +986,9 @@ public class ClassFile implements ClassConstants
         dout.writeShort(this.u2minorVersion);
         dout.writeShort(this.u2majorVersion);
         dout.writeShort(this.constantPool.length() + (this.cpIdString != null ? 1 : 0));
-        for (Enumeration enm = this.constantPool.elements(); enm.hasMoreElements();)
+        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
         {
-            CpInfo cpInfo = (CpInfo)enm.nextElement();
+            CpInfo cpInfo = (CpInfo)it.next();
             if (cpInfo != null)
             {
                 cpInfo.write(dout);

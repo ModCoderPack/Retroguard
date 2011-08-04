@@ -21,11 +21,12 @@ package COM.rl.obf;
 
 import java.io.*;
 import java.util.*;
+
 import COM.rl.util.*;
 import COM.rl.obf.classfile.*;
 
 /**
- * Parser for RGS script files which provides an enumeration of option entries.
+ * Parser for RGS script files which provides an iterator of option entries.
  * 
  * @author Mark Welsh
  */
@@ -284,7 +285,7 @@ public class RgsEnum
     }
 
     /** Are there more script entries? */
-    public boolean hasMoreEntries() throws Exception
+    public boolean hasNext() throws Exception
     {
         if (this.nextException != null)
         {
@@ -294,7 +295,7 @@ public class RgsEnum
     }
 
     /** Return next script entry. */
-    public RgsEntry nextEntry() throws Exception
+    public RgsEntry next() throws Exception
     {
         RgsEntry thisOne = this.next;
         Exception thisException = this.nextException;
@@ -304,6 +305,12 @@ public class RgsEnum
             throw thisException;
         }
         return thisOne;
+    }
+    
+    /** Not implemented */
+    public void remove()
+    {
+        throw new UnsupportedOperationException();
     }
 
     /** Read the next entry, returning true if one is available. */

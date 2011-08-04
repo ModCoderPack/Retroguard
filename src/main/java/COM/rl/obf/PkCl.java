@@ -61,9 +61,9 @@ abstract public class PkCl extends TreeItem
     /** Get a class by obfuscated name. */
     public Cl getObfClass(String name) throws Exception
     {
-        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
         {
-            Cl cl = (Cl)enm.nextElement();
+            Cl cl = (Cl)iter.next();
             if (name.equals(cl.getOutName()))
             {
                 return cl;
@@ -72,26 +72,26 @@ abstract public class PkCl extends TreeItem
         return null;
     }
 
-    /** Get an Enumeration of classes directly beneath this PkCl. */
-    public Enumeration getClassEnum()
+    /** Get an Iterator of classes directly beneath this PkCl. */
+    public Iterator getClassIter()
     {
-        return this.cls.elements();
+        return this.cls.values().iterator();
     }
 
-    /** Get an Enumeration of all classes (outer and inner) in the tree beneath this PkCl. */
-    public Enumeration getAllClassEnum()
+    /** Get an Iterator of all classes (outer and inner) in the tree beneath this PkCl. */
+    public Iterator getAllClassIter()
     {
         Vector allClasses = new Vector();
         this.addAllClasses(allClasses);
-        return allClasses.elements();
+        return allClasses.iterator();
     }
 
     /** List classes and recursively compose a list of all inner classes. */
     protected void addAllClasses(Vector allClasses)
     {
-        for (Enumeration enm = this.cls.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
         {
-            Cl cl = (Cl)enm.nextElement();
+            Cl cl = (Cl)iter.next();
             allClasses.addElement(cl);
             cl.addAllClasses(allClasses);
         }
@@ -130,9 +130,9 @@ abstract public class PkCl extends TreeItem
         // Copy over the inner class data from the placeholder, if any
         if (plClassItem != null)
         {
-            for (Enumeration enm = plClassItem.getClassEnum(); enm.hasMoreElements();)
+            for (Iterator iter = plClassItem.getClassIter(); iter.hasNext();)
             {
-                Cl innerCl = (Cl)enm.nextElement();
+                Cl innerCl = (Cl)iter.next();
                 innerCl.setParent(cl);
                 cl.addClass(innerCl);
             }
@@ -164,9 +164,9 @@ abstract public class PkCl extends TreeItem
     /** Generate unique obfuscated names for a given namespace. */
     protected void generateNames(Hashtable hash) throws Exception
     {
-        for (Enumeration enm = hash.elements(); enm.hasMoreElements();)
+        for (Iterator iter = hash.values().iterator(); iter.hasNext();)
         {
-            TreeItem ti = (TreeItem)enm.nextElement();
+            TreeItem ti = (TreeItem)iter.next();
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);

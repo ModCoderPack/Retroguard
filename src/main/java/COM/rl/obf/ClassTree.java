@@ -56,7 +56,7 @@ public class ClassTree implements NameMapper
 
     // Class methods ---------------------------------------------------------
     /** Return a fully qualified name broken into package/class segments. */
-    public static Enumeration getNameEnum(String name) throws Exception
+    public static Iterator getNameIter(String name) throws Exception
     {
         Vector vec = new Vector();
         String nameOrig = name;
@@ -94,7 +94,7 @@ public class ClassTree implements NameMapper
             }
             vec.addElement(simpleName);
         }
-        return vec.elements();
+        return vec.iterator();
     }
 
 
@@ -118,9 +118,9 @@ public class ClassTree implements NameMapper
         {
             TreeItem ti = this.root;
             StringBuffer sb = new StringBuffer();
-            for (Enumeration nameEnum = ClassTree.getNameEnum(inName); nameEnum.hasMoreElements();)
+            for (Iterator nameIter = ClassTree.getNameIter(inName); nameIter.hasNext();)
             {
-                SimpleName simpleName = (SimpleName)nameEnum.nextElement();
+                SimpleName simpleName = (SimpleName)nameIter.next();
                 String name = simpleName.getName();
                 if (simpleName.isAsPackage())
                 {
@@ -173,9 +173,9 @@ public class ClassTree implements NameMapper
     {
         // Add the fully qualified class name
         TreeItem ti = this.root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(cf.getName()); nameEnum.hasMoreElements();)
+        for (Iterator nameIter = ClassTree.getNameIter(cf.getName()); nameIter.hasNext();)
         {
-            SimpleName simpleName = (SimpleName)nameEnum.nextElement();
+            SimpleName simpleName = (SimpleName)nameIter.next();
             String name = simpleName.getName();
             if (simpleName.isAsPackage())
             {
@@ -184,7 +184,7 @@ public class ClassTree implements NameMapper
             else if (simpleName.isAsClass())
             {
                 // If this is an inner class, just add placeholder classes up the tree
-                if (nameEnum.hasMoreElements())
+                if (nameIter.hasNext())
                 {
                     ti = ((PkCl)ti).addPlaceholderClass(name);
                 }
@@ -229,9 +229,9 @@ public class ClassTree implements NameMapper
     public void noWarnClass(String name) throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements();)
+        for (Iterator clIter = this.getClIter(name); clIter.hasNext();)
         {
-            Cl cl = (Cl)clEnum.nextElement();
+            Cl cl = (Cl)clIter.next();
             cl.setNoWarn();
         }
     }
@@ -281,9 +281,9 @@ public class ClassTree implements NameMapper
         throws Exception
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Enumeration clEnum = this.getClEnum(name); clEnum.hasMoreElements();)
+        for (Iterator clIter = this.getClIter(name); clIter.hasNext();)
         {
-            Cl cl = (Cl)clEnum.nextElement();
+            Cl cl = (Cl)clIter.next();
             if (((extendsName == null) || cl.hasAsSuperOrInterface(extendsName))
                 && cl.modifiersMatchMask(accessMask, accessSetting))
             {
@@ -293,9 +293,9 @@ public class ClassTree implements NameMapper
                     // Retain methods if requested
                     if (!retainFieldsOnly)
                     {
-                        for (Enumeration enm = cl.getMethodEnum(); enm.hasMoreElements();)
+                        for (Iterator iter = cl.getMethodIter(); iter.hasNext();)
                         {
-                            Md md = (Md)enm.nextElement();
+                            Md md = (Md)iter.next();
                             if ((retainToPublic && Modifier.isPublic(md.getModifiers()))
                                 || (retainToProtected && !Modifier.isPrivate(md.getModifiers()))
                                 || (retainPubProtOnly && (Modifier.isPublic(md.getModifiers())
@@ -318,9 +318,9 @@ public class ClassTree implements NameMapper
                     // Retain fields if requested
                     if (!retainMethodsOnly)
                     {
-                        for (Enumeration enm = cl.getFieldEnum(); enm.hasMoreElements();)
+                        for (Iterator iter = cl.getFieldIter(); iter.hasNext();)
                         {
-                            Fd fd = (Fd)enm.nextElement();
+                            Fd fd = (Fd)iter.next();
                             if ((retainToPublic && Modifier.isPublic(fd.getModifiers()))
                                 || (retainToProtected && !Modifier.isPrivate(fd.getModifiers()))
                                 || (retainPubProtOnly && (Modifier.isPublic(fd.getModifiers())
@@ -348,9 +348,9 @@ public class ClassTree implements NameMapper
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
         int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = this.getMdEnum(name, descriptor); enm.hasMoreElements();)
+        for (Iterator iter = this.getMdIter(name, descriptor); iter.hasNext();)
         {
-            Md md = (Md)enm.nextElement();
+            Md md = (Md)iter.next();
             Cl thisCl = (Cl)md.getParent();
             if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName))
                 && md.modifiersMatchMask(accessMask, accessSetting))
@@ -377,9 +377,9 @@ public class ClassTree implements NameMapper
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
         int accessMask, int accessSetting) throws Exception
     {
-        for (Enumeration enm = this.getFdEnum(name, descriptor); enm.hasMoreElements();)
+        for (Iterator iter = this.getFdIter(name, descriptor); iter.hasNext();)
         {
-            Fd fd = (Fd)enm.nextElement();
+            Fd fd = (Fd)iter.next();
             Cl thisCl = (Cl)fd.getParent();
             if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName))
                 && fd.modifiersMatchMask(accessMask, accessSetting))
@@ -531,7 +531,7 @@ public class ClassTree implements NameMapper
      * Get classes in tree from the fully qualified name
      * (can be wildcarded).
      */
-    public Enumeration getClEnum(String fullName) throws Exception
+    public Iterator getClIter(String fullName) throws Exception
     {
         final Vector vec = new Vector();
         // Wildcard? then return list of all matching classes (including inner)
@@ -580,11 +580,11 @@ public class ClassTree implements NameMapper
                 vec.addElement(cl);
             }
         }
-        return vec.elements();
+        return vec.iterator();
     }
 
     /** Get methods in tree from the fully qualified, and possibly wildcarded, name. */
-    public Enumeration getMdEnum(String fullName, String descriptor) throws Exception
+    public Iterator getMdIter(String fullName, String descriptor) throws Exception
     {
         final Vector vec = new Vector();
         final String fDesc = descriptor;
@@ -633,11 +633,11 @@ public class ClassTree implements NameMapper
                 vec.addElement(md);
             }
         }
-        return vec.elements();
+        return vec.iterator();
     }
 
     /** Get fields in tree from the fully qualified, and possibly wildcarded, name. */
-    public Enumeration getFdEnum(String fullName, String descriptor) throws Exception
+    public Iterator getFdIter(String fullName, String descriptor) throws Exception
     {
         final Vector vec = new Vector();
         // Wildcard? then return list of all matching methods
@@ -686,16 +686,16 @@ public class ClassTree implements NameMapper
                 vec.addElement(fd);
             }
         }
-        return vec.elements();
+        return vec.iterator();
     }
 
     /** Get class in tree from the fully qualified name, returning null if name not found. */
     public Cl getCl(String fullName) throws Exception
     {
         TreeItem ti = this.root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements();)
+        for (Iterator nameIter = ClassTree.getNameIter(fullName); nameIter.hasNext();)
         {
-            SimpleName simpleName = (SimpleName)nameEnum.nextElement();
+            SimpleName simpleName = (SimpleName)nameIter.next();
             String name = simpleName.getName();
             if (simpleName.isAsPackage())
             {
@@ -732,9 +732,9 @@ public class ClassTree implements NameMapper
     public Pk getPk(String fullName) throws Exception
     {
         TreeItem ti = this.root;
-        for (Enumeration nameEnum = ClassTree.getNameEnum(fullName); nameEnum.hasMoreElements();)
+        for (Iterator nameIter = ClassTree.getNameIter(fullName); nameIter.hasNext();)
         {
-            SimpleName simpleName = (SimpleName)nameEnum.nextElement();
+            SimpleName simpleName = (SimpleName)nameIter.next();
             String name = simpleName.getName();
             ti = ((Pk)ti).getPackage(name);
 
@@ -847,10 +847,10 @@ public class ClassTree implements NameMapper
                 {
                     s.push(nextCl);
                 }
-                Enumeration enm = cl.getSuperInterfaces();
-                while (enm.hasMoreElements())
+                Iterator iter = cl.getSuperInterfaces();
+                while (iter.hasNext())
                 {
-                    nextCl = (Cl)enm.nextElement();
+                    nextCl = (Cl)iter.next();
                     if (nextCl != null)
                     {
                         s.push(nextCl);
@@ -893,10 +893,10 @@ public class ClassTree implements NameMapper
                 {
                     s.push(nextCl);
                 }
-                Enumeration enm = cl.getSuperInterfaces();
-                while (enm.hasMoreElements())
+                Iterator iter = cl.getSuperInterfaces();
+                while (iter.hasNext())
                 {
-                    nextCl = (Cl)enm.nextElement();
+                    nextCl = (Cl)iter.next();
                     if (nextCl != null)
                     {
                         s.push(nextCl);
@@ -1111,33 +1111,33 @@ public class ClassTree implements NameMapper
     {
         if (ti instanceof Pk)
         {
-            Enumeration packageEnum = ((Pk)ti).getPackageEnum();
+            Iterator packageIter = ((Pk)ti).getPackageIter();
             ta.packageAction((Pk)ti);
-            while (packageEnum.hasMoreElements())
+            while (packageIter.hasNext())
             {
-                this.walkTree(ta, (TreeItem)packageEnum.nextElement());
+                this.walkTree(ta, (TreeItem)packageIter.next());
             }
         }
         if (ti instanceof PkCl)
         {
-            Enumeration classEnum = ((PkCl)ti).getClassEnum();
-            while (classEnum.hasMoreElements())
+            Iterator classIter = ((PkCl)ti).getClassIter();
+            while (classIter.hasNext())
             {
-                this.walkTree(ta, (TreeItem)classEnum.nextElement());
+                this.walkTree(ta, (TreeItem)classIter.next());
             }
         }
         if (ti instanceof Cl)
         {
-            Enumeration fieldEnum = ((Cl)ti).getFieldEnum();
-            Enumeration methodEnum = ((Cl)ti).getMethodEnum();
+            Iterator fieldIter = ((Cl)ti).getFieldIter();
+            Iterator methodIter = ((Cl)ti).getMethodIter();
             ta.classAction((Cl)ti);
-            while (fieldEnum.hasMoreElements())
+            while (fieldIter.hasNext())
             {
-                ta.fieldAction((Fd)fieldEnum.nextElement());
+                ta.fieldAction((Fd)fieldIter.next());
             }
-            while (methodEnum.hasMoreElements())
+            while (methodIter.hasNext())
             {
-                ta.methodAction((Md)methodEnum.nextElement());
+                ta.methodAction((Md)methodIter.next());
             }
         }
     }

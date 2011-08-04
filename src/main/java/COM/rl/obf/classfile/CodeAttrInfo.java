@@ -21,6 +21,7 @@ package COM.rl.obf.classfile;
 
 import java.io.*;
 import java.util.*;
+
 import COM.rl.util.*;
 
 /**

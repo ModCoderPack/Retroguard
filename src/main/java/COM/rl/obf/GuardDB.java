@@ -151,7 +151,7 @@ public class GuardDB implements ClassConstants
     }
 
     /** Go through database marking certain entities for retention, while maintaining polymorphic integrity. */
-    public void retain(RgsEnum rgsEnum, PrintWriter log) throws Exception
+    public void retain(RgsEnum rgsIter, PrintWriter log) throws Exception
     {
 
         // Build database if not already done, or if a mapping has already been generated
@@ -175,10 +175,10 @@ public class GuardDB implements ClassConstants
             ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC,
             ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC);
 
-        // Enumerate the entries in the RGS script
-        while (rgsEnum.hasMoreEntries())
+        // Iterate the entries in the RGS script
+        while (rgsIter.hasNext())
         {
-            RgsEntry entry = rgsEnum.nextEntry();
+            RgsEntry entry = rgsIter.next();
             try
             {
                 switch (entry.type)
@@ -603,9 +603,9 @@ public class GuardDB implements ClassConstants
         this.newManifest.add(version);
 
         // copy through all the none-filename sections, apart from the version
-        for (Enumeration enm = this.oldManifest.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.oldManifest.iterator(); iter.hasNext();)
         {
-            Section section = (Section)enm.nextElement();
+            Section section = (Section)iter.next();
             if ((section != null) && (section != version))
             {
                 Header name = section.findTag(GuardDB.MANIFEST_NAME_TAG);
@@ -637,9 +637,9 @@ public class GuardDB implements ClassConstants
             newSection.add(GuardDB.MANIFEST_NAME_TAG, outName);
 
             // Copy over non-"Name", non-digest entries
-            for (Enumeration enm = oldSection.elements(); enm.hasMoreElements();)
+            for (Iterator iter = oldSection.iterator(); iter.hasNext();)
             {
-                Header header = (Header)enm.nextElement();
+                Header header = (Header)iter.next();
                 if (!header.getTag().equals(GuardDB.MANIFEST_NAME_TAG) && (header.getTag().indexOf("Digest") == -1))
                 {
                     newSection.add(header);

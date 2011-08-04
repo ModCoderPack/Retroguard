@@ -135,9 +135,9 @@ public class TreeItem
             pos = rpos;
         }
         // Check each section for a non-overlapping match in the string
-        for (Enumeration enm = section.elements(); enm.hasMoreElements();)
+        for (Iterator iter = section.iterator(); iter.hasNext();)
         {
-            String chunk = (String)enm.nextElement();
+            String chunk = (String)iter.next();
             pos = string.indexOf(chunk);
             if (pos == -1)
             {

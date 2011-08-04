@@ -1,21 +1,9 @@
 package COM.rl;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import COM.rl.obf.Cl;
-import COM.rl.obf.Fd;
-import COM.rl.obf.Md;
-import COM.rl.obf.Pk;
-import COM.rl.obf.TreeItem;
+import COM.rl.obf.*;
 
 public class NameProvider
 {
@@ -934,7 +922,7 @@ public class NameProvider
                     tmpMd = null;
                 }
 
-                Enumeration children = cls.getDownClasses();
+                Iterator children = cls.getDownClasses();
 //                NameProvider.log("Children: " + children.hasMoreElements());
 
                 boolean goingDown = false;
@@ -957,35 +945,39 @@ public class NameProvider
                     }
 
 
-                    Enumeration en;
+                    Iterator iter;
                     try
                     {
-                        en = cls.getSuperInterfaces();
+                        iter = cls.getSuperInterfaces();
 //                        NameProvider.log("Interfaces: " + en.hasMoreElements());
                     }
                     catch (Exception e1)
                     {
-                        en = new Enumeration()
+                        iter = new Iterator()
                         {
-
                             @Override
-                            public boolean hasMoreElements()
+                            public boolean hasNext()
                             {
                                 return false;
                             }
 
                             @Override
-                            public Object nextElement()
+                            public Object next()
                             {
                                 return null;
+                            }
+                            
+                            @Override
+                            public void remove()
+                            {
                             }
                         };
                     }
 
                     boolean found = false;
-                    while (en.hasMoreElements())
+                    while (iter.hasNext())
                     {
-                        Cl iface = (Cl)en.nextElement();
+                        Cl iface = (Cl)iter.next();
 
                         tmpMd.setParent(iface);
 //                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
@@ -1031,9 +1023,9 @@ public class NameProvider
 
                     if (goingDown)
                     {
-                        if (children.hasMoreElements())
+                        if (children.hasNext())
                         {
-                            cls = (Cl)children.nextElement();
+                            cls = (Cl)children.next();
 //                            NameProvider.log("Child: " + cls.getFullInName());
                         }
                         else

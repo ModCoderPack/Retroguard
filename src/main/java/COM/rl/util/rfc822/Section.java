@@ -58,10 +58,10 @@ public class Section
         this.add(new Header(tag, value));
     }
 
-    /** Return an Enumeration of headers. */
-    public Enumeration elements()
+    /** Return an Iterator of headers. */
+    public Iterator iterator()
     {
-        return this.headers.elements();
+        return this.headers.iterator();
     }
 
     /** Does the section contain a header matching the specified one? */
@@ -69,9 +69,9 @@ public class Section
     {
         if (queryHeader != null)
         {
-            for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+            for (Iterator it = this.headers.iterator(); it.hasNext();)
             {
-                Header header = (Header)enm.nextElement();
+                Header header = (Header)it.next();
                 if (queryHeader.equals(header))
                 {
                     return true;
@@ -91,9 +91,9 @@ public class Section
         }
 
         // For now, do linear search of headers
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.headers.iterator(); iter.hasNext();)
         {
-            Header header = (Header)enm.nextElement();
+            Header header = (Header)iter.next();
             if (tag.equals(header.getTag()))
             {
                 // Found
@@ -108,9 +108,9 @@ public class Section
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.headers.iterator(); iter.hasNext();)
         {
-            ((Header)enm.nextElement()).writeString(writer);
+            ((Header)iter.next()).writeString(writer);
         }
         writer.write("\015\012");
     }
@@ -120,9 +120,9 @@ public class Section
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration enm = this.headers.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.headers.iterator(); iter.hasNext();)
         {
-            sb.append(((Header)enm.nextElement()).toString());
+            sb.append(((Header)iter.next()).toString());
             sb.append("\015\012");
         }
         sb.append("\015\012");

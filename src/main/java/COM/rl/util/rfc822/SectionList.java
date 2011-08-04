@@ -117,10 +117,10 @@ public class SectionList
         this.sections.addElement(section);
     }
 
-    /** Return an Enumeration of sections. */
-    public Enumeration elements()
+    /** Return an Iterator of sections. */
+    public Iterator iterator()
     {
-        return this.sections.elements();
+        return this.sections.iterator();
     }
 
     /** Find the first section in the list containing the matching header. */
@@ -132,9 +132,9 @@ public class SectionList
     /** Find the first section in the list containing the matching header. */
     public Section find(Header header)
     {
-        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.iterator(); iter.hasNext();)
         {
-            Section section = (Section)enm.nextElement();
+            Section section = (Section)iter.next();
             if (section.hasHeader(header))
             {
                 return section;
@@ -146,9 +146,9 @@ public class SectionList
     /** Print String rep of this object to a java.io.Writer. */
     public void writeString(Writer writer) throws IOException
     {
-        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.iterator(); iter.hasNext();)
         {
-            ((Section)enm.nextElement()).writeString(writer);
+            ((Section)iter.next()).writeString(writer);
         }
     }
 
@@ -157,9 +157,9 @@ public class SectionList
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Enumeration enm = this.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.iterator(); iter.hasNext();)
         {
-            sb.append(((Section)enm.nextElement()).toString());
+            sb.append(((Section)iter.next()).toString());
         }
         return sb.toString();
     }

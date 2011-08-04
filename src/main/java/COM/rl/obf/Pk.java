@@ -103,9 +103,9 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated name. */
     public Pk getObfPackage(String name) throws Exception
     {
-        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
         {
-            Pk pk = (Pk)enm.nextElement();
+            Pk pk = (Pk)iter.next();
             if (name.equals(pk.getOutName()))
             {
                 return pk;
@@ -117,9 +117,9 @@ public class Pk extends PkCl
     /** Get a package level by obfuscated repackage name. */
     public Pk getObfRepackage(String name) throws Exception
     {
-        for (Enumeration enm = this.pks.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
         {
-            Pk pk = (Pk)enm.nextElement();
+            Pk pk = (Pk)iter.next();
             if (name.equals(pk.getRepackageName()))
             {
                 return pk;
@@ -133,10 +133,10 @@ public class Pk extends PkCl
         return null;
     }
 
-    /** Get an Enumeration of packages. */
-    public Enumeration getPackageEnum() throws Exception
+    /** Get an Iterator of packages. */
+    public Iterator getPackageIter() throws Exception
     {
-        return this.pks.elements();
+        return this.pks.values().iterator();
     }
 
     /** Return number of packages. */

@@ -21,6 +21,7 @@ package COM.rl.obf.classfile;
 
 import java.io.*;
 import java.util.*;
+
 import COM.rl.util.*;
 
 /**
@@ -56,10 +57,10 @@ public class ConstantPool
         }
     }
 
-    /** Return an Enumeration of all Constant Pool entries. */
-    public Enumeration elements()
+    /** Return an Iterator of all Constant Pool entries. */
+    public Iterator iterator()
     {
-        return this.pool.elements();
+        return this.pool.iterator();
     }
 
     /** Return the Constant Pool length. */
@@ -211,9 +212,9 @@ public class ConstantPool
 
     private void walkPool(PoolAction pa) throws Exception
     {
-        for (Enumeration enm = this.pool.elements(); enm.hasMoreElements();)
+        for (Iterator iter = this.pool.iterator(); iter.hasNext();)
         {
-            Object o = enm.nextElement();
+            Object o = iter.next();
             if (o instanceof Utf8CpInfo)
             {
                 pa.utf8Action((Utf8CpInfo)o);
