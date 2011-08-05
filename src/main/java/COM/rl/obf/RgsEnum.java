@@ -306,7 +306,7 @@ public class RgsEnum
         }
         return thisOne;
     }
-    
+
     /** Not implemented */
     public void remove()
     {

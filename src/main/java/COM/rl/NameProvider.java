@@ -27,22 +27,22 @@ public class NameProvider
     private static File roLog = null;
 
     private static List<String> protectedPackages = new ArrayList<String>();
-    private static HashMap<String, String> classNameLookup = new HashMap<String, String>();
-    private static HashMap<String, String> packageNameLookup = new HashMap<String, String>();
+    private static Map<String, String> classNameLookup = new HashMap<String, String>();
+    private static Map<String, String> packageNameLookup = new HashMap<String, String>();
 
     private static List<PackageEntry> packageDefs = new ArrayList<PackageEntry>();
     private static List<ClassEntry> classDefs = new ArrayList<ClassEntry>();
     private static List<MethodEntry> methodDefs = new ArrayList<MethodEntry>();
     private static List<FieldEntry> fieldDefs = new ArrayList<FieldEntry>();
 
-    private static HashMap<String, PackageEntry> packagesObf2Deobf = new HashMap<String, PackageEntry>();
-    private static HashMap<String, PackageEntry> packagesDeobf2Obf = new HashMap<String, PackageEntry>();
-    private static HashMap<String, ClassEntry> classesObf2Deobf = new HashMap<String, ClassEntry>();
-    private static HashMap<String, ClassEntry> classesDeobf2Obf = new HashMap<String, ClassEntry>();
-    private static HashMap<String, MethodEntry> methodsObf2Deobf = new HashMap<String, MethodEntry>();
-    private static HashMap<String, MethodEntry> methodsDeobf2Obf = new HashMap<String, MethodEntry>();
-    private static HashMap<String, FieldEntry> fieldsObf2Deobf = new HashMap<String, FieldEntry>();
-    private static HashMap<String, FieldEntry> fieldsDeobf2Obf = new HashMap<String, FieldEntry>();
+    private static Map<String, PackageEntry> packagesObf2Deobf = new HashMap<String, PackageEntry>();
+    private static Map<String, PackageEntry> packagesDeobf2Obf = new HashMap<String, PackageEntry>();
+    private static Map<String, ClassEntry> classesObf2Deobf = new HashMap<String, ClassEntry>();
+    private static Map<String, ClassEntry> classesDeobf2Obf = new HashMap<String, ClassEntry>();
+    private static Map<String, MethodEntry> methodsObf2Deobf = new HashMap<String, MethodEntry>();
+    private static Map<String, MethodEntry> methodsDeobf2Obf = new HashMap<String, MethodEntry>();
+    private static Map<String, FieldEntry> fieldsObf2Deobf = new HashMap<String, FieldEntry>();
+    private static Map<String, FieldEntry> fieldsDeobf2Obf = new HashMap<String, FieldEntry>();
 
     public static String[] parseCommandLine(String[] args)
     {
@@ -922,64 +922,16 @@ public class NameProvider
                     tmpMd = null;
                 }
 
-                Iterator children = cls.getDownClasses();
-//                NameProvider.log("Children: " + children.hasMoreElements());
-
-                boolean goingDown = false;
-                do
+                if (tmpMd != null)
                 {
-                    tmpMd.setParent(cls);
-//                    NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
-                    if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
+
+                    Iterator children = cls.getDownClasses();
+//                    NameProvider.log("Children: " + children.hasMoreElements());
+
+                    boolean goingDown = false;
+                    do
                     {
-                        String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
-                        if (obfName.contains("/"))
-                        {
-                            methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                        }
-                        else
-                        {
-                            methodName = obfName;
-                        }
-                        break;
-                    }
-
-
-                    Iterator iter;
-                    try
-                    {
-                        iter = cls.getSuperInterfaces();
-//                        NameProvider.log("Interfaces: " + en.hasMoreElements());
-                    }
-                    catch (Exception e1)
-                    {
-                        iter = new Iterator()
-                        {
-                            @Override
-                            public boolean hasNext()
-                            {
-                                return false;
-                            }
-
-                            @Override
-                            public Object next()
-                            {
-                                return null;
-                            }
-                            
-                            @Override
-                            public void remove()
-                            {
-                            }
-                        };
-                    }
-
-                    boolean found = false;
-                    while (iter.hasNext())
-                    {
-                        Cl iface = (Cl)iter.next();
-
-                        tmpMd.setParent(iface);
+                        tmpMd.setParent(cls);
 //                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
                         if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
                         {
@@ -992,48 +944,100 @@ public class NameProvider
                             {
                                 methodName = obfName;
                             }
-                            found = true;
+                            break;
                         }
-                    }
 
-                    if (found)
-                    {
-                        break;
-                    }
 
-                    if (!goingDown)
-                    {
+                        Iterator iter;
                         try
                         {
-                            cls = cls.getSuperCl();
-                            if (cls == null)
+                            iter = cls.getSuperInterfaces();
+//                            NameProvider.log("Interfaces: " + en.hasMoreElements());
+                        }
+                        catch (Exception e1)
+                        {
+                            iter = new Iterator()
+                            {
+                                @Override
+                                public boolean hasNext()
+                                {
+                                    return false;
+                                }
+
+                                @Override
+                                public Object next()
+                                {
+                                    return null;
+                                }
+
+                                @Override
+                                public void remove()
+                                {
+                                }
+                            };
+                        }
+
+                        boolean found = false;
+                        while (iter.hasNext())
+                        {
+                            Cl iface = (Cl)iter.next();
+
+                            tmpMd.setParent(iface);
+//                            NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
+                            if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
+                            {
+                                String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
+                                if (obfName.contains("/"))
+                                {
+                                    methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
+                                }
+                                else
+                                {
+                                    methodName = obfName;
+                                }
+                                found = true;
+                            }
+                        }
+
+                        if (found)
+                        {
+                            break;
+                        }
+
+                        if (!goingDown)
+                        {
+                            try
+                            {
+                                cls = cls.getSuperCl();
+                                if (cls == null)
+                                {
+                                    goingDown = true;
+                                }
+//                                else
+//                                {
+//                                    NameProvider.log("Parent: " + cls.getFullInName());
+//                                }
+                            }
+                            catch (Exception e)
                             {
                                 goingDown = true;
                             }
-//                            else
-//                            {
-//                                NameProvider.log("Parent: " + cls.getFullInName());
-//                            }
                         }
-                        catch (Exception e)
-                        {
-                            goingDown = true;
-                        }
-                    }
 
-                    if (goingDown)
-                    {
-                        if (children.hasNext())
+                        if (goingDown)
                         {
-                            cls = (Cl)children.next();
-//                            NameProvider.log("Child: " + cls.getFullInName());
+                            if (children.hasNext())
+                            {
+                                cls = (Cl)children.next();
+//                                NameProvider.log("Child: " + cls.getFullInName());
+                            }
+                            else
+                            {
+                                cls = null;
+                            }
                         }
-                        else
-                        {
-                            cls = null;
-                        }
-                    }
-                } while (cls != null);
+                    } while (cls != null);
+                }
             }
 
             int i = 0;
