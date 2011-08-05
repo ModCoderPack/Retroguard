@@ -39,13 +39,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     // Fields ----------------------------------------------------------------
     /** Owns a list of methods */
-    private Hashtable mds = new Hashtable();
+    private Map mds = new HashMap();
 
     /** Owns a list of special methods */
-    private Hashtable mdsSpecial = new Hashtable();
+    private Map mdsSpecial = new HashMap();
 
     /** Owns a list of fields */
-    private Hashtable fds = new Hashtable();
+    private Map fds = new HashMap();
 
     /** Has the class been resolved already? */
     private boolean isResolved = false;
@@ -1057,7 +1057,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return null;
     }
 
-    private static Hashtable extNameListUpCache = new Hashtable();
+    private static Map extNameListUpCache = new HashMap();
 
     /** Construct, or retrieve from cache, the NameListUp object for an external class/interface */
     private NameListUp getExtNameListUp(String name) throws Exception

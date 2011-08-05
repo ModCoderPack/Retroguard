@@ -23,11 +23,11 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Subclass of Hashtable used for storing flags while walking Code.
+ * Subclass of HashMap used for storing flags while walking Code.
  * 
  * @author Mark Welsh
  */
-public class FlagHashtable extends Hashtable
+public class FlagHashtable extends HashMap
 {
     private static final long serialVersionUID = 1L;
 

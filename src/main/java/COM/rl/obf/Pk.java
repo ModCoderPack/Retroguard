@@ -39,7 +39,7 @@ public class Pk extends PkCl
 
     // Fields ----------------------------------------------------------------
     /** Owns a list of sub-package levels */
-    private Hashtable pks = new Hashtable();
+    private Map pks = new HashMap();
 
     /** Compact name for this package */
     private String repackageName = null;

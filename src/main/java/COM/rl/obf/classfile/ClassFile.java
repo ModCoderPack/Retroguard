@@ -869,7 +869,7 @@ public class ClassFile implements ClassConstants
             }
         }
         // Analyse String mapping flags and generate updated Strings
-        Hashtable cpUpdate = new Hashtable();
+        Map cpUpdate = new HashMap();
         for (Iterator iter = cpToFlag.keySet().iterator(); iter.hasNext();)
         {
             StringCpInfo stringCpInfo = (StringCpInfo)iter.next();

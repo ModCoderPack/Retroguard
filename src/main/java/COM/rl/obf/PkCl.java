@@ -39,7 +39,7 @@ abstract public class PkCl extends TreeItem
 
     // Fields ----------------------------------------------------------------
     /** Owns a list of classes. */
-    protected Hashtable cls = new Hashtable();
+    protected Map cls = new HashMap();
 
 
     // Class Methods ---------------------------------------------------------
@@ -162,7 +162,7 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Generate unique obfuscated names for a given namespace. */
-    protected void generateNames(Hashtable hash) throws Exception
+    protected void generateNames(Map hash) throws Exception
     {
         for (Iterator iter = hash.values().iterator(); iter.hasNext();)
         {
