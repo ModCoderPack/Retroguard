@@ -517,14 +517,9 @@ public class ClassTree implements NameMapper
 
     /** Return a list of attributes marked to keep. */
     @Override
-    public String[] getAttrsToKeep() throws Exception
+    public List getAttrsToKeep() throws Exception
     {
-        String[] attrs = new String[this.retainAttrs.size()];
-        for (int i = 0; i < attrs.length; i++)
-        {
-            attrs[i] = (String)this.retainAttrs.get(i);
-        }
-        return attrs;
+        return this.retainAttrs;
     }
 
     /**

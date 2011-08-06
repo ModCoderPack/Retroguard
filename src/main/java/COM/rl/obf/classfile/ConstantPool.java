@@ -48,12 +48,7 @@ public class ConstantPool
     public ConstantPool(ClassFile classFile, CpInfo[] cpInfo) throws Exception
     {
         this.myClassFile = classFile;
-        int length = cpInfo.length;
-        this.pool = new ArrayList(length);
-        for (int i = 0; i < length; i++)
-        {
-            this.pool.add(cpInfo[i]);
-        }
+        this.pool = new ArrayList(Arrays.asList(cpInfo));
     }
 
     /** Return an Iterator of all Constant Pool entries. */

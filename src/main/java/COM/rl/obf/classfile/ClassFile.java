@@ -124,16 +124,14 @@ public class ClassFile implements ClassConstants
     public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws Exception
     {
         // Check for field descriptor
-        String[] names = null;
+        List names = new ArrayList();
         if (descriptor.charAt(0) != '(')
         {
-            names = new String[1];
-            names[0] = descriptor;
+            names.add(descriptor);
         }
         else
         {
             // Method descriptor
-            List namesList = new ArrayList();
             descriptor = descriptor.substring(1);
             String type = "";
             while (descriptor.length() > 0)
@@ -154,7 +152,7 @@ public class ClassFile implements ClassConstants
                     case 'S':
                     case 'Z':
                     case 'V':
-                        namesList.add(type + descriptor.substring(0, 1));
+                        names.add(type + descriptor.substring(0, 1));
                         descriptor = descriptor.substring(1);
                         type = "";
                         break;
@@ -166,7 +164,7 @@ public class ClassFile implements ClassConstants
                     case 'L':
                     {
                         int pos = descriptor.indexOf(';') + 1;
-                        namesList.add(type + descriptor.substring(0, pos));
+                        names.add(type + descriptor.substring(0, pos));
                         descriptor = descriptor.substring(pos);
                         type = "";
                         break;
@@ -176,25 +174,21 @@ public class ClassFile implements ClassConstants
                         throw new Exception("Illegal field or method descriptor: " + descriptor);
                 }
             }
-            names = new String[namesList.size()];
-            for (int i = 0; i < names.length; i++)
-            {
-                names[i] = (String)namesList.get(i);
-            }
         }
 
         if (doTranslate)
         {
             // Translate the names from JVM to Class.forName() format.
-            String[] translatedNames = new String[names.length];
-            for (int i = 0; i < names.length; i++)
+            List translatedNames = new ArrayList();
+            for (Iterator iter = names.iterator(); iter.hasNext();)
             {
-                translatedNames[i] = ClassFile.translateType(names[i], isDisplay);
+                String name = (String)iter.next();
+                translatedNames.add(ClassFile.translateType(name, isDisplay));
             }
-            return translatedNames;
+            return (String[])translatedNames.toArray(new String[0]);
         }
 
-        return names;
+        return (String[])names.toArray(new String[0]);
     }
 
     /** Translate a type specifier from the internal JVM convention to the Class.forName() one. */
@@ -419,12 +413,12 @@ public class ClassFile implements ClassConstants
     }
 
     /** Return the names of this class's interfaces. */
-    public String[] getInterfaces() throws Exception
+    public List getInterfaces() throws Exception
     {
-        String[] interfaces = new String[this.u2interfacesCount];
+        List interfaces = new ArrayList();
         for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            interfaces[i] = this.toName(this.u2interfaces[i]);
+            interfaces.add(this.toName(this.u2interfaces[i]));
         }
         return interfaces;
     }
@@ -499,18 +493,10 @@ public class ClassFile implements ClassConstants
         return this.hasReflection;
     }
 
-    /** List methods which can break obfuscated code, and log to a String[]. */
-    public String[] getDangerousMethods() throws Exception
+    /** List methods which can break obfuscated code, and log to a <tt>List</tt>. */
+    public List getDangerousMethods() throws Exception
     {
-        List list = new ArrayList();
-        list = this.listDangerMethods(list);
-        // Copy any warnings to a String[]
-        String[] warnings = new String[list.size()];
-        for (int i = 0; i < warnings.length; i++)
-        {
-            warnings[i] = (String)list.get(i);
-        }
-        return warnings;
+        return this.listDangerMethods(new ArrayList());
     }
 
     /** List methods which can break obfuscated code, and log to a List. */
@@ -539,13 +525,13 @@ public class ClassFile implements ClassConstants
                         list.add(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_CLASS_FORNAME_MID
                             + ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR);
                     }
-                    else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY))
+                    else if (Arrays.asList(ClassFile.DANGEROUS_CLASS_SIMPLENAME_DESCRIPTOR_ARRAY).contains(name + descriptor))
                     {
                         list.add(ClassFile.LOG_DANGER_CLASS_PRE + this.getName() + ClassFile.LOG_DANGER_CLASS_MID
                             + name + descriptor);
                     }
                 }
-                else if (Tools.isInArray(name + descriptor, ClassFile.DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY))
+                else if (Arrays.asList(ClassFile.DANGEROUS_CLASSLOADER_SIMPLENAME_DESCRIPTOR_ARRAY).contains(name + descriptor))
                 {
                     list.add(ClassFile.LOG_DANGER_CLASSLOADER_PRE + this.getName() + ClassFile.LOG_DANGER_CLASSLOADER_MID
                         + name + descriptor);
@@ -614,20 +600,13 @@ public class ClassFile implements ClassConstants
     }
 
     /**
-     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except the list in the
-     * String[] are killed).
+     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
+     * <tt>List</tt> are killed).
      */
-    public void trimAttrsExcept(String[] extraAttrs) throws Exception
+    public void trimAttrsExcept(List keepAttrs) throws Exception
     {
         // Merge additional attributes with required list
-        String[] keepAttrs = ClassConstants.REQUIRED_ATTRS;
-        if ((extraAttrs != null) && (extraAttrs.length > 0))
-        {
-            String[] tmp = new String[keepAttrs.length + extraAttrs.length];
-            System.arraycopy(keepAttrs, 0, tmp, 0, keepAttrs.length);
-            System.arraycopy(extraAttrs, 0, tmp, keepAttrs.length, extraAttrs.length);
-            keepAttrs = tmp;
-        }
+        keepAttrs.addAll(Arrays.asList(ClassConstants.REQUIRED_ATTRS));
 
         // Traverse all attributes, removing all except those on 'keep' list
         for (int i = 0; i < this.fields.length; i++)
@@ -640,7 +619,7 @@ public class ClassFile implements ClassConstants
         }
         for (int i = 0; i < this.attributes.length; i++)
         {
-            if (Tools.isInArray(this.attributes[i].getAttrName(), keepAttrs))
+            if (keepAttrs.contains(this.attributes[i].getAttrName()))
             {
                 this.attributes[i].trimAttrsExcept(keepAttrs);
             }
@@ -651,18 +630,16 @@ public class ClassFile implements ClassConstants
         }
 
         // Delete the marked attributes
-        AttrInfo[] left = new AttrInfo[this.attributes.length];
-        int j = 0;
+        List left = new ArrayList();
         for (int i = 0; i < this.attributes.length; i++)
         {
             if (this.attributes[i] != null)
             {
-                left[j++] = this.attributes[i];
+                left.add(this.attributes[i]);
             }
         }
-        this.attributes = new AttrInfo[j];
-        System.arraycopy(left, 0, this.attributes, 0, j);
-        this.u2attributesCount = j;
+        this.attributes = (AttrInfo[])left.toArray(new AttrInfo[0]);
+        this.u2attributesCount = left.size();
 
         // Signal that unknown attributes are gone
         this.isUnkAttrGone = true;
@@ -677,21 +654,14 @@ public class ClassFile implements ClassConstants
     /** Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed). */
     public void trimAttrs() throws Exception
     {
-        this.trimAttrsExcept(null);
+        this.trimAttrsExcept(Collections.emptyList());
     }
 
     /** Remove unnecessary attributes from the class. */
     public void trimAttrs(NameMapper nm) throws Exception
     {
-        String[] attrs = nm.getAttrsToKeep();
-        if (attrs.length > 0)
-        {
-            this.trimAttrsExcept(attrs);
-        }
-        else
-        {
-            this.trimAttrs();
-        }
+        List attrs = nm.getAttrsToKeep();
+        this.trimAttrsExcept(attrs);
     }
 
     /** Remap the entities in the specified ClassFile. */
@@ -870,10 +840,11 @@ public class ClassFile implements ClassConstants
         }
         // Analyse String mapping flags and generate updated Strings
         Map cpUpdate = new HashMap();
-        for (Iterator iter = cpToFlag.keySet().iterator(); iter.hasNext();)
+        for (Iterator iter = cpToFlag.entrySet().iterator(); iter.hasNext();)
         {
-            StringCpInfo stringCpInfo = (StringCpInfo)iter.next();
-            StringCpInfoFlags flags = (StringCpInfoFlags)cpToFlag.get(stringCpInfo);
+            Map.Entry entry = (Map.Entry)iter.next();
+            StringCpInfo stringCpInfo = (StringCpInfo)entry.getKey();
+            StringCpInfoFlags flags = (StringCpInfoFlags)entry.getValue();
             String name = ClassFile.backTranslate(((Utf8CpInfo)this.getCpEntry(stringCpInfo.getStringIndex())).getString());
             // String accessed as Class.forName or .class?
             if (ClassFile.isClassSpec(name) && flags.forNameFlag)

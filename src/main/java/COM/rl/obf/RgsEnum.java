@@ -240,11 +240,11 @@ public class RgsEnum
                 accessString = accessString.substring(endIndex);
             }
             if ((((entryType == RgsEntry.TYPE_CLASS) || (entryType == RgsEntry.TYPE_NOT_CLASS))
-                && !Tools.isInArray(flagString, RgsEnum.CLASS_ACCESS))
+                && !Arrays.asList(RgsEnum.CLASS_ACCESS).contains(flagString))
                 || (((entryType == RgsEntry.TYPE_METHOD) || (entryType == RgsEntry.TYPE_NOT_METHOD))
-                    && !Tools.isInArray(flagString, RgsEnum.METHOD_ACCESS))
+                    && !Arrays.asList(RgsEnum.METHOD_ACCESS).contains(flagString))
                 || (((entryType == RgsEntry.TYPE_FIELD) || (entryType == RgsEntry.TYPE_NOT_FIELD))
-                    && !Tools.isInArray(flagString, RgsEnum.FIELD_ACCESS)))
+                    && !Arrays.asList(RgsEnum.FIELD_ACCESS).contains(flagString)))
             {
                 throw new Exception();
             }
@@ -425,14 +425,14 @@ public class RgsEnum
                         switch (directive)
                         {
                             case RgsEntry.TYPE_OPTION:
-                                if (!Tools.isInArray(this.tk.sval, ClassConstants.KNOWN_OPTIONS))
+                                if (!Arrays.asList(ClassConstants.KNOWN_OPTIONS).contains(this.tk.sval))
                                 {
                                     throw new Exception();
                                 }
                                 entry = new RgsEntry(directive, this.tk.sval);
                                 break;
                             case RgsEntry.TYPE_ATTR:
-                                if (!Tools.isInArray(this.tk.sval, ClassConstants.KNOWN_ATTRS))
+                                if (!Arrays.asList(ClassConstants.KNOWN_ATTRS).contains(this.tk.sval))
                                 {
                                     throw new Exception();
                                 }

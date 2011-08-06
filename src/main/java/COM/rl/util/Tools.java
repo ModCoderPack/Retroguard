@@ -36,19 +36,6 @@ public class Tools
 
 
     // Class Methods ---------------------------------------------------------
-    /** Is the string one of the ones in the array? */
-    public static boolean isInArray(String s, String[] list)
-    {
-        for (int i = 0; i < list.length; i++)
-        {
-            if (s.equals(list[i]))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /** Encode a byte[] as a Base64 (see RFC1521, Section 5.2) String. */
     private static final char[] base64 =
     {

@@ -30,8 +30,8 @@ import java.util.*;
 public interface NameMapper
 {
     // Interface Methods -----------------------------------------------------
-    /** Return a list of attributes marked to keep. */
-    public String[] getAttrsToKeep() throws Exception;
+    /** Return a <tt>List</tt> of attributes marked to keep. */
+    public List getAttrsToKeep() throws Exception;
 
     /** Mapping for fully qualified class name. */
     public String mapClass(String className) throws Exception;

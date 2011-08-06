@@ -159,7 +159,7 @@ public class Pk extends PkCl
 
     /** Add a class. */
     @Override
-    public Cl addClass(String name, String superName, String[] interfaceNames, int access) throws Exception
+    public Cl addClass(String name, String superName, List interfaceNames, int access) throws Exception
     {
         return this.addClass(false, name, superName, interfaceNames, access);
     }

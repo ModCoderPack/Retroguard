@@ -104,10 +104,10 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Add a class to the list of owned classes. */
-    abstract public Cl addClass(String name, String superName, String[] interfaceNames, int access) throws Exception;
+    abstract public Cl addClass(String name, String superName, List interfaceNames, int access) throws Exception;
 
     /** Add a class to the list of owned classes. */
-    public Cl addClass(boolean isInnerClass, String name, String superName, String[] interfaceNames, int access) throws Exception
+    public Cl addClass(boolean isInnerClass, String name, String superName, List interfaceNames, int access) throws Exception
     {
         Cl cl = this.getClass(name);
 

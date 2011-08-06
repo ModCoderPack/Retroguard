@@ -169,8 +169,8 @@ public class AttrInfo implements ClassConstants
         return ClassConstants.ATTR_Unknown;
     }
 
-    /** Trim attributes from the classfile except those in the String[]. */
-    protected void trimAttrsExcept(String[] keepAttrs) throws Exception
+    /** Trim attributes from the classfile except those in the <tt>List</tt>. */
+    protected void trimAttrsExcept(List keepAttrs) throws Exception
     {
     }
 

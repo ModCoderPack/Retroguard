@@ -103,15 +103,15 @@ abstract public class ClassItemInfo implements ClassConstants
     }
 
     /**
-     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except the list in the
-     * String[] are killed).
+     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
+     * <tt>List</tt> are killed).
      */
-    protected void trimAttrsExcept(String[] keepAttrs) throws Exception
+    protected void trimAttrsExcept(List keepAttrs) throws Exception
     {
         // Traverse all attributes, removing all except those on 'keep' list
         for (int i = 0; i < this.attributes.length; i++)
         {
-            if (Tools.isInArray(this.attributes[i].getAttrName(), keepAttrs))
+            if (keepAttrs.contains(this.attributes[i].getAttrName()))
             {
                 this.attributes[i].trimAttrsExcept(keepAttrs);
             }
@@ -122,18 +122,16 @@ abstract public class ClassItemInfo implements ClassConstants
         }
 
         // Delete the marked attributes
-        AttrInfo[] left = new AttrInfo[this.attributes.length];
-        int j = 0;
+        List left = new ArrayList();
         for (int i = 0; i < this.attributes.length; i++)
         {
             if (this.attributes[i] != null)
             {
-                left[j++] = this.attributes[i];
+                left.add(this.attributes[i]);
             }
         }
-        this.attributes = new AttrInfo[j];
-        System.arraycopy(left, 0, this.attributes, 0, j);
-        this.u2attributesCount = j;
+        this.attributes = (AttrInfo[])left.toArray(new AttrInfo[0]);
+        this.u2attributesCount = left.size();
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
