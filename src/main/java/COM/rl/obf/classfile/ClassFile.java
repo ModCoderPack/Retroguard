@@ -171,7 +171,7 @@ public class ClassFile implements ClassConstants
                     }
 
                     default:
-                        throw new Exception("Illegal field or method descriptor: " + descriptor);
+                        throw new ClassFileException("Illegal field or method descriptor: " + descriptor);
                 }
             }
         }
@@ -255,7 +255,7 @@ public class ClassFile implements ClassConstants
             }
 
             default:
-                throw new Exception("Illegal field or method name: " + inName);
+                throw new ClassFileException("Illegal field or method name: " + inName);
         }
         return outName;
     }
@@ -436,7 +436,7 @@ public class ClassFile implements ClassConstants
             }
         }
 
-        throw new Exception("Inconsistent Constant Pool in class file.");
+        throw new ClassFileException("Inconsistent Constant Pool in class file.");
     }
 
     /** Return number of methods in class. */
@@ -574,7 +574,7 @@ public class ClassFile implements ClassConstants
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            throw new Exception("Inconsistent reference to constant pool.");
+            throw new ClassFileException("Inconsistent reference to constant pool.");
         }
     }
 
@@ -595,7 +595,7 @@ public class ClassFile implements ClassConstants
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            throw new Exception("Inconsistent reference to constant pool.");
+            throw new ClassFileException("Inconsistent reference to constant pool.");
         }
     }
 

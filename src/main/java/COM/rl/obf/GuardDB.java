@@ -333,7 +333,7 @@ public class GuardDB implements ClassConstants
                         break;
 
                     default:
-                        throw new Exception("Illegal type received from the .rgs script");
+                        throw new RGSException("Illegal type received from the .rgs script");
                 }
             }
             catch (Exception e)

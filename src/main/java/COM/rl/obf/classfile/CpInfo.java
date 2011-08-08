@@ -148,7 +148,7 @@ abstract public class CpInfo implements ClassConstants
     {
         if (this.refCount == 0)
         {
-            throw new Exception("Illegal to decrement ref count that is already zero.");
+            throw new ClassFileException("Illegal to decrement ref count that is already zero.");
         }
         this.refCount--;
     }

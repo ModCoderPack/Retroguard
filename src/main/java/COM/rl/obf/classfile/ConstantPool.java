@@ -70,7 +70,7 @@ public class ConstantPool
         {
             return (CpInfo)this.pool.get(i);
         }
-        throw new Exception("Constant Pool index out of range.");
+        throw new ClassFileException("Constant Pool index out of range.");
     }
 
     /** Set the reference count for each element, using references from the owning ClassFile. */
@@ -113,7 +113,7 @@ public class ConstantPool
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
-//            throw new Exception("Illegal access to a Constant Pool element.");
+//            throw new CPException("Illegal access to a Constant Pool element.");
         }
         else
         {
@@ -135,7 +135,7 @@ public class ConstantPool
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
-//            throw new Exception("Illegal access to a Constant Pool element.");
+//            throw new CPException("Illegal access to a Constant Pool element.");
         }
         else
         {

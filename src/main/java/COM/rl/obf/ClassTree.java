@@ -157,7 +157,7 @@ public class ClassTree implements NameMapper
                 }
                 else
                 {
-                    throw new Exception("Internal error: illegal package/class name tag");
+                    throw new ClassFileException("Internal error: illegal package/class name tag");
                 }
             }
         }
@@ -195,7 +195,7 @@ public class ClassTree implements NameMapper
             }
             else
             {
-                throw new Exception("Internal error: illegal package/class name tag");
+                throw new ClassFileException("Internal error: illegal package/class name tag");
             }
         }
 
@@ -221,7 +221,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            throw new Exception("Inconsistent class file.");
+            throw new ClassFileException("Inconsistent class file.");
         }
     }
 
@@ -702,7 +702,7 @@ public class ClassTree implements NameMapper
             }
             else
             {
-                throw new Exception("Internal error: illegal package/class name tag");
+                throw new ClassFileException("Internal error: illegal package/class name tag");
             }
 
             // If the name is not in the database, return null
@@ -717,7 +717,7 @@ public class ClassTree implements NameMapper
         {
             // 15Jul2005 - this exception is being over-sensitive with fullName of null (should never get here) so safely return
             // null instead
-//            throw new Exception("Inconsistent class or interface name: " + fullName);
+//            throw new ClassFileException("Inconsistent class or interface name: " + fullName);
             return null;
         }
         return (Cl)ti;
@@ -741,7 +741,7 @@ public class ClassTree implements NameMapper
             // It is an error if we do not end up with a package
             if (!(ti instanceof Pk))
             {
-                throw new Exception("Inconsistent package.");
+                throw new ClassFileException("Inconsistent package.");
             }
         }
         return (Pk)ti;
@@ -793,7 +793,7 @@ public class ClassTree implements NameMapper
                         int pos = className.indexOf(';', i);
                         if (pos < 0)
                         {
-                            throw new Exception("Invalid class name encountered: " + className);
+                            throw new ClassFileException("Invalid class name encountered: " + className);
                         }
                         newName.append(this.mapClass(className.substring(i, pos)));
                         i = pos;
@@ -951,14 +951,14 @@ public class ClassTree implements NameMapper
                     int pos = descriptor.indexOf(';', i);
                     if (pos < 0)
                     {
-                        throw new Exception("Invalid descriptor string encountered.");
+                        throw new ClassFileException("Invalid descriptor string encountered.");
                     }
                     newDesc.append(this.mapClass(descriptor.substring(i, pos)));
                     i = pos;
                     break;
 
                 default:
-                    throw new Exception("Invalid descriptor string encountered.");
+                    throw new ClassFileException("Invalid descriptor string encountered.");
             }
         }
         return newDesc.toString();

@@ -318,7 +318,7 @@ public class CodeAttrInfo extends AttrInfo
                                             this.code[i - 1] = (byte)remapStringIndex;
                                             break;
                                         default: // error
-                                            throw new Exception(".class or Class.forName remap of non-ldc/ldc_w"
+                                            throw new ClassFileException(".class or Class.forName remap of non-ldc/ldc_w"
                                                 + " - please report this error");
                                     }
                                 }
@@ -392,11 +392,11 @@ public class CodeAttrInfo extends AttrInfo
                             bytes = 5;
                             break;
                         default:
-                            throw new Exception("Illegal wide opcode");
+                            throw new ClassFileException("Illegal wide opcode");
                     }
                     break;
                 default:
-                    throw new Exception("Illegal variable length opcode");
+                    throw new ClassFileException("Illegal variable length opcode");
             }
         }
         return bytes;

@@ -84,7 +84,7 @@ public class VerificationTypeInfo
                 break;
 
             default:
-                throw new Exception("Illegal Verification Type Info tag: " + this.u1tag);
+                throw new ClassFileException("Illegal Verification Type Info tag: " + this.u1tag);
         }
     }
 
@@ -121,7 +121,7 @@ public class VerificationTypeInfo
                 break;
 
             default:
-                throw new Exception("Illegal Verification Type Info tag: " + this.u1tag);
+                throw new ClassFileException("Illegal Verification Type Info tag: " + this.u1tag);
         }
     }
 }

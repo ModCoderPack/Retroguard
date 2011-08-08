@@ -207,7 +207,7 @@ public class RgsEnum
         }
         else
         {
-            throw new Exception();
+            throw new RGSException();
         }
     }
 
@@ -221,7 +221,7 @@ public class RgsEnum
             boolean invert = false;
             if (accessString.charAt(0) != ';')
             {
-                throw new Exception();
+                throw new RGSException();
             }
             int startIndex = 1;
             if (accessString.charAt(1) == '!')
@@ -246,7 +246,7 @@ public class RgsEnum
                 || (((entryType == RgsEntry.TYPE_FIELD) || (entryType == RgsEntry.TYPE_NOT_FIELD))
                     && !Arrays.asList(RgsEnum.FIELD_ACCESS).contains(flagString)))
             {
-                throw new Exception();
+                throw new RGSException();
             }
             int flag = RgsEnum.toAccessFlag(flagString);
             accessMask |= flag;
@@ -417,7 +417,7 @@ public class RgsEnum
                         }
                         else
                         {
-                            throw new Exception();
+                            throw new RGSException();
                         }
                     }
                     else if (entry == null)
@@ -427,14 +427,14 @@ public class RgsEnum
                             case RgsEntry.TYPE_OPTION:
                                 if (!Arrays.asList(ClassConstants.KNOWN_OPTIONS).contains(this.tk.sval))
                                 {
-                                    throw new Exception();
+                                    throw new RGSException();
                                 }
                                 entry = new RgsEntry(directive, this.tk.sval);
                                 break;
                             case RgsEntry.TYPE_ATTR:
                                 if (!Arrays.asList(ClassConstants.KNOWN_ATTRS).contains(this.tk.sval))
                                 {
-                                    throw new Exception();
+                                    throw new RGSException();
                                 }
                                 entry = new RgsEntry(directive, this.tk.sval);
                                 break;
@@ -551,7 +551,7 @@ public class RgsEnum
                         {
                             if (entry.retainToPublic || entry.retainToProtected || entry.retainPubProtOnly)
                             {
-                                throw new Exception();
+                                throw new RGSException();
                             }
                             entry.retainToPublic = true;
                         }
@@ -559,7 +559,7 @@ public class RgsEnum
                         {
                             if (entry.retainToPublic || entry.retainToProtected || entry.retainPubProtOnly)
                             {
-                                throw new Exception();
+                                throw new RGSException();
                             }
                             entry.retainPubProtOnly = true;
                         }
@@ -567,7 +567,7 @@ public class RgsEnum
                         {
                             if (entry.retainToPublic || entry.retainToProtected || entry.retainPubProtOnly)
                             {
-                                throw new Exception();
+                                throw new RGSException();
                             }
                             entry.retainToProtected = true;
                         }
@@ -576,7 +576,7 @@ public class RgsEnum
                             if ((!entry.retainToPublic && !entry.retainPubProtOnly && !entry.retainToProtected)
                                 || entry.retainMethodsOnly)
                             {
-                                throw new Exception();
+                                throw new RGSException();
                             }
                             entry.retainFieldsOnly = true;
                         }
@@ -585,7 +585,7 @@ public class RgsEnum
                             if ((!entry.retainToPublic && !entry.retainPubProtOnly && !entry.retainToProtected)
                                 || entry.retainFieldsOnly)
                             {
-                                throw new Exception();
+                                throw new RGSException();
                             }
                             entry.retainMethodsOnly = true;
                         }
@@ -601,7 +601,7 @@ public class RgsEnum
                         }
                         else
                         {
-                            throw new Exception();
+                            throw new RGSException();
                         }
                     }
                     else if ((directive == RgsEntry.TYPE_METHOD) || (directive == RgsEntry.TYPE_NOT_METHOD)
@@ -623,12 +623,12 @@ public class RgsEnum
                         }
                         else
                         {
-                            throw new Exception();
+                            throw new RGSException();
                         }
                     }
                     else
                     {
-                        throw new Exception();
+                        throw new RGSException();
                     }
                 }
                 else if (ttype == StreamTokenizer.TT_EOL)
@@ -640,7 +640,7 @@ public class RgsEnum
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new RGSException();
                 }
             }
             this.next = entry;
@@ -664,7 +664,7 @@ public class RgsEnum
             }
 
             // Save exception for throw from nextEntry()
-            this.nextException = new Exception("Parser error at line " + Integer.toString(this.tk.lineno()) + " of script file.");
+            this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno()) + " of script file.");
         }
     }
 
@@ -673,7 +673,7 @@ public class RgsEnum
     {
         if ((s.length() == 0) || (s.charAt(0) != '('))
         {
-            throw new Exception();
+            throw new RGSException();
         }
         s = s.substring(1);
 
@@ -694,7 +694,7 @@ public class RgsEnum
             s = s.substring(1);
             if (s.length() == 0)
             {
-                throw new Exception();
+                throw new RGSException();
             }
         }
 
@@ -717,14 +717,14 @@ public class RgsEnum
                 pos = s.indexOf(';');
                 if (pos == -1)
                 {
-                    throw new Exception();
+                    throw new RGSException();
                 }
                 // Check the class type
                 this.checkClassSpec(s.substring(0, pos));
                 break;
 
             default:
-                throw new Exception();
+                throw new RGSException();
         }
         return s.substring(pos + 1);
     }
@@ -734,7 +734,7 @@ public class RgsEnum
     {
         if (!this.checkFirstJavaType(s).equals(""))
         {
-            throw new Exception();
+            throw new RGSException();
         }
     }
 
@@ -743,14 +743,14 @@ public class RgsEnum
     {
         if (s.length() == 0)
         {
-            throw new Exception();
+            throw new RGSException();
         }
 
         // Check the method or field name
         int pos = s.lastIndexOf('/');
         if (pos == -1)
         {
-            throw new Exception();
+            throw new RGSException();
         }
         this.checkJavaIdentifier(s.substring(pos + 1));
         this.checkClassSpec(s.substring(0, pos));
@@ -761,7 +761,7 @@ public class RgsEnum
     {
         if (s.length() == 0)
         {
-            throw new Exception();
+            throw new RGSException();
         }
 
         int pos = -1;
@@ -784,7 +784,7 @@ public class RgsEnum
         // Check for wildcard package spec first
         if (s.length() == 0)
         {
-            throw new Exception();
+            throw new RGSException();
         }
         if (s.charAt(s.length() - 1) == '*')
         {
@@ -792,7 +792,7 @@ public class RgsEnum
             {
                 if ((s.length() < 3) || (s.charAt(s.length() - 2) != '/'))
                 {
-                    throw new Exception();
+                    throw new RGSException();
                 }
 
                 s = s.substring(0, s.length() - 2);
@@ -817,13 +817,13 @@ public class RgsEnum
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
         {
-            throw new Exception();
+            throw new RGSException();
         }
         for (int i = 1; i < s.length(); i++)
         {
             if (!Character.isJavaIdentifierPart(s.charAt(i)))
             {
-                throw new Exception();
+                throw new RGSException();
             }
         }
     }
@@ -833,13 +833,13 @@ public class RgsEnum
     {
         if (s.length() == 0)
         {
-            throw new Exception();
+            throw new RGSException();
         }
         for (int i = 0; i < s.length(); i++)
         {
             if (!Character.isJavaIdentifierPart(s.charAt(i)))
             {
-                throw new Exception();
+                throw new RGSException();
             }
         }
     }

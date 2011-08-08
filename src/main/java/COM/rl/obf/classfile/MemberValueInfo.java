@@ -103,7 +103,7 @@ public class MemberValueInfo
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
+                throw new ClassFileException("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
@@ -142,7 +142,7 @@ public class MemberValueInfo
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
+                throw new ClassFileException("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
@@ -182,7 +182,7 @@ public class MemberValueInfo
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
+                throw new ClassFileException("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 
@@ -219,7 +219,7 @@ public class MemberValueInfo
                 }
                 break;
             default:
-                throw new Exception("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
+                throw new ClassFileException("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
 

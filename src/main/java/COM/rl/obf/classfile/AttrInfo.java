@@ -142,7 +142,7 @@ public class AttrInfo implements ClassConstants
         }
         else
         {
-            throw new Exception("Inconsistent reference to Constant Pool.");
+            throw new ClassFileException("Inconsistent reference to Constant Pool.");
         }
         ai.readInfo(din);
         return ai;
