@@ -45,7 +45,7 @@ public class MemberValueInfo
     private AnnotationInfo annotationValue;
 
     private int u2numValues;
-    private MemberValueInfo[] values;
+    private List values;
 
 
     // Class Methods ---------------------------------------------------------
@@ -96,9 +96,10 @@ public class MemberValueInfo
                 this.annotationValue.markUtf8Refs(pool);
                 break;
             case '[':
-                for (int i = 0; i < this.u2numValues; i++)
+                for (Iterator iter = this.values.iterator(); iter.hasNext();)
                 {
-                    this.values[i].markUtf8Refs(pool);
+                    MemberValueInfo mv = (MemberValueInfo)iter.next();
+                    mv.markUtf8Refs(pool);
                 }
                 break;
             default:
@@ -134,10 +135,10 @@ public class MemberValueInfo
                 break;
             case '[':
                 this.u2numValues = din.readUnsignedShort();
-                this.values = new MemberValueInfo[this.u2numValues];
+                this.values = new ArrayList(this.u2numValues);
                 for (int i = 0; i < this.u2numValues; i++)
                 {
-                    this.values[i] = MemberValueInfo.create(din);
+                    this.values.add(MemberValueInfo.create(din));
                 }
                 break;
             default:
@@ -174,9 +175,10 @@ public class MemberValueInfo
                 break;
             case '[':
                 dout.writeShort(this.u2numValues);
-                for (int i = 0; i < this.u2numValues; i++)
+                for (Iterator iter = this.values.iterator(); iter.hasNext();)
                 {
-                    this.values[i].write(dout);
+                    MemberValueInfo mv = (MemberValueInfo)iter.next();
+                    mv.write(dout);
                 }
                 break;
             default:
@@ -210,9 +212,10 @@ public class MemberValueInfo
                 this.annotationValue.remap(cf, nm);
                 break;
             case '[':
-                for (int i = 0; i < this.u2numValues; i++)
+                for (Iterator iter = this.values.iterator(); iter.hasNext();)
                 {
-                    this.values[i].remap(cf, nm);
+                    MemberValueInfo mv = (MemberValueInfo)iter.next();
+                    mv.remap(cf, nm);
                 }
                 break;
             default:

@@ -34,7 +34,7 @@ public class InnerClassesAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2numberOfClasses;
-    private InnerClassesInfo[] classes;
+    private List classes;
 
 
     // Class Methods ---------------------------------------------------------
@@ -56,16 +56,17 @@ public class InnerClassesAttrInfo extends AttrInfo
     /** Return the array of inner classes data. */
     protected InnerClassesInfo[] getInfo() throws Exception
     {
-        return this.classes;
+        return (InnerClassesInfo[])this.classes.toArray(new InnerClassesInfo[0]);
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < this.classes.length; i++)
+        for (Iterator iter = this.classes.iterator(); iter.hasNext();)
         {
-            this.classes[i].markUtf8Refs(pool);
+            InnerClassesInfo cl = (InnerClassesInfo)iter.next();
+            cl.markUtf8Refs(pool);
         }
     }
 
@@ -74,10 +75,10 @@ public class InnerClassesAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws Exception
     {
         this.u2numberOfClasses = din.readUnsignedShort();
-        this.classes = new InnerClassesInfo[this.u2numberOfClasses];
+        this.classes = new ArrayList(this.u2numberOfClasses);
         for (int i = 0; i < this.u2numberOfClasses; i++)
         {
-            this.classes[i] = InnerClassesInfo.create(din);
+            this.classes.add(InnerClassesInfo.create(din));
         }
     }
 
@@ -86,9 +87,10 @@ public class InnerClassesAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(this.u2numberOfClasses);
-        for (int i = 0; i < this.u2numberOfClasses; i++)
+        for (Iterator iter = this.classes.iterator(); iter.hasNext();)
         {
-            this.classes[i].write(dout);
+            InnerClassesInfo cl = (InnerClassesInfo)iter.next();
+            cl.write(dout);
         }
     }
 
@@ -96,9 +98,10 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < this.u2numberOfClasses; i++)
+        for (Iterator iter = this.classes.iterator(); iter.hasNext();)
         {
-            this.classes[i].remap(cf, nm);
+            InnerClassesInfo cl = (InnerClassesInfo)iter.next();
+            cl.remap(cf, nm);
         }
     }
 }

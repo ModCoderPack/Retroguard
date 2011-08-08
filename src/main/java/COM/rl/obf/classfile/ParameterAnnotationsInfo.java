@@ -34,7 +34,7 @@ public class ParameterAnnotationsInfo
 
     // Fields ----------------------------------------------------------------
     private int u2numAnnotations;
-    private AnnotationInfo[] annotationTable;
+    private List annotationTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -54,25 +54,26 @@ public class ParameterAnnotationsInfo
     /** Return the array of annotation table entries. */
     protected AnnotationInfo[] getAnnotationTable() throws Exception
     {
-        return this.annotationTable;
+        return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
     }
 
     /** Check for Utf8 references to constant pool and mark them. */
     protected void markUtf8Refs(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < this.annotationTable.length; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].markUtf8Refs(pool);
+            AnnotationInfo a = (AnnotationInfo)iter.next();
+            a.markUtf8Refs(pool);
         }
     }
 
     private void read(DataInput din) throws Exception
     {
         this.u2numAnnotations = din.readUnsignedShort();
-        this.annotationTable = new AnnotationInfo[this.u2numAnnotations];
+        this.annotationTable = new ArrayList(this.u2numAnnotations);
         for (int i = 0; i < this.u2numAnnotations; i++)
         {
-            this.annotationTable[i] = AnnotationInfo.create(din);
+            this.annotationTable.add(AnnotationInfo.create(din));
         }
     }
 
@@ -80,18 +81,20 @@ public class ParameterAnnotationsInfo
     public void write(DataOutput dout) throws Exception
     {
         dout.writeShort(this.u2numAnnotations);
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].write(dout);
+            AnnotationInfo a = (AnnotationInfo)iter.next();
+            a.write(dout);
         }
     }
 
     /** Do necessary name remapping. */
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].remap(cf, nm);
+            AnnotationInfo a = (AnnotationInfo)iter.next();
+            a.remap(cf, nm);
         }
     }
 }

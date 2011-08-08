@@ -34,7 +34,7 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2numAnnotations;
-    private AnnotationInfo[] annotationTable;
+    private List annotationTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -49,16 +49,17 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     /** Return the array of annotation table entries. */
     protected AnnotationInfo[] getAnnotationTable() throws Exception
     {
-        return this.annotationTable;
+        return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < this.annotationTable.length; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].markUtf8Refs(pool);
+            AnnotationInfo ai = (AnnotationInfo)iter.next();
+            ai.markUtf8Refs(pool);
         }
     }
 
@@ -67,10 +68,10 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws Exception
     {
         this.u2numAnnotations = din.readUnsignedShort();
-        this.annotationTable = new AnnotationInfo[this.u2numAnnotations];
+        this.annotationTable = new ArrayList(this.u2numAnnotations);
         for (int i = 0; i < this.u2numAnnotations; i++)
         {
-            this.annotationTable[i] = AnnotationInfo.create(din);
+            this.annotationTable.add(AnnotationInfo.create(din));
         }
     }
 
@@ -79,9 +80,10 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(this.u2numAnnotations);
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].write(dout);
+            AnnotationInfo ai = (AnnotationInfo)iter.next();
+            ai.write(dout);
         }
     }
 
@@ -89,9 +91,10 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].remap(cf, nm);
+            AnnotationInfo ai = (AnnotationInfo)iter.next();
+            ai.remap(cf, nm);
         }
     }
 
@@ -101,9 +104,10 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     {
         super.dump(ps);
         ps.println("u2numAnnotations : " + this.u2numAnnotations);
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            this.annotationTable[i].dump(ps, this.cf);
+            AnnotationInfo ai = (AnnotationInfo)iter.next();
+            ai.dump(ps, this.cf);
         }
     }
 }

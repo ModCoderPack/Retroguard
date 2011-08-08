@@ -534,10 +534,7 @@ public class NameProvider
             }
         }
 
-        String[] result = new String[lines.size()];
-        lines.toArray(result);
-
-        return result;
+        return lines.toArray(new String[0]);
     }
 
     private static void log(String text)

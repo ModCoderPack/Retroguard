@@ -34,7 +34,7 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2localVariableTypeTableLength;
-    private LocalVariableTypeInfo[] localVariableTypeTable;
+    private List localVariableTypeTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -56,16 +56,17 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     /** Return the array of local variable type table entries. */
     protected LocalVariableTypeInfo[] getLocalVariableTypeTable() throws Exception
     {
-        return this.localVariableTypeTable;
+        return (LocalVariableTypeInfo[])this.localVariableTypeTable.toArray(new LocalVariableTypeInfo[0]);
     }
 
     /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
     {
-        for (int i = 0; i < this.localVariableTypeTable.length; i++)
+        for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
         {
-            this.localVariableTypeTable[i].markUtf8Refs(pool);
+            LocalVariableTypeInfo lvt = (LocalVariableTypeInfo)iter.next();
+            lvt.markUtf8Refs(pool);
         }
     }
 
@@ -74,10 +75,10 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws Exception
     {
         this.u2localVariableTypeTableLength = din.readUnsignedShort();
-        this.localVariableTypeTable = new LocalVariableTypeInfo[this.u2localVariableTypeTableLength];
+        this.localVariableTypeTable = new ArrayList(this.u2localVariableTypeTableLength);
         for (int i = 0; i < this.u2localVariableTypeTableLength; i++)
         {
-            this.localVariableTypeTable[i] = LocalVariableTypeInfo.create(din);
+            this.localVariableTypeTable.add(LocalVariableTypeInfo.create(din));
         }
     }
 
@@ -86,9 +87,10 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws Exception
     {
         dout.writeShort(this.u2localVariableTypeTableLength);
-        for (int i = 0; i < this.u2localVariableTypeTableLength; i++)
+        for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
         {
-            this.localVariableTypeTable[i].write(dout);
+            LocalVariableTypeInfo lvt = (LocalVariableTypeInfo)iter.next();
+            lvt.write(dout);
         }
     }
 
@@ -96,9 +98,10 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        for (int i = 0; i < this.u2localVariableTypeTableLength; i++)
+        for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
         {
-            this.localVariableTypeTable[i].remap(cf, nm);
+            LocalVariableTypeInfo lvt = (LocalVariableTypeInfo)iter.next();
+            lvt.remap(cf, nm);
         }
     }
 }
