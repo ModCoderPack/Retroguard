@@ -148,7 +148,8 @@ public class SectionList
     {
         for (Iterator iter = this.iterator(); iter.hasNext();)
         {
-            ((Section)iter.next()).writeString(writer);
+            Section section = (Section)iter.next();
+            section.writeString(writer);
         }
     }
 
@@ -159,7 +160,8 @@ public class SectionList
         StringBuffer sb = new StringBuffer();
         for (Iterator iter = this.iterator(); iter.hasNext();)
         {
-            sb.append(((Section)iter.next()).toString());
+            Section section = (Section)iter.next();
+            sb.append(section.toString());
         }
         return sb.toString();
     }

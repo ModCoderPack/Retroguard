@@ -77,7 +77,6 @@ public class SignatureAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws Exception
     {
-        // NOTE - mapSignature does nothing for now; implement if interest
         String oldDesc = cf.getUtf8(this.u2signatureIndex);
         String newDesc = nm.mapSignature(oldDesc);
         this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);

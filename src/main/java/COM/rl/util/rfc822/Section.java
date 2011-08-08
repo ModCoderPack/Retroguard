@@ -110,7 +110,8 @@ public class Section
     {
         for (Iterator iter = this.headers.iterator(); iter.hasNext();)
         {
-            ((Header)iter.next()).writeString(writer);
+            Header header = (Header)iter.next();
+            header.writeString(writer);
         }
         writer.write("\015\012");
     }
@@ -122,7 +123,8 @@ public class Section
         StringBuffer sb = new StringBuffer();
         for (Iterator iter = this.headers.iterator(); iter.hasNext();)
         {
-            sb.append(((Header)iter.next()).toString());
+            Header header = (Header)iter.next();
+            sb.append(header.toString());
             sb.append("\015\012");
         }
         sb.append("\015\012");

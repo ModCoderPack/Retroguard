@@ -1110,7 +1110,8 @@ public class ClassTree implements NameMapper
             ta.packageAction((Pk)ti);
             while (packageIter.hasNext())
             {
-                this.walkTree(ta, (TreeItem)packageIter.next());
+                TreeItem tiPk = (TreeItem)packageIter.next();
+                this.walkTree(ta, tiPk);
             }
         }
         if (ti instanceof PkCl)
@@ -1118,7 +1119,8 @@ public class ClassTree implements NameMapper
             Iterator classIter = ((PkCl)ti).getClassIter();
             while (classIter.hasNext())
             {
-                this.walkTree(ta, (TreeItem)classIter.next());
+                TreeItem tiCl = (TreeItem)classIter.next();
+                this.walkTree(ta, tiCl);
             }
         }
         if (ti instanceof Cl)
@@ -1128,11 +1130,13 @@ public class ClassTree implements NameMapper
             ta.classAction((Cl)ti);
             while (fieldIter.hasNext())
             {
-                ta.fieldAction((Fd)fieldIter.next());
+                Fd fd = (Fd)fieldIter.next();
+                ta.fieldAction(fd);
             }
             while (methodIter.hasNext())
             {
-                ta.methodAction((Md)methodIter.next());
+                Md md = (Md)methodIter.next();
+                ta.methodAction(md);
             }
         }
     }
