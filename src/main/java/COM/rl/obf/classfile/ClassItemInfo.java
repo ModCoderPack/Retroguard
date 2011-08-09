@@ -84,20 +84,28 @@ abstract public class ClassItemInfo implements ClassConstants
         this.u2descriptorIndex = index;
     }
 
-    /** Return method/field string name. */
-    public String getName() throws Exception
+    /**
+     * Return method/field string name.
+     * 
+     * @throws ClassFileException
+     */
+    public String getName() throws ClassFileException
     {
         return ((Utf8CpInfo)this.cf.getCpEntry(this.u2nameIndex)).getString();
     }
 
-    /** Return descriptor string. */
-    public String getDescriptor() throws Exception
+    /**
+     * Return descriptor string.
+     * 
+     * @throws ClassFileException
+     */
+    public String getDescriptor() throws ClassFileException
     {
         return ((Utf8CpInfo)this.cf.getCpEntry(this.u2descriptorIndex)).getString();
     }
 
     /** Return access flags. */
-    public int getAccessFlags() throws Exception
+    public int getAccessFlags()
     {
         return this.u2accessFlags;
     }
@@ -106,7 +114,7 @@ abstract public class ClassItemInfo implements ClassConstants
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
      * <tt>List</tt> are killed).
      */
-    protected void trimAttrsExcept(List keepAttrs) throws Exception
+    protected void trimAttrsExcept(List keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
         for (int i = 0; i < this.attributes.length; i++)
@@ -134,8 +142,12 @@ abstract public class ClassItemInfo implements ClassConstants
         this.u2attributesCount = left.size();
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2nameIndex);
         pool.incRefCount(this.u2descriptorIndex);
@@ -145,8 +157,13 @@ abstract public class ClassItemInfo implements ClassConstants
         }
     }
 
-    /** Import the field or method data to internal representation. */
-    protected void read(DataInput din) throws Exception
+    /**
+     * Import the field or method data to internal representation.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    protected void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2accessFlags = din.readUnsignedShort();
         this.u2nameIndex = din.readUnsignedShort();
@@ -163,8 +180,13 @@ abstract public class ClassItemInfo implements ClassConstants
         }
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         if (dout == null)
         {

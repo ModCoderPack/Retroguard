@@ -48,7 +48,7 @@ public class VerificationTypeInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static VerificationTypeInfo create(DataInput din) throws Exception
+    public static VerificationTypeInfo create(DataInput din) throws IOException, ClassFileException
     {
         VerificationTypeInfo vti = new VerificationTypeInfo();
         vti.read(din);
@@ -61,7 +61,7 @@ public class VerificationTypeInfo
     {
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1tag = din.readUnsignedByte();
         switch (this.u1tag)
@@ -88,8 +88,12 @@ public class VerificationTypeInfo
         }
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         if (this.u1tag == VerificationTypeInfo.ITEM_Object)
         {
@@ -97,8 +101,13 @@ public class VerificationTypeInfo
         }
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeByte(this.u1tag);
         switch (this.u1tag)

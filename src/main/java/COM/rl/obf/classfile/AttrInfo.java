@@ -47,8 +47,9 @@ public class AttrInfo implements ClassConstants
      * 
      * @throws IOException
      *             if class file is corrupt or incomplete
+     * @throws ClassFileException
      */
-    public static AttrInfo create(DataInput din, ClassFile cf) throws Exception
+    public static AttrInfo create(DataInput din, ClassFile cf) throws IOException, ClassFileException
     {
         if (din == null)
         {
@@ -158,43 +159,61 @@ public class AttrInfo implements ClassConstants
     }
 
     /** Return the length in bytes of the attribute; over-ride this in sub-classes. */
-    protected int getAttrInfoLength() throws Exception
+    protected int getAttrInfoLength()
     {
         return this.u4attrLength;
     }
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_Unknown;
     }
 
     /** Trim attributes from the classfile except those in the <tt>List</tt>. */
-    protected void trimAttrsExcept(List keepAttrs) throws Exception
+    protected void trimAttrsExcept(List keepAttrs)
     {
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2attrNameIndex);
         this.markUtf8RefsInInfo(pool);
     }
 
-    /** Check for Utf8 references in the 'info' data to the constant pool and mark them; over-ride this in sub-classes. */
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references in the 'info' data to the constant pool and mark them; over-ride this in sub-classes.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
     }
 
-    /** Read the data following the header; over-ride this in sub-classes. */
-    protected void readInfo(DataInput din) throws Exception
+    /**
+     * Read the data following the header; over-ride this in sub-classes.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.info = new byte[this.u4attrLength];
         din.readFully(this.info);
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public final void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public final void write(DataOutput dout) throws IOException, ClassFileException
     {
         if (dout == null)
         {
@@ -205,19 +224,32 @@ public class AttrInfo implements ClassConstants
         this.writeInfo(dout);
     }
 
-    /** Export data following the header to a DataOutput stream; over-ride this in sub-classes. */
-    public void writeInfo(DataOutput dout) throws Exception
+    /**
+     * Export data following the header to a DataOutput stream; over-ride this in sub-classes.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.write(this.info);
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
     }
 
-    /** Provide debugging dump of this object. */
-    public void dump(PrintStream ps) throws Exception
+    /**
+     * Provide debugging dump of this object.
+     * 
+     * @throws ClassFileException
+     */
+    public void dump(PrintStream ps) throws ClassFileException
     {
         ps.println("u2attrNameIndex : " + this.u2attrNameIndex + " " + this.cf.getUtf8(this.u2attrNameIndex));
         ps.println("u4attrLength : " + this.u4attrLength);

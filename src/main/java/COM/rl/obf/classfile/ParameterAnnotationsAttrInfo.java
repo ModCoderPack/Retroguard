@@ -47,14 +47,18 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /** Return the array of parameter annotations table entries. */
-    protected ParameterAnnotationsInfo[] getParameterAnnotationsTable() throws Exception
+    protected ParameterAnnotationsInfo[] getParameterAnnotationsTable()
     {
         return (ParameterAnnotationsInfo[])this.parameterAnnotationsTable.toArray(new ParameterAnnotationsInfo[0]);
     }
 
-    /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    /**
+     * Check for Utf8 references in the 'info' data to the constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
         for (Iterator iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
         {
@@ -63,9 +67,14 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u1numParameters = din.readUnsignedByte();
         this.parameterAnnotationsTable = new ArrayList(this.u1numParameters);
@@ -75,9 +84,14 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeByte(this.u1numParameters);
         for (Iterator iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
@@ -87,9 +101,13 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Do necessary name remapping. */
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         for (Iterator iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
         {

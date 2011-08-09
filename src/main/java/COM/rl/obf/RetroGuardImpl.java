@@ -68,6 +68,7 @@ public class RetroGuardImpl
      *            valid RetroGuard Script data file name, or null (which implies default settings)
      * @param logFilename
      *            name for the log data file
+     * @throws Exception
      */
     public static void obfuscate(String inFilename, String outFilename, String rgsFilename, String logFilename) throws Exception
     {
@@ -123,6 +124,7 @@ public class RetroGuardImpl
      *            valid RetroGuard Script data, or null (which implies default settings)
      * @param logFile
      *            file for the log data.
+     * @throws Exception
      */
     public static void obfuscate(File inFile, File outFile, File rgsFile, File logFile) throws Exception
     {
@@ -140,7 +142,11 @@ public class RetroGuardImpl
         this.logFile = logFile;
     }
 
-    /** Run the obfuscator. */
+    /**
+     * Run the obfuscator.
+     * 
+     * @throws Exception
+     */
     private void run() throws Exception
     {
         // Create the session log file

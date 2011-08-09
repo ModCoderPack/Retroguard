@@ -31,20 +31,40 @@ public interface NameMapper
 {
     // Interface Methods -----------------------------------------------------
     /** Return a <tt>List</tt> of attributes marked to keep. */
-    public List getAttrsToKeep() throws Exception;
+    public List getAttrsToKeep();
 
-    /** Mapping for fully qualified class name. */
-    public String mapClass(String className) throws Exception;
+    /**
+     * Mapping for fully qualified class name.
+     * 
+     * @throws ClassFileException
+     */
+    public String mapClass(String className) throws ClassFileException;
 
-    /** Mapping for method name, of fully qualified class. */
-    public String mapMethod(String className, String methodName, String descriptor) throws Exception;
+    /**
+     * Mapping for method name, of fully qualified class.
+     * 
+     * @throws ClassFileException
+     */
+    public String mapMethod(String className, String methodName, String descriptor) throws ClassFileException;
 
-    /** Mapping for field name, of fully qualified class. */
-    public String mapField(String className, String fieldName) throws Exception;
+    /**
+     * Mapping for field name, of fully qualified class.
+     * 
+     * @throws ClassFileException
+     */
+    public String mapField(String className, String fieldName) throws ClassFileException;
 
-    /** Mapping for descriptor of field or method. */
-    public String mapDescriptor(String descriptor) throws Exception;
+    /**
+     * Mapping for descriptor of field or method.
+     * 
+     * @throws ClassFileException
+     */
+    public String mapDescriptor(String descriptor) throws ClassFileException;
 
-    /** Mapping for generic type signature. */
-    public String mapSignature(String signature) throws Exception;
+    /**
+     * Mapping for generic type signature.
+     * 
+     * @throws ClassFileException
+     */
+    public String mapSignature(String signature) throws ClassFileException;
 }

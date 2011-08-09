@@ -41,7 +41,7 @@ public class ExceptionInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static ExceptionInfo create(DataInput din) throws Exception
+    public static ExceptionInfo create(DataInput din) throws IOException
     {
         ExceptionInfo ei = new ExceptionInfo();
         ei.read(din);
@@ -54,7 +54,7 @@ public class ExceptionInfo
     {
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException
     {
         this.u2startpc = din.readUnsignedShort();
         this.u2endpc = din.readUnsignedShort();
@@ -62,8 +62,12 @@ public class ExceptionInfo
         this.u2catchType = din.readUnsignedShort();
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     */
+    public void write(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2startpc);
         dout.writeShort(this.u2endpc);

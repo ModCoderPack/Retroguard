@@ -40,7 +40,7 @@ public class InnerClassesInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static InnerClassesInfo create(DataInput din) throws Exception
+    public static InnerClassesInfo create(DataInput din) throws IOException
     {
         InnerClassesInfo ici = new InnerClassesInfo();
         ici.read(din);
@@ -71,8 +71,12 @@ public class InnerClassesInfo
         this.u2innerNameIndex = index;
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         // BUGFIX: a Swing1.1beta3 class has name index of zero - this is valid
         if (this.u2innerNameIndex != 0)
@@ -81,7 +85,7 @@ public class InnerClassesInfo
         }
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException
     {
         this.u2innerClassInfoIndex = din.readUnsignedShort();
         this.u2outerClassInfoIndex = din.readUnsignedShort();
@@ -89,8 +93,12 @@ public class InnerClassesInfo
         this.u2innerClassAccessFlags = din.readUnsignedShort();
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     */
+    public void write(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2innerClassInfoIndex);
         dout.writeShort(this.u2outerClassInfoIndex);
@@ -98,8 +106,12 @@ public class InnerClassesInfo
         dout.writeShort(this.u2innerClassAccessFlags);
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         if (this.u2innerNameIndex != 0)
         {

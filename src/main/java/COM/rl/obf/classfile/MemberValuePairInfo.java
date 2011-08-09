@@ -38,7 +38,7 @@ public class MemberValuePairInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static MemberValuePairInfo create(DataInput din) throws Exception
+    public static MemberValuePairInfo create(DataInput din) throws IOException, ClassFileException
     {
         MemberValuePairInfo mvpi = new MemberValuePairInfo();
         mvpi.read(din);
@@ -57,34 +57,51 @@ public class MemberValuePairInfo
         return this.u2memberNameIndex;
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2memberNameIndex);
         this.value.markUtf8Refs(pool);
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2memberNameIndex = din.readUnsignedShort();
         this.value = MemberValueInfo.create(din);
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2memberNameIndex);
         this.value.write(dout);
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         this.value.remap(cf, nm);
     }
 
-    /** Provide debugging dump of this object. */
-    public void dump(PrintStream ps, ClassFile cf) throws Exception
+    /**
+     * Provide debugging dump of this object.
+     * 
+     * @throws ClassFileException
+     */
+    public void dump(PrintStream ps, ClassFile cf) throws ClassFileException
     {
         ps.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8(this.u2memberNameIndex));
         this.value.dump(ps, cf);

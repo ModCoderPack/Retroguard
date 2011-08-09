@@ -19,6 +19,8 @@
 
 package COM.rl.obf;
 
+import COM.rl.obf.classfile.ClassFileException;
+
 /**
  * Interface to a list of method and field names and descriptors -- used for checking if a name/descriptor is reserved through a
  * derived class/interface.
@@ -27,9 +29,19 @@ package COM.rl.obf;
  */
 public interface NameListDown
 {
-    /** Is the method reserved because of its reservation down the class hierarchy? */
-    public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws Exception;
+    /**
+     * Is the method reserved because of its reservation down the class hierarchy?
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
+    public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws ClassFileException, ClassNotFoundException;
 
-    /** Is the field reserved because of its reservation down the class hierarchy? */
-    public String getFieldObfNameDown(Cl caller, String name) throws Exception;
+    /**
+     * Is the field reserved because of its reservation down the class hierarchy?
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
+    public String getFieldObfNameDown(Cl caller, String name) throws ClassFileException, ClassNotFoundException;
 }

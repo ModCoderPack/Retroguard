@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import COM.rl.obf.*;
+import COM.rl.obf.classfile.ClassFileException;
 
 public class NameProvider
 {
@@ -59,15 +60,16 @@ public class NameProvider
         }
 
         int idx;
-        try
-        {
-            idx = Integer.parseInt(args[4]);
-        }
-        catch (NumberFormatException up)
-        {
-            System.out.println("Invalid start index: " + args[4]);
-            throw up;
-        }
+        // TODO catch NumberFormatException
+//        try
+//        {
+        idx = Integer.parseInt(args[4]);
+//        }
+//        catch (NumberFormatException up)
+//        {
+//            System.out.println("Invalid start index: " + args[4]);
+//            throw up;
+//        }
 
         System.out.println("# New start index is " + idx);
 
@@ -204,14 +206,15 @@ public class NameProvider
                     }
                     else if (defines[0].equalsIgnoreCase("startindex"))
                     {
-                        try
-                        {
-                            int start = Integer.parseInt(defines[1]);
-                            NameProvider.uniqueStart = start;
-                        }
-                        catch (NumberFormatException e)
-                        {
-                        }
+                        // TODO catch NumberFormatException
+//                        try
+//                        {
+                        int start = Integer.parseInt(defines[1]);
+                        NameProvider.uniqueStart = start;
+//                        }
+//                        catch (NumberFormatException e)
+//                        {
+//                        }
                     }
                     else if (defines[0].equalsIgnoreCase("protectedpackage"))
                     {
@@ -222,6 +225,7 @@ public class NameProvider
         }
         catch (IOException e)
         {
+            // TODO printStackTrace
             e.printStackTrace();
             return null;
         }
@@ -240,6 +244,7 @@ public class NameProvider
             }
             catch (IOException e)
             {
+                // TODO printStackTrace
                 e.printStackTrace();
             }
         }
@@ -289,6 +294,7 @@ public class NameProvider
                     }
                     catch (IOException e)
                     {
+                        // TODO printStackTrace
                         e.printStackTrace();
                     }
                     finally
@@ -311,6 +317,7 @@ public class NameProvider
                     }
                     catch (IOException e)
                     {
+                        // TODO printStackTrace
                         e.printStackTrace();
                     }
                     finally
@@ -325,6 +332,7 @@ public class NameProvider
         }
         catch (IOException e)
         {
+            // TODO printStackTrace
             e.printStackTrace();
             NameProvider.npLog = null;
             NameProvider.roLog = null;
@@ -509,8 +517,9 @@ public class NameProvider
                 line = reader.readLine();
             }
         }
-        catch (Exception e)
+        catch (IOException e)
         {
+            // TODO printStackTrace
             e.printStackTrace();
             return null;
         }
@@ -527,8 +536,9 @@ public class NameProvider
                     fileReader.close();
                 }
             }
-            catch (Exception e)
+            catch (IOException e)
             {
+                // TODO printStackTrace
                 e.printStackTrace();
                 return null;
             }
@@ -570,6 +580,7 @@ public class NameProvider
         }
         catch (IOException e)
         {
+            // TODO printStackTrace
             e.printStackTrace();
             return;
         }
@@ -588,6 +599,7 @@ public class NameProvider
             }
             catch (IOException e)
             {
+                // TODO printStackTrace
                 e.printStackTrace();
             }
         }
@@ -910,14 +922,15 @@ public class NameProvider
 
 
                 Md tmpMd;
-                try
-                {
-                    tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
-                }
-                catch (Exception e2)
-                {
-                    tmpMd = null;
-                }
+                // TODO Catch Exception
+//                try
+//                {
+                tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
+//                }
+//                catch (Exception e2)
+//                {
+//                    tmpMd = null;
+//                }
 
                 if (tmpMd != null)
                 {
@@ -951,8 +964,10 @@ public class NameProvider
                             iter = cls.getSuperInterfaces();
 //                            NameProvider.log("Interfaces: " + en.hasMoreElements());
                         }
-                        catch (Exception e1)
+                        catch (ClassFileException e)
                         {
+                            // TODO printStackTrace
+                            e.printStackTrace();
                             iter = new Iterator()
                             {
                                 @Override
@@ -1015,8 +1030,10 @@ public class NameProvider
 //                                    NameProvider.log("Parent: " + cls.getFullInName());
 //                                }
                             }
-                            catch (Exception e)
+                            catch (ClassFileException e)
                             {
+                                // TODO printStackTrace
+                                e.printStackTrace();
                                 goingDown = true;
                             }
                         }

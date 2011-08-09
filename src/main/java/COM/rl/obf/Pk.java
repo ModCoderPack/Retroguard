@@ -95,13 +95,13 @@ public class Pk extends PkCl
     }
 
     /** Get a package level by name. */
-    public Pk getPackage(String name) throws Exception
+    public Pk getPackage(String name)
     {
         return (Pk)this.pks.get(name);
     }
 
     /** Get a package level by obfuscated name. */
-    public Pk getObfPackage(String name) throws Exception
+    public Pk getObfPackage(String name)
     {
         for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
         {
@@ -115,7 +115,7 @@ public class Pk extends PkCl
     }
 
     /** Get a package level by obfuscated repackage name. */
-    public Pk getObfRepackage(String name) throws Exception
+    public Pk getObfRepackage(String name)
     {
         for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
         {
@@ -134,7 +134,7 @@ public class Pk extends PkCl
     }
 
     /** Get an Iterator of packages. */
-    public Iterator getPackageIter() throws Exception
+    public Iterator getPackageIter()
     {
         return this.pks.values().iterator();
     }
@@ -146,7 +146,7 @@ public class Pk extends PkCl
     }
 
     /** Add a sub-package level. */
-    public Pk addPackage(String name) throws Exception
+    public Pk addPackage(String name)
     {
         Pk pk = this.getPackage(name);
         if (pk == null)
@@ -159,28 +159,28 @@ public class Pk extends PkCl
 
     /** Add a class. */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access) throws Exception
+    public Cl addClass(String name, String superName, List interfaceNames, int access)
     {
         return this.addClass(false, name, superName, interfaceNames, access);
     }
 
     /** Add a placeholder class. */
     @Override
-    public Cl addPlaceholderClass(String name) throws Exception
+    public Cl addPlaceholderClass(String name)
     {
         return this.addPlaceholderClass(false, name);
     }
 
     /** Generate unique obfuscated names for this namespace. */
     @Override
-    public void generateNames() throws Exception
+    public void generateNames()
     {
         super.generateNames();
         this.generateNames(this.pks);
     }
 
     /** Generate unique-across-run obfuscated repackage name. */
-    public void repackageName() throws Exception
+    public void repackageName()
     {
         if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
         {

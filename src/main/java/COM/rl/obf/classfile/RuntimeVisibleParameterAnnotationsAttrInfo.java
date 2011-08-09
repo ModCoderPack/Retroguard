@@ -46,7 +46,7 @@ public class RuntimeVisibleParameterAnnotationsAttrInfo extends ParameterAnnotat
 
     /** Return the String name of the attribute. */
     @Override
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_RuntimeVisibleParameterAnnotations;
     }

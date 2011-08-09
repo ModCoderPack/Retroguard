@@ -39,7 +39,7 @@ public class AnnotationInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static AnnotationInfo create(DataInput din) throws Exception
+    public static AnnotationInfo create(DataInput din) throws IOException, ClassFileException
     {
         AnnotationInfo ai = new AnnotationInfo();
         ai.read(din);
@@ -58,8 +58,12 @@ public class AnnotationInfo
         return this.u2typeIndex;
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2typeIndex);
         for (Iterator iter = this.memberValuePairTable.iterator(); iter.hasNext();)
@@ -69,7 +73,7 @@ public class AnnotationInfo
         }
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2typeIndex = din.readUnsignedShort();
         this.u2numMemberValuePairs = din.readUnsignedShort();
@@ -80,8 +84,13 @@ public class AnnotationInfo
         }
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2typeIndex);
         dout.writeShort(this.u2numMemberValuePairs);
@@ -92,8 +101,12 @@ public class AnnotationInfo
         }
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         String oldType = cf.getUtf8(this.u2typeIndex);
         String newType = nm.mapDescriptor(oldType);
@@ -105,8 +118,12 @@ public class AnnotationInfo
         }
     }
 
-    /** Provide debugging dump of this object. */
-    public void dump(PrintStream ps, ClassFile cf) throws Exception
+    /**
+     * Provide debugging dump of this object.
+     * 
+     * @throws ClassFileException
+     */
+    public void dump(PrintStream ps, ClassFile cf) throws ClassFileException
     {
         ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8(this.u2typeIndex));
         ps.println("u2numMemberValuePairs : " + this.u2numMemberValuePairs);

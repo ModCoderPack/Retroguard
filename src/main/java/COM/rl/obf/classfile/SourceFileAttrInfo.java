@@ -47,28 +47,40 @@ public class SourceFileAttrInfo extends AttrInfo
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
     @Override
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_SourceFile;
     }
 
-    /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    /**
+     * Check for Utf8 references in the 'info' data to the constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2sourceFileIndex);
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException
     {
         this.u2sourceFileIndex = din.readUnsignedShort();
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2sourceFileIndex);
     }

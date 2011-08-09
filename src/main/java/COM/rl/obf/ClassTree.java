@@ -55,8 +55,12 @@ public class ClassTree implements NameMapper
     private Pk root = null;
 
     // Class methods ---------------------------------------------------------
-    /** Return a fully qualified name broken into package/class segments. */
-    public static Iterator getNameIter(String name) throws Exception
+    /**
+     * Return a fully qualified name broken into package/class segments.
+     * 
+     * @throws ClassFileException
+     */
+    public static Iterator getNameIter(String name) throws ClassFileException
     {
         List list = new ArrayList();
         String nameOrig = name;
@@ -89,7 +93,7 @@ public class ClassTree implements NameMapper
                 }
                 else
                 {
-                    throw new IOException("Invalid fully qualified name (a): " + nameOrig);
+                    throw new ClassFileException("Invalid fully qualified name (a): " + nameOrig);
                 }
             }
             list.add(simpleName);
@@ -161,15 +165,26 @@ public class ClassTree implements NameMapper
                 }
             }
         }
-        catch (Exception e)
+        catch (ClassFileException e)
         {
+            // TODO printStackTrace
+            e.printStackTrace();
             // Just drop through and return the original name
         }
+        // TODO check for missed exceptions
+//        catch (Exception e)
+//        {
+//            // Just drop through and return the original name
+//        }
         return inName;
     }
 
-    /** Add a classfile's package, class, method and field entries to database. */
-    public void addClassFile(ClassFile cf) throws Exception
+    /**
+     * Add a classfile's package, class, method and field entries to database.
+     * 
+     * @throws ClassFileException
+     */
+    public void addClassFile(ClassFile cf) throws ClassFileException
     {
         // Add the fully qualified class name
         TreeItem ti = this.root;
@@ -225,8 +240,13 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mark a class/interface type to suppress warnings from it. */
-    public void noWarnClass(String name) throws Exception
+    /**
+     * Mark a class/interface type to suppress warnings from it.
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
+    public void noWarnClass(String name) throws ClassFileException, ClassNotFoundException
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
         for (Iterator clIter = this.getClIter(name); clIter.hasNext();)
@@ -236,14 +256,19 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Write any non-suppressed warnings to the log. */
-    public void logWarnings(PrintWriter log) throws Exception
+    /**
+     * Write any non-suppressed warnings to the log.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    public void logWarnings(PrintWriter log) throws ClassFileException, ClassNotFoundException
     {
         final List hasWarnings = new ArrayList();
         this.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl)
             {
                 if (cl.hasWarnings())
                 {
@@ -261,7 +286,7 @@ public class ClassTree implements NameMapper
             this.walkTree(new TreeAction()
             {
                 @Override
-                public void classAction(Cl cl) throws Exception
+                public void classAction(Cl cl)
                 {
                     cl.logWarnings(flog);
                 }
@@ -270,15 +295,21 @@ public class ClassTree implements NameMapper
     }
 
     /** Mark an attribute type for retention. */
-    public void retainAttribute(String name) throws Exception
+    public void retainAttribute(String name)
     {
         this.retainAttrs.add(name);
     }
 
-    /** Mark a class/interface type (and possibly methods and fields defined in class) for retention. */
+    /**
+     * Mark a class/interface type (and possibly methods and fields defined in class) for retention.
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
     public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly,
         boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, int accessMask, int accessSetting)
-        throws Exception
+        throws ClassFileException, ClassNotFoundException
+
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
         for (Iterator clIter = this.getClIter(name); clIter.hasNext();)
@@ -344,9 +375,14 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mark a method type for retention. */
+    /**
+     * Mark a method type for retention.
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
-        int accessMask, int accessSetting) throws Exception
+        int accessMask, int accessSetting) throws ClassFileException, ClassNotFoundException
     {
         for (Iterator iter = this.getMdIter(name, descriptor); iter.hasNext();)
         {
@@ -373,9 +409,14 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mark a field type for retention. */
+    /**
+     * Mark a field type for retention.
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
-        int accessMask, int accessSetting) throws Exception
+        int accessMask, int accessSetting) throws ClassFileException, ClassNotFoundException
     {
         for (Iterator iter = this.getFdIter(name, descriptor); iter.hasNext();)
         {
@@ -402,14 +443,22 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mark a package for retention, and specify its new name. */
-    public void retainPackageMap(String name, String obfName) throws Exception
+    /**
+     * Mark a package for retention, and specify its new name.
+     * 
+     * @throws ClassFileException
+     */
+    public void retainPackageMap(String name, String obfName) throws ClassFileException
     {
         this.retainItemMap(this.getPk(name), obfName);
     }
 
-    /** Mark a package for repackaging under this new name. */
-    public void retainRepackageMap(String name, String obfName) throws Exception
+    /**
+     * Mark a package for repackaging under this new name.
+     * 
+     * @throws ClassFileException
+     */
+    public void retainRepackageMap(String name, String obfName) throws ClassFileException
     {
         Pk pk = this.getPk(name);
         if (!pk.isFixed())
@@ -419,26 +468,38 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mark a class/interface type for retention, and specify its new name. */
-    public void retainClassMap(String name, String obfName) throws Exception
+    /**
+     * Mark a class/interface type for retention, and specify its new name.
+     * 
+     * @throws ClassFileException
+     */
+    public void retainClassMap(String name, String obfName) throws ClassFileException
     {
         this.retainItemMap(this.getCl(name), obfName);
     }
 
-    /** Mark a method type for retention, and specify its new name. */
-    public void retainMethodMap(String name, String descriptor, String obfName) throws Exception
+    /**
+     * Mark a method type for retention, and specify its new name.
+     * 
+     * @throws ClassFileException
+     */
+    public void retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
     {
         this.retainItemMap(this.getMd(name, descriptor), obfName);
     }
 
-    /** Mark a field type for retention, and specify its new name. */
-    public void retainFieldMap(String name, String obfName) throws Exception
+    /**
+     * Mark a field type for retention, and specify its new name.
+     * 
+     * @throws ClassFileException
+     */
+    public void retainFieldMap(String name, String obfName) throws ClassFileException
     {
         this.retainItemMap(this.getFd(name), obfName);
     }
 
     /** Mark an item for retention, and specify its new name. */
-    private void retainItemMap(TreeItem item, String obfName) throws Exception
+    private void retainItemMap(TreeItem item, String obfName)
     {
         if (!item.isFixed())
         {
@@ -451,8 +512,13 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Traverse the class tree, generating obfuscated names within each namespace. */
-    public void generateNames(boolean enableRepackage) throws Exception
+    /**
+     * Traverse the class tree, generating obfuscated names within each namespace.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    public void generateNames(boolean enableRepackage) throws ClassFileException, ClassNotFoundException
     {
         // Repackage first, if requested
         // (need TreeItem.isFixed set properly, so must be done first)
@@ -462,7 +528,7 @@ public class ClassTree implements NameMapper
             this.walkTree(new TreeAction()
             {
                 @Override
-                public void packageAction(Pk pk) throws Exception
+                public void packageAction(Pk pk)
                 {
                     pk.repackageName();
                 }
@@ -472,26 +538,31 @@ public class ClassTree implements NameMapper
         this.walkTree(new TreeAction()
         {
             @Override
-            public void packageAction(Pk pk) throws Exception
+            public void packageAction(Pk pk)
             {
                 pk.generateNames();
             }
 
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl)
             {
                 cl.generateNames();
             }
         });
     }
 
-    /** Resolve the polymorphic dependencies of each class. */
-    public void resolveClasses() throws Exception
+    /**
+     * Resolve the polymorphic dependencies of each class.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    public void resolveClasses() throws ClassFileException, ClassNotFoundException
     {
         this.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl)
             {
                 cl.resetResolve();
             }
@@ -499,7 +570,7 @@ public class ClassTree implements NameMapper
         this.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl) throws ClassFileException
             {
                 cl.setupNameListDowns();
             }
@@ -508,7 +579,7 @@ public class ClassTree implements NameMapper
         this.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl) throws ClassFileException, ClassNotFoundException
             {
                 cl.resolveOptimally();
             }
@@ -517,7 +588,7 @@ public class ClassTree implements NameMapper
 
     /** Return a list of attributes marked to keep. */
     @Override
-    public List getAttrsToKeep() throws Exception
+    public List getAttrsToKeep()
     {
         return this.retainAttrs;
     }
@@ -525,8 +596,11 @@ public class ClassTree implements NameMapper
     /**
      * Get classes in tree from the fully qualified name
      * (can be wildcarded).
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
      */
-    public Iterator getClIter(String fullName) throws Exception
+    public Iterator getClIter(String fullName) throws ClassFileException, ClassNotFoundException
     {
         final List list = new ArrayList();
         // Wildcard? then return list of all matching classes (including inner)
@@ -540,7 +614,7 @@ public class ClassTree implements NameMapper
                 this.walkTree(new TreeAction()
                 {
                     @Override
-                    public void classAction(Cl cl) throws Exception
+                    public void classAction(Cl cl)
                     {
                         if (cl.isOldStyleMatch(fName))
                         {
@@ -556,7 +630,7 @@ public class ClassTree implements NameMapper
                 this.walkTree(new TreeAction()
                 {
                     @Override
-                    public void classAction(Cl cl) throws Exception
+                    public void classAction(Cl cl)
                     {
                         if (cl.isWildcardMatch(fName))
                         {
@@ -578,8 +652,13 @@ public class ClassTree implements NameMapper
         return list.iterator();
     }
 
-    /** Get methods in tree from the fully qualified, and possibly wildcarded, name. */
-    public Iterator getMdIter(String fullName, String descriptor) throws Exception
+    /**
+     * Get methods in tree from the fully qualified, and possibly wildcarded, name.
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
+    public Iterator getMdIter(String fullName, String descriptor) throws ClassFileException, ClassNotFoundException
     {
         final List list = new ArrayList();
         final String fDesc = descriptor;
@@ -594,7 +673,7 @@ public class ClassTree implements NameMapper
                 this.walkTree(new TreeAction()
                 {
                     @Override
-                    public void methodAction(Md md) throws Exception
+                    public void methodAction(Md md)
                     {
                         if (md.isOldStyleMatch(fName, fDesc))
                         {
@@ -610,7 +689,7 @@ public class ClassTree implements NameMapper
                 this.walkTree(new TreeAction()
                 {
                     @Override
-                    public void methodAction(Md md) throws Exception
+                    public void methodAction(Md md)
                     {
                         if (md.isWildcardMatch(fName, fDesc))
                         {
@@ -631,8 +710,13 @@ public class ClassTree implements NameMapper
         return list.iterator();
     }
 
-    /** Get fields in tree from the fully qualified, and possibly wildcarded, name. */
-    public Iterator getFdIter(String fullName, String descriptor) throws Exception
+    /**
+     * Get fields in tree from the fully qualified, and possibly wildcarded, name.
+     * 
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
+    public Iterator getFdIter(String fullName, String descriptor) throws ClassFileException, ClassNotFoundException
     {
         final List list = new ArrayList();
         // Wildcard? then return list of all matching methods
@@ -646,7 +730,7 @@ public class ClassTree implements NameMapper
                 this.walkTree(new TreeAction()
                 {
                     @Override
-                    public void fieldAction(Fd fd) throws Exception
+                    public void fieldAction(Fd fd)
                     {
                         if (fd.isOldStyleMatch(fName))
                         {
@@ -663,7 +747,7 @@ public class ClassTree implements NameMapper
                 this.walkTree(new TreeAction()
                 {
                     @Override
-                    public void fieldAction(Fd fd) throws Exception
+                    public void fieldAction(Fd fd)
                     {
                         if (fd.isWildcardMatch(fName, fDesc))
                         {
@@ -684,8 +768,12 @@ public class ClassTree implements NameMapper
         return list.iterator();
     }
 
-    /** Get class in tree from the fully qualified name, returning null if name not found. */
-    public Cl getCl(String fullName) throws Exception
+    /**
+     * Get class in tree from the fully qualified name, returning null if name not found.
+     * 
+     * @throws ClassFileException
+     */
+    public Cl getCl(String fullName) throws ClassFileException
     {
         TreeItem ti = this.root;
         for (Iterator nameIter = ClassTree.getNameIter(fullName); nameIter.hasNext();)
@@ -723,8 +811,12 @@ public class ClassTree implements NameMapper
         return (Cl)ti;
     }
 
-    /** Get package in tree from the fully qualified name, returning null if name not found. */
-    public Pk getPk(String fullName) throws Exception
+    /**
+     * Get package in tree from the fully qualified name, returning null if name not found.
+     * 
+     * @throws ClassFileException
+     */
+    public Pk getPk(String fullName) throws ClassFileException
     {
         TreeItem ti = this.root;
         for (Iterator nameIter = ClassTree.getNameIter(fullName); nameIter.hasNext();)
@@ -747,8 +839,12 @@ public class ClassTree implements NameMapper
         return (Pk)ti;
     }
 
-    /** Get method in tree from the fully qualified name. */
-    public Md getMd(String fullName, String descriptor) throws Exception
+    /**
+     * Get method in tree from the fully qualified name.
+     * 
+     * @throws ClassFileException
+     */
+    public Md getMd(String fullName, String descriptor) throws ClassFileException
     {
         // Split into class and method names
         int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
@@ -756,8 +852,12 @@ public class ClassTree implements NameMapper
         return cl.getMethod(fullName.substring(pos + 1), descriptor);
     }
 
-    /** Get field in tree from the fully qualified name. */
-    public Fd getFd(String fullName) throws Exception
+    /**
+     * Get field in tree from the fully qualified name.
+     * 
+     * @throws ClassFileException
+     */
+    public Fd getFd(String fullName) throws ClassFileException
     {
         // Split into class and field names
         int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
@@ -768,10 +868,11 @@ public class ClassTree implements NameMapper
     /**
      * Mapping for fully qualified class name.
      * 
+     * @throws ClassFileException
      * @see NameMapper#mapClass
      */
     @Override
-    public String mapClass(String className) throws Exception
+    public String mapClass(String className) throws ClassFileException
     {
         // Check for array -- requires special handling
         if ((className.length() > 0) && (className.charAt(0) == '['))
@@ -813,10 +914,11 @@ public class ClassTree implements NameMapper
     /**
      * Mapping for method name, of fully qualified class.
      * 
+     * @throws ClassFileException
      * @see NameMapper#mapMethod
      */
     @Override
-    public String mapMethod(String className, String methodName, String descriptor) throws Exception
+    public String mapMethod(String className, String methodName, String descriptor) throws ClassFileException
     {
         String outName = methodName;
         if (!methodName.equals("<init>"))
@@ -859,10 +961,11 @@ public class ClassTree implements NameMapper
     /**
      * Mapping for field name, of fully qualified class.
      * 
+     * @throws ClassFileException
      * @see NameMapper#mapField
      */
     @Override
-    public String mapField(String className, String fieldName) throws Exception
+    public String mapField(String className, String fieldName) throws ClassFileException
     {
         String outName = fieldName;
         if (!fieldName.equals("<init>"))
@@ -905,10 +1008,11 @@ public class ClassTree implements NameMapper
     /**
      * Mapping for generic type signature.
      * 
+     * @throws ClassFileException
      * @see NameMapper#mapSignature
      */
     @Override
-    public String mapSignature(String signature) throws Exception
+    public String mapSignature(String signature) throws ClassFileException
     {
         // NOTE - not currently parsed and mapped; reserve identifiers appearing in type signatures for reflective methods to work.
         return signature;
@@ -917,10 +1021,11 @@ public class ClassTree implements NameMapper
     /**
      * Mapping for descriptor of field or method.
      * 
+     * @throws ClassFileException
      * @see NameMapper#mapDescriptor
      */
     @Override
-    public String mapDescriptor(String descriptor) throws Exception
+    public String mapDescriptor(String descriptor) throws ClassFileException
     {
         // Pass everything through unchanged, except for the String between 'L' and ';' -- this is passed through mapClass(String)
         StringBuffer newDesc = new StringBuffer();
@@ -964,8 +1069,13 @@ public class ClassTree implements NameMapper
         return newDesc.toString();
     }
 
-    /** Dump the content of the class tree to the specified file (used for logging). */
-    public void dump(final PrintWriter log) throws Exception
+    /**
+     * Dump the content of the class tree to the specified file (used for logging).
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    public void dump(final PrintWriter log) throws ClassFileException, ClassNotFoundException
     {
         log.println("#");
         log.println(ClassTree.LOG_PRE_UNOBFUSCATED);
@@ -1070,7 +1180,7 @@ public class ClassTree implements NameMapper
 
     // Private Methods -------------------------------------------------------
     /** Mark TreeItem and all parents for retention. */
-    private void retainHierarchy(TreeItem ti, boolean invert) throws Exception
+    private void retainHierarchy(TreeItem ti, boolean invert)
     {
         if (invert)
         {
@@ -1095,14 +1205,24 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Walk the whole tree taking action once only on each package level, class, method and field. */
-    public void walkTree(TreeAction ta) throws Exception
+    /**
+     * Walk the whole tree taking action once only on each package level, class, method and field.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    public void walkTree(TreeAction ta) throws ClassFileException, ClassNotFoundException
     {
         this.walkTree(ta, this.root);
     }
 
-    /** Walk the tree which has TreeItem as its root taking action once only on each package level, class, method and field. */
-    private void walkTree(TreeAction ta, TreeItem ti) throws Exception
+    /**
+     * Walk the tree which has TreeItem as its root taking action once only on each package level, class, method and field.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    private void walkTree(TreeAction ta, TreeItem ti) throws ClassFileException, ClassNotFoundException
     {
         if (ti instanceof Pk)
         {

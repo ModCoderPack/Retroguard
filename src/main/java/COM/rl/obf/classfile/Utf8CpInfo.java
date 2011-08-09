@@ -47,17 +47,25 @@ public class Utf8CpInfo extends CpInfo
         super(ClassConstants.CONSTANT_Utf8);
     }
 
-    /** Ctor used when appending fresh Utf8 entries to the constant pool. */
-    public Utf8CpInfo(String s) throws Exception
+    /**
+     * Ctor used when appending fresh Utf8 entries to the constant pool.
+     * 
+     * @throws ClassFileException
+     */
+    public Utf8CpInfo(String s) throws ClassFileException
     {
         super(ClassConstants.CONSTANT_Utf8);
         this.setString(s);
         this.refCount = 1;
     }
 
-    /** Decrement the reference count, blanking the entry if no more references. */
+    /**
+     * Decrement the reference count, blanking the entry if no more references.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public void decRefCount() throws Exception
+    public void decRefCount() throws ClassFileException
     {
         super.decRefCount();
         if (this.refCount == 0)
@@ -66,26 +74,56 @@ public class Utf8CpInfo extends CpInfo
         }
     }
 
-    /** Return UTF8 data as a String. */
-    public String getString() throws Exception
+    /**
+     * Return UTF8 data as a String.
+     * 
+     * @throws ClassFileException
+     */
+    public String getString() throws ClassFileException
     {
         if (this.utf8string == null)
         {
-            this.utf8string = new String(this.bytes, "UTF8");
+            try
+            {
+                this.utf8string = new String(this.bytes, "UTF8");
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                // TODO printStackTrace
+                e.printStackTrace();
+                throw new ClassFileException("UnsupportedEncodingException");
+            }
         }
         return this.utf8string;
     }
 
-    /** Set UTF8 data as String. */
-    public void setString(String str) throws Exception
+    /**
+     * Set UTF8 data as String.
+     * 
+     * @throws ClassFileException
+     */
+    public void setString(String str) throws ClassFileException
     {
         this.utf8string = str;
-        this.bytes = str.getBytes("UTF8");
+        try
+        {
+            this.bytes = str.getBytes("UTF8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            throw new ClassFileException("UnsupportedEncodingException");
+        }
         this.u2length = this.bytes.length;
     }
 
-    /** Set the UTF8 data to empty. */
-    public void clearString() throws Exception
+    /**
+     * Set the UTF8 data to empty.
+     * 
+     * @throws ClassFileException
+     */
+    public void clearString() throws ClassFileException
     {
         this.u2length = 0;
         this.bytes = new byte[0];
@@ -93,9 +131,14 @@ public class Utf8CpInfo extends CpInfo
         this.getString();
     }
 
-    /** Read the 'info' data following the u1tag byte. */
+    /**
+     * Read the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2length = din.readUnsignedShort();
         this.bytes = new byte[this.u2length];
@@ -103,9 +146,13 @@ public class Utf8CpInfo extends CpInfo
         this.getString();
     }
 
-    /** Write the 'info' data following the u1tag byte. */
+    /**
+     * Write the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void writeInfo(DataOutput dout) throws Exception
+    protected void writeInfo(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2length);
         if (this.bytes.length > 0)

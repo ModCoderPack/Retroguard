@@ -45,7 +45,7 @@ public class ConstantPool
 
     // Instance Methods ------------------------------------------------------
     /** Ctor, which initializes Constant Pool using an array of CpInfo. */
-    public ConstantPool(ClassFile classFile, CpInfo[] cpInfo) throws Exception
+    public ConstantPool(ClassFile classFile, CpInfo[] cpInfo)
     {
         this.myClassFile = classFile;
         this.pool = new ArrayList(Arrays.asList(cpInfo));
@@ -63,8 +63,12 @@ public class ConstantPool
         return this.pool.size();
     }
 
-    /** Return the specified Constant Pool entry. */
-    public CpInfo getCpEntry(int i) throws Exception
+    /**
+     * Return the specified Constant Pool entry.
+     * 
+     * @throws ClassFileException
+     */
+    public CpInfo getCpEntry(int i) throws ClassFileException
     {
         if (i < this.pool.size())
         {
@@ -73,14 +77,18 @@ public class ConstantPool
         throw new ClassFileException("Constant Pool index out of range.");
     }
 
-    /** Set the reference count for each element, using references from the owning ClassFile. */
-    public void updateRefCount() throws Exception
+    /**
+     * Set the reference count for each element, using references from the owning ClassFile.
+     * 
+     * @throws ClassFileException
+     */
+    public void updateRefCount() throws ClassFileException
     {
         // Reset all reference counts to zero
         this.walkPool(new PoolAction()
         {
             @Override
-            public void defaultAction(CpInfo cpInfo) throws Exception
+            public void defaultAction(CpInfo cpInfo)
             {
                 cpInfo.resetRefCount();
             }
@@ -96,7 +104,7 @@ public class ConstantPool
         this.walkPool(new PoolAction()
         {
             @Override
-            public void utf8Action(Utf8CpInfo cpInfo) throws Exception
+            public void utf8Action(Utf8CpInfo cpInfo) throws ClassFileException
             {
                 if (cpInfo.getRefCount() == 0)
                 {
@@ -106,45 +114,55 @@ public class ConstantPool
         });
     }
 
-    /** Increment the reference count for the specified element. */
-    public void incRefCount(int i) throws Exception
+    /**
+     * Increment the reference count for the specified element.
+     * 
+     * @throws ClassFileException
+     */
+    public void incRefCount(int i) throws ClassFileException
     {
         CpInfo cpInfo = (CpInfo)this.pool.get(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
-//            throw new CPException("Illegal access to a Constant Pool element.");
+//            throw new ClassFileException("Illegal access to a Constant Pool element.");
+            return;
         }
-        else
-        {
-            cpInfo.incRefCount();
-        }
+
+        cpInfo.incRefCount();
     }
 
-    /** Remap a specified Utf8 entry to the given value and return its new index. */
-    public int remapUtf8To(String newString, int oldIndex) throws Exception
+    /**
+     * Remap a specified Utf8 entry to the given value and return its new index.
+     * 
+     * @throws ClassFileException
+     */
+    public int remapUtf8To(String newString, int oldIndex) throws ClassFileException
     {
         this.decRefCount(oldIndex);
         return this.addUtf8Entry(newString);
     }
 
-    /** Decrement the reference count for the specified element, blanking if Utf and refs are zero. */
-    public void decRefCount(int i) throws Exception
+    /**
+     * Decrement the reference count for the specified element, blanking if Utf and refs are zero.
+     * 
+     * @throws ClassFileException
+     */
+    public void decRefCount(int i) throws ClassFileException
     {
         CpInfo cpInfo = (CpInfo)this.pool.get(i);
         if (cpInfo == null)
         {
             // This can happen for JDK1.2 code so remove - 981123
 //            throw new CPException("Illegal access to a Constant Pool element.");
+            return;
         }
-        else
-        {
-            cpInfo.decRefCount();
-        }
+
+        cpInfo.decRefCount();
     }
 
     /** Add an entry to the constant pool and return its index. */
-    public int addEntry(CpInfo entry) throws Exception
+    public int addEntry(CpInfo entry)
     {
         // Try to replace an old, blanked Utf8 entry
         int index = this.pool.size();
@@ -152,8 +170,12 @@ public class ConstantPool
         return index;
     }
 
-    /** Add a string to the constant pool and return its index. */
-    protected int addUtf8Entry(String s) throws Exception
+    /**
+     * Add a string to the constant pool and return its index.
+     * 
+     * @throws ClassFileException
+     */
+    protected int addUtf8Entry(String s) throws ClassFileException
     {
         // Search pool for the string. If found, just increment the reference count and return the index
         for (int i = 0; i < this.pool.size(); i++)
@@ -193,17 +215,20 @@ public class ConstantPool
     /** Data walker */
     class PoolAction
     {
-        public void utf8Action(Utf8CpInfo cpInfo) throws Exception
+        /**
+         * @throws ClassFileException
+         */
+        public void utf8Action(Utf8CpInfo cpInfo) throws ClassFileException
         {
             this.defaultAction(cpInfo);
         }
 
-        public void defaultAction(CpInfo cpInfo) throws Exception
+        public void defaultAction(CpInfo cpInfo)
         {
         }
     }
 
-    private void walkPool(PoolAction pa) throws Exception
+    private void walkPool(PoolAction pa) throws ClassFileException
     {
         for (Iterator iter = this.pool.iterator(); iter.hasNext();)
         {

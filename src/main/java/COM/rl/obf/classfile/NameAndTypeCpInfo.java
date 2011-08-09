@@ -81,25 +81,37 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
         this.u2descriptorIndex = index;
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2nameIndex);
         pool.incRefCount(this.u2descriptorIndex);
     }
 
-    /** Read the 'info' data following the u1tag byte. */
+    /**
+     * Read the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException
     {
         this.u2nameIndex = din.readUnsignedShort();
         this.u2descriptorIndex = din.readUnsignedShort();
     }
 
-    /** Write the 'info' data following the u1tag byte. */
+    /**
+     * Write the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void writeInfo(DataOutput dout) throws Exception
+    protected void writeInfo(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2nameIndex);
         dout.writeShort(this.u2descriptorIndex);

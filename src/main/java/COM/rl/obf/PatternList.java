@@ -38,7 +38,7 @@ public class PatternList
 
 
     // Class Methods ---------------------------------------------------------
-    public static PatternList create(String pattern) throws Exception
+    public static PatternList create(String pattern)
     {
         return new PatternList(pattern);
     }
@@ -46,7 +46,7 @@ public class PatternList
 
     // Instance Methods ------------------------------------------------------
     /** Ctor. */
-    private PatternList(String pattern) throws Exception
+    private PatternList(String pattern)
     {
         int scFirst = pattern.indexOf("**");
         int scLast = pattern.lastIndexOf("**");

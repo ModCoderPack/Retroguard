@@ -41,7 +41,7 @@ public class LocalVariableInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static LocalVariableInfo create(DataInput din) throws Exception
+    public static LocalVariableInfo create(DataInput din) throws IOException
     {
         LocalVariableInfo lvi = new LocalVariableInfo();
         lvi.read(din);
@@ -78,14 +78,18 @@ public class LocalVariableInfo
         this.u2descriptorIndex = index;
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2nameIndex);
         pool.incRefCount(this.u2descriptorIndex);
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException
     {
         this.u2startpc = din.readUnsignedShort();
         this.u2length = din.readUnsignedShort();
@@ -94,8 +98,12 @@ public class LocalVariableInfo
         this.u2index = din.readUnsignedShort();
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     */
+    public void write(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2startpc);
         dout.writeShort(this.u2length);
@@ -104,8 +112,12 @@ public class LocalVariableInfo
         dout.writeShort(this.u2index);
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         String oldDesc = cf.getUtf8(this.u2descriptorIndex);
         String newDesc = nm.mapDescriptor(oldDesc);

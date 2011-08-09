@@ -19,6 +19,8 @@
 
 package COM.rl.obf;
 
+import COM.rl.obf.classfile.ClassFileException;
+
 /**
  * Interface to a list of method and field names and descriptors -- used for checking if a name/descriptor is in the
  * public/protected lists of the super-class/interface hierarchy.
@@ -27,15 +29,23 @@ package COM.rl.obf;
  */
 public interface NameListUp
 {
-    /** Get output method name from list, or null if no mapping exists. */
-    public String getMethodOutNameUp(String name, String descriptor) throws Exception;
+    /**
+     * Get output method name from list, or null if no mapping exists.
+     * 
+     * @throws ClassFileException
+     */
+    public String getMethodOutNameUp(String name, String descriptor) throws ClassFileException;
 
-    /** Get obfuscated method name from list, or null if no mapping exists. */
-    public String getMethodObfNameUp(String name, String descriptor) throws Exception;
+    /**
+     * Get obfuscated method name from list, or null if no mapping exists.
+     * 
+     * @throws ClassFileException
+     */
+    public String getMethodObfNameUp(String name, String descriptor) throws ClassFileException;
 
     /** Get output field name from list, or null if no mapping exists. */
-    public String getFieldOutNameUp(String name) throws Exception;
+    public String getFieldOutNameUp(String name);
 
     /** Get obfuscated field name from list, or null if no mapping exists. */
-    public String getFieldObfNameUp(String name) throws Exception;
+    public String getFieldObfNameUp(String name);
 }

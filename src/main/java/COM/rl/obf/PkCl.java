@@ -53,13 +53,13 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Get a class by name. */
-    public Cl getClass(String name) throws Exception
+    public Cl getClass(String name)
     {
         return (Cl)this.cls.get(name);
     }
 
     /** Get a class by obfuscated name. */
-    public Cl getObfClass(String name) throws Exception
+    public Cl getObfClass(String name)
     {
         for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
         {
@@ -104,10 +104,10 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Add a class to the list of owned classes. */
-    abstract public Cl addClass(String name, String superName, List interfaceNames, int access) throws Exception;
+    abstract public Cl addClass(String name, String superName, List interfaceNames, int access);
 
     /** Add a class to the list of owned classes. */
-    public Cl addClass(boolean isInnerClass, String name, String superName, List interfaceNames, int access) throws Exception
+    public Cl addClass(boolean isInnerClass, String name, String superName, List interfaceNames, int access)
     {
         Cl cl = this.getClass(name);
 
@@ -141,10 +141,10 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Add a placeholder class to our list of owned classes, to be replaced later by the full class. */
-    abstract public Cl addPlaceholderClass(String name) throws Exception;
+    abstract public Cl addPlaceholderClass(String name);
 
     /** Add a placeholder class to our list of owned classes, to be replaced later by the full class. */
-    public Cl addPlaceholderClass(boolean isInnerClass, String name) throws Exception
+    public Cl addPlaceholderClass(boolean isInnerClass, String name)
     {
         Cl cl = this.getClass(name);
         if (cl == null)
@@ -156,13 +156,13 @@ abstract public class PkCl extends TreeItem
     }
 
     /** Generate unique obfuscated names for this namespace. */
-    public void generateNames() throws Exception
+    public void generateNames()
     {
         this.generateNames(this.cls);
     }
 
     /** Generate unique obfuscated names for a given namespace. */
-    protected void generateNames(Map hash) throws Exception
+    protected void generateNames(Map hash)
     {
         for (Iterator iter = hash.values().iterator(); iter.hasNext();)
         {

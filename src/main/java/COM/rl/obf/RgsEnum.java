@@ -124,7 +124,7 @@ public class RgsEnum
     // Fields ----------------------------------------------------------------
     private StreamTokenizer tk;
     private RgsEntry next;
-    private Exception nextException;
+    private RGSException nextException;
 
 
     // Class Methods ---------------------------------------------------------
@@ -134,8 +134,12 @@ public class RgsEnum
         return RgsEnum.DEFAULT_RGS;
     }
 
-    /** Translate a string access modifier from the script to bit flag */
-    private static int toAccessFlag(String accessString) throws Exception
+    /**
+     * Translate a string access modifier from the script to bit flag
+     * 
+     * @throws RGSException
+     */
+    private static int toAccessFlag(String accessString) throws RGSException
     {
         if (RgsEnum.ACCESS_PUBLIC.equals(accessString))
         {
@@ -207,12 +211,16 @@ public class RgsEnum
         }
         else
         {
-            throw new RGSException();
+            throw new RGSException("Invalid access string " + accessString);
         }
     }
 
-    /** Decode a list of access flags into a bit mask for class, method, or field access flag u2's. */
-    private static int decodeAccessFlags(int entryType, String accessString) throws Exception
+    /**
+     * Decode a list of access flags into a bit mask for class, method, or field access flag u2's.
+     * 
+     * @throws RGSException
+     */
+    private static int decodeAccessFlags(int entryType, String accessString) throws RGSException
     {
         int accessMask = 0;
         int accessSetting = 0;
@@ -284,8 +292,12 @@ public class RgsEnum
         this.readNext();
     }
 
-    /** Are there more script entries? */
-    public boolean hasNext() throws Exception
+    /**
+     * Are there more script entries?
+     * 
+     * @throws RGSException
+     */
+    public boolean hasNext() throws RGSException
     {
         if (this.nextException != null)
         {
@@ -294,11 +306,15 @@ public class RgsEnum
         return this.next != null;
     }
 
-    /** Return next script entry. */
-    public RgsEntry next() throws Exception
+    /**
+     * Return next script entry.
+     * 
+     * @throws RGSException
+     */
+    public RgsEntry next() throws RGSException
     {
         RgsEntry thisOne = this.next;
-        Exception thisException = this.nextException;
+        RGSException thisException = this.nextException;
         this.readNext();
         if (thisException != null)
         {
@@ -307,13 +323,6 @@ public class RgsEnum
         return thisOne;
     }
 
-    /** Not implemented */
-    public void remove()
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    /** Read the next entry, returning true if one is available. */
     private void readNext()
     {
         // Reset the 'next error' state
@@ -645,8 +654,10 @@ public class RgsEnum
             }
             this.next = entry;
         }
-        catch (Exception e)
+        catch (RGSException e)
         {
+            // TODO printStackTrace
+            e.printStackTrace();
             // Discard to end of erroneous line
             try
             {
@@ -660,6 +671,33 @@ public class RgsEnum
             }
             catch (IOException ee)
             {
+                // TODO printStackTrace
+                e.printStackTrace();
+                // Take no action if StreamTokenizer fails here
+            }
+
+            // Save exception for throw from nextEntry()
+            this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno()) + " of script file.");
+        }
+        catch (IOException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            // Discard to end of erroneous line
+            try
+            {
+                while ((ttype = this.tk.nextToken()) != StreamTokenizer.TT_EOF)
+                {
+                    if (ttype == StreamTokenizer.TT_EOL)
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (IOException ee)
+            {
+                // TODO printStackTrace
+                e.printStackTrace();
                 // Take no action if StreamTokenizer fails here
             }
 
@@ -668,8 +706,12 @@ public class RgsEnum
         }
     }
 
-    /** Throw if invalid */
-    private void checkMethodDescriptor(String s) throws Exception
+    /**
+     * Throw if invalid
+     * 
+     * @throws RGSException
+     */
+    private void checkMethodDescriptor(String s) throws RGSException
     {
         if ((s.length() == 0) || (s.charAt(0) != '('))
         {
@@ -685,8 +727,12 @@ public class RgsEnum
         this.checkJavaType(s.substring(1));
     }
 
-    /** Throw if first type is invalid, else return all but first type in String */
-    private String checkFirstJavaType(String s) throws Exception
+    /**
+     * Throw if first type is invalid, else return all but first type in String
+     * 
+     * @throws RGSException
+     */
+    private String checkFirstJavaType(String s) throws RGSException
     {
         // Pull off the array specifiers
         while (s.charAt(0) == '[')
@@ -729,8 +775,12 @@ public class RgsEnum
         return s.substring(pos + 1);
     }
 
-    /** Throw if type is invalid */
-    private void checkJavaType(String s) throws Exception
+    /**
+     * Throw if type is invalid
+     * 
+     * @throws RGSException
+     */
+    private void checkJavaType(String s) throws RGSException
     {
         if (!this.checkFirstJavaType(s).equals(""))
         {
@@ -738,8 +788,12 @@ public class RgsEnum
         }
     }
 
-    /** Throw if invalid */
-    private void checkMethodOrFieldSpec(String s) throws Exception
+    /**
+     * Throw if invalid
+     * 
+     * @throws RGSException
+     */
+    private void checkMethodOrFieldSpec(String s) throws RGSException
     {
         if (s.length() == 0)
         {
@@ -756,8 +810,12 @@ public class RgsEnum
         this.checkClassSpec(s.substring(0, pos));
     }
 
-    /** Throw if invalid */
-    private void checkClassSpec(String s) throws Exception
+    /**
+     * Throw if invalid
+     * 
+     * @throws RGSException
+     */
+    private void checkClassSpec(String s) throws RGSException
     {
         if (s.length() == 0)
         {
@@ -778,8 +836,12 @@ public class RgsEnum
         this.checkJavaIdentifier(s);
     }
 
-    /** Throw if invalid */
-    private void checkClassWCSpec(String s) throws Exception
+    /**
+     * Throw if invalid
+     * 
+     * @throws RGSException
+     */
+    private void checkClassWCSpec(String s) throws RGSException
     {
         // Check for wildcard package spec first
         if (s.length() == 0)
@@ -812,8 +874,12 @@ public class RgsEnum
         }
     }
 
-    /** Throw if invalid */
-    private void checkJavaIdentifier(String s) throws Exception
+    /**
+     * Throw if invalid
+     * 
+     * @throws RGSException
+     */
+    private void checkJavaIdentifier(String s) throws RGSException
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
         {
@@ -828,8 +894,12 @@ public class RgsEnum
         }
     }
 
-    /** Throw if invalid (allows for anon. inner class names like '4') */
-    private void checkJavaInnerIdentifier(String s) throws Exception
+    /**
+     * Throw if invalid (allows for anon. inner class names like '4')
+     * 
+     * @throws RGSException
+     */
+    private void checkJavaInnerIdentifier(String s) throws RGSException
     {
         if (s.length() == 0)
         {

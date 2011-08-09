@@ -41,8 +41,9 @@ public class FieldInfo extends ClassItemInfo
      * 
      * @throws IOException
      *             if class file is corrupt or incomplete
+     * @throws ClassFileException
      */
-    public static FieldInfo create(DataInput din, ClassFile cf) throws Exception
+    public static FieldInfo create(DataInput din, ClassFile cf) throws IOException, ClassFileException
     {
         if (din == null)
         {

@@ -53,7 +53,7 @@ public class StackMapFrameInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static StackMapFrameInfo create(DataInput din) throws Exception
+    public static StackMapFrameInfo create(DataInput din) throws IOException, ClassFileException
     {
         StackMapFrameInfo smfi = new StackMapFrameInfo();
         smfi.read(din);
@@ -66,7 +66,7 @@ public class StackMapFrameInfo
     {
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1frameType = din.readUnsignedByte();
         if ((StackMapFrameInfo.SAME_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_MAX))
@@ -109,8 +109,12 @@ public class StackMapFrameInfo
         }
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
@@ -122,8 +126,13 @@ public class StackMapFrameInfo
         }
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeByte(this.u1frameType);
         if ((StackMapFrameInfo.SAME_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.SAME_MAX))
@@ -163,8 +172,13 @@ public class StackMapFrameInfo
         }
     }
 
-    /** Read 'locals' VerificationTypeInfo */
-    private void readLocals(DataInput din) throws Exception
+    /**
+     * Read 'locals' VerificationTypeInfo
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    private void readLocals(DataInput din) throws IOException, ClassFileException
     {
         this.locals = new VerificationTypeInfo[this.u2numberOfLocals];
         for (int i = 0; i < this.u2numberOfLocals; i++)
@@ -173,8 +187,13 @@ public class StackMapFrameInfo
         }
     }
 
-    /** Write 'locals' VerificationTypeInfo */
-    private void writeLocals(DataOutput dout) throws Exception
+    /**
+     * Write 'locals' VerificationTypeInfo
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    private void writeLocals(DataOutput dout) throws IOException, ClassFileException
     {
         for (int i = 0; i < this.u2numberOfLocals; i++)
         {
@@ -182,8 +201,13 @@ public class StackMapFrameInfo
         }
     }
 
-    /** Read 'stack items' VerificationTypeInfo */
-    private void readStackItems(DataInput din) throws Exception
+    /**
+     * Read 'stack items' VerificationTypeInfo
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    private void readStackItems(DataInput din) throws IOException, ClassFileException
     {
         this.stack = new VerificationTypeInfo[this.u2numberOfStackItems];
         for (int i = 0; i < this.u2numberOfStackItems; i++)
@@ -192,8 +216,13 @@ public class StackMapFrameInfo
         }
     }
 
-    /** Write 'stack items' VerificationTypeInfo */
-    private void writeStackItems(DataOutput dout) throws Exception
+    /**
+     * Write 'stack items' VerificationTypeInfo
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    private void writeStackItems(DataOutput dout) throws ClassFileException, IOException
     {
         for (int i = 0; i < this.u2numberOfStackItems; i++)
         {

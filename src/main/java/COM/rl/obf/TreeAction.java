@@ -22,6 +22,8 @@ package COM.rl.obf;
 import java.io.*;
 import java.util.*;
 
+import COM.rl.obf.classfile.ClassFileException;
+
 /**
  * Set of actions to be performed by a tree walker
  * 
@@ -29,27 +31,31 @@ import java.util.*;
  */
 public class TreeAction
 {
-    public void packageAction(Pk pk) throws Exception
+    public void packageAction(Pk pk)
     {
         this.defaultAction(pk);
     }
 
-    public void classAction(Cl cl) throws Exception
+    /**
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     */
+    public void classAction(Cl cl) throws ClassFileException, ClassNotFoundException
     {
         this.defaultAction(cl);
     }
 
-    public void methodAction(Md md) throws Exception
+    public void methodAction(Md md)
     {
         this.defaultAction(md);
     }
 
-    public void fieldAction(Fd fd) throws Exception
+    public void fieldAction(Fd fd)
     {
         this.defaultAction(fd);
     }
 
-    public void defaultAction(TreeItem ti) throws Exception
+    public void defaultAction(TreeItem ti)
     {
     }
 }

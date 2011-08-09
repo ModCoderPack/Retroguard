@@ -48,14 +48,18 @@ public class StackMapTableAttrInfo extends AttrInfo
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
     @Override
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_StackMapTable;
     }
 
-    /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    /**
+     * Check for Utf8 references in the 'info' data to the constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
         for (Iterator iter = this.entries.iterator(); iter.hasNext();)
         {
@@ -64,9 +68,14 @@ public class StackMapTableAttrInfo extends AttrInfo
         }
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2numberOfEntries = din.readUnsignedShort();
         this.entries = new ArrayList(this.u2numberOfEntries);
@@ -76,9 +85,14 @@ public class StackMapTableAttrInfo extends AttrInfo
         }
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numberOfEntries);
         for (Iterator iter = this.entries.iterator(); iter.hasNext();)

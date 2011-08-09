@@ -124,7 +124,7 @@ public class CodeAttrInfo extends AttrInfo
 
     /** Return the length in bytes of the attribute. */
     @Override
-    protected int getAttrInfoLength() throws Exception
+    protected int getAttrInfoLength()
     {
         int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength
             + this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
@@ -137,7 +137,7 @@ public class CodeAttrInfo extends AttrInfo
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
     @Override
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_Code;
     }
@@ -147,7 +147,7 @@ public class CodeAttrInfo extends AttrInfo
      * <tt>List</tt> are killed).
      */
     @Override
-    protected void trimAttrsExcept(List keepAttrs) throws Exception
+    protected void trimAttrsExcept(List keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
         for (int i = 0; i < this.attributes.length; i++)
@@ -175,9 +175,13 @@ public class CodeAttrInfo extends AttrInfo
         this.u2attributesCount = left.size();
     }
 
-    /** Check for references in the 'info' data to the constant pool and mark them. */
+    /**
+     * Check for references in the 'info' data to the constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
         for (int i = 0; i < this.attributes.length; i++)
         {
@@ -185,9 +189,14 @@ public class CodeAttrInfo extends AttrInfo
         }
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2maxStack = din.readUnsignedShort();
         this.u2maxLocals = din.readUnsignedShort();
@@ -208,9 +217,14 @@ public class CodeAttrInfo extends AttrInfo
         }
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2maxStack);
         dout.writeShort(this.u2maxLocals);
@@ -228,9 +242,13 @@ public class CodeAttrInfo extends AttrInfo
         }
     }
 
-    /** Do necessary name remapping. */
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         for (int i = 0; i < this.u2attributesCount; i++)
         {
@@ -238,14 +256,22 @@ public class CodeAttrInfo extends AttrInfo
         }
     }
 
-    /** Walk the code, finding .class and Class.forName to update. */
-    protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws Exception
+    /**
+     * Walk the code, finding .class and Class.forName to update.
+     * 
+     * @throws ClassFileException
+     */
+    protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws ClassFileException
     {
         return this.walkClassStrings(cpToFlag, null);
     }
 
-    /** Walk the code, updating .class and Class.forName strings. */
-    protected void walkUpdateClassStrings(Map cpUpdate) throws Exception
+    /**
+     * Walk the code, updating .class and Class.forName strings.
+     * 
+     * @throws ClassFileException
+     */
+    protected void walkUpdateClassStrings(Map cpUpdate) throws ClassFileException
     {
         this.walkClassStrings(null, cpUpdate);
     }
@@ -255,8 +281,10 @@ public class CodeAttrInfo extends AttrInfo
      * Note that class literals MyClass.class are stored directly in the constant pool in 1.5 (change from 1.4), not referenced
      * by Utf8 name, so .option MapClassString is not necessary for them.
      * Still needed for Class.forName("MyClass") though.
+     * 
+     * @throws ClassFileException
      */
-    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Map cpUpdate) throws Exception
+    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Map cpUpdate) throws ClassFileException
     {
         int opcodePrev = -1;
         int ldcIndex = -1;
@@ -338,8 +366,12 @@ public class CodeAttrInfo extends AttrInfo
         return cpToFlag;
     }
 
-    /** Compute length of opcode arguments at offset */
-    private int getOpcodeBytes(int opcode, int i) throws Exception
+    /**
+     * Compute length of opcode arguments at offset
+     * 
+     * @throws ClassFileException
+     */
+    private int getOpcodeBytes(int opcode, int i) throws ClassFileException
     {
         int bytes = CodeAttrInfo.opcodeBytes(opcode);
         if (bytes < 0) // variable length instructions

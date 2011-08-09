@@ -44,7 +44,7 @@ public class PlaceholderCl extends Cl
 
     // Instance Methods ------------------------------------------------------
     /** Ctor. */
-    public PlaceholderCl(TreeItem parent, boolean isInnerClass, String name) throws Exception
+    public PlaceholderCl(TreeItem parent, boolean isInnerClass, String name)
     {
         super(parent, isInnerClass, name, null, Collections.emptyList(), 0);
     }

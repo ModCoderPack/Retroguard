@@ -87,8 +87,9 @@ public class ClassFile implements ClassConstants
      * 
      * @throws IOException
      *             if class file is corrupt or incomplete
+     * @throws ClassFileException
      */
-    public static ClassFile create(DataInput din) throws Exception
+    public static ClassFile create(DataInput din) throws IOException, ClassFileException
     {
         if (din == null)
         {
@@ -102,8 +103,10 @@ public class ClassFile implements ClassConstants
     /**
      * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
      * Class.forName() method returns .
+     * 
+     * @throws ClassFileException
      */
-    public static String[] parseDescriptor(String descriptor) throws Exception
+    public static String[] parseDescriptor(String descriptor) throws ClassFileException
     {
         return ClassFile.parseDescriptor(descriptor, false, true);
     }
@@ -111,8 +114,10 @@ public class ClassFile implements ClassConstants
     /**
      * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, optionally in same format
      * as the Class.forName() method returns .
+     * 
+     * @throws ClassFileException
      */
-    public static String[] parseDescriptor(String descriptor, boolean isDisplay) throws Exception
+    public static String[] parseDescriptor(String descriptor, boolean isDisplay) throws ClassFileException
     {
         return ClassFile.parseDescriptor(descriptor, isDisplay, true);
     }
@@ -120,8 +125,10 @@ public class ClassFile implements ClassConstants
     /**
      * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
      * Class.forName() method returns .
+     * 
+     * @throws ClassFileException
      */
-    public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws Exception
+    public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws ClassFileException
     {
         // Check for field descriptor
         List names = new ArrayList();
@@ -191,8 +198,12 @@ public class ClassFile implements ClassConstants
         return (String[])names.toArray(new String[0]);
     }
 
-    /** Translate a type specifier from the internal JVM convention to the Class.forName() one. */
-    public static String translateType(String inName, boolean isDisplay) throws Exception
+    /**
+     * Translate a type specifier from the internal JVM convention to the Class.forName() one.
+     * 
+     * @throws ClassFileException
+     */
+    public static String translateType(String inName, boolean isDisplay) throws ClassFileException
     {
         String outName = null;
         switch (inName.charAt(0))
@@ -261,13 +272,13 @@ public class ClassFile implements ClassConstants
     }
 
     /** Translate a class name from the internal '/' convention to the regular '.' one. */
-    public static String translate(String name) throws Exception
+    public static String translate(String name)
     {
         return name.replace('/', '.');
     }
 
     /** Translate a class name from the the regular '.' convention to internal '/' one. */
-    public static String backTranslate(String name) throws Exception
+    public static String backTranslate(String name)
     {
         return name.replace('.', '/');
     }
@@ -291,8 +302,13 @@ public class ClassFile implements ClassConstants
     {
     }
 
-    /** Import the class data to internal representation. */
-    private void read(DataInput din) throws Exception
+    /**
+     * Import the class data to internal representation.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         // Read the class file
         this.u4magic = din.readInt();
@@ -302,11 +318,11 @@ public class ClassFile implements ClassConstants
         // Check this is a valid classfile that we can handle
         if (this.u4magic != ClassConstants.MAGIC)
         {
-            throw new IOException("Invalid magic number in class file.");
+            throw new ClassFileException("Invalid magic number in class file.");
         }
 //        if (this.u2majorVersion > ClassConstants.MAJOR_VERSION)
 //        {
-//            throw new IOException("Incompatible version number for class file format.");
+//            throw new ClassFileException("Incompatible version number for class file format.");
 //        }
 
         int u2constantPoolCount = din.readUnsignedShort();
@@ -352,8 +368,12 @@ public class ClassFile implements ClassConstants
         this.checkReflection();
     }
 
-    /** Define a constant String to include in this output class file. */
-    public void setIdString(String id) throws Exception
+    /**
+     * Define a constant String to include in this output class file.
+     * 
+     * @throws ClassFileException
+     */
+    public void setIdString(String id) throws ClassFileException
     {
         if (id != null)
         {
@@ -365,8 +385,12 @@ public class ClassFile implements ClassConstants
         }
     }
 
-    /** Check for reflection methods and set flag */
-    private boolean checkReflection() throws Exception
+    /**
+     * Check for reflection methods and set flag
+     * 
+     * @throws ClassFileException
+     */
+    private boolean checkReflection() throws ClassFileException
     {
         // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
         // not interfaces.
@@ -394,26 +418,38 @@ public class ClassFile implements ClassConstants
     }
 
     /** Return the access modifiers for this classfile. */
-    public int getModifiers() throws Exception
+    public int getModifiers()
     {
         return this.u2accessFlags;
     }
 
-    /** Return the name of this classfile. */
-    public String getName() throws Exception
+    /**
+     * Return the name of this classfile.
+     * 
+     * @throws ClassFileException
+     */
+    public String getName() throws ClassFileException
     {
         return this.toName(this.u2thisClass);
     }
 
-    /** Return the name of this class's superclass. */
-    public String getSuper() throws Exception
+    /**
+     * Return the name of this class's superclass.
+     * 
+     * @throws ClassFileException
+     */
+    public String getSuper() throws ClassFileException
     {
         // This may be java/lang/Object, in which case there is no super
         return (this.u2superClass == 0) ? null : this.toName(this.u2superClass);
     }
 
-    /** Return the names of this class's interfaces. */
-    public List getInterfaces() throws Exception
+    /**
+     * Return the names of this class's interfaces.
+     * 
+     * @throws ClassFileException
+     */
+    public List getInterfaces() throws ClassFileException
     {
         List interfaces = new ArrayList();
         for (int i = 0; i < this.u2interfacesCount; i++)
@@ -423,8 +459,12 @@ public class ClassFile implements ClassConstants
         return interfaces;
     }
 
-    /** Convert a CP index to a class name. */
-    private String toName(int u2index) throws Exception
+    /**
+     * Convert a CP index to a class name.
+     * 
+     * @throws ClassFileException
+     */
+    private String toName(int u2index) throws ClassFileException
     {
         CpInfo classEntry = this.getCpEntry(u2index);
         if (classEntry instanceof ClassCpInfo)
@@ -440,43 +480,55 @@ public class ClassFile implements ClassConstants
     }
 
     /** Return number of methods in class. */
-    public int getMethodCount() throws Exception
+    public int getMethodCount()
     {
         return this.methods.length;
     }
 
     /** Return i'th method in class. */
-    public MethodInfo getMethod(int i) throws Exception
+    public MethodInfo getMethod(int i)
     {
         return this.methods[i];
     }
 
     /** Return number of fields in class. */
-    public int getFieldCount() throws Exception
+    public int getFieldCount()
     {
         return this.fields.length;
     }
 
     /** Return i'th field in class. */
-    public FieldInfo getField(int i) throws Exception
+    public FieldInfo getField(int i)
     {
         return this.fields[i];
     }
 
-    /** Lookup the entry in the constant pool and return as an Object. */
-    protected CpInfo getCpEntry(int cpIndex) throws Exception
+    /**
+     * Lookup the entry in the constant pool and return as an Object.
+     * 
+     * @throws ClassFileException
+     */
+    protected CpInfo getCpEntry(int cpIndex) throws ClassFileException
     {
         return this.constantPool.getCpEntry(cpIndex);
     }
 
-    /** Remap a specified Utf8 entry to the given value and return its new index. */
-    public int remapUtf8To(String newString, int oldIndex) throws Exception
+    /**
+     * Remap a specified Utf8 entry to the given value and return its new index.
+     * 
+     * @throws ClassFileException
+     */
+    public int remapUtf8To(String newString, int oldIndex) throws ClassFileException
     {
         return this.constantPool.remapUtf8To(newString, oldIndex);
     }
 
-    /** Lookup the UTF8 string in the constant pool. Used in debugging. */
-    protected String getUtf8(int cpIndex) throws Exception
+    /**
+     * Lookup the UTF8 string in the constant pool. Used in debugging.
+     * 
+     * @throws ClassFileException
+     */
+    protected String getUtf8(int cpIndex) throws ClassFileException
     {
         CpInfo i = this.getCpEntry(cpIndex);
         if (i instanceof Utf8CpInfo)
@@ -493,14 +545,22 @@ public class ClassFile implements ClassConstants
         return this.hasReflection;
     }
 
-    /** List methods which can break obfuscated code, and log to a <tt>List</tt>. */
-    public List getDangerousMethods() throws Exception
+    /**
+     * List methods which can break obfuscated code, and log to a <tt>List</tt>.
+     * 
+     * @throws ClassFileException
+     */
+    public List getDangerousMethods() throws ClassFileException
     {
         return this.listDangerMethods(new ArrayList());
     }
 
-    /** List methods which can break obfuscated code, and log to a List. */
-    public List listDangerMethods(List list) throws Exception
+    /**
+     * List methods which can break obfuscated code, and log to a List.
+     * 
+     * @throws ClassFileException
+     */
+    public List listDangerMethods(List list) throws ClassFileException
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
@@ -541,69 +601,79 @@ public class ClassFile implements ClassConstants
         return list;
     }
 
-    /** Check for direct references to Utf8 constant pool entries. */
-    public void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for direct references to Utf8 constant pool entries.
+     * 
+     * @throws ClassFileException
+     */
+    public void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
-        try
+        // TODO catch ArrayIndexOutOfBoundsException
+//        try
+//        {
+        // Check for references to Utf8 from outside the constant pool
+        for (int i = 0; i < this.fields.length; i++)
         {
-            // Check for references to Utf8 from outside the constant pool
-            for (int i = 0; i < this.fields.length; i++)
-            {
-                this.fields[i].markUtf8Refs(pool);
-            }
-            for (int i = 0; i < this.methods.length; i++)
-            {
-                // also checks Code/LVT attrs here
-                this.methods[i].markUtf8Refs(pool);
-            }
-            for (int i = 0; i < this.attributes.length; i++)
-            {
-                // checks InnerClasses, SourceFile and all attr names
-                this.attributes[i].markUtf8Refs(pool);
-            }
+            this.fields[i].markUtf8Refs(pool);
+        }
+        for (int i = 0; i < this.methods.length; i++)
+        {
+            // also checks Code/LVT attrs here
+            this.methods[i].markUtf8Refs(pool);
+        }
+        for (int i = 0; i < this.attributes.length; i++)
+        {
+            // checks InnerClasses, SourceFile and all attr names
+            this.attributes[i].markUtf8Refs(pool);
+        }
 
-            // Now check for references from other CP entries
-            for (Iterator it = pool.iterator(); it.hasNext();)
+        // Now check for references from other CP entries
+        for (Iterator it = pool.iterator(); it.hasNext();)
+        {
+            Object o = it.next();
+            if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
             {
-                Object o = it.next();
-                if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
-                {
-                    ((CpInfo)o).markUtf8Refs(pool);
-                }
+                ((CpInfo)o).markUtf8Refs(pool);
             }
         }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
-            throw new ClassFileException("Inconsistent reference to constant pool.");
-        }
+//        }
+//        catch (ArrayIndexOutOfBoundsException e)
+//        {
+//            throw new ClassFileException("Inconsistent reference to constant pool.");
+//        }
     }
 
-    /** Check for direct references to NameAndType constant pool entries. */
-    public void markNTRefs(ConstantPool pool) throws Exception
+    /**
+     * Check for direct references to NameAndType constant pool entries.
+     * 
+     * @throws ClassFileException
+     */
+    public void markNTRefs(ConstantPool pool) throws ClassFileException
     {
-        try
+        // TODO catch ArrayIndexOutOfBoundsException
+//        try
+//        {
+        // Now check the method and field CP entries
+        for (Iterator it = pool.iterator(); it.hasNext();)
         {
-            // Now check the method and field CP entries
-            for (Iterator it = pool.iterator(); it.hasNext();)
+            Object o = it.next();
+            if (o instanceof RefCpInfo)
             {
-                Object o = it.next();
-                if (o instanceof RefCpInfo)
-                {
-                    ((CpInfo)o).markNTRefs(pool);
-                }
+                ((CpInfo)o).markNTRefs(pool);
             }
         }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
-            throw new ClassFileException("Inconsistent reference to constant pool.");
-        }
+//        }
+//        catch (ArrayIndexOutOfBoundsException e)
+//        {
+//            throw new ClassFileException("Inconsistent reference to constant pool.");
+//        }
     }
 
     /**
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
      * <tt>List</tt> are killed).
      */
-    public void trimAttrsExcept(List keepAttrs) throws Exception
+    public void trimAttrsExcept(List keepAttrs)
     {
         // Merge additional attributes with required list
         keepAttrs.addAll(Arrays.asList(ClassConstants.REQUIRED_ATTRS));
@@ -645,27 +715,35 @@ public class ClassFile implements ClassConstants
         this.isUnkAttrGone = true;
     }
 
-    /** Update the constant pool reference counts. */
-    public void updateRefCount() throws Exception
+    /**
+     * Update the constant pool reference counts.
+     * 
+     * @throws ClassFileException
+     */
+    public void updateRefCount() throws ClassFileException
     {
         this.constantPool.updateRefCount();
     }
 
     /** Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed). */
-    public void trimAttrs() throws Exception
+    public void trimAttrs()
     {
         this.trimAttrsExcept(Collections.emptyList());
     }
 
     /** Remove unnecessary attributes from the class. */
-    public void trimAttrs(NameMapper nm) throws Exception
+    public void trimAttrs(NameMapper nm)
     {
         List attrs = nm.getAttrsToKeep();
         this.trimAttrsExcept(attrs);
     }
 
-    /** Remap the entities in the specified ClassFile. */
-    public void remap(NameMapper nm, PrintWriter log, boolean enableMapClassString) throws Exception
+    /**
+     * Remap the entities in the specified ClassFile.
+     * 
+     * @throws ClassFileException
+     */
+    public void remap(NameMapper nm, PrintWriter log, boolean enableMapClassString) throws ClassFileException
     {
         // Go through all of class's fields and methods mapping 'name' and 'descriptor' references
         String thisClassName = ((Utf8CpInfo)this.getCpEntry(
@@ -821,8 +899,12 @@ public class ClassFile implements ClassConstants
         }
     }
 
-    /** Remap Class.forName and .class, leaving other identical Strings alone */
-    private void remapClassStrings(NameMapper nm, PrintWriter log) throws Exception
+    /**
+     * Remap Class.forName and .class, leaving other identical Strings alone
+     * 
+     * @throws ClassFileException
+     */
+    private void remapClassStrings(NameMapper nm, PrintWriter log) throws ClassFileException
     {
         // Visit all method Code attributes, collecting information on remap
         FlagHashtable cpToFlag = new FlagHashtable();
@@ -946,8 +1028,13 @@ public class ClassFile implements ClassConstants
         return true;
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         if (dout == null)
         {
@@ -994,8 +1081,12 @@ public class ClassFile implements ClassConstants
         }
     }
 
-    /** Dump the content of the class file to the specified file (used for debugging). */
-    public void dump(PrintWriter pw) throws Exception
+    /**
+     * Dump the content of the class file to the specified file (used for debugging).
+     * 
+     * @throws ClassFileException
+     */
+    public void dump(PrintWriter pw) throws ClassFileException
     {
         pw.println("_____________________________________________________________________");
         pw.println("CLASS: " + this.getName());

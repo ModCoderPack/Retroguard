@@ -49,7 +49,7 @@ public class MemberValueInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static MemberValueInfo create(DataInput din) throws Exception
+    public static MemberValueInfo create(DataInput din) throws IOException, ClassFileException
     {
         MemberValueInfo mvi = new MemberValueInfo();
         mvi.read(din);
@@ -68,8 +68,12 @@ public class MemberValueInfo
         return this.u1tag;
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         switch (this.u1tag)
         {
@@ -107,7 +111,7 @@ public class MemberValueInfo
         }
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1tag = din.readUnsignedByte();
         switch (this.u1tag)
@@ -146,8 +150,13 @@ public class MemberValueInfo
         }
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeByte(this.u1tag);
         switch (this.u1tag)
@@ -186,8 +195,12 @@ public class MemberValueInfo
         }
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         switch (this.u1tag)
         {
@@ -224,7 +237,7 @@ public class MemberValueInfo
     }
 
     /** Provide debugging dump of this object. */
-    public void dump(PrintStream ps, ClassFile cf) throws Exception
+    public void dump(PrintStream ps, ClassFile cf)
     {
         ps.println("u1tag : " + this.u1tag);
     }

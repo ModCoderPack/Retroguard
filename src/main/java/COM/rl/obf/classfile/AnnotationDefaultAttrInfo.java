@@ -47,41 +47,59 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
 
     /** Return the String name of the attribute. */
     @Override
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_AnnotationDefault;
     }
 
     /** Return the default value. */
-    protected MemberValueInfo getDefaultValue() throws Exception
+    protected MemberValueInfo getDefaultValue()
     {
         return this.defaultValue;
     }
 
-    /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    /**
+     * Check for Utf8 references in the 'info' data to the constant pool and mark them.
+     * 
+     * @throws throws ClassFileException
+     */
     @Override
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
         this.defaultValue.markUtf8Refs(pool);
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws ClassFileException
+     * @throws IOException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.defaultValue = MemberValueInfo.create(din);
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         this.defaultValue.write(dout);
     }
 
-    /** Do necessary name remapping. */
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         this.defaultValue.remap(cf, nm);
     }

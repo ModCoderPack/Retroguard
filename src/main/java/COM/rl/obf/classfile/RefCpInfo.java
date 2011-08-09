@@ -64,52 +64,80 @@ abstract public class RefCpInfo extends CpInfo
         this.u2nameAndTypeIndex = index;
     }
 
-    /** Return the method's class string name. */
-    public String getClassName(ClassFile cf) throws Exception
+    /**
+     * Return the method's class string name.
+     * 
+     * @throws ClassFileException
+     */
+    public String getClassName(ClassFile cf) throws ClassFileException
     {
         return ((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getName(cf);
     }
 
-    /** Return the method's string name. */
-    public String getName(ClassFile cf) throws Exception
+    /**
+     * Return the method's string name.
+     * 
+     * @throws ClassFileException
+     */
+    public String getName(ClassFile cf) throws ClassFileException
     {
         NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
         return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getNameIndex())).getString();
     }
 
-    /** Return the method's string descriptor. */
-    public String getDescriptor(ClassFile cf) throws Exception
+    /**
+     * Return the method's string descriptor.
+     * 
+     * @throws ClassFileException
+     */
+    public String getDescriptor(ClassFile cf) throws ClassFileException
     {
         NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
         return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getDescriptorIndex())).getString();
     }
 
-    /** Check for N+T references to constant pool and mark them. */
+    /**
+     * Check for N+T references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void markNTRefs(ConstantPool pool) throws Exception
+    protected void markNTRefs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2nameAndTypeIndex);
     }
 
-    /** Read the 'info' data following the u1tag byte. */
+    /**
+     * Read the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException
     {
         this.u2classIndex = din.readUnsignedShort();
         this.u2nameAndTypeIndex = din.readUnsignedShort();
     }
 
-    /** Write the 'info' data following the u1tag byte. */
+    /**
+     * Write the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void writeInfo(DataOutput dout) throws Exception
+    protected void writeInfo(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2classIndex);
         dout.writeShort(this.u2nameAndTypeIndex);
     }
 
-    /** Dump the content of the class file to the specified file (used for debugging). */
+    /**
+     * Dump the content of the class file to the specified file (used for debugging).
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
+    public void dump(PrintWriter pw, ClassFile cf, int index) throws ClassFileException
     {
         pw.println("  Ref " + Integer.toString(index) + ": "
             + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getNameIndex())).getString()

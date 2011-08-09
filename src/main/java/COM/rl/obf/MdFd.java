@@ -46,7 +46,7 @@ abstract public class MdFd extends TreeItem
 
     // Instance Methods ------------------------------------------------------
     /** Ctor. */
-    public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access) throws Exception
+    public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
     {
         super(parent, name);
         this.descriptor = descriptor;
@@ -163,8 +163,10 @@ abstract public class MdFd extends TreeItem
             {
                 this.parsedTypes = ClassFile.parseDescriptor(this.getDescriptor(), true);
             }
-            catch (Exception e)
+            catch (ClassFileException e)
             {
+                // TODO printStackTrace
+                e.printStackTrace();
                 this.parsedTypes = null;
             }
         }

@@ -88,8 +88,12 @@ public class GuardDB implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
-    /** A classfile database for obfuscation. */
-    public GuardDB(File inFile) throws Exception
+    /**
+     * A classfile database for obfuscation.
+     * 
+     * @throws IOException
+     */
+    public GuardDB(File inFile) throws IOException
     {
         this.inJar = new ZipFile(inFile);
         this.parseManifest();
@@ -97,13 +101,18 @@ public class GuardDB implements ClassConstants
 
     /** Close input JAR file and log-file at GC-time. */
     @Override
-    protected void finalize() throws Exception
+    protected void finalize()
     {
         this.close();
     }
 
-    /** Create a classfile database. */
-    public void buildClassTree(PrintWriter log) throws Exception
+    /**
+     * Create a classfile database.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void buildClassTree(PrintWriter log) throws IOException, ClassFileException
     {
         // Go through the input Jar, adding each class file to the database
         int incompatibleVersion = 0;
@@ -124,14 +133,17 @@ public class GuardDB implements ClassConstants
                 {
                     cf = ClassFile.create(inStream);
                 }
-                catch (Exception e)
+                catch (ClassFileException e)
                 {
+                    // TODO printStackTrace
+                    e.printStackTrace();
                     log.println(GuardDB.ERROR_CORRUPT_CLASS + name + " (" + e.getMessage() + ")");
                 }
                 finally
                 {
                     inStream.close();
                 }
+
                 if (cf != null)
                 {
                     if (cf.hasIncompatibleVersion())
@@ -150,8 +162,16 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    /** Go through database marking certain entities for retention, while maintaining polymorphic integrity. */
-    public void retain(RgsEnum rgsIter, PrintWriter log) throws Exception
+    /**
+     * Go through database marking certain entities for retention, while maintaining polymorphic integrity.
+     * 
+     * @throws ClassFileException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws RGSException
+     */
+    public void retain(RgsEnum rgsIter, PrintWriter log) throws IOException, ClassFileException, ClassNotFoundException,
+        RGSException
     {
 
         // Build database if not already done, or if a mapping has already been generated
@@ -336,15 +356,34 @@ public class GuardDB implements ClassConstants
                         throw new RGSException("Illegal type received from the .rgs script");
                 }
             }
-            catch (Exception e)
+            catch (ClassNotFoundException e)
             {
+                // TODO printStackTrace
+                e.printStackTrace();
+                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
+            }
+            catch (ClassFileException e)
+            {
+                // TODO printStackTrace
+                e.printStackTrace();
+                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
+            }
+            catch (RGSException e)
+            {
+                // TODO printStackTrace
+                e.printStackTrace();
                 log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
             }
         }
     }
 
-    /** Write any non-suppressed warnings to the log. */
-    public void logWarnings(PrintWriter log) throws Exception
+    /**
+     * Write any non-suppressed warnings to the log.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     */
+    public void logWarnings(PrintWriter log) throws ClassFileException, ClassNotFoundException
     {
         if (this.classTree != null)
         {
@@ -352,8 +391,14 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    /** Generate a mapping table for obfuscation. */
-    public void createMap(PrintWriter log) throws Exception
+    /**
+     * Generate a mapping table for obfuscation.
+     * 
+     * @throws ClassNotFoundException
+     * @throws ClassFileException
+     * @throws IOException
+     */
+    public void createMap(PrintWriter log) throws ClassFileException, ClassNotFoundException, IOException
     {
         // Build database if not already done
         if (this.classTree == null)
@@ -365,7 +410,7 @@ public class GuardDB implements ClassConstants
         this.classTree.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl)
             {
                 cl.resetResolve();
             }
@@ -373,7 +418,7 @@ public class GuardDB implements ClassConstants
         this.classTree.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws Exception
+            public void classAction(Cl cl) throws ClassFileException
             {
                 cl.setupNameListDowns();
             }
@@ -397,8 +442,16 @@ public class GuardDB implements ClassConstants
         log.println("#");
     }
 
-    /** Remap each class based on the remap database, and remove attributes. */
-    public void remapTo(File out, PrintWriter log) throws Exception
+    /**
+     * Remap each class based on the remap database, and remove attributes.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     * @throws ClassNotFoundException
+     * @throws NoSuchAlgorithmException
+     */
+    public void remapTo(File out, PrintWriter log) throws IOException, ClassFileException, ClassNotFoundException,
+        NoSuchAlgorithmException
     {
         // Generate map table if not already done
         if (!this.hasMap)
@@ -565,17 +618,29 @@ public class GuardDB implements ClassConstants
     }
 
     /** Close input JAR file. */
-    public void close() throws Exception
+    public void close()
     {
         if (this.inJar != null)
         {
-            this.inJar.close();
+            try
+            {
+                this.inJar.close();
+            }
+            catch (IOException e)
+            {
+                // TODO printStackTrace
+                e.printStackTrace();
+            }
             this.inJar = null;
         }
     }
 
-    /** Parse the RFC822-style MANIFEST.MF file */
-    private void parseManifest() throws Exception
+    /**
+     * Parse the RFC822-style MANIFEST.MF file
+     * 
+     * @throws IOException
+     */
+    private void parseManifest() throws IOException
     {
         // The manifest file is the first in the jar and is called (case insensitively) 'MANIFEST.MF'
         this.oldManifest = new SectionList();

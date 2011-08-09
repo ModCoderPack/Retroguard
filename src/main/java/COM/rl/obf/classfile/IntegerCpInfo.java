@@ -45,16 +45,24 @@ public class IntegerCpInfo extends CpInfo
         super(ClassConstants.CONSTANT_Integer);
     }
 
-    /** Read the 'info' data following the u1tag byte. */
+    /**
+     * Read the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException
     {
         this.u4bytes = din.readInt();
     }
 
-    /** Write the 'info' data following the u1tag byte. */
+    /**
+     * Write the 'info' data following the u1tag byte.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void writeInfo(DataOutput dout) throws Exception
+    protected void writeInfo(DataOutput dout) throws IOException
     {
         dout.writeInt(this.u4bytes);
     }

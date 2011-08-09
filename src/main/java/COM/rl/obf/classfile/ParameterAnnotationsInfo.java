@@ -38,7 +38,7 @@ public class ParameterAnnotationsInfo
 
 
     // Class Methods ---------------------------------------------------------
-    public static ParameterAnnotationsInfo create(DataInput din) throws Exception
+    public static ParameterAnnotationsInfo create(DataInput din) throws IOException, ClassFileException
     {
         ParameterAnnotationsInfo pai = new ParameterAnnotationsInfo();
         pai.read(din);
@@ -52,13 +52,17 @@ public class ParameterAnnotationsInfo
     }
 
     /** Return the array of annotation table entries. */
-    protected AnnotationInfo[] getAnnotationTable() throws Exception
+    protected AnnotationInfo[] getAnnotationTable()
     {
         return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
     }
 
-    /** Check for Utf8 references to constant pool and mark them. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
@@ -67,7 +71,7 @@ public class ParameterAnnotationsInfo
         }
     }
 
-    private void read(DataInput din) throws Exception
+    private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2numAnnotations = din.readUnsignedShort();
         this.annotationTable = new ArrayList(this.u2numAnnotations);
@@ -77,8 +81,13 @@ public class ParameterAnnotationsInfo
         }
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numAnnotations);
         for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
@@ -88,8 +97,12 @@ public class ParameterAnnotationsInfo
         }
     }
 
-    /** Do necessary name remapping. */
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {

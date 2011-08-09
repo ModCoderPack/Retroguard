@@ -48,34 +48,42 @@ public class EnclosingMethodAttrInfo extends AttrInfo
 
     /** Return the String name of the attribute. */
     @Override
-    protected String getAttrName() throws Exception
+    protected String getAttrName()
     {
         return ClassConstants.ATTR_EnclosingMethod;
     }
 
     /** Return the class index into the constant pool. */
-    protected int getClassIndex() throws Exception
+    protected int getClassIndex()
     {
         return this.u2classIndex;
     }
 
     /** Return the method index into the constant pool. */
-    protected int getMethodIndex() throws Exception
+    protected int getMethodIndex()
     {
         return this.u2methodIndex;
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws IOException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException
     {
         this.u2classIndex = din.readUnsignedShort();
         this.u2methodIndex = din.readUnsignedShort();
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException
     {
         dout.writeShort(this.u2classIndex);
         dout.writeShort(this.u2methodIndex);
@@ -83,7 +91,7 @@ public class EnclosingMethodAttrInfo extends AttrInfo
 
     /** Do necessary name remapping. */
     @Override
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    protected void remap(ClassFile cf, NameMapper nm)
     {
         // No remap needed
     }

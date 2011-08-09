@@ -47,14 +47,18 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     }
 
     /** Return the array of annotation table entries. */
-    protected AnnotationInfo[] getAnnotationTable() throws Exception
+    protected AnnotationInfo[] getAnnotationTable()
     {
         return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
     }
 
-    /** Check for Utf8 references in the 'info' data to the constant pool and mark them. */
+    /**
+     * Check for Utf8 references in the 'info' data to the constant pool and mark them.
+     * 
+     * @throws throws ClassFileException
+     */
     @Override
-    protected void markUtf8RefsInInfo(ConstantPool pool) throws Exception
+    protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
         for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
@@ -63,9 +67,14 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    protected void readInfo(DataInput din) throws Exception
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2numAnnotations = din.readUnsignedShort();
         this.annotationTable = new ArrayList(this.u2numAnnotations);
@@ -75,9 +84,14 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    public void writeInfo(DataOutput dout) throws Exception
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numAnnotations);
         for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
@@ -87,9 +101,13 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Do necessary name remapping. */
+    /**
+     * Do necessary name remapping.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    protected void remap(ClassFile cf, NameMapper nm) throws Exception
+    protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
         {
@@ -98,9 +116,13 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
         }
     }
 
-    /** Provide debugging dump of this object. */
+    /**
+     * Provide debugging dump of this object.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public void dump(PrintStream ps) throws Exception
+    public void dump(PrintStream ps) throws ClassFileException
     {
         super.dump(ps);
         ps.println("u2numAnnotations : " + this.u2numAnnotations);

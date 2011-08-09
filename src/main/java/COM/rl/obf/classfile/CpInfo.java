@@ -45,8 +45,9 @@ abstract public class CpInfo implements ClassConstants
      * 
      * @throws IOException
      *             if class file is corrupt or incomplete
+     * @throws ClassFileException
      */
-    public static CpInfo create(DataInput din) throws Exception
+    public static CpInfo create(DataInput din) throws IOException, ClassFileException
     {
         if (din == null)
         {
@@ -91,7 +92,7 @@ abstract public class CpInfo implements ClassConstants
                 ci = new NameAndTypeCpInfo();
                 break;
             default:
-                throw new IOException("Unknown tag type in constant pool.");
+                throw new ClassFileException("Unknown tag type in constant pool.");
         }
         ci.readInfo(din);
         return ci;
@@ -104,21 +105,38 @@ abstract public class CpInfo implements ClassConstants
         this.u1tag = tag;
     }
 
-    /** Read the 'info' data following the u1tag byte; over-ride this in sub-classes. */
-    abstract protected void readInfo(DataInput din) throws Exception;
+    /**
+     * Read the 'info' data following the u1tag byte; over-ride this in sub-classes.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    abstract protected void readInfo(DataInput din) throws IOException, ClassFileException;
 
-    /** Check for Utf8 references to constant pool and mark them; over-ride this in sub-classes. */
-    protected void markUtf8Refs(ConstantPool pool) throws Exception
+    /**
+     * Check for Utf8 references to constant pool and mark them; over-ride this in sub-classes.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
     }
 
-    /** Check for NameAndType references to constant pool and mark them; over-ride this in sub-classes. */
-    protected void markNTRefs(ConstantPool pool) throws Exception
+    /**
+     * Check for NameAndType references to constant pool and mark them; over-ride this in sub-classes.
+     * 
+     * @throws ClassFileException
+     */
+    protected void markNTRefs(ConstantPool pool) throws ClassFileException
     {
     }
 
-    /** Export the representation to a DataOutput stream. */
-    public void write(DataOutput dout) throws Exception
+    /**
+     * Export the representation to a DataOutput stream.
+     * 
+     * @throws IOException
+     */
+    public void write(DataOutput dout) throws IOException
     {
         if (dout == null)
         {
@@ -128,8 +146,12 @@ abstract public class CpInfo implements ClassConstants
         this.writeInfo(dout);
     }
 
-    /** Write the 'info' data following the u1tag byte; over-ride this in sub-classes. */
-    abstract protected void writeInfo(DataOutput dout) throws Exception;
+    /**
+     * Write the 'info' data following the u1tag byte; over-ride this in sub-classes.
+     * 
+     * @throws IOException
+     */
+    abstract protected void writeInfo(DataOutput dout) throws IOException;
 
     /** Return the reference count. */
     public int getRefCount()
@@ -143,8 +165,12 @@ abstract public class CpInfo implements ClassConstants
         this.refCount++;
     }
 
-    /** Decrement the reference count. */
-    public void decRefCount() throws Exception
+    /**
+     * Decrement the reference count.
+     * 
+     * @throws ClassFileException
+     */
+    public void decRefCount() throws ClassFileException
     {
         if (this.refCount == 0)
         {
@@ -159,8 +185,12 @@ abstract public class CpInfo implements ClassConstants
         this.refCount = 0;
     }
 
-    /** Dump the content of the class file to the specified file (used for debugging). */
-    public void dump(PrintWriter pw, ClassFile cf, int index) throws Exception
+    /**
+     * Dump the content of the class file to the specified file (used for debugging).
+     * 
+     * @throws ClassFileException
+     */
+    public void dump(PrintWriter pw, ClassFile cf, int index) throws ClassFileException
     {
     }
 }
