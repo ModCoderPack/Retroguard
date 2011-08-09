@@ -103,8 +103,12 @@ public class ClassTree implements NameMapper
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
-    public ClassTree()
+    /**
+     * Ctor.
+     * 
+     * @throws ClassFileException
+     */
+    public ClassTree() throws ClassFileException
     {
         this.root = Pk.createRoot(this);
     }

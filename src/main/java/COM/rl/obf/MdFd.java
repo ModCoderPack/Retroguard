@@ -45,8 +45,12 @@ abstract public class MdFd extends TreeItem
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
-    public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
+    /**
+     * Ctor.
+     * 
+     * @throws ClassFileException
+     */
+    public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         super(parent, name);
         this.descriptor = descriptor;
@@ -54,7 +58,7 @@ abstract public class MdFd extends TreeItem
         this.isSynthetic = isSynthetic;
         if (name.equals("") || descriptor.equals("") || !(parent instanceof Cl))
         {
-            System.err.println("# Internal error: method/field must have name and descriptor, "
+            throw new ClassFileException("# Internal error: method/field must have name and descriptor, "
                 + "and have Class or Interface as parent");
         }
 

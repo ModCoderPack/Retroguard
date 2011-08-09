@@ -46,32 +46,44 @@ public class Pk extends PkCl
 
 
     // Class Methods ---------------------------------------------------------
-    /** Create the root entry for a tree. */
-    public static Pk createRoot(ClassTree classTree)
+    /**
+     * Create the root entry for a tree.
+     * 
+     * @throws ClassFileException
+     */
+    public static Pk createRoot(ClassTree classTree) throws ClassFileException
     {
         return new Pk(classTree);
     }
 
 
     // Instance Methods ------------------------------------------------------
-    /** Constructor for default package level. */
-    public Pk(ClassTree classTree)
+    /**
+     * Constructor for default package level.
+     * 
+     * @throws ClassFileException
+     */
+    public Pk(ClassTree classTree) throws ClassFileException
     {
         this(null, "");
         this.classTree = classTree;
     }
 
-    /** Constructor for regular package levels. */
-    public Pk(TreeItem parent, String name)
+    /**
+     * Constructor for regular package levels.
+     * 
+     * @throws ClassFileException
+     */
+    public Pk(TreeItem parent, String name) throws ClassFileException
     {
         super(parent, name);
         if ((parent == null) && !name.equals(""))
         {
-            System.err.println("# Internal error: only the default package has no parent");
+            throw new ClassFileException("# Internal error: only the default package has no parent");
         }
         else if ((parent != null) && name.equals(""))
         {
-            System.err.println("# Internal error: the default package cannot have a parent");
+            throw new ClassFileException("# Internal error: the default package cannot have a parent");
         }
     }
 
@@ -145,8 +157,12 @@ public class Pk extends PkCl
         return this.pks.size();
     }
 
-    /** Add a sub-package level. */
-    public Pk addPackage(String name)
+    /**
+     * Add a sub-package level.
+     * 
+     * @throws ClassFileException
+     */
+    public Pk addPackage(String name) throws ClassFileException
     {
         Pk pk = this.getPackage(name);
         if (pk == null)
@@ -157,16 +173,24 @@ public class Pk extends PkCl
         return pk;
     }
 
-    /** Add a class. */
+    /**
+     * Add a class.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access)
+    public Cl addClass(String name, String superName, List interfaceNames, int access) throws ClassFileException
     {
         return this.addClass(false, name, superName, interfaceNames, access);
     }
 
-    /** Add a placeholder class. */
+    /**
+     * Add a placeholder class.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public Cl addPlaceholderClass(String name)
+    public Cl addPlaceholderClass(String name) throws ClassFileException
     {
         return this.addPlaceholderClass(false, name);
     }

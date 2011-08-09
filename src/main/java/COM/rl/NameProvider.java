@@ -922,12 +922,18 @@ public class NameProvider
 
 
                 Md tmpMd;
-                // TODO Catch Exception
-//                try
-//                {
-                tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
-//                }
-//                catch (Exception e2)
+                try
+                {
+                    tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
+                }
+                catch (Exception e)
+                {
+                    // TODO printStackTrace
+                    e.printStackTrace();
+                    tmpMd = null;
+                }
+                // TODO keep for missed exceptions
+//                catch (Exception e)
 //                {
 //                    tmpMd = null;
 //                }

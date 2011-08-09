@@ -103,11 +103,20 @@ abstract public class PkCl extends TreeItem
         return this.cls.size();
     }
 
-    /** Add a class to the list of owned classes. */
-    abstract public Cl addClass(String name, String superName, List interfaceNames, int access);
+    /**
+     * Add a class to the list of owned classes.
+     * 
+     * @throws ClassFileException
+     */
+    abstract public Cl addClass(String name, String superName, List interfaceNames, int access) throws ClassFileException;
 
-    /** Add a class to the list of owned classes. */
+    /**
+     * Add a class to the list of owned classes.
+     * 
+     * @throws ClassFileException
+     */
     public Cl addClass(boolean isInnerClass, String name, String superName, List interfaceNames, int access)
+        throws ClassFileException
     {
         Cl cl = this.getClass(name);
 
@@ -140,11 +149,19 @@ abstract public class PkCl extends TreeItem
         return cl;
     }
 
-    /** Add a placeholder class to our list of owned classes, to be replaced later by the full class. */
-    abstract public Cl addPlaceholderClass(String name);
+    /**
+     * Add a placeholder class to our list of owned classes, to be replaced later by the full class.
+     * 
+     * @throws ClassFileException
+     */
+    abstract public Cl addPlaceholderClass(String name) throws ClassFileException;
 
-    /** Add a placeholder class to our list of owned classes, to be replaced later by the full class. */
-    public Cl addPlaceholderClass(boolean isInnerClass, String name)
+    /**
+     * Add a placeholder class to our list of owned classes, to be replaced later by the full class.
+     * 
+     * @throws ClassFileException
+     */
+    public Cl addPlaceholderClass(boolean isInnerClass, String name) throws ClassFileException
     {
         Cl cl = this.getClass(name);
         if (cl == null)

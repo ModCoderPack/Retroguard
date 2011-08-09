@@ -81,8 +81,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Ctor.
+     * 
+     * @throws ClassFileException
+     */
     public Cl(TreeItem parent, boolean isInnerClass, String name, String superClass, List superInterfaces, int access)
+        throws ClassFileException
 
     {
         super(parent, name);
@@ -92,7 +97,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.access = access;
         if ((parent == null) || "".equals(name))
         {
-            System.err.println("# Internal error: class must have parent and name");
+            throw new ClassFileException("# Internal error: class must have parent and name");
         }
         if (parent instanceof Cl)
         {
@@ -422,9 +427,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return this.hasAsSuperInt(queryName, false);
     }
 
-    /** Add an inner class. */
+    /**
+     * Add an inner class.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access)
+    public Cl addClass(String name, String superName, List interfaceNames, int access) throws ClassFileException
     {
         return this.addClass(true, name, superName, interfaceNames, access);
     }
@@ -436,9 +445,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return cl;
     }
 
-    /** Add a placeholder class. */
+    /**
+     * Add a placeholder class.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public Cl addPlaceholderClass(String name)
+    public Cl addPlaceholderClass(String name) throws ClassFileException
     {
         return this.addPlaceholderClass(true, name);
     }
@@ -455,8 +468,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return md;
     }
 
-    /** Add a method. */
-    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags)
+    /**
+     * Add a method.
+     * 
+     * @throws ClassFileException
+     */
+    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags) throws ClassFileException
     {
         // Store <init> and <clinit> methods separately - needed only for reference tracking
         Md md;
@@ -492,8 +509,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return fd;
     }
 
-    /** Add a field. */
-    public Fd addField(boolean isSynthetic, String name, String descriptor, int access)
+    /**
+     * Add a field.
+     * 
+     * @throws ClassFileException
+     */
+    public Fd addField(boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         Fd fd = this.getField(name);
         if (fd == null)
@@ -1291,7 +1312,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 {
                     // TODO printStackTrace
                     e.printStackTrace();
-                    field = null;
                 }
                 // TODO check for missed exceptions
 //                catch (Exception e)

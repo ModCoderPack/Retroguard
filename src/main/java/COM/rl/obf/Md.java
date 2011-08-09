@@ -43,8 +43,12 @@ public class Md extends MdFd
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
-    public Md(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
+    /**
+     * Ctor.
+     * 
+     * @throws ClassFileException
+     */
+    public Md(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         super(parent, isSynthetic, name, descriptor, access);
     }
