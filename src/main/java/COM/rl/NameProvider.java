@@ -60,16 +60,17 @@ public class NameProvider
         }
 
         int idx;
-        // TODO catch NumberFormatException
-//        try
-//        {
-        idx = Integer.parseInt(args[4]);
-//        }
-//        catch (NumberFormatException up)
-//        {
-//            System.out.println("Invalid start index: " + args[4]);
-//            throw up;
-//        }
+        try
+        {
+            idx = Integer.parseInt(args[4]);
+        }
+        catch (NumberFormatException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            System.out.println("Invalid start index: " + args[4]);
+            throw e;
+        }
 
         System.out.println("# New start index is " + idx);
 
@@ -206,15 +207,18 @@ public class NameProvider
                     }
                     else if (defines[0].equalsIgnoreCase("startindex"))
                     {
-                        // TODO catch NumberFormatException
-//                        try
-//                        {
-                        int start = Integer.parseInt(defines[1]);
-                        NameProvider.uniqueStart = start;
-//                        }
-//                        catch (NumberFormatException e)
-//                        {
-//                        }
+                        try
+                        {
+                            int start = Integer.parseInt(defines[1]);
+                            NameProvider.uniqueStart = start;
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            // TODO printStackTrace
+                            e.printStackTrace();
+                            System.out.println("Invalid start index: " + args[4]);
+                            throw e;
+                        }
                     }
                     else if (defines[0].equalsIgnoreCase("protectedpackage"))
                     {
@@ -932,7 +936,7 @@ public class NameProvider
                     e.printStackTrace();
                     tmpMd = null;
                 }
-                // TODO keep for missed exceptions
+                // TODO check for missed exceptions
 //                catch (Exception e)
 //                {
 //                    tmpMd = null;
