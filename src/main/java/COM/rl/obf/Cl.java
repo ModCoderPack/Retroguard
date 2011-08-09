@@ -339,9 +339,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             String queryNameExt = ClassFile.translate(queryName);
             Class superClass = clExt.getSuperclass();
             List superInterfaces = Arrays.asList(clExt.getInterfaces());
-            if (queryNameExt.equals(superClass.getName()))
+            if (superClass != null)
             {
-                return true;
+                if (queryNameExt.equals(superClass.getName()))
+                {
+                    return true;
+                }
             }
             if (checkInterfaces)
             {
@@ -355,19 +358,19 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
             }
             // Nothing, so recurse up through parents
-            Cl superClInt = classTree.getCl(ClassFile.backTranslate(superClass.getName()));
-            if (superClInt != null)
+            if (superClass != null)
             {
-                if (superClInt.hasAsSuperInt(queryName, checkInterfaces))
+                Cl superClInt = classTree.getCl(ClassFile.backTranslate(superClass.getName()));
+                if (superClInt != null)
                 {
-                    return true;
+                    if (superClInt.hasAsSuperInt(queryName, checkInterfaces))
+                    {
+                        return true;
+                    }
                 }
-            }
-            else
-            {
-                Class superClExt = superClass;
-                if (superClExt != null)
+                else
                 {
+                    Class superClExt = superClass;
                     if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, superClExt))
                     {
                         return true;
@@ -390,12 +393,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     else
                     {
                         Class interClExt = si;
-                        if (interClExt != null)
+                        if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, interClExt))
                         {
-                            if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, interClExt))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }
@@ -1310,8 +1310,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 catch (NoSuchFieldException e)
                 {
-                    // TODO printStackTrace
-                    e.printStackTrace();
+                    // fall thru
                 }
                 // TODO check for missed exceptions
 //                catch (Exception e)
@@ -1332,8 +1331,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             catch (NoSuchFieldException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
                 return null;
             }
             // TODO check for missed exceptions

@@ -448,10 +448,8 @@ public class GuardDB implements ClassConstants
      * @throws IOException
      * @throws ClassFileException
      * @throws ClassNotFoundException
-     * @throws NoSuchAlgorithmException
      */
-    public void remapTo(File out, PrintWriter log) throws IOException, ClassFileException, ClassNotFoundException,
-        NoSuchAlgorithmException
+    public void remapTo(File out, PrintWriter log) throws IOException, ClassFileException, ClassNotFoundException
     {
         // Generate map table if not already done
         if (!this.hasMap)
@@ -518,13 +516,31 @@ public class GuardDB implements ClassConstants
                             OutputStream outputStream = outJar;
                             if (this.enableDigestSHA)
                             {
-                                shaDigest = MessageDigest.getInstance("SHA-1");
-                                outputStream = new DigestOutputStream(outputStream, shaDigest);
+                                try
+                                {
+                                    shaDigest = MessageDigest.getInstance("SHA-1");
+                                    outputStream = new DigestOutputStream(outputStream, shaDigest);
+                                }
+                                catch (NoSuchAlgorithmException e)
+                                {
+                                    // TODO printStackTrace
+                                    e.printStackTrace();
+                                    this.enableDigestSHA = false;
+                                }
                             }
                             if (this.enableDigestMD5)
                             {
-                                md5Digest = MessageDigest.getInstance("MD5");
-                                outputStream = new DigestOutputStream(outputStream, md5Digest);
+                                try
+                                {
+                                    md5Digest = MessageDigest.getInstance("MD5");
+                                    outputStream = new DigestOutputStream(outputStream, md5Digest);
+                                }
+                                catch (NoSuchAlgorithmException e)
+                                {
+                                    // TODO printStackTrace
+                                    e.printStackTrace();
+                                    this.enableDigestMD5 = false;
+                                }
                             }
                             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
@@ -567,13 +583,31 @@ public class GuardDB implements ClassConstants
                             OutputStream outputStream = outJar;
                             if (this.enableDigestSHA)
                             {
-                                shaDigest = MessageDigest.getInstance("SHA-1");
-                                outputStream = new DigestOutputStream(outputStream, shaDigest);
+                                try
+                                {
+                                    shaDigest = MessageDigest.getInstance("SHA-1");
+                                    outputStream = new DigestOutputStream(outputStream, shaDigest);
+                                }
+                                catch (NoSuchAlgorithmException e)
+                                {
+                                    // TODO printStackTrace
+                                    e.printStackTrace();
+                                    this.enableDigestSHA = false;
+                                }
                             }
                             if (this.enableDigestMD5)
                             {
-                                md5Digest = MessageDigest.getInstance("MD5");
-                                outputStream = new DigestOutputStream(outputStream, md5Digest);
+                                try
+                                {
+                                    md5Digest = MessageDigest.getInstance("MD5");
+                                    outputStream = new DigestOutputStream(outputStream, md5Digest);
+                                }
+                                catch (NoSuchAlgorithmException e)
+                                {
+                                    // TODO printStackTrace
+                                    e.printStackTrace();
+                                    this.enableDigestMD5 = false;
+                                }
                             }
                             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 

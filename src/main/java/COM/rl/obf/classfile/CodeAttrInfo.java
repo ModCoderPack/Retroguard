@@ -32,6 +32,7 @@ import COM.rl.util.*;
 public class CodeAttrInfo extends AttrInfo
 {
     // Constants -------------------------------------------------------------
+    @SuppressWarnings("hiding")
     public static final int CONSTANT_FIELD_SIZE = 12;
 
 

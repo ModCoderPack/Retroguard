@@ -150,9 +150,10 @@ public class RetroGuardImpl
     private void run() throws Exception
     {
         // Create the session log file
-        PrintWriter log = new PrintWriter(new BufferedOutputStream(new FileOutputStream(this.logFile)));
+        PrintWriter log = null;
         try
         {
+            log = new PrintWriter(new BufferedOutputStream(new FileOutputStream(this.logFile)));
             // Write out the log header
             this.writeLogHeader(log);
 
@@ -174,25 +175,32 @@ public class RetroGuardImpl
                 db.close();
             }
         }
+        // TODO catch Exception
         catch (Exception e)
         {
             // Log exceptions before exiting
-            log.println();
-            log.println(RetroGuardImpl.LOG_ERROR);
-            if (e instanceof java.util.zip.ZipException)
+            if (log != null)
             {
-                log.println(RetroGuardImpl.LOG_ZIP_ERROR);
+                log.println();
+                log.println(RetroGuardImpl.LOG_ERROR);
+                if (e instanceof java.util.zip.ZipException)
+                {
+                    log.println(RetroGuardImpl.LOG_ZIP_ERROR);
+                }
+                log.println("# " + e.toString());
+                e.printStackTrace(log);
+                log.println();
+                System.err.println(RetroGuardImpl.SEE_LOG_FILE);
             }
-            log.println("# " + e.toString());
-            e.printStackTrace(log);
-            log.println();
-            System.err.println(RetroGuardImpl.SEE_LOG_FILE);
             throw e;
         }
         finally
         {
-            log.flush();
-            log.close();
+            if (log != null)
+            {
+                log.flush();
+                log.close();
+            }
         }
     }
 

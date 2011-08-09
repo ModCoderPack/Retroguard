@@ -93,6 +93,7 @@ public class RetroGuard
             RetroGuard.showUsage();
             System.exit(-1);
         }
+        // TODO catch Exception
         catch (Exception e)
         {
             System.err.print("RetroGuard error: ");
