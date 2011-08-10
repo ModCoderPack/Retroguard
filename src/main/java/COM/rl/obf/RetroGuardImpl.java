@@ -175,7 +175,6 @@ public class RetroGuardImpl
                 db.close();
             }
         }
-        // TODO catch Exception
         catch (Exception e)
         {
             // Log exceptions before exiting
@@ -187,8 +186,12 @@ public class RetroGuardImpl
                 {
                     log.println(RetroGuardImpl.LOG_ZIP_ERROR);
                 }
-                log.println("# " + e.toString());
-                e.printStackTrace(log);
+                // make sure exception string is a comment in the log
+                log.println("# " + e.toString().replace("\n", "\n# \t"));
+                for (StackTraceElement st : e.getStackTrace())
+                {
+                    log.println("# \tat " + st);
+                }
                 log.println();
                 System.err.println(RetroGuardImpl.SEE_LOG_FILE);
             }
