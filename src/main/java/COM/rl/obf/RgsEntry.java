@@ -30,24 +30,10 @@ import java.util.*;
 public class RgsEntry
 {
     // Constants -------------------------------------------------------------
-    public static final int TYPE_OPTION = 0;
-    public static final int TYPE_ATTR = 1;
-    public static final int TYPE_CLASS = 2;
-    public static final int TYPE_NOT_CLASS = 4;
-    public static final int TYPE_FIELD = 5;
-    public static final int TYPE_NOT_FIELD = 7;
-    public static final int TYPE_METHOD = 8;
-    public static final int TYPE_NOT_METHOD = 10;
-    public static final int TYPE_PACKAGE_MAP = 11;
-    public static final int TYPE_REPACKAGE_MAP = 12;
-    public static final int TYPE_CLASS_MAP = 13;
-    public static final int TYPE_FIELD_MAP = 14;
-    public static final int TYPE_METHOD_MAP = 15;
-    public static final int TYPE_NOWARN = 16;
 
 
     // Fields ----------------------------------------------------------------
-    public int type;
+    public RgsEntryType type;
     public String name;
     public String descriptor;
     public String extendsName;
@@ -63,13 +49,13 @@ public class RgsEntry
 
 
     // Instance Methods-------------------------------------------------------
-    public RgsEntry(int type, String name)
+    public RgsEntry(RgsEntryType type, String name)
     {
         this.type = type;
         this.name = name;
     }
 
-    public RgsEntry(int type, String name, String descriptor)
+    public RgsEntry(RgsEntryType type, String name, String descriptor)
     {
         this.type = type;
         this.name = name;
@@ -84,21 +70,7 @@ public class RgsEntry
 
     public String debugString()
     {
-        return (this.type == RgsEntry.TYPE_OPTION ? ".option "
-            : (this.type == RgsEntry.TYPE_ATTR ? ".attribute "
-                : (this.type == RgsEntry.TYPE_CLASS ? ".class "
-                    : (this.type == RgsEntry.TYPE_NOT_CLASS ? "!class "
-                        : (this.type == RgsEntry.TYPE_METHOD ? ".method "
-                            : (this.type == RgsEntry.TYPE_NOT_METHOD ? "!method "
-                                : (this.type == RgsEntry.TYPE_FIELD ? ".field "
-                                    : (this.type == RgsEntry.TYPE_NOT_FIELD ? "!field "
-                                        : (this.type == RgsEntry.TYPE_PACKAGE_MAP ? ".package_map "
-                                            : (this.type == RgsEntry.TYPE_REPACKAGE_MAP ? ".repackage_map "
-                                                : (this.type == RgsEntry.TYPE_CLASS_MAP ? ".class_map "
-                                                    : (this.type == RgsEntry.TYPE_METHOD_MAP ? ".method_map "
-                                                        : (this.type == RgsEntry.TYPE_FIELD_MAP ? ".field_map "
-                                                            : (this.type == RgsEntry.TYPE_NOWARN ? ".nowarn "
-                                                                : ""))))))))))))))
+        return this.type.toString() + " "
             + this.name + " "
             + (this.descriptor != null ? this.descriptor + " " : "")
             + (this.retainToPublic ? "public " : "")

@@ -203,7 +203,7 @@ public class GuardDB implements ClassConstants
             {
                 switch (entry.type)
                 {
-                    case RgsEntry.TYPE_OPTION:
+                    case OPTION:
                         if (ClassConstants.OPTION_DigestSHA.equals(entry.name))
                         {
                             this.enableDigestSHA = true;
@@ -305,50 +305,50 @@ public class GuardDB implements ClassConstants
                         }
                         break;
 
-                    case RgsEntry.TYPE_ATTR:
+                    case ATTR:
                         this.classTree.retainAttribute(entry.name);
                         break;
 
-                    case RgsEntry.TYPE_NOWARN:
+                    case NOWARN:
                         this.classTree.noWarnClass(entry.name);
                         break;
 
-                    case RgsEntry.TYPE_CLASS:
-                    case RgsEntry.TYPE_NOT_CLASS:
+                    case CLASS:
+                    case NOT_CLASS:
                         this.classTree.retainClass(entry.name, entry.retainToPublic, entry.retainToProtected,
                             entry.retainPubProtOnly, entry.retainFieldsOnly, entry.retainMethodsOnly, entry.extendsName,
-                            entry.type == RgsEntry.TYPE_NOT_CLASS, entry.accessMask, entry.accessSetting);
+                            entry.type == RgsEntryType.NOT_CLASS, entry.accessMask, entry.accessSetting);
                         break;
 
-                    case RgsEntry.TYPE_METHOD:
-                    case RgsEntry.TYPE_NOT_METHOD:
+                    case METHOD:
+                    case NOT_METHOD:
                         this.classTree.retainMethod(entry.name, entry.descriptor, entry.retainAndClass, entry.extendsName,
-                            entry.type == RgsEntry.TYPE_NOT_METHOD, entry.accessMask, entry.accessSetting);
+                            entry.type == RgsEntryType.NOT_METHOD, entry.accessMask, entry.accessSetting);
                         break;
 
-                    case RgsEntry.TYPE_FIELD:
-                    case RgsEntry.TYPE_NOT_FIELD:
+                    case FIELD:
+                    case NOT_FIELD:
                         this.classTree.retainField(entry.name, entry.descriptor, entry.retainAndClass, entry.extendsName,
-                            entry.type == RgsEntry.TYPE_NOT_FIELD, entry.accessMask, entry.accessSetting);
+                            entry.type == RgsEntryType.NOT_FIELD, entry.accessMask, entry.accessSetting);
                         break;
 
-                    case RgsEntry.TYPE_PACKAGE_MAP:
+                    case PACKAGE_MAP:
                         this.classTree.retainPackageMap(entry.name, entry.obfName);
                         break;
 
-                    case RgsEntry.TYPE_REPACKAGE_MAP:
+                    case REPACKAGE_MAP:
                         this.classTree.retainRepackageMap(entry.name, entry.obfName);
                         break;
 
-                    case RgsEntry.TYPE_CLASS_MAP:
+                    case CLASS_MAP:
                         this.classTree.retainClassMap(entry.name, entry.obfName);
                         break;
 
-                    case RgsEntry.TYPE_METHOD_MAP:
+                    case METHOD_MAP:
                         this.classTree.retainMethodMap(entry.name, entry.descriptor, entry.obfName);
                         break;
 
-                    case RgsEntry.TYPE_FIELD_MAP:
+                    case FIELD_MAP:
                         this.classTree.retainFieldMap(entry.name, entry.obfName);
                         break;
 
