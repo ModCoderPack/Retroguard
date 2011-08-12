@@ -17,11 +17,20 @@ public enum RgsEntryType
     FIELD_MAP(".field_map"),
     NOWARN(".nowarn");
 
-    public String directive;
+    private String directive;
 
+    /**
+     * @param directive
+     */
     RgsEntryType(String directive)
     {
         this.directive = directive;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.directive;
     }
 
     int length()

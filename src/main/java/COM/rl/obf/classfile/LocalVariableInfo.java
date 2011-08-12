@@ -41,6 +41,10 @@ public class LocalVariableInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     */
     public static LocalVariableInfo create(DataInput din) throws IOException
     {
         LocalVariableInfo lvi = new LocalVariableInfo();
@@ -50,29 +54,44 @@ public class LocalVariableInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private LocalVariableInfo()
     {
     }
 
-    /** Return name index into Constant Pool. */
+    /**
+     * Return name index into Constant Pool.
+     */
     protected int getNameIndex()
     {
         return this.u2nameIndex;
     }
 
-    /** Set the name index. */
+    /**
+     * Set the name index.
+     * 
+     * @param index
+     */
     protected void setNameIndex(int index)
     {
         this.u2nameIndex = index;
     }
 
-    /** Return descriptor index into Constant Pool. */
+    /**
+     * Return descriptor index into Constant Pool.
+     */
     protected int getDescriptorIndex()
     {
         return this.u2descriptorIndex;
     }
 
-    /** Set the descriptor index. */
+    /**
+     * Set the descriptor index.
+     * 
+     * @param index
+     */
     protected void setDescriptorIndex(int index)
     {
         this.u2descriptorIndex = index;
@@ -81,6 +100,7 @@ public class LocalVariableInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -89,6 +109,10 @@ public class LocalVariableInfo
         pool.incRefCount(this.u2descriptorIndex);
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     */
     private void read(DataInput din) throws IOException
     {
         this.u2startpc = din.readUnsignedShort();
@@ -101,6 +125,7 @@ public class LocalVariableInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      */
     public void write(DataOutput dout) throws IOException
@@ -115,6 +140,8 @@ public class LocalVariableInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException

@@ -41,40 +41,54 @@ public class SimpleName
 
 
     // Instance Methods ---------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param simpleName
+     */
     public SimpleName(String simpleName)
     {
         this.name = simpleName;
         this.isAsPackage = true;
     }
 
-    /** Set simple name as package level. */
+    /**
+     * Set simple name as package level.
+     */
     public SimpleName setAsPackage()
     {
         this.isAsPackage = true;
         return this;
     }
 
-    /** Set simple name as class level. */
+    /**
+     * Set simple name as class level.
+     */
     public SimpleName setAsClass()
     {
         this.isAsPackage = false;
         return this;
     }
 
-    /** Is this a package level simple name? */
+    /**
+     * Is this a package level simple name?
+     */
     public boolean isAsPackage()
     {
         return this.isAsPackage;
     }
 
-    /** Is this a class level simple name? */
+    /**
+     * Is this a class level simple name?
+     */
     public boolean isAsClass()
     {
         return !this.isAsPackage;
     }
 
-    /** Return the simple name. */
+    /**
+     * Return the simple name.
+     */
     public String getName()
     {
         return this.name;

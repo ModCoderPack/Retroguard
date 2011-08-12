@@ -11,6 +11,9 @@ public class RGSException extends Exception
     {
     }
 
+    /**
+     * @param s
+     */
     public RGSException(String s)
     {
         super(s);

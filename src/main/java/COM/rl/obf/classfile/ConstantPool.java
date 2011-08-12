@@ -44,20 +44,29 @@ public class ConstantPool
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor, which initializes Constant Pool using an array of CpInfo. */
+    /**
+     * Constructor, which initializes Constant Pool using an array of CpInfo.
+     * 
+     * @param classFile
+     * @param cpInfo
+     */
     public ConstantPool(ClassFile classFile, CpInfo[] cpInfo)
     {
         this.myClassFile = classFile;
         this.pool = new ArrayList(Arrays.asList(cpInfo));
     }
 
-    /** Return an Iterator of all Constant Pool entries. */
+    /**
+     * Return an Iterator of all Constant Pool entries.
+     */
     public Iterator iterator()
     {
         return this.pool.iterator();
     }
 
-    /** Return the Constant Pool length. */
+    /**
+     * Return the Constant Pool length.
+     */
     public int length()
     {
         return this.pool.size();
@@ -66,6 +75,7 @@ public class ConstantPool
     /**
      * Return the specified Constant Pool entry.
      * 
+     * @param i
      * @throws ClassFileException
      */
     public CpInfo getCpEntry(int i) throws ClassFileException
@@ -120,6 +130,7 @@ public class ConstantPool
     /**
      * Increment the reference count for the specified element.
      * 
+     * @param i
      * @throws ClassFileException
      */
     public void incRefCount(int i) throws ClassFileException
@@ -139,6 +150,8 @@ public class ConstantPool
     /**
      * Remap a specified Utf8 entry to the given value and return its new index.
      * 
+     * @param newString
+     * @param oldIndex
      * @throws ClassFileException
      */
     public int remapUtf8To(String newString, int oldIndex) throws ClassFileException
@@ -150,6 +163,7 @@ public class ConstantPool
     /**
      * Decrement the reference count for the specified element, blanking if Utf and refs are zero.
      * 
+     * @param i
      * @throws ClassFileException
      */
     public void decRefCount(int i) throws ClassFileException
@@ -166,7 +180,11 @@ public class ConstantPool
         cpInfo.decRefCount();
     }
 
-    /** Add an entry to the constant pool and return its index. */
+    /**
+     * Add an entry to the constant pool and return its index.
+     * 
+     * @param entry
+     */
     public int addEntry(CpInfo entry)
     {
         // Try to replace an old, blanked Utf8 entry
@@ -177,6 +195,8 @@ public class ConstantPool
 
     /**
      * Add a string to the constant pool and return its index.
+     * 
+     * @param s
      */
     protected int addUtf8Entry(String s)
     {
@@ -215,19 +235,31 @@ public class ConstantPool
         return this.addEntry(new Utf8CpInfo(s));
     }
 
-    /** Data walker */
+    /**
+     * Data walker
+     */
     class PoolAction
     {
+        /**
+         * @param cpInfo
+         */
         public void utf8Action(Utf8CpInfo cpInfo)
         {
             this.defaultAction(cpInfo);
         }
 
+        /**
+         * @param cpInfo
+         */
         public void defaultAction(CpInfo cpInfo)
         {
+            // do nothing
         }
     }
 
+    /**
+     * @param pa
+     */
     private void walkPool(PoolAction pa)
     {
         for (Iterator iter = this.pool.iterator(); iter.hasNext();)

@@ -49,36 +49,55 @@ abstract public class ClassItemInfo implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     */
     protected ClassItemInfo(ClassFile cf)
     {
         this.cf = cf;
     }
 
-    /** Is the field or method 'Synthetic'? */
+    /**
+     * Is the field or method 'Synthetic'?
+     */
     public boolean isSynthetic()
     {
         return this.isSynthetic;
     }
 
-    /** Return method/field name index into Constant Pool. */
+    /**
+     * Return method/field name index into Constant Pool.
+     */
     protected int getNameIndex()
     {
         return this.u2nameIndex;
     }
 
-    /** Set the method/field name index. */
+    /**
+     * Set the method/field name index.
+     * 
+     * @param index
+     */
     protected void setNameIndex(int index)
     {
         this.u2nameIndex = index;
     }
 
-    /** Return method/field descriptor index into Constant Pool. */
+    /**
+     * Return method/field descriptor index into Constant Pool.
+     */
     protected int getDescriptorIndex()
     {
         return this.u2descriptorIndex;
     }
 
-    /** Set the method/field descriptor index. */
+    /**
+     * Set the method/field descriptor index.
+     * 
+     * @param index
+     */
     protected void setDescriptorIndex(int index)
     {
         this.u2descriptorIndex = index;
@@ -104,7 +123,9 @@ abstract public class ClassItemInfo implements ClassConstants
         return this.cf.getUtf8(this.u2descriptorIndex);
     }
 
-    /** Return access flags. */
+    /**
+     * Return access flags.
+     */
     public int getAccessFlags()
     {
         return this.u2accessFlags;
@@ -113,6 +134,8 @@ abstract public class ClassItemInfo implements ClassConstants
     /**
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
      * <tt>List</tt> are killed).
+     * 
+     * @param keepAttrs
      */
     protected void trimAttrsExcept(List keepAttrs)
     {
@@ -145,6 +168,7 @@ abstract public class ClassItemInfo implements ClassConstants
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -160,6 +184,7 @@ abstract public class ClassItemInfo implements ClassConstants
     /**
      * Import the field or method data to internal representation.
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -183,6 +208,7 @@ abstract public class ClassItemInfo implements ClassConstants
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */

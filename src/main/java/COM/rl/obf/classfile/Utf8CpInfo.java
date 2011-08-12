@@ -42,13 +42,18 @@ public class Utf8CpInfo extends CpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected Utf8CpInfo()
     {
         super(ClassConstants.CONSTANT_Utf8);
     }
 
     /**
-     * Ctor used when appending fresh Utf8 entries to the constant pool.
+     * Constructor used when appending fresh Utf8 entries to the constant pool.
+     * 
+     * @param s
      */
     public Utf8CpInfo(String s)
     {
@@ -93,6 +98,8 @@ public class Utf8CpInfo extends CpInfo
 
     /**
      * Set UTF8 data as String.
+     * 
+     * @param str
      */
     public void setString(String str)
     {
@@ -123,9 +130,10 @@ public class Utf8CpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2length = din.readUnsignedShort();
         this.bytes = new byte[this.u2length];
@@ -137,9 +145,10 @@ public class Utf8CpInfo extends CpInfo
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2length);
         if (this.bytes.length > 0)

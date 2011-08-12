@@ -41,6 +41,10 @@ public class LocalVariableTypeInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     */
     public static LocalVariableTypeInfo create(DataInput din) throws IOException
     {
         LocalVariableTypeInfo lvti = new LocalVariableTypeInfo();
@@ -50,17 +54,24 @@ public class LocalVariableTypeInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private LocalVariableTypeInfo()
     {
     }
 
-    /** Return name index into Constant Pool. */
+    /**
+     * Return name index into Constant Pool.
+     */
     protected int getNameIndex()
     {
         return this.u2nameIndex;
     }
 
-    /** Return signature index into Constant Pool. */
+    /**
+     * Return signature index into Constant Pool.
+     */
     protected int getSignatureIndex()
     {
         return this.u2signatureIndex;
@@ -69,6 +80,7 @@ public class LocalVariableTypeInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -77,6 +89,10 @@ public class LocalVariableTypeInfo
         pool.incRefCount(this.u2signatureIndex);
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     */
     private void read(DataInput din) throws IOException
     {
         this.u2startpc = din.readUnsignedShort();
@@ -89,6 +105,7 @@ public class LocalVariableTypeInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      */
     public void write(DataOutput dout) throws IOException
@@ -103,6 +120,8 @@ public class LocalVariableTypeInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException

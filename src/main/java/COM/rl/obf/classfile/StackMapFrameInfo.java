@@ -53,6 +53,11 @@ public class StackMapFrameInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     public static StackMapFrameInfo create(DataInput din) throws IOException, ClassFileException
     {
         StackMapFrameInfo smfi = new StackMapFrameInfo();
@@ -62,10 +67,18 @@ public class StackMapFrameInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private StackMapFrameInfo()
     {
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1frameType = din.readUnsignedByte();
@@ -112,6 +125,7 @@ public class StackMapFrameInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -129,6 +143,7 @@ public class StackMapFrameInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -175,6 +190,7 @@ public class StackMapFrameInfo
     /**
      * Read 'locals' VerificationTypeInfo
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -190,6 +206,7 @@ public class StackMapFrameInfo
     /**
      * Write 'locals' VerificationTypeInfo
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -204,6 +221,7 @@ public class StackMapFrameInfo
     /**
      * Read 'stack items' VerificationTypeInfo
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -219,6 +237,7 @@ public class StackMapFrameInfo
     /**
      * Write 'stack items' VerificationTypeInfo
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */

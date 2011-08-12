@@ -45,6 +45,8 @@ public class AttrInfo implements ClassConstants
     /**
      * Create a new AttrInfo from the data passed.
      * 
+     * @param din
+     * @param cf
      * @throws IOException
      * @throws ClassFileException
      */
@@ -142,6 +144,11 @@ public class AttrInfo implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected AttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         this.cf = cf;
@@ -149,27 +156,37 @@ public class AttrInfo implements ClassConstants
         this.u4attrLength = attrLength;
     }
 
-    /** Return the length in bytes of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the length in bytes of the attribute; over-ride this in sub-classes.
+     */
     protected int getAttrInfoLength()
     {
         return this.u4attrLength;
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @SuppressWarnings("static-method")
     protected String getAttrName()
     {
         return ClassConstants.ATTR_Unknown;
     }
 
-    /** Trim attributes from the classfile except those in the <tt>List</tt>. */
+    /**
+     * Trim attributes from the classfile except those in the <tt>List</tt>.
+     * 
+     * @param keepAttrs
+     */
     protected void trimAttrsExcept(List keepAttrs)
     {
+        // do nothing
     }
 
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -181,15 +198,18 @@ public class AttrInfo implements ClassConstants
     /**
      * Check for Utf8 references in the 'info' data to the constant pool and mark them; over-ride this in sub-classes.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
+        // do nothing
     }
 
     /**
      * Read the data following the header; over-ride this in sub-classes.
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -202,6 +222,7 @@ public class AttrInfo implements ClassConstants
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -219,6 +240,7 @@ public class AttrInfo implements ClassConstants
     /**
      * Export data following the header to a DataOutput stream; over-ride this in sub-classes.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -230,14 +252,19 @@ public class AttrInfo implements ClassConstants
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
+        // do nothing
     }
 
     /**
      * Provide debugging dump of this object.
+     * 
+     * @param ps
      */
     public void dump(PrintStream ps)
     {

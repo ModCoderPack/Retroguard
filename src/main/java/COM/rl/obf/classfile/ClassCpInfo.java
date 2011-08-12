@@ -40,18 +40,27 @@ public class ClassCpInfo extends CpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected ClassCpInfo()
     {
         super(ClassConstants.CONSTANT_Class);
     }
 
-    /** Return the name index. */
+    /**
+     * Return the name index.
+     */
     protected int getNameIndex()
     {
         return this.u2nameIndex;
     }
 
-    /** Set the name index. */
+    /**
+     * Set the name index.
+     * 
+     * @param index
+     */
     protected void setNameIndex(int index)
     {
         this.u2nameIndex = index;
@@ -60,6 +69,7 @@ public class ClassCpInfo extends CpInfo
     /**
      * Return the string name.
      * 
+     * @param cf
      * @throws ClassFileException
      */
     public String getName(ClassFile cf) throws ClassFileException
@@ -82,9 +92,10 @@ public class ClassCpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2nameIndex = din.readUnsignedShort();
     }
@@ -93,15 +104,19 @@ public class ClassCpInfo extends CpInfo
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2nameIndex);
     }
 
     /**
      * Dump the content of the class file to the specified file (used for debugging).
+     * 
+     * @param pw
+     * @param cf
      */
     public void dump(PrintWriter pw, ClassFile cf)
     {

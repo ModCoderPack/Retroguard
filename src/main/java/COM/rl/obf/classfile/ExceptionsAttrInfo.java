@@ -41,25 +41,40 @@ public class ExceptionsAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected ExceptionsAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_Exceptions;
     }
 
-    /** Return the number of exception class indices. */
+    /**
+     * Return the number of exception class indices.
+     */
     public int count()
     {
         return this.u2exceptionIndexTable.length;
     }
 
-    /** Return the i'th exception class indices. */
+    /**
+     * Return the i'th exception class indices.
+     * 
+     * @param i
+     */
     public int getIndex(int i)
     {
         return this.u2exceptionIndexTable[i];

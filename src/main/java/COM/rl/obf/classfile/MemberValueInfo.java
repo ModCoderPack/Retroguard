@@ -49,6 +49,11 @@ public class MemberValueInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     public static MemberValueInfo create(DataInput din) throws IOException, ClassFileException
     {
         MemberValueInfo mvi = new MemberValueInfo();
@@ -58,11 +63,16 @@ public class MemberValueInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private MemberValueInfo()
     {
     }
 
-    /** Return tag, defining member type. */
+    /**
+     * Return tag, defining member type.
+     */
     protected int getTag()
     {
         return this.u1tag;
@@ -71,6 +81,7 @@ public class MemberValueInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -111,6 +122,11 @@ public class MemberValueInfo
         }
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1tag = din.readUnsignedByte();
@@ -153,6 +169,7 @@ public class MemberValueInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -198,6 +215,8 @@ public class MemberValueInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
@@ -236,7 +255,12 @@ public class MemberValueInfo
         }
     }
 
-    /** Provide debugging dump of this object. */
+    /**
+     * Provide debugging dump of this object.
+     * 
+     * @param ps
+     * @param cf
+     */
     public void dump(PrintStream ps, ClassFile cf)
     {
         ps.println("u1tag : " + this.u1tag);

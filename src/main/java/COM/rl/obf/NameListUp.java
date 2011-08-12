@@ -32,6 +32,8 @@ public interface NameListUp
     /**
      * Get output method name from list, or null if no mapping exists.
      * 
+     * @param name
+     * @param descriptor
      * @throws ClassFileException
      */
     public String getMethodOutNameUp(String name, String descriptor) throws ClassFileException;
@@ -39,6 +41,8 @@ public interface NameListUp
     /**
      * Get obfuscated method name from list, or null if no mapping exists.
      * 
+     * @param name
+     * @param descriptor
      * @throws ClassFileException
      */
     public String getMethodObfNameUp(String name, String descriptor) throws ClassFileException;
@@ -46,6 +50,7 @@ public interface NameListUp
     /**
      * Get output field name from list, or null if no mapping exists.
      * 
+     * @param name
      * @throws ClassFileException
      */
     public String getFieldOutNameUp(String name) throws ClassFileException;
@@ -53,6 +58,7 @@ public interface NameListUp
     /**
      * Get obfuscated field name from list, or null if no mapping exists.
      * 
+     * @param name
      * @throws ClassFileException
      */
     public String getFieldObfNameUp(String name) throws ClassFileException;

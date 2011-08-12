@@ -48,7 +48,11 @@ public class CodeAttrInfo extends AttrInfo
 
 
     // Class Methods ---------------------------------------------------------
-    /** Number of bytes following an opcode */
+    /**
+     * Number of bytes following an opcode
+     * 
+     * @param opcode
+     */
     private static int opcodeBytes(int opcode)
     {
         switch (opcode)
@@ -118,12 +122,21 @@ public class CodeAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected CodeAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the length in bytes of the attribute. */
+    /**
+     * Return the length in bytes of the attribute.
+     */
     @Override
     protected int getAttrInfoLength()
     {
@@ -136,7 +149,9 @@ public class CodeAttrInfo extends AttrInfo
         return length;
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @Override
     protected String getAttrName()
     {
@@ -260,6 +275,7 @@ public class CodeAttrInfo extends AttrInfo
     /**
      * Walk the code, finding .class and Class.forName to update.
      * 
+     * @param cpToFlag
      * @throws ClassFileException
      */
     protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws ClassFileException
@@ -270,6 +286,7 @@ public class CodeAttrInfo extends AttrInfo
     /**
      * Walk the code, updating .class and Class.forName strings.
      * 
+     * @param cpUpdate
      * @throws ClassFileException
      */
     protected void walkUpdateClassStrings(Map cpUpdate) throws ClassFileException
@@ -283,6 +300,8 @@ public class CodeAttrInfo extends AttrInfo
      * by Utf8 name, so .option MapClassString is not necessary for them.
      * Still needed for Class.forName("MyClass") though.
      * 
+     * @param cpToFlag
+     * @param cpUpdate
      * @throws ClassFileException
      */
     private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Map cpUpdate) throws ClassFileException
@@ -370,6 +389,8 @@ public class CodeAttrInfo extends AttrInfo
     /**
      * Compute length of opcode arguments at offset
      * 
+     * @param opcode
+     * @param i
      * @throws ClassFileException
      */
     private int getOpcodeBytes(int opcode, int i) throws ClassFileException
@@ -435,7 +456,11 @@ public class CodeAttrInfo extends AttrInfo
         return bytes;
     }
 
-    /** Convert int to 2 char hex string */
+    /**
+     * Convert int to 2 char hex string
+     * 
+     * @param i
+     */
     private static String toHexString(int i)
     {
         String hex = "0" + Integer.toHexString(i);

@@ -38,6 +38,11 @@ public class MemberValuePairInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     public static MemberValuePairInfo create(DataInput din) throws IOException, ClassFileException
     {
         MemberValuePairInfo mvpi = new MemberValuePairInfo();
@@ -47,11 +52,16 @@ public class MemberValuePairInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private MemberValuePairInfo()
     {
     }
 
-    /** Return member name index into Constant Pool. */
+    /**
+     * Return member name index into Constant Pool.
+     */
     protected int getMemberNameIndex()
     {
         return this.u2memberNameIndex;
@@ -60,6 +70,7 @@ public class MemberValuePairInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -68,6 +79,11 @@ public class MemberValuePairInfo
         this.value.markUtf8Refs(pool);
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2memberNameIndex = din.readUnsignedShort();
@@ -77,6 +93,7 @@ public class MemberValuePairInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -89,6 +106,8 @@ public class MemberValuePairInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
@@ -98,6 +117,9 @@ public class MemberValuePairInfo
 
     /**
      * Provide debugging dump of this object.
+     * 
+     * @param ps
+     * @param cf
      */
     public void dump(PrintStream ps, ClassFile cf)
     {

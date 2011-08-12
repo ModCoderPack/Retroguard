@@ -40,31 +40,48 @@ public class Section
 
 
     // Instance Methods ------------------------------------------------------
-    /** Blank section. */
+    /**
+     * Blank section.
+     */
     public Section()
     {
         this.headers = new ArrayList();
     }
 
-    /** Append a header to this section. */
+    /**
+     * Append a header to this section.
+     * 
+     * @param header
+     */
     public void add(Header header)
     {
         this.headers.add(header);
     }
 
-    /** Append a header to this section. */
+    /**
+     * Append a header to this section.
+     * 
+     * @param tag
+     * @param value
+     */
     public void add(String tag, String value)
     {
         this.add(new Header(tag, value));
     }
 
-    /** Return an Iterator of headers. */
+    /**
+     * Return an Iterator of headers.
+     */
     public Iterator iterator()
     {
         return this.headers.iterator();
     }
 
-    /** Does the section contain a header matching the specified one? */
+    /**
+     * Does the section contain a header matching the specified one?
+     * 
+     * @param queryHeader
+     */
     public boolean hasHeader(Header queryHeader)
     {
         if (queryHeader != null)
@@ -81,7 +98,11 @@ public class Section
         return false;
     }
 
-    /** Find a header matching the specified tag, or null if none. */
+    /**
+     * Find a header matching the specified tag, or null if none.
+     * 
+     * @param tag
+     */
     public Header findTag(String tag)
     {
         // Check params
@@ -105,7 +126,12 @@ public class Section
         return null;
     }
 
-    /** Print String rep of this object to a java.io.Writer. */
+    /**
+     * Print String rep of this object to a java.io.Writer.
+     * 
+     * @param writer
+     * @throws IOException
+     */
     public void writeString(Writer writer) throws IOException
     {
         for (Iterator iter = this.headers.iterator(); iter.hasNext();)
@@ -116,7 +142,9 @@ public class Section
         writer.write("\015\012");
     }
 
-    /** Return String rep of this object. */
+    /**
+     * Return String rep of this object.
+     */
     @Override
     public String toString()
     {

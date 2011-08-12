@@ -39,13 +39,19 @@ public class SectionList
 
 
     // Instance Methods ------------------------------------------------------
-    /** Construct with no initial sections. */
+    /**
+     * Construct with no initial sections.
+     */
     public SectionList()
     {
         this.sections = new ArrayList();
     }
 
-    /** Parse the stream, appending the sections found there to our list. */
+    /**
+     * Parse the stream, appending the sections found there to our list.
+     * 
+     * @param in
+     */
     public void parse(InputStream in)
     {
         // Wrap the stream for text reading
@@ -113,25 +119,40 @@ public class SectionList
         }
     }
 
-    /** Add a Section to the list. */
+    /**
+     * Add a Section to the list.
+     * 
+     * @param section
+     */
     public void add(Section section)
     {
         this.sections.add(section);
     }
 
-    /** Return an Iterator of sections. */
+    /**
+     * Return an Iterator of sections.
+     */
     public Iterator iterator()
     {
         return this.sections.iterator();
     }
 
-    /** Find the first section in the list containing the matching header. */
+    /**
+     * Find the first section in the list containing the matching header.
+     * 
+     * @param tag
+     * @param value
+     */
     public Section find(String tag, String value)
     {
         return this.find(new Header(tag, value));
     }
 
-    /** Find the first section in the list containing the matching header. */
+    /**
+     * Find the first section in the list containing the matching header.
+     * 
+     * @param header
+     */
     public Section find(Header header)
     {
         for (Iterator iter = this.iterator(); iter.hasNext();)
@@ -145,7 +166,12 @@ public class SectionList
         return null;
     }
 
-    /** Print String rep of this object to a java.io.Writer. */
+    /**
+     * Print String rep of this object to a java.io.Writer.
+     * 
+     * @param writer
+     * @throws IOException
+     */
     public void writeString(Writer writer) throws IOException
     {
         for (Iterator iter = this.iterator(); iter.hasNext();)
@@ -155,7 +181,9 @@ public class SectionList
         }
     }
 
-    /** Return String rep of this object. */
+    /**
+     * Return String rep of this object.
+     */
     @Override
     public String toString()
     {

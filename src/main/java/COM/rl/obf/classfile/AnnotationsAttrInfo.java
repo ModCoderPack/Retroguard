@@ -41,12 +41,21 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected AnnotationsAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the array of annotation table entries. */
+    /**
+     * Return the array of annotation table entries.
+     */
     protected AnnotationInfo[] getAnnotationTable()
     {
         return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
@@ -55,7 +64,7 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     /**
      * Check for Utf8 references in the 'info' data to the constant pool and mark them.
      * 
-     * @throws throws ClassFileException
+     * @throws ClassFileException
      */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException

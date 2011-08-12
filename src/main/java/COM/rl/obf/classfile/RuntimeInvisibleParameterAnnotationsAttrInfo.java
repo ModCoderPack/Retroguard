@@ -39,12 +39,21 @@ public class RuntimeInvisibleParameterAnnotationsAttrInfo extends ParameterAnnot
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected RuntimeInvisibleParameterAnnotationsAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute. */
+    /**
+     * Return the String name of the attribute.
+     */
     @Override
     protected String getAttrName()
     {

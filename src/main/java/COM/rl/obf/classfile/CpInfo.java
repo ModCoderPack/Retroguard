@@ -35,7 +35,9 @@ abstract public class CpInfo implements ClassConstants
     // Fields ----------------------------------------------------------------
     private int u1tag;
 
-    /** Used for reference counting in Constant Pool */
+    /**
+     * Used for reference counting in Constant Pool
+     */
     protected int refCount = 0;
 
 
@@ -43,6 +45,7 @@ abstract public class CpInfo implements ClassConstants
     /**
      * Create a new CpInfo from the data passed.
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -99,6 +102,11 @@ abstract public class CpInfo implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param tag
+     */
     protected CpInfo(int tag)
     {
         this.u1tag = tag;
@@ -107,6 +115,7 @@ abstract public class CpInfo implements ClassConstants
     /**
      * Read the 'info' data following the u1tag byte; over-ride this in sub-classes.
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -115,24 +124,29 @@ abstract public class CpInfo implements ClassConstants
     /**
      * Check for Utf8 references to constant pool and mark them; over-ride this in sub-classes.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
+        // do nothing
     }
 
     /**
      * Check for NameAndType references to constant pool and mark them; over-ride this in sub-classes.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markNTRefs(ConstantPool pool) throws ClassFileException
     {
+        // do nothing
     }
 
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -149,18 +163,23 @@ abstract public class CpInfo implements ClassConstants
     /**
      * Write the 'info' data following the u1tag byte; over-ride this in sub-classes.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
     abstract protected void writeInfo(DataOutput dout) throws IOException, ClassFileException;
 
-    /** Return the reference count. */
+    /**
+     * Return the reference count.
+     */
     public int getRefCount()
     {
         return this.refCount;
     }
 
-    /** Increment the reference count. */
+    /**
+     * Increment the reference count.
+     */
     public void incRefCount()
     {
         this.refCount++;
@@ -180,7 +199,9 @@ abstract public class CpInfo implements ClassConstants
         this.refCount--;
     }
 
-    /** Reset the reference count to zero. */
+    /**
+     * Reset the reference count to zero.
+     */
     public void resetRefCount()
     {
         this.refCount = 0;
@@ -188,8 +209,13 @@ abstract public class CpInfo implements ClassConstants
 
     /**
      * Dump the content of the class file to the specified file (used for debugging).
+     * 
+     * @param pw
+     * @param cf
+     * @param index
      */
     public void dump(PrintWriter pw, ClassFile cf, int index)
     {
+        // do nothing
     }
 }

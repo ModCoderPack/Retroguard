@@ -31,7 +31,9 @@ import java.util.*;
 public class Header
 {
     // Constants -------------------------------------------------------------
-    /** Maximum length of header line in a section, before break to next line */
+    /**
+     * Maximum length of header line in a section, before break to next line
+     */
     private static final int MAX_HEADER_LINE_LENGTH = 70;
 
 
@@ -40,7 +42,11 @@ public class Header
     private String value;
 
     // Class Methods ---------------------------------------------------------
-    /** Parse a header from the specified String. */
+    /**
+     * Parse a header from the specified String.
+     * 
+     * @param line
+     */
     public static Header parse(String line)
     {
         Header header = null;
@@ -56,26 +62,37 @@ public class Header
     }
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param tag
+     * @param value
+     */
     public Header(String tag, String value)
     {
         this.tag = (tag == null ? "" : tag);
         this.value = (value == null ? "" : value);
     }
 
-    /** Return the tag. */
+    /**
+     * Return the tag.
+     */
     public String getTag()
     {
         return this.tag;
     }
 
-    /** Return the value. */
+    /**
+     * Return the value.
+     */
     public String getValue()
     {
         return this.value;
     }
 
-    /** Test equality of headers. */
+    /**
+     * Test equality of headers.
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -90,6 +107,9 @@ public class Header
         return false;
     }
 
+    /**
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
@@ -100,7 +120,12 @@ public class Header
         return result;
     }
 
-    /** Print String rep of this object to a java.io.Writer. */
+    /**
+     * Print String rep of this object to a java.io.Writer.
+     * 
+     * @param writer
+     * @throws IOException
+     */
     public void writeString(Writer writer) throws IOException
     {
         String prefix = this.getTag() + ": ";
@@ -115,7 +140,9 @@ public class Header
         }
     }
 
-    /** Return String rep of this object. */
+    /**
+     * Return String rep of this object.
+     */
     @Override
     public String toString()
     {

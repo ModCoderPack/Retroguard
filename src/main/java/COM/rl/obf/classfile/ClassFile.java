@@ -85,6 +85,7 @@ public class ClassFile implements ClassConstants
     /**
      * Create a new ClassFile from the class file format data in the DataInput stream.
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -103,6 +104,7 @@ public class ClassFile implements ClassConstants
      * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
      * Class.forName() method returns .
      * 
+     * @param descriptor
      * @throws ClassFileException
      */
     public static String[] parseDescriptor(String descriptor) throws ClassFileException
@@ -114,6 +116,8 @@ public class ClassFile implements ClassConstants
      * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, optionally in same format
      * as the Class.forName() method returns .
      * 
+     * @param descriptor
+     * @param isDisplay
      * @throws ClassFileException
      */
     public static String[] parseDescriptor(String descriptor, boolean isDisplay) throws ClassFileException
@@ -125,6 +129,9 @@ public class ClassFile implements ClassConstants
      * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
      * Class.forName() method returns .
      * 
+     * @param descriptor
+     * @param isDisplay
+     * @param doTranslate
      * @throws ClassFileException
      */
     public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws ClassFileException
@@ -200,6 +207,8 @@ public class ClassFile implements ClassConstants
     /**
      * Translate a type specifier from the internal JVM convention to the Class.forName() one.
      * 
+     * @param inName
+     * @param isDisplay
      * @throws ClassFileException
      */
     public static String translateType(String inName, boolean isDisplay) throws ClassFileException
@@ -270,25 +279,37 @@ public class ClassFile implements ClassConstants
         return outName;
     }
 
-    /** Translate a class name from the internal '/' convention to the regular '.' one. */
+    /**
+     * Translate a class name from the internal '/' convention to the regular '.' one.
+     * 
+     * @param name
+     */
     public static String translate(String name)
     {
         return name.replace('/', '.');
     }
 
-    /** Translate a class name from the the regular '.' convention to internal '/' one. */
+    /**
+     * Translate a class name from the the regular '.' convention to internal '/' one.
+     * 
+     * @param name
+     */
     public static String backTranslate(String name)
     {
         return name.replace('.', '/');
     }
 
-    /** Is this class in an unsupported version of the file format? */
+    /**
+     * Is this class in an unsupported version of the file format?
+     */
     public boolean hasIncompatibleVersion()
     {
         return (this.u2majorVersion > ClassConstants.MAJOR_VERSION);
     }
 
-    /** Return major version of this class's file format. */
+    /**
+     * Return major version of this class's file format.
+     */
     public int getMajorVersion()
     {
         return this.u2majorVersion;
@@ -296,7 +317,9 @@ public class ClassFile implements ClassConstants
 
 
     // Instance Methods ------------------------------------------------------
-    /** Private constructor. */
+    /**
+     * Private constructor.
+     */
     private ClassFile()
     {
     }
@@ -304,6 +327,7 @@ public class ClassFile implements ClassConstants
     /**
      * Import the class data to internal representation.
      * 
+     * @param din
      * @throws IOException
      * @throws ClassFileException
      */
@@ -369,6 +393,8 @@ public class ClassFile implements ClassConstants
 
     /**
      * Define a constant String to include in this output class file.
+     * 
+     * @param id
      */
     public void setIdString(String id)
     {
@@ -414,7 +440,9 @@ public class ClassFile implements ClassConstants
         return this.hasReflection;
     }
 
-    /** Return the access modifiers for this classfile. */
+    /**
+     * Return the access modifiers for this classfile.
+     */
     public int getModifiers()
     {
         return this.u2accessFlags;
@@ -459,6 +487,7 @@ public class ClassFile implements ClassConstants
     /**
      * Convert a CP index to a class name.
      * 
+     * @param u2index
      * @throws ClassFileException
      */
     private String toName(int u2index) throws ClassFileException
@@ -472,25 +501,37 @@ public class ClassFile implements ClassConstants
         throw new ClassFileException("Inconsistent Constant Pool in class file.");
     }
 
-    /** Return number of methods in class. */
+    /**
+     * Return number of methods in class.
+     */
     public int getMethodCount()
     {
         return this.methods.length;
     }
 
-    /** Return i'th method in class. */
+    /**
+     * Return i'th method in class.
+     * 
+     * @param i
+     */
     public MethodInfo getMethod(int i)
     {
         return this.methods[i];
     }
 
-    /** Return number of fields in class. */
+    /**
+     * Return number of fields in class.
+     */
     public int getFieldCount()
     {
         return this.fields.length;
     }
 
-    /** Return i'th field in class. */
+    /**
+     * Return i'th field in class.
+     * 
+     * @param i
+     */
     public FieldInfo getField(int i)
     {
         return this.fields[i];
@@ -499,6 +540,7 @@ public class ClassFile implements ClassConstants
     /**
      * Lookup the entry in the constant pool and return as an Object.
      * 
+     * @param cpIndex
      * @throws ClassFileException
      */
     protected CpInfo getCpEntry(int cpIndex) throws ClassFileException
@@ -509,6 +551,8 @@ public class ClassFile implements ClassConstants
     /**
      * Remap a specified Utf8 entry to the given value and return its new index.
      * 
+     * @param newString
+     * @param oldIndex
      * @throws ClassFileException
      */
     public int remapUtf8To(String newString, int oldIndex) throws ClassFileException
@@ -519,6 +563,7 @@ public class ClassFile implements ClassConstants
     /**
      * Lookup the UTF8 string in the constant pool.
      * 
+     * @param cpIndex
      * @throws ClassFileException
      */
     protected String getUtf8(int cpIndex) throws ClassFileException
@@ -534,6 +579,8 @@ public class ClassFile implements ClassConstants
 
     /**
      * Lookup the UTF8 string in the constant pool. Used in debugging.
+     * 
+     * @param cpIndex
      */
     protected String getUtf8Debug(int cpIndex)
     {
@@ -554,7 +601,9 @@ public class ClassFile implements ClassConstants
         return "[bad Utf8: " + cpIndex + "]";
     }
 
-    /** Does this class contain reflection methods? */
+    /**
+     * Does this class contain reflection methods?
+     */
     public boolean hasReflection()
     {
         return this.hasReflection;
@@ -570,6 +619,8 @@ public class ClassFile implements ClassConstants
 
     /**
      * List methods which can break obfuscated code, and log to a List.
+     * 
+     * @param list
      */
     public List listDangerMethods(List list)
     {
@@ -676,6 +727,8 @@ public class ClassFile implements ClassConstants
     /**
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
      * <tt>List</tt> are killed).
+     * 
+     * @param keepAttrs
      */
     public void trimAttrsExcept(List keepAttrs)
     {
@@ -729,13 +782,19 @@ public class ClassFile implements ClassConstants
         this.constantPool.updateRefCount();
     }
 
-    /** Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed). */
+    /**
+     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed).
+     */
     public void trimAttrs()
     {
         this.trimAttrsExcept(Collections.emptyList());
     }
 
-    /** Remove unnecessary attributes from the class. */
+    /**
+     * Remove unnecessary attributes from the class.
+     * 
+     * @param nm
+     */
     public void trimAttrs(NameMapper nm)
     {
         List attrs = nm.getAttrsToKeep();
@@ -745,6 +804,9 @@ public class ClassFile implements ClassConstants
     /**
      * Remap the entities in the specified ClassFile.
      * 
+     * @param nm
+     * @param log
+     * @param enableMapClassString
      * @throws ClassFileException
      */
     public void remap(NameMapper nm, PrintWriter log, boolean enableMapClassString) throws ClassFileException
@@ -905,6 +967,8 @@ public class ClassFile implements ClassConstants
     /**
      * Remap Class.forName and .class, leaving other identical Strings alone
      * 
+     * @param nm
+     * @param log
      * @throws ClassFileException
      */
     private void remapClassStrings(NameMapper nm, PrintWriter log) throws ClassFileException
@@ -991,7 +1055,11 @@ public class ClassFile implements ClassConstants
         }
     }
 
-    /** Is this String a valid class specifier? */
+    /**
+     * Is this String a valid class specifier?
+     * 
+     * @param s
+     */
     private static boolean isClassSpec(String s)
     {
         if (s.length() == 0)
@@ -1014,7 +1082,11 @@ public class ClassFile implements ClassConstants
         return true;
     }
 
-    /** Is this String a valid Java identifier? */
+    /**
+     * Is this String a valid Java identifier?
+     * 
+     * @param s
+     */
     private static boolean isJavaIdentifier(String s)
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
@@ -1034,6 +1106,7 @@ public class ClassFile implements ClassConstants
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -1087,6 +1160,7 @@ public class ClassFile implements ClassConstants
     /**
      * Dump the content of the class file to the specified file (used for debugging).
      * 
+     * @param pw
      * @throws ClassFileException
      */
     public void dump(PrintWriter pw) throws ClassFileException
@@ -1108,6 +1182,7 @@ public class ClassFile implements ClassConstants
             }
             catch (ClassFileException e)
             {
+                // ignore
             }
             if (cpInfo != null)
             {

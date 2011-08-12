@@ -31,6 +31,11 @@ public class FlagHashtable extends HashMap
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * @param cpInfo
+     * @param index
+     * @param forNameFlag
+     */
     public void updateFlag(CpInfo cpInfo, int index, boolean forNameFlag)
     {
         StringCpInfoFlags flags = (StringCpInfoFlags)this.get(cpInfo);
@@ -57,6 +62,9 @@ class StringCpInfoFlags
     protected boolean forNameFlag;
     protected boolean otherFlag;
 
+    /**
+     * Constructor
+     */
     protected StringCpInfoFlags()
     {
     }

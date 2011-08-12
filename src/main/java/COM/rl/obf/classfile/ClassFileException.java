@@ -11,6 +11,9 @@ public class ClassFileException extends Exception
     {
     }
 
+    /**
+     * @param s
+     */
     public ClassFileException(String s)
     {
         super(s);

@@ -38,6 +38,11 @@ public class ParameterAnnotationsInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     public static ParameterAnnotationsInfo create(DataInput din) throws IOException, ClassFileException
     {
         ParameterAnnotationsInfo pai = new ParameterAnnotationsInfo();
@@ -47,11 +52,16 @@ public class ParameterAnnotationsInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private ParameterAnnotationsInfo()
     {
     }
 
-    /** Return the array of annotation table entries. */
+    /**
+     * Return the array of annotation table entries.
+     */
     protected AnnotationInfo[] getAnnotationTable()
     {
         return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
@@ -60,6 +70,7 @@ public class ParameterAnnotationsInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -71,6 +82,11 @@ public class ParameterAnnotationsInfo
         }
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2numAnnotations = din.readUnsignedShort();
@@ -84,6 +100,7 @@ public class ParameterAnnotationsInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -100,6 +117,8 @@ public class ParameterAnnotationsInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException

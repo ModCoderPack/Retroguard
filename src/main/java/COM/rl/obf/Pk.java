@@ -38,16 +38,22 @@ public class Pk extends PkCl
 
 
     // Fields ----------------------------------------------------------------
-    /** Owns a list of sub-package levels */
+    /**
+     * Owns a list of sub-package levels
+     */
     private Map pks = new HashMap();
 
-    /** Compact name for this package */
+    /**
+     * Compact name for this package
+     */
     private String repackageName = null;
 
 
     // Class Methods ---------------------------------------------------------
     /**
      * Create the root entry for a tree.
+     * 
+     * @param classTree
      */
     public static Pk createRoot(ClassTree classTree)
     {
@@ -58,6 +64,8 @@ public class Pk extends PkCl
     // Instance Methods ------------------------------------------------------
     /**
      * Constructor for default package level.
+     * 
+     * @param classTree
      */
     public Pk(ClassTree classTree)
     {
@@ -67,6 +75,9 @@ public class Pk extends PkCl
 
     /**
      * Constructor for regular package levels.
+     * 
+     * @param parent
+     * @param name
      */
     public Pk(TreeItem parent, String name)
     {
@@ -81,7 +92,11 @@ public class Pk extends PkCl
         }
     }
 
-    /** Set the repackage name of the entry. */
+    /**
+     * Set the repackage name of the entry.
+     * 
+     * @param repackageName
+     */
     public void setRepackageName(String repackageName)
     {
         if (repackageName.equals("."))
@@ -94,19 +109,29 @@ public class Pk extends PkCl
         }
     }
 
-    /** Return the repackage name of the entry. */
+    /**
+     * Return the repackage name of the entry.
+     */
     public String getRepackageName()
     {
         return this.repackageName;
     }
 
-    /** Get a package level by name. */
+    /**
+     * Get a package level by name.
+     * 
+     * @param name
+     */
     public Pk getPackage(String name)
     {
         return (Pk)this.pks.get(name);
     }
 
-    /** Get a package level by obfuscated name. */
+    /**
+     * Get a package level by obfuscated name.
+     * 
+     * @param name
+     */
     public Pk getObfPackage(String name)
     {
         for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
@@ -120,7 +145,11 @@ public class Pk extends PkCl
         return null;
     }
 
-    /** Get a package level by obfuscated repackage name. */
+    /**
+     * Get a package level by obfuscated repackage name.
+     * 
+     * @param name
+     */
     public Pk getObfRepackage(String name)
     {
         for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
@@ -139,13 +168,17 @@ public class Pk extends PkCl
         return null;
     }
 
-    /** Get an Iterator of packages. */
+    /**
+     * Get an Iterator of packages.
+     */
     public Iterator getPackageIter()
     {
         return this.pks.values().iterator();
     }
 
-    /** Return number of packages. */
+    /**
+     * Return number of packages.
+     */
     public int getPackageCount()
     {
         return this.pks.size();
@@ -153,6 +186,8 @@ public class Pk extends PkCl
 
     /**
      * Add a sub-package level.
+     * 
+     * @param name
      */
     public Pk addPackage(String name)
     {
@@ -183,7 +218,9 @@ public class Pk extends PkCl
         return this.addPlaceholderClass(false, name);
     }
 
-    /** Generate unique obfuscated names for this namespace. */
+    /**
+     * Generate unique obfuscated names for this namespace.
+     */
     @Override
     public void generateNames()
     {
@@ -191,7 +228,9 @@ public class Pk extends PkCl
         PkCl.generateNames(this.pks);
     }
 
-    /** Generate unique-across-run obfuscated repackage name. */
+    /**
+     * Generate unique-across-run obfuscated repackage name.
+     */
     public void repackageName()
     {
         if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
@@ -216,7 +255,9 @@ public class Pk extends PkCl
         }
     }
 
-    /** Construct and return the full obfuscated name of the entry. */
+    /**
+     * Construct and return the full obfuscated name of the entry.
+     */
     @Override
     public String getFullOutName()
     {

@@ -40,19 +40,30 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected AnnotationDefaultAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute. */
+    /**
+     * Return the String name of the attribute.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_AnnotationDefault;
     }
 
-    /** Return the default value. */
+    /**
+     * Return the default value.
+     */
     protected MemberValueInfo getDefaultValue()
     {
         return this.defaultValue;
@@ -61,7 +72,7 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
     /**
      * Check for Utf8 references in the 'info' data to the constant pool and mark them.
      * 
-     * @throws throws ClassFileException
+     * @throws ClassFileException
      */
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
@@ -72,8 +83,8 @@ public class AnnotationDefaultAttrInfo extends AttrInfo
     /**
      * Read the data following the header.
      * 
-     * @throws ClassFileException
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException

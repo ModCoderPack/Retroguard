@@ -41,25 +41,38 @@ public class EnclosingMethodAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected EnclosingMethodAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute. */
+    /**
+     * Return the String name of the attribute.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_EnclosingMethod;
     }
 
-    /** Return the class index into the constant pool. */
+    /**
+     * Return the class index into the constant pool.
+     */
     protected int getClassIndex()
     {
         return this.u2classIndex;
     }
 
-    /** Return the method index into the constant pool. */
+    /**
+     * Return the method index into the constant pool.
+     */
     protected int getMethodIndex()
     {
         return this.u2methodIndex;
@@ -91,7 +104,12 @@ public class EnclosingMethodAttrInfo extends AttrInfo
         dout.writeShort(this.u2methodIndex);
     }
 
-    /** Do necessary name remapping. */
+    /**
+     * Do necessary name remapping.
+     * 
+     * @param cf
+     * @param nm
+     */
     @Override
     protected void remap(ClassFile cf, NameMapper nm)
     {

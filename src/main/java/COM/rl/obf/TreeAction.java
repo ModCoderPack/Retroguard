@@ -32,6 +32,7 @@ import COM.rl.obf.classfile.ClassFileException;
 public class TreeAction
 {
     /**
+     * @param pk
      * @throws ClassFileException
      */
     public void packageAction(Pk pk) throws ClassFileException
@@ -40,6 +41,7 @@ public class TreeAction
     }
 
     /**
+     * @param cl
      * @throws ClassFileException
      */
     public void classAction(Cl cl) throws ClassFileException
@@ -48,6 +50,7 @@ public class TreeAction
     }
 
     /**
+     * @param md
      * @throws ClassFileException
      */
     public void methodAction(Md md) throws ClassFileException
@@ -56,6 +59,7 @@ public class TreeAction
     }
 
     /**
+     * @param fd
      * @throws ClassFileException
      */
     public void fieldAction(Fd fd) throws ClassFileException
@@ -64,9 +68,11 @@ public class TreeAction
     }
 
     /**
+     * @param ti
      * @throws ClassFileException
      */
     public void defaultAction(TreeItem ti) throws ClassFileException
     {
+        // do nothing
     }
 }

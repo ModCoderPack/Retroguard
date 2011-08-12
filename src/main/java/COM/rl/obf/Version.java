@@ -39,25 +39,33 @@ public class Version
 
 
     // Class Methods ---------------------------------------------------------
-    /** Return the current major.minor.patch version string. */
+    /**
+     * Return the current major.minor.patch version string.
+     */
     public static String getVersion()
     {
         return Version.REL_VERSION;
     }
 
-    /** Return a major.minor.patch versioned comment string. */
+    /**
+     * Return a major.minor.patch versioned comment string.
+     */
     public static String getVersionComment()
     {
         return Version.RETROGUARD_FULL_VERSION_COMMENT;
     }
 
-    /** Return the current class ID string. */
+    /**
+     * Return the current class ID string.
+     */
     public static String getClassIdString()
     {
         return Version.RETROGUARD_CLASS_ID;
     }
 
-    /** Return the default Jar comment string. */
+    /**
+     * Return the default Jar comment string.
+     */
     public static String getJarComment()
     {
         return Version.RETROGUARD_REL_JAR_COMMENT;

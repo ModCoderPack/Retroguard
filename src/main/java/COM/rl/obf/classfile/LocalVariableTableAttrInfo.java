@@ -41,19 +41,30 @@ public class LocalVariableTableAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected LocalVariableTableAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_LocalVariableTable;
     }
 
-    /** Return the array of local variable table entries. */
+    /**
+     * Return the array of local variable table entries.
+     */
     protected LocalVariableInfo[] getLocalVariableTable()
     {
         return (LocalVariableInfo[])this.localVariableTable.toArray(new LocalVariableInfo[0]);

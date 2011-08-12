@@ -48,6 +48,11 @@ public class VerificationTypeInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     public static VerificationTypeInfo create(DataInput din) throws IOException, ClassFileException
     {
         VerificationTypeInfo vti = new VerificationTypeInfo();
@@ -57,10 +62,18 @@ public class VerificationTypeInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private VerificationTypeInfo()
     {
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1tag = din.readUnsignedByte();
@@ -91,6 +104,7 @@ public class VerificationTypeInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -104,6 +118,7 @@ public class VerificationTypeInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */

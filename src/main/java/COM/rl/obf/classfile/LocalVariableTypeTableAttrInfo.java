@@ -41,19 +41,30 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected LocalVariableTypeTableAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_LocalVariableTypeTable;
     }
 
-    /** Return the array of local variable type table entries. */
+    /**
+     * Return the array of local variable type table entries.
+     */
     protected LocalVariableTypeInfo[] getLocalVariableTypeTable()
     {
         return (LocalVariableTypeInfo[])this.localVariableTypeTable.toArray(new LocalVariableTypeInfo[0]);
@@ -78,9 +89,10 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
      * Read the data following the header.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2localVariableTypeTableLength = din.readUnsignedShort();
         this.localVariableTypeTable = new ArrayList(this.u2localVariableTypeTableLength);

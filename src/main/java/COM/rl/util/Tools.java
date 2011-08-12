@@ -36,7 +36,6 @@ public class Tools
 
 
     // Class Methods ---------------------------------------------------------
-    /** Encode a byte[] as a Base64 (see RFC1521, Section 5.2) String. */
     private static final char[] base64 =
     {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -46,6 +45,11 @@ public class Tools
     };
     private static final char pad = '=';
 
+    /**
+     * Encode a byte[] as a Base64 (see RFC1521, Section 5.2) String.
+     * 
+     * @param b
+     */
     public static String toBase64(byte[] b)
     {
         StringBuffer sb = new StringBuffer();

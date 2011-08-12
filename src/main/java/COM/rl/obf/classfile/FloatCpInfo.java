@@ -40,6 +40,9 @@ public class FloatCpInfo extends CpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected FloatCpInfo()
     {
         super(ClassConstants.CONSTANT_Float);
@@ -49,9 +52,10 @@ public class FloatCpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u4bytes = din.readInt();
     }
@@ -60,9 +64,10 @@ public class FloatCpInfo extends CpInfo
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeInt(this.u4bytes);
     }

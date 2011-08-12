@@ -45,7 +45,15 @@ abstract public class MdFd extends TreeItem
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param isSynthetic
+     * @param name
+     * @param descriptor
+     * @param access
+     */
     public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
     {
         super(parent, name);
@@ -65,31 +73,41 @@ abstract public class MdFd extends TreeItem
         }
     }
 
-    /** Return the method or field descriptor String. */
+    /**
+     * Return the method or field descriptor String.
+     */
     public String getDescriptor()
     {
         return this.descriptor;
     }
 
-    /** Is this member static? */
+    /**
+     * Is this member static?
+     */
     public boolean isStatic()
     {
         return Modifier.isStatic(this.getModifiers());
     }
 
-    /** Set that this method or field is an override. */
+    /**
+     * Set that this method or field is an override.
+     */
     public void setIsOverride()
     {
         this.isOverride = true;
     }
 
-    /** Is this method or field an override? */
+    /**
+     * Is this method or field an override?
+     */
     public boolean isOverride()
     {
         return this.isOverride;
     }
 
-    /** Return the display name for field. */
+    /**
+     * Return the display name for field.
+     */
     @Override
     public String toString()
     {
@@ -142,19 +160,25 @@ abstract public class MdFd extends TreeItem
         return sb.toString();
     }
 
-    /** Return the display name of the return type. */
+    /**
+     * Return the display name of the return type.
+     */
     protected String getReturnTypeName()
     {
         String[] types = this.parseTypes();
         return (types.length > 0 ? types[types.length - 1] : "") + " ";
     }
 
-    /** Return the display name of the descriptor types. */
+    /**
+     * Return the display name of the descriptor types.
+     */
     abstract protected String getDescriptorName();
 
     private String[] parsedTypes = null;
 
-    /** Return the parsed descriptor types array. */
+    /**
+     * Return the parsed descriptor types array.
+     */
     protected String[] parseTypes()
     {
         // TODO move into constructor?
@@ -173,7 +197,12 @@ abstract public class MdFd extends TreeItem
         return this.parsedTypes;
     }
 
-    /** Does this member match the wildcard pattern? (** and * supported) */
+    /**
+     * Does this member match the wildcard pattern? (** and * supported)
+     * 
+     * @param namePattern
+     * @param descPattern
+     */
     public boolean isWildcardMatch(String namePattern, String descPattern)
     {
         return this.isWildcardMatch(namePattern) && TreeItem.isMatch(descPattern, this.getDescriptor());

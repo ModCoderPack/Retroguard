@@ -39,6 +39,11 @@ public class AnnotationInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     public static AnnotationInfo create(DataInput din) throws IOException, ClassFileException
     {
         AnnotationInfo ai = new AnnotationInfo();
@@ -48,11 +53,16 @@ public class AnnotationInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     private AnnotationInfo()
     {
     }
 
-    /** Return type index into Constant Pool. */
+    /**
+     * Return type index into Constant Pool.
+     */
     protected int getTypeIndex()
     {
         return this.u2typeIndex;
@@ -61,6 +71,7 @@ public class AnnotationInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -73,6 +84,11 @@ public class AnnotationInfo
         }
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2typeIndex = din.readUnsignedShort();
@@ -87,6 +103,7 @@ public class AnnotationInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
@@ -104,6 +121,8 @@ public class AnnotationInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
@@ -120,6 +139,9 @@ public class AnnotationInfo
 
     /**
      * Provide debugging dump of this object.
+     * 
+     * @param ps
+     * @param cf
      */
     public void dump(PrintStream ps, ClassFile cf)
     {

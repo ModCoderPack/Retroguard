@@ -39,6 +39,8 @@ public class FieldInfo extends ClassItemInfo
     /**
      * Create a new FieldInfo from the file format data in the DataInput stream.
      * 
+     * @param din
+     * @param cf
      * @throws IOException
      * @throws ClassFileException
      */
@@ -55,6 +57,11 @@ public class FieldInfo extends ClassItemInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     */
     protected FieldInfo(ClassFile cf)
     {
         super(cf);

@@ -49,12 +49,21 @@ public class RgsEntry
 
 
     // Instance Methods-------------------------------------------------------
+    /**
+     * @param type
+     * @param name
+     */
     public RgsEntry(RgsEntryType type, String name)
     {
         this.type = type;
         this.name = name;
     }
 
+    /**
+     * @param type
+     * @param name
+     * @param descriptor
+     */
     public RgsEntry(RgsEntryType type, String name, String descriptor)
     {
         this.type = type;

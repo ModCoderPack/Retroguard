@@ -113,7 +113,9 @@ public class RgsEnum
 
 
     // Class Methods ---------------------------------------------------------
-    /** Return the internal default script file. */
+    /**
+     * Return the internal default script file.
+     */
     public static String getDefaultRgs()
     {
         return RgsEnum.DEFAULT_RGS;
@@ -122,6 +124,7 @@ public class RgsEnum
     /**
      * Translate a string access modifier from the script to bit flag
      * 
+     * @param accessString
      * @throws RGSException
      */
     private static int toAccessFlag(String accessString) throws RGSException
@@ -203,6 +206,8 @@ public class RgsEnum
     /**
      * Decode a list of access flags into a bit mask for class, method, or field access flag u2's.
      * 
+     * @param entryType
+     * @param accessString
      * @throws RGSException
      */
     private static int decodeAccessFlags(RgsEntryType entryType, String accessString) throws RGSException
@@ -253,7 +258,11 @@ public class RgsEnum
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param rgs
+     */
     public RgsEnum(InputStream rgs)
     {
         this.tk = new StreamTokenizer(new BufferedReader(rgs != null ? (Reader)new InputStreamReader(rgs)
@@ -329,39 +338,39 @@ public class RgsEnum
                 {
                     if (directive == null)
                     {
-                        if (this.tk.sval.equals(RgsEntryType.OPTION.directive))
+                        if (this.tk.sval.equals(RgsEntryType.OPTION.toString()))
                         {
                             directive = RgsEntryType.OPTION;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.ATTR.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.ATTR.toString()))
                         {
                             directive = RgsEntryType.ATTR;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.NOWARN.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.NOWARN.toString()))
                         {
                             directive = RgsEntryType.NOWARN;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.PACKAGE_MAP.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.PACKAGE_MAP.toString()))
                         {
                             directive = RgsEntryType.PACKAGE_MAP;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.REPACKAGE_MAP.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.REPACKAGE_MAP.toString()))
                         {
                             directive = RgsEntryType.REPACKAGE_MAP;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.CLASS_MAP.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.CLASS_MAP.toString()))
                         {
                             directive = RgsEntryType.CLASS_MAP;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.METHOD_MAP.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.METHOD_MAP.toString()))
                         {
                             directive = RgsEntryType.METHOD_MAP;
                         }
-                        else if (this.tk.sval.equals(RgsEntryType.FIELD_MAP.directive))
+                        else if (this.tk.sval.equals(RgsEntryType.FIELD_MAP.toString()))
                         {
                             directive = RgsEntryType.FIELD_MAP;
                         }
-                        else if (this.tk.sval.startsWith(RgsEntryType.CLASS.directive))
+                        else if (this.tk.sval.startsWith(RgsEntryType.CLASS.toString()))
                         {
                             directive = RgsEntryType.CLASS;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
@@ -369,7 +378,7 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEntryType.NOT_CLASS.directive))
+                        else if (this.tk.sval.startsWith(RgsEntryType.NOT_CLASS.toString()))
                         {
                             directive = RgsEntryType.NOT_CLASS;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
@@ -377,7 +386,7 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEntryType.METHOD.directive))
+                        else if (this.tk.sval.startsWith(RgsEntryType.METHOD.toString()))
                         {
                             directive = RgsEntryType.METHOD;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
@@ -385,7 +394,7 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEntryType.NOT_METHOD.directive))
+                        else if (this.tk.sval.startsWith(RgsEntryType.NOT_METHOD.toString()))
                         {
                             directive = RgsEntryType.NOT_METHOD;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
@@ -393,7 +402,7 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEntryType.FIELD.directive))
+                        else if (this.tk.sval.startsWith(RgsEntryType.FIELD.toString()))
                         {
                             directive = RgsEntryType.FIELD;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
@@ -401,7 +410,7 @@ public class RgsEnum
                             accessSetting = accessMask >> 16;
                             accessMask &= 0xffff;
                         }
-                        else if (this.tk.sval.startsWith(RgsEntryType.NOT_FIELD.directive))
+                        else if (this.tk.sval.startsWith(RgsEntryType.NOT_FIELD.toString()))
                         {
                             directive = RgsEntryType.NOT_FIELD;
                             accessMask = RgsEnum.decodeAccessFlags(directive,
@@ -696,6 +705,7 @@ public class RgsEnum
     /**
      * Throw if invalid
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkMethodDescriptor(String s) throws RGSException
@@ -717,6 +727,7 @@ public class RgsEnum
     /**
      * Throw if first type is invalid, else return all but first type in String
      * 
+     * @param s
      * @throws RGSException
      */
     private static String checkFirstJavaType(String s) throws RGSException
@@ -765,6 +776,7 @@ public class RgsEnum
     /**
      * Throw if type is invalid
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkJavaType(String s) throws RGSException
@@ -778,6 +790,7 @@ public class RgsEnum
     /**
      * Throw if invalid
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkMethodOrFieldSpec(String s) throws RGSException
@@ -800,6 +813,7 @@ public class RgsEnum
     /**
      * Throw if invalid
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkClassSpec(String s) throws RGSException
@@ -826,6 +840,7 @@ public class RgsEnum
     /**
      * Throw if invalid
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkClassWCSpec(String s) throws RGSException
@@ -880,6 +895,7 @@ public class RgsEnum
     /**
      * Throw if invalid
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkJavaIdentifier(String s) throws RGSException
@@ -900,6 +916,7 @@ public class RgsEnum
     /**
      * Throw if invalid (allows for anon. inner class names like '4')
      * 
+     * @param s
      * @throws RGSException
      */
     private static void checkJavaInnerIdentifier(String s) throws RGSException

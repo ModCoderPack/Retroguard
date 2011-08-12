@@ -38,7 +38,9 @@ abstract public class PkCl extends TreeItem
 
 
     // Fields ----------------------------------------------------------------
-    /** Owns a list of classes. */
+    /**
+     * Owns a list of classes.
+     */
     protected Map cls = new HashMap();
 
 
@@ -46,19 +48,32 @@ abstract public class PkCl extends TreeItem
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param name
+     */
     public PkCl(TreeItem parent, String name)
     {
         super(parent, name);
     }
 
-    /** Get a class by name. */
+    /**
+     * Get a class by name.
+     * 
+     * @param name
+     */
     public Cl getClass(String name)
     {
         return (Cl)this.cls.get(name);
     }
 
-    /** Get a class by obfuscated name. */
+    /**
+     * Get a class by obfuscated name.
+     * 
+     * @param name
+     */
     public Cl getObfClass(String name)
     {
         for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
@@ -72,13 +87,17 @@ abstract public class PkCl extends TreeItem
         return null;
     }
 
-    /** Get an Iterator of classes directly beneath this PkCl. */
+    /**
+     * Get an Iterator of classes directly beneath this PkCl.
+     */
     public Iterator getClassIter()
     {
         return this.cls.values().iterator();
     }
 
-    /** Get an Iterator of all classes (outer and inner) in the tree beneath this PkCl. */
+    /**
+     * Get an Iterator of all classes (outer and inner) in the tree beneath this PkCl.
+     */
     public Iterator getAllClassIter()
     {
         List allClasses = new ArrayList();
@@ -86,7 +105,11 @@ abstract public class PkCl extends TreeItem
         return allClasses.iterator();
     }
 
-    /** List classes and recursively compose a list of all inner classes. */
+    /**
+     * List classes and recursively compose a list of all inner classes.
+     * 
+     * @param allClasses
+     */
     protected void addAllClasses(List allClasses)
     {
         for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
@@ -97,7 +120,9 @@ abstract public class PkCl extends TreeItem
         }
     }
 
-    /** Return number of classes. */
+    /**
+     * Return number of classes.
+     */
     public int getClassCount()
     {
         return this.cls.size();
@@ -105,11 +130,22 @@ abstract public class PkCl extends TreeItem
 
     /**
      * Add a class to the list of owned classes.
+     * 
+     * @param name
+     * @param superName
+     * @param interfaceNames
+     * @param access
      */
     abstract public Cl addClass(String name, String superName, List interfaceNames, int access);
 
     /**
      * Add a class to the list of owned classes.
+     * 
+     * @param isInnerClass
+     * @param name
+     * @param superName
+     * @param interfaceNames
+     * @param access
      */
     public Cl addClass(boolean isInnerClass, String name, String superName, List interfaceNames, int access)
     {
@@ -146,11 +182,16 @@ abstract public class PkCl extends TreeItem
 
     /**
      * Add a placeholder class to our list of owned classes, to be replaced later by the full class.
+     * 
+     * @param name
      */
     abstract public Cl addPlaceholderClass(String name);
 
     /**
      * Add a placeholder class to our list of owned classes, to be replaced later by the full class.
+     * 
+     * @param isInnerClass
+     * @param name
      */
     public Cl addPlaceholderClass(boolean isInnerClass, String name)
     {
@@ -163,13 +204,19 @@ abstract public class PkCl extends TreeItem
         return cl;
     }
 
-    /** Generate unique obfuscated names for this namespace. */
+    /**
+     * Generate unique obfuscated names for this namespace.
+     */
     public void generateNames()
     {
         PkCl.generateNames(this.cls);
     }
 
-    /** Generate unique obfuscated names for a given namespace. */
+    /**
+     * Generate unique obfuscated names for a given namespace.
+     * 
+     * @param hash
+     */
     protected static void generateNames(Map hash)
     {
         for (Iterator iter = hash.values().iterator(); iter.hasNext();)

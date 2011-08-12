@@ -43,13 +43,23 @@ public class Md extends MdFd
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param isSynthetic
+     * @param name
+     * @param descriptor
+     * @param access
+     */
     public Md(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
     {
         super(parent, isSynthetic, name, descriptor, access);
     }
 
-    /** Return the display name of the descriptor types. */
+    /**
+     * Return the display name of the descriptor types.
+     */
     @Override
     protected String getDescriptorName()
     {
@@ -71,7 +81,12 @@ public class Md extends MdFd
         return sb.toString();
     }
 
-    /** Does this method match the wildcard pattern? (compatibility mode) */
+    /**
+     * Does this method match the wildcard pattern? (compatibility mode)
+     * 
+     * @param namePattern
+     * @param descPattern
+     */
     public boolean isOldStyleMatch(String namePattern, String descPattern)
     {
         return this.isOldStyleMatch(namePattern) && TreeItem.isMatch(descPattern, this.getDescriptor());

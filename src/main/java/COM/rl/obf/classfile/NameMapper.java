@@ -30,12 +30,15 @@ import java.util.*;
 public interface NameMapper
 {
     // Interface Methods -----------------------------------------------------
-    /** Return a <tt>List</tt> of attributes marked to keep. */
+    /**
+     * Return a <tt>List</tt> of attributes marked to keep.
+     */
     public List getAttrsToKeep();
 
     /**
      * Mapping for fully qualified class name.
      * 
+     * @param className
      * @throws ClassFileException
      */
     public String mapClass(String className) throws ClassFileException;
@@ -43,6 +46,9 @@ public interface NameMapper
     /**
      * Mapping for method name, of fully qualified class.
      * 
+     * @param className
+     * @param methodName
+     * @param descriptor
      * @throws ClassFileException
      */
     public String mapMethod(String className, String methodName, String descriptor) throws ClassFileException;
@@ -50,6 +56,8 @@ public interface NameMapper
     /**
      * Mapping for field name, of fully qualified class.
      * 
+     * @param className
+     * @param fieldName
      * @throws ClassFileException
      */
     public String mapField(String className, String fieldName) throws ClassFileException;
@@ -57,6 +65,7 @@ public interface NameMapper
     /**
      * Mapping for descriptor of field or method.
      * 
+     * @param descriptor
      * @throws ClassFileException
      */
     public String mapDescriptor(String descriptor) throws ClassFileException;
@@ -64,6 +73,7 @@ public interface NameMapper
     /**
      * Mapping for generic type signature.
      * 
+     * @param signature
      * @throws ClassFileException
      */
     public String mapSignature(String signature) throws ClassFileException;

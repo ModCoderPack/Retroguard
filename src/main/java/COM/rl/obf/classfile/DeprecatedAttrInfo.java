@@ -39,32 +39,50 @@ public class DeprecatedAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected DeprecatedAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute. */
+    /**
+     * Return the String name of the attribute.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_Deprecated;
     }
 
-    /** Read the data following the header. */
+    /**
+     * Read the data following the header.
+     * 
+     * @param din
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    protected void readInfo(DataInput din)
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
+        // do nothing
     }
 
     /**
      * Export data following the header to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      * @throws ClassFileException
      */
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
+        // do nothing
     }
 }

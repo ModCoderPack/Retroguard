@@ -41,19 +41,30 @@ public class InnerClassesAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected InnerClassesAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @Override
     protected String getAttrName()
     {
         return ClassConstants.ATTR_InnerClasses;
     }
 
-    /** Return the array of inner classes data. */
+    /**
+     * Return the array of inner classes data.
+     */
     protected InnerClassesInfo[] getInfo()
     {
         return (InnerClassesInfo[])this.classes.toArray(new InnerClassesInfo[0]);

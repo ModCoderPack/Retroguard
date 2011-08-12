@@ -40,18 +40,27 @@ public class StringCpInfo extends CpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected StringCpInfo()
     {
         super(ClassConstants.CONSTANT_String);
     }
 
-    /** Return the string index. */
+    /**
+     * Return the string index.
+     */
     protected int getStringIndex()
     {
         return this.u2stringIndex;
     }
 
-    /** Set the string index. */
+    /**
+     * Set the string index.
+     * 
+     * @param index
+     */
     protected void setStringIndex(int index)
     {
         this.u2stringIndex = index;
@@ -72,9 +81,10 @@ public class StringCpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2stringIndex = din.readUnsignedShort();
     }
@@ -83,9 +93,10 @@ public class StringCpInfo extends CpInfo
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2stringIndex);
     }

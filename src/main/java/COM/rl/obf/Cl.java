@@ -38,40 +38,64 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
 
     // Fields ----------------------------------------------------------------
-    /** Owns a list of methods */
+    /**
+     * Owns a list of methods
+     */
     private Map mds = new HashMap();
 
-    /** Owns a list of special methods */
+    /**
+     * Owns a list of special methods
+     */
     private Map mdsSpecial = new HashMap();
 
-    /** Owns a list of fields */
+    /**
+     * Owns a list of fields
+     */
     private Map fds = new HashMap();
 
-    /** Has the class been resolved already? */
+    /**
+     * Has the class been resolved already?
+     */
     private boolean isResolved = false;
 
-    /** Has the class been scanned already? */
+    /**
+     * Has the class been scanned already?
+     */
     private boolean isScanned = false;
 
-    /** Our superclass name */
+    /**
+     * Our superclass name
+     */
     private String superClass;
 
-    /** Names of implemented interfaces */
+    /**
+     * Names of implemented interfaces
+     */
     private List superInterfaces;
 
-    /** Is this an inner class? */
+    /**
+     * Is this an inner class?
+     */
     private boolean isInnerClass;
 
-    /** NameListUp interfaces for super-class/interfaces */
+    /**
+     * NameListUp interfaces for super-class/interfaces
+     */
     private List nameListUps = new ArrayList();
 
-    /** NameListDown interfaces for derived class/interfaces */
+    /**
+     * NameListDown interfaces for derived class/interfaces
+     */
     private List nameListDowns = new ArrayList();
 
-    /** Are danger-method warnings suppressed? */
+    /**
+     * Are danger-method warnings suppressed?
+     */
     private boolean isNoWarn = false;
 
-    /** Danger-method warnings */
+    /**
+     * Danger-method warnings
+     */
     private List warningList = new ArrayList();
 
     public static int nameSpace = 0;
@@ -81,7 +105,16 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param isInnerClass
+     * @param name
+     * @param superClass
+     * @param superInterfaces
+     * @param access
+     */
     public Cl(TreeItem parent, boolean isInnerClass, String name, String superClass, List superInterfaces, int access)
     {
         super(parent, name);
@@ -105,31 +138,45 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    /** Is this an inner class? */
+    /**
+     * Is this an inner class?
+     */
     public boolean isInnerClass()
     {
         return this.isInnerClass;
     }
 
-    /** Suppress warnings. */
+    /**
+     * Suppress warnings.
+     */
     public void setNoWarn()
     {
         this.isNoWarn = true;
     }
 
-    /** Add class's warning. */
+    /**
+     * Add class's warning.
+     * 
+     * @param cf
+     */
     public void setWarnings(ClassFile cf)
     {
         this.warningList = cf.listDangerMethods(this.warningList);
     }
 
-    /** Do we have non-suppressed warnings? */
+    /**
+     * Do we have non-suppressed warnings?
+     */
     public boolean hasWarnings()
     {
         return (!this.isNoWarn && (this.warningList.size() > 0));
     }
 
-    /** Log this class's warnings. */
+    /**
+     * Log this class's warnings.
+     * 
+     * @param log
+     */
     public void logWarnings(PrintWriter log)
     {
         if (this.hasWarnings())
@@ -142,19 +189,33 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    /** Get a method by name. */
+    /**
+     * Get a method by name.
+     * 
+     * @param name
+     * @param descriptor
+     */
     public Md getMethod(String name, String descriptor)
     {
         return (Md)this.mds.get(name + descriptor);
     }
 
-    /** Get a special method by name. */
+    /**
+     * Get a special method by name.
+     * 
+     * @param name
+     * @param descriptor
+     */
     public Md getMethodSpecial(String name, String descriptor)
     {
         return (Md)this.mdsSpecial.get(name + descriptor);
     }
 
-    /** Get all methods with obfuscated name. */
+    /**
+     * Get all methods with obfuscated name.
+     * 
+     * @param name
+     */
     public Iterator getObfMethods(String name)
     {
         List mdsMatch = new ArrayList();
@@ -169,19 +230,27 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return mdsMatch.iterator();
     }
 
-    /** Get a field by name. */
+    /**
+     * Get a field by name.
+     * 
+     * @param name
+     */
     public Fd getField(String name)
     {
         return (Fd)this.fds.get(name);
     }
 
-    /** Get an Collection of methods. */
+    /**
+     * Get an Collection of methods.
+     */
     public Iterator getMethodIter()
     {
         return this.mds.values().iterator();
     }
 
-    /** Get an Collection of fields. */
+    /**
+     * Get an Collection of fields.
+     */
     public Iterator getFieldIter()
     {
         return this.fds.values().iterator();
@@ -222,7 +291,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return list.iterator();
     }
 
-    /** Does this internal class have the specified class or interface in its super or interface chain? */
+    /**
+     * Does this internal class have the specified class or interface in its super or interface chain?
+     * 
+     * @param queryName
+     * @param checkInterfaces
+     */
     protected boolean hasAsSuperInt(String queryName, boolean checkInterfaces)
     {
         try
@@ -328,7 +402,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return false;
     }
 
-    /** Does this class have the specified class or interface in its super or interface chain? */
+    /**
+     * Does this class have the specified class or interface in its super or interface chain?
+     * 
+     * @param queryName
+     * @param checkInterfaces
+     * @param classTree
+     * @param clExt
+     */
     protected static boolean hasAsSuperExt(String queryName, boolean checkInterfaces, ClassTree classTree, Class clExt)
     {
         try
@@ -418,33 +499,49 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return false;
     }
 
-    /** Does this class have the specified class or interface in its super or interface chain? */
+    /**
+     * Does this class have the specified class or interface in its super or interface chain?
+     * 
+     * @param queryName
+     */
     public boolean hasAsSuperOrInterface(String queryName)
     {
         return this.hasAsSuperInt(queryName, true);
     }
 
-    /** Does this class have the specified class in its super chain? */
+    /**
+     * Does this class have the specified class in its super chain?
+     * 
+     * @param queryName
+     */
     public boolean hasAsSuper(String queryName)
     {
         return this.hasAsSuperInt(queryName, false);
     }
 
-    /** Add an inner class. */
+    /**
+     * Add an inner class.
+     */
     @Override
     public Cl addClass(String name, String superName, List interfaceNames, int access)
     {
         return this.addClass(true, name, superName, interfaceNames, access);
     }
 
-    /** Add an inner class, used when copying inner classes from a placeholder. */
+    /**
+     * Add an inner class, used when copying inner classes from a placeholder.
+     * 
+     * @param cl
+     */
     public Cl addClass(Cl cl)
     {
         this.cls.put(cl.getInName(), cl);
         return cl;
     }
 
-    /** Add a placeholder class. */
+    /**
+     * Add a placeholder class.
+     */
     @Override
     public Cl addPlaceholderClass(String name)
     {
@@ -454,6 +551,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Add a method.
      * 
+     * @param cf
+     * @param methodInfo
      * @throws ClassFileException
      */
     public Md addMethod(ClassFile cf, MethodInfo methodInfo) throws ClassFileException
@@ -463,7 +562,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return md;
     }
 
-    /** Add a method. */
+    /**
+     * Add a method.
+     * 
+     * @param isSynthetic
+     * @param name
+     * @param descriptor
+     * @param accessFlags
+     */
     public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags)
     {
         // Store <init> and <clinit> methods separately - needed only for reference tracking
@@ -492,6 +598,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Add a field.
      * 
+     * @param cf
+     * @param fieldInfo
      * @throws ClassFileException
      */
     public Fd addField(ClassFile cf, FieldInfo fieldInfo) throws ClassFileException
@@ -500,7 +608,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return fd;
     }
 
-    /** Add a field. */
+    /**
+     * Add a field.
+     * 
+     * @param isSynthetic
+     * @param name
+     * @param descriptor
+     * @param access
+     */
     public Fd addField(boolean isSynthetic, String name, String descriptor, int access)
     {
         Fd fd = this.getField(name);
@@ -512,7 +627,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return fd;
     }
 
-    /** Prepare for resolve of a class entry by resetting flags. */
+    /**
+     * Prepare for resolve of a class entry by resetting flags.
+     */
     public void resetResolve()
     {
         this.isScanned = false;
@@ -577,6 +694,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Get lists of method and field names in inheritance namespace
      * 
+     * @param ignoreCl
+     * @param methods
+     * @param fields
      * @throws ClassFileException
      */
     private void scanNameSpaceExcept(Cl ignoreCl, List methods, List fields) throws ClassFileException
@@ -638,6 +758,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     /**
      * Get lists of method and field names in inheritance namespace
+     * 
+     * @param name
+     * @param methods
+     * @param fields
      */
     private static void scanExtSupers(String name, List methods, List fields)
     {
@@ -707,7 +831,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
-    /** Add method and field names from this class to the lists */
+    /**
+     * Add method and field names from this class to the lists
+     * 
+     * @param methods
+     * @param fields
+     */
     private void scanThis(List methods, List fields)
     {
         for (Iterator mdIter = this.mds.values().iterator(); mdIter.hasNext();)
@@ -739,6 +868,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Resolve an entire inheritance name space optimally.
      * 
+     * @param ignoreCl
      * @throws ClassFileException
      */
     private void resolveNameSpaceExcept(Cl ignoreCl) throws ClassFileException
@@ -1140,6 +1270,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Construct, or retrieve from cache, the NameListUp object for an external class/interface
      * 
+     * @param name
      * @throws ClassFileException
      */
     private NameListUp getExtNameListUp(String name) throws ClassFileException
@@ -1153,7 +1284,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return nl;
     }
 
-    /** NameListUp for class/interface not in the database. */
+    /**
+     * NameListUp for class/interface not in the database.
+     */
     class ExtNameListUp implements NameListUp
     {
         // Class's fully qualified name
@@ -1161,8 +1294,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         private List methods = null;
 
         /**
-         * Ctor.
+         * Constructor
          * 
+         * @param name
          * @throws ClassFileException
          */
         public ExtNameListUp(String name) throws ClassFileException
@@ -1179,7 +1313,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
         }
 
-        /** Ctor. */
+        /**
+         * Constructor
+         * 
+         * @param extClass
+         */
         public ExtNameListUp(Class extClass)
         {
             this.extClass = extClass;
@@ -1256,14 +1394,18 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return null;
         }
 
-        /** Get obfuscated field name from list, or null if no mapping exists. */
+        /**
+         * Get obfuscated field name from list, or null if no mapping exists.
+         */
         @Override
         public String getFieldObfNameUp(String name)
         {
             return this.getFieldOutNameUp(name);
         }
 
-        /** Get obfuscated field name from list, or null if no mapping exists. */
+        /**
+         * Get obfuscated field name from list, or null if no mapping exists.
+         */
         @Override
         public String getFieldOutNameUp(String name)
         {
@@ -1283,7 +1425,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return null;
         }
 
-        /** Get all methods (from supers too) regardless of access level */
+        /**
+         * Get all methods (from supers too) regardless of access level
+         * 
+         * @param theClass
+         */
         private List getAllDeclaredMethods(Class theClass)
         {
             List ma = new ArrayList();
@@ -1301,7 +1447,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return ma;
         }
 
-        /** Get a specified field (from supers and interfaces too) regardless of access level */
+        /**
+         * Get a specified field (from supers and interfaces too) regardless of access level
+         * 
+         * @param theClass
+         * @param name
+         */
         private Field getAllDeclaredField(Class theClass, String name)
         {
             Class origClass = theClass;
@@ -1341,6 +1492,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Walk class inheritance group taking action once only on each class.
      * Must be called after setupNameListDowns() called for all classes.
      * 
+     * @param ta
      * @throws ClassFileException
      */
     public void walkGroup(TreeAction ta) throws ClassFileException
@@ -1352,6 +1504,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Walk class inheritance group taking action once only on each class.
      * 
+     * @param ta
+     * @param cl
+     * @param done
      * @throws ClassFileException
      */
     private void walkGroup(TreeAction ta, Cl cl, List done) throws ClassFileException

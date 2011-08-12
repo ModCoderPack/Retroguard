@@ -41,12 +41,21 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected ParameterAnnotationsAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the array of parameter annotations table entries. */
+    /**
+     * Return the array of parameter annotations table entries.
+     */
     protected ParameterAnnotationsInfo[] getParameterAnnotationsTable()
     {
         return (ParameterAnnotationsInfo[])this.parameterAnnotationsTable.toArray(new ParameterAnnotationsInfo[0]);

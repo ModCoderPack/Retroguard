@@ -41,24 +41,37 @@ abstract public class RefCpInfo extends CpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param tag
+     */
     protected RefCpInfo(int tag)
     {
         super(tag);
     }
 
-    /** Return the class index. */
+    /**
+     * Return the class index.
+     */
     protected int getClassIndex()
     {
         return this.u2classIndex;
     }
 
-    /** Return the name-and-type index. */
+    /**
+     * Return the name-and-type index.
+     */
     protected int getNameAndTypeIndex()
     {
         return this.u2nameAndTypeIndex;
     }
 
-    /** Set the name-and-type index. */
+    /**
+     * Set the name-and-type index.
+     * 
+     * @param index
+     */
     protected void setNameAndTypeIndex(int index)
     {
         this.u2nameAndTypeIndex = index;
@@ -67,6 +80,7 @@ abstract public class RefCpInfo extends CpInfo
     /**
      * Return the method's class string name.
      * 
+     * @param cf
      * @throws ClassFileException
      */
     public String getClassName(ClassFile cf) throws ClassFileException
@@ -77,6 +91,7 @@ abstract public class RefCpInfo extends CpInfo
     /**
      * Return the method's string name.
      * 
+     * @param cf
      * @throws ClassFileException
      */
     public String getName(ClassFile cf) throws ClassFileException
@@ -88,6 +103,7 @@ abstract public class RefCpInfo extends CpInfo
     /**
      * Return the method's string descriptor.
      * 
+     * @param cf
      * @throws ClassFileException
      */
     public String getDescriptor(ClassFile cf) throws ClassFileException
@@ -111,9 +127,10 @@ abstract public class RefCpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2classIndex = din.readUnsignedShort();
         this.u2nameAndTypeIndex = din.readUnsignedShort();
@@ -123,9 +140,10 @@ abstract public class RefCpInfo extends CpInfo
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2classIndex);
         dout.writeShort(this.u2nameAndTypeIndex);

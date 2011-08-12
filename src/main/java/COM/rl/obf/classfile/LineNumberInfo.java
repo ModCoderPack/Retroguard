@@ -38,6 +38,10 @@ public class LineNumberInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     */
     public static LineNumberInfo create(DataInput din) throws IOException
     {
         LineNumberInfo lni = new LineNumberInfo();
@@ -47,10 +51,17 @@ public class LineNumberInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private LineNumberInfo()
     {
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     */
     private void read(DataInput din) throws IOException
     {
         this.u2startpc = din.readUnsignedShort();
@@ -60,6 +71,7 @@ public class LineNumberInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      */
     public void write(DataOutput dout) throws IOException

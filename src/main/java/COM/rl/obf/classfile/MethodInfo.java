@@ -39,6 +39,8 @@ public class MethodInfo extends ClassItemInfo
     /**
      * Create a new MethodInfo from the file format data in the DataInput stream.
      * 
+     * @param din
+     * @param cf
      * @throws IOException
      * @throws ClassFileException
      */
@@ -55,6 +57,11 @@ public class MethodInfo extends ClassItemInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     */
     protected MethodInfo(ClassFile cf)
     {
         super(cf);

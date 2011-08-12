@@ -41,12 +41,17 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected NameAndTypeCpInfo()
     {
         super(ClassConstants.CONSTANT_NameAndType);
     }
 
-    /** Clone the entry. */
+    /**
+     * Clone the entry.
+     */
     @Override
     public Object clone()
     {
@@ -57,25 +62,37 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
         return cloneInfo;
     }
 
-    /** Return the name index. */
+    /**
+     * Return the name index.
+     */
     protected int getNameIndex()
     {
         return this.u2nameIndex;
     }
 
-    /** Set the name index. */
+    /**
+     * Set the name index.
+     * 
+     * @param index
+     */
     protected void setNameIndex(int index)
     {
         this.u2nameIndex = index;
     }
 
-    /** Return the descriptor index. */
+    /**
+     * Return the descriptor index.
+     */
     protected int getDescriptorIndex()
     {
         return this.u2descriptorIndex;
     }
 
-    /** Set the descriptor index. */
+    /**
+     * Set the descriptor index.
+     * 
+     * @param index
+     */
     protected void setDescriptorIndex(int index)
     {
         this.u2descriptorIndex = index;
@@ -97,9 +114,10 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2nameIndex = din.readUnsignedShort();
         this.u2descriptorIndex = din.readUnsignedShort();
@@ -109,9 +127,10 @@ public class NameAndTypeCpInfo extends CpInfo implements Cloneable
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2nameIndex);
         dout.writeShort(this.u2descriptorIndex);

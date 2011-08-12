@@ -43,13 +43,23 @@ public class Fd extends MdFd
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param isSynthetic
+     * @param name
+     * @param descriptor
+     * @param access
+     */
     public Fd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
     {
         super(parent, isSynthetic, name, descriptor, access);
     }
 
-    /** Return the display name of the descriptor types. */
+    /**
+     * Return the display name of the descriptor types.
+     */
     @Override
     protected String getDescriptorName()
     {

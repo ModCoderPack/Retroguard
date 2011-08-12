@@ -41,6 +41,9 @@ public class DoubleCpInfo extends CpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected DoubleCpInfo()
     {
         super(ClassConstants.CONSTANT_Double);
@@ -50,9 +53,10 @@ public class DoubleCpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u4highBytes = din.readInt();
         this.u4lowBytes = din.readInt();
@@ -62,9 +66,10 @@ public class DoubleCpInfo extends CpInfo
      * Write the 'info' data following the u1tag byte.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void writeInfo(DataOutput dout) throws IOException
+    protected void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeInt(this.u4highBytes);
         dout.writeInt(this.u4lowBytes);

@@ -133,7 +133,18 @@ public class RetroGuardImpl
 
 
     // Instance Methods ------------------------------------------------------
-    /** Private constructor takes in-jar, out-jar and script specifiers. */
+    /**
+     * Private constructor takes in-jar, out-jar and script specifiers.
+     * 
+     * @param inFile
+     *            a File pointing to a readable JAR
+     * @param outFile
+     *            a writable JAR for obfuscated output
+     * @param rgsFile
+     *            valid RetroGuard Script data, or null (which implies default settings)
+     * @param logFile
+     *            file for the log data.
+     */
     private RetroGuardImpl(File inFile, File outFile, File rgsFile, File logFile)
     {
         this.inFile = inFile;
@@ -207,7 +218,11 @@ public class RetroGuardImpl
         }
     }
 
-    /** Write a header out to the log file */
+    /**
+     * Write a header out to the log file
+     * 
+     * @param log
+     */
     private void writeLogHeader(PrintWriter log)
     {
         log.println("# If this log is to be used for incremental obfuscation / patch generation, ");

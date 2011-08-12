@@ -48,16 +48,21 @@ public class ClassTree implements NameMapper
 
 
     // Fields ----------------------------------------------------------------
-    /** List of attributes to retain */
+    /**
+     * List of attributes to retain
+     */
     private List retainAttrs = new ArrayList();
 
-    /** Root package in database (Java default package) */
+    /**
+     * Root package in database (Java default package)
+     */
     private Pk root = null;
 
     // Class methods ---------------------------------------------------------
     /**
      * Return a fully qualified name broken into package/class segments.
      * 
+     * @param name
      * @throws ClassFileException
      */
     public static Iterator getNameIter(String name) throws ClassFileException
@@ -103,19 +108,27 @@ public class ClassTree implements NameMapper
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     */
     public ClassTree()
     {
         this.root = Pk.createRoot(this);
     }
 
-    /** Return the root node. */
+    /**
+     * Return the root node.
+     */
     public Pk getRoot()
     {
         return this.root;
     }
 
-    /** Update the path of the passed filename, if that path corresponds to a package. */
+    /**
+     * Update the path of the passed filename, if that path corresponds to a package.
+     * 
+     * @param inName
+     */
     public String getOutName(String inName)
     {
         try
@@ -182,6 +195,7 @@ public class ClassTree implements NameMapper
     /**
      * Add a classfile's package, class, method and field entries to database.
      * 
+     * @param cf
      * @throws ClassFileException
      */
     public void addClassFile(ClassFile cf) throws ClassFileException
@@ -244,6 +258,7 @@ public class ClassTree implements NameMapper
     /**
      * Mark a class/interface type to suppress warnings from it.
      * 
+     * @param name
      * @throws ClassFileException
      */
     public void noWarnClass(String name) throws ClassFileException
@@ -258,6 +273,8 @@ public class ClassTree implements NameMapper
 
     /**
      * Write any non-suppressed warnings to the log.
+     * 
+     * @param log
      */
     public void logWarnings(PrintWriter log)
     {
@@ -300,7 +317,11 @@ public class ClassTree implements NameMapper
         }
     }
 
-    /** Mark an attribute type for retention. */
+    /**
+     * Mark an attribute type for retention.
+     * 
+     * @param name
+     */
     public void retainAttribute(String name)
     {
         this.retainAttrs.add(name);
@@ -309,6 +330,16 @@ public class ClassTree implements NameMapper
     /**
      * Mark a class/interface type (and possibly methods and fields defined in class) for retention.
      * 
+     * @param name
+     * @param retainToPublic
+     * @param retainToProtected
+     * @param retainPubProtOnly
+     * @param retainFieldsOnly
+     * @param retainMethodsOnly
+     * @param extendsName
+     * @param invert
+     * @param accessMask
+     * @param accessSetting
      * @throws ClassFileException
      */
     public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly,
@@ -382,6 +413,13 @@ public class ClassTree implements NameMapper
     /**
      * Mark a method type for retention.
      * 
+     * @param name
+     * @param descriptor
+     * @param retainAndClass
+     * @param extendsName
+     * @param invert
+     * @param accessMask
+     * @param accessSetting
      * @throws ClassFileException
      */
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
@@ -415,6 +453,13 @@ public class ClassTree implements NameMapper
     /**
      * Mark a field type for retention.
      * 
+     * @param name
+     * @param descriptor
+     * @param retainAndClass
+     * @param extendsName
+     * @param invert
+     * @param accessMask
+     * @param accessSetting
      * @throws ClassFileException
      */
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
@@ -448,6 +493,8 @@ public class ClassTree implements NameMapper
     /**
      * Mark a package for retention, and specify its new name.
      * 
+     * @param name
+     * @param obfName
      * @throws ClassFileException
      */
     public void retainPackageMap(String name, String obfName) throws ClassFileException
@@ -459,6 +506,8 @@ public class ClassTree implements NameMapper
     /**
      * Mark a package for repackaging under this new name.
      * 
+     * @param name
+     * @param obfName
      * @throws ClassFileException
      */
     public void retainRepackageMap(String name, String obfName) throws ClassFileException
@@ -474,6 +523,8 @@ public class ClassTree implements NameMapper
     /**
      * Mark a class/interface type for retention, and specify its new name.
      * 
+     * @param name
+     * @param obfName
      * @throws ClassFileException
      */
     public void retainClassMap(String name, String obfName) throws ClassFileException
@@ -485,6 +536,9 @@ public class ClassTree implements NameMapper
     /**
      * Mark a method type for retention, and specify its new name.
      * 
+     * @param name
+     * @param descriptor
+     * @param obfName
      * @throws ClassFileException
      */
     public void retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
@@ -496,6 +550,8 @@ public class ClassTree implements NameMapper
     /**
      * Mark a field type for retention, and specify its new name.
      * 
+     * @param name
+     * @param obfName
      * @throws ClassFileException
      */
     public void retainFieldMap(String name, String obfName) throws ClassFileException
@@ -504,7 +560,12 @@ public class ClassTree implements NameMapper
         ClassTree.retainItemMap(fd, obfName);
     }
 
-    /** Mark an item for retention, and specify its new name. */
+    /**
+     * Mark an item for retention, and specify its new name.
+     * 
+     * @param item
+     * @param obfName
+     */
     private static void retainItemMap(TreeItem item, String obfName)
     {
         if (!item.isFixed())
@@ -521,6 +582,7 @@ public class ClassTree implements NameMapper
     /**
      * Traverse the class tree, generating obfuscated names within each namespace.
      * 
+     * @param enableRepackage
      * @throws ClassFileException
      */
     public void generateNames(boolean enableRepackage) throws ClassFileException
@@ -590,7 +652,9 @@ public class ClassTree implements NameMapper
         });
     }
 
-    /** Return a list of attributes marked to keep. */
+    /**
+     * Return a list of attributes marked to keep.
+     */
     @Override
     public List getAttrsToKeep()
     {
@@ -601,6 +665,7 @@ public class ClassTree implements NameMapper
      * Get classes in tree from the fully qualified name
      * (can be wildcarded).
      * 
+     * @param fullName
      * @throws ClassFileException
      */
     public Iterator getClIter(String fullName) throws ClassFileException
@@ -658,6 +723,8 @@ public class ClassTree implements NameMapper
     /**
      * Get methods in tree from the fully qualified, and possibly wildcarded, name.
      * 
+     * @param fullName
+     * @param descriptor
      * @throws ClassFileException
      */
     public Iterator getMdIter(String fullName, String descriptor) throws ClassFileException
@@ -715,6 +782,8 @@ public class ClassTree implements NameMapper
     /**
      * Get fields in tree from the fully qualified, and possibly wildcarded, name.
      * 
+     * @param fullName
+     * @param descriptor
      * @throws ClassFileException
      */
     public Iterator getFdIter(String fullName, String descriptor) throws ClassFileException
@@ -772,6 +841,7 @@ public class ClassTree implements NameMapper
     /**
      * Get class in tree from the fully qualified name, returning null if name not found.
      * 
+     * @param fullName
      * @throws ClassFileException
      */
     public Cl getCl(String fullName) throws ClassFileException
@@ -815,6 +885,7 @@ public class ClassTree implements NameMapper
     /**
      * Get package in tree from the fully qualified name, returning null if name not found.
      * 
+     * @param fullName
      * @throws ClassFileException
      */
     public Pk getPk(String fullName) throws ClassFileException
@@ -843,6 +914,8 @@ public class ClassTree implements NameMapper
     /**
      * Get method in tree from the fully qualified name.
      * 
+     * @param fullName
+     * @param descriptor
      * @throws ClassFileException
      */
     public Md getMd(String fullName, String descriptor) throws ClassFileException
@@ -856,6 +929,7 @@ public class ClassTree implements NameMapper
     /**
      * Get field in tree from the fully qualified name.
      * 
+     * @param fullName
      * @throws ClassFileException
      */
     public Fd getFd(String fullName) throws ClassFileException
@@ -1072,6 +1146,8 @@ public class ClassTree implements NameMapper
 
     /**
      * Dump the content of the class tree to the specified file (used for logging).
+     * 
+     * @param log
      */
     public void dump(final PrintWriter log)
     {
@@ -1087,7 +1163,7 @@ public class ClassTree implements NameMapper
                 {
                     if (cl.isFromScript())
                     {
-                        log.println(".class " + cl.getFullInName());
+                        log.println(RgsEntryType.CLASS + " " + cl.getFullInName());
                     }
                 }
 
@@ -1096,7 +1172,7 @@ public class ClassTree implements NameMapper
                 {
                     if (md.isFromScript())
                     {
-                        log.println(".method " + md.getFullInName() + " " + md.getDescriptor());
+                        log.println(RgsEntryType.METHOD + " " + md.getFullInName() + " " + md.getDescriptor());
                     }
                 }
 
@@ -1105,14 +1181,17 @@ public class ClassTree implements NameMapper
                 {
                     if (fd.isFromScript())
                     {
-                        log.println(".field " + fd.getFullInName() + " " + fd.getDescriptor());
+                        log.println(RgsEntryType.FIELD + " " + fd.getFullInName() + " " + fd.getDescriptor());
                     }
                 }
 
+                /**
+                 * @param pk
+                 */
                 @Override
                 public void packageAction(Pk pk)
                 {
-                    // No action
+                    // do nothing
                 }
             });
             log.println("#");
@@ -1126,7 +1205,7 @@ public class ClassTree implements NameMapper
                 {
                     if (!cl.isFromScript())
                     {
-                        log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
+                        log.println(RgsEntryType.CLASS_MAP + " " + cl.getFullInName() + " " + cl.getOutName());
                     }
                 }
 
@@ -1135,7 +1214,8 @@ public class ClassTree implements NameMapper
                 {
                     if (!md.isFromScript())
                     {
-                        log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
+                        log.println(RgsEntryType.METHOD_MAP + " " + md.getFullInName() + " " + md.getDescriptor() + " "
+                            + md.getOutName());
                     }
                 }
 
@@ -1144,7 +1224,7 @@ public class ClassTree implements NameMapper
                 {
                     if (!fd.isFromScript())
                     {
-                        log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
+                        log.println(RgsEntryType.FIELD_MAP + " " + fd.getFullInName() + " " + fd.getOutName());
                     }
                 }
 
@@ -1155,11 +1235,11 @@ public class ClassTree implements NameMapper
                     {
                         if (pk.getRepackageName() != null)
                         {
-                            log.println(".repackage_map " + pk.getFullInName() + " " + pk.getRepackageName());
+                            log.println(RgsEntryType.REPACKAGE_MAP + " " + pk.getFullInName() + " " + pk.getRepackageName());
                         }
                         else
                         {
-                            log.println(".package_map " + pk.getFullInName() + " " + pk.getOutName());
+                            log.println(RgsEntryType.PACKAGE_MAP + " " + pk.getFullInName() + " " + pk.getOutName());
                         }
                     }
                 }
@@ -1173,20 +1253,14 @@ public class ClassTree implements NameMapper
         }
     }
 
-    class SortElement
-    {
-        int useCount;
-        String name;
-
-        SortElement(String name, int useCount)
-        {
-            this.useCount = useCount;
-            this.name = name;
-        }
-    }
 
     // Private Methods -------------------------------------------------------
-    /** Mark TreeItem and all parents for retention. */
+    /**
+     * Mark TreeItem and all parents for retention.
+     * 
+     * @param ti
+     * @param invert
+     */
     private void retainHierarchy(TreeItem ti, boolean invert)
     {
         if (invert)
@@ -1215,6 +1289,7 @@ public class ClassTree implements NameMapper
     /**
      * Walk the whole tree taking action once only on each package level, class, method and field.
      * 
+     * @param ta
      * @throws ClassFileException
      */
     public void walkTree(TreeAction ta) throws ClassFileException
@@ -1225,6 +1300,8 @@ public class ClassTree implements NameMapper
     /**
      * Walk the tree which has TreeItem as its root taking action once only on each package level, class, method and field.
      * 
+     * @param ta
+     * @param ti
      * @throws ClassFileException
      */
     private void walkTree(TreeAction ta, TreeItem ti) throws ClassFileException

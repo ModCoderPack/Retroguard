@@ -38,39 +38,64 @@ public class TreeItem
 
 
     // Fields ----------------------------------------------------------------
-    /** Is a method or field Synthetic? */
+    /**
+     * Is a method or field Synthetic?
+     */
     protected boolean isSynthetic;
 
-    /** Access level (interpret using java.lang.reflect.Modifier) */
+    /**
+     * Access level (interpret using java.lang.reflect.Modifier)
+     */
     protected int access;
 
-    /** Our owner */
+    /**
+     * Our owner
+     */
     protected ClassTree classTree = null;
 
-    /** Our immediate parent */
+    /**
+     * Our immediate parent
+     */
     protected TreeItem parent = null;
 
-    /** Separator preceeding this level's name */
+    /**
+     * Separator preceeding this level's name
+     */
     protected String sep = ClassFile.SEP_REGULAR;
 
-    /** Original name of this item */
+    /**
+     * Original name of this item
+     */
     private String inName = null;
 
-    /** Output name of this item */
+    /**
+     * Output name of this item
+     */
     private String outName = null;
 
-    /** Has the name been fixed in some way? */
+    /**
+     * Has the name been fixed in some way?
+     */
     private boolean isFixed = false;
 
-    /** Is this script constrained? */
+    /**
+     * Is this script constrained?
+     */
     private boolean isFromScript = false;
 
-    /** Is this script_map constrained? */
+    /**
+     * Is this script_map constrained?
+     */
     private boolean isFromScriptMap = false;
 
 
     // Class Methods ---------------------------------------------------------
-    /** Do a wildcard String match. */
+    /**
+     * Do a wildcard String match.
+     * 
+     * @param pattern
+     * @param string
+     */
     public static boolean isMatch(String pattern, String string)
     {
         // Sanity check
@@ -149,7 +174,12 @@ public class TreeItem
     }
 
 
-    /** Do a generalized wildcard String match - handles '**' wildcard that matches across package boundaries. */
+    /**
+     * Do a generalized wildcard String match - handles '**' wildcard that matches across package boundaries.
+     * 
+     * @param pattern
+     * @param string
+     */
     public static boolean isGMatch(String pattern, String string)
     {
         PatternList pl, sl;
@@ -209,16 +239,21 @@ public class TreeItem
 //        {
 //            return false;
 //        }
-        // TODO finally
         finally
         {
+            // TODO finally
         }
         return true;
     }
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param name
+     */
     public TreeItem(TreeItem parent, String name)
     {
         this.parent = parent;
@@ -229,50 +264,71 @@ public class TreeItem
         }
     }
 
-    /** Return the modifiers. */
+    /**
+     * Return the modifiers.
+     */
     public int getModifiers()
     {
         return this.access;
     }
 
-    /** Do the modifiers specified by mask equal the settings? */
+    /**
+     * Do the modifiers specified by mask equal the settings?
+     * 
+     * @param mask
+     * @param setting
+     */
     public boolean modifiersMatchMask(int mask, int setting)
     {
         return (this.getModifiers() & mask) == (setting & mask);
     }
 
-    /** Return the original name of the entry. */
+    /**
+     * Return the original name of the entry.
+     */
     public String getInName()
     {
         return this.inName;
     }
 
-    /** Set the output name of the entry. */
+    /**
+     * Set the output name of the entry.
+     * 
+     * @param outName
+     */
     public void setOutName(String outName)
     {
         this.outName = outName;
         this.isFixed = true;
     }
 
-    /** Return the output name of the entry, obfuscated or original. */
+    /**
+     * Return the output name of the entry, obfuscated or original.
+     */
     public String getOutName()
     {
         return this.outName != null ? this.outName : this.inName;
     }
 
-    /** Return the obfuscated name of the entry. */
+    /**
+     * Return the obfuscated name of the entry.
+     */
     public String getObfName()
     {
         return this.outName;
     }
 
-    /** Signal that this constraint came from a user script line. */
+    /**
+     * Signal that this constraint came from a user script line.
+     */
     public void setFromScript()
     {
         this.isFromScript = true;
     }
 
-    /** Clear the signal that this constraint came from a user script line. */
+    /**
+     * Clear the signal that this constraint came from a user script line.
+     */
     public void clearFromScript()
     {
         if (this.isFromScript)
@@ -282,49 +338,67 @@ public class TreeItem
         }
     }
 
-    /** Signal that this constraint came from a map script line. */
+    /**
+     * Signal that this constraint came from a map script line.
+     */
     public void setFromScriptMap()
     {
         this.isFromScriptMap = true;
     }
 
-    /** Has the entry been fixed already? */
+    /**
+     * Has the entry been fixed already?
+     */
     public boolean isFixed()
     {
         return this.isFixed;
     }
 
-    /** Is this constrained by a user script line? */
+    /**
+     * Is this constrained by a user script line?
+     */
     public boolean isFromScript()
     {
         return this.isFromScript;
     }
 
-    /** Is this constrained by a map script line? */
+    /**
+     * Is this constrained by a map script line?
+     */
     public boolean isFromScriptMap()
     {
         return this.isFromScriptMap;
     }
 
-    /** Is a method or field Synthetic? */
+    /**
+     * Is a method or field Synthetic?
+     */
     public boolean isSynthetic()
     {
         return this.isSynthetic;
     }
 
-    /** Set the parent in the tree -- used when stitching in a Cl to replace a PlaceholderCl. */
+    /**
+     * Set the parent in the tree -- used when stitching in a Cl to replace a PlaceholderCl.
+     * 
+     * @param parent
+     */
     public void setParent(TreeItem parent)
     {
         this.parent = parent;
     }
 
-    /** Get the parent in the tree. */
+    /**
+     * Get the parent in the tree.
+     */
     public TreeItem getParent()
     {
         return this.parent;
     }
 
-    /** Construct and return the full original name of the entry. */
+    /**
+     * Construct and return the full original name of the entry.
+     */
     public String getFullInName()
     {
         if (this.parent == null)
@@ -346,7 +420,9 @@ public class TreeItem
         }
     }
 
-    /** Construct and return the full obfuscated name of the entry. */
+    /**
+     * Construct and return the full obfuscated name of the entry.
+     */
     public String getFullOutName()
     {
         if (this.parent == null)
@@ -368,13 +444,21 @@ public class TreeItem
         }
     }
 
-    /** Does this name match the wildcard pattern? (compatibility mode) */
+    /**
+     * Does this name match the wildcard pattern? (compatibility mode)
+     * 
+     * @param pattern
+     */
     public boolean isOldStyleMatch(String pattern)
     {
         return TreeItem.isMatch(pattern, this.getFullInName());
     }
 
-    /** Does this name match the wildcard pattern? (** and * supported) */
+    /**
+     * Does this name match the wildcard pattern? (** and * supported)
+     * 
+     * @param pattern
+     */
     public boolean isWildcardMatch(String pattern)
     {
         return TreeItem.isGMatch(pattern, this.getFullInName());

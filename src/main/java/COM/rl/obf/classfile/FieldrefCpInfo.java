@@ -39,6 +39,9 @@ public class FieldrefCpInfo extends RefCpInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     */
     protected FieldrefCpInfo()
     {
         super(ClassConstants.CONSTANT_Fieldref);

@@ -56,31 +56,49 @@ public class GuardDB implements ClassConstants
 
 
     // Fields ----------------------------------------------------------------
-    /** JAR file for obfuscation */
+    /**
+     * JAR file for obfuscation
+     */
     private ZipFile inJar;
 
-    /** MANIFEST.MF RFC822-style data from old Jar */
+    /**
+     * MANIFEST.MF RFC822-style data from old Jar
+     */
     private SectionList oldManifest;
 
-    /** MANIFEST.MF RFC822-style data for new Jar */
+    /**
+     * MANIFEST.MF RFC822-style data for new Jar
+     */
     private SectionList newManifest;
 
-    /** Tree of packages, classes. methods, fields */
+    /**
+     * Tree of packages, classes. methods, fields
+     */
     private ClassTree classTree;
 
-    /** Has the mapping been generated already? */
+    /**
+     * Has the mapping been generated already?
+     */
     private boolean hasMap = false;
 
-    /** Remap strings in reflection? */
+    /**
+     * Remap strings in reflection?
+     */
     private boolean enableMapClassString = false;
 
-    /** Repackage classes for size? */
+    /**
+     * Repackage classes for size?
+     */
     private boolean enableRepackage = false;
 
-    /** Produce SHA-1 manifest digests? */
+    /**
+     * Produce SHA-1 manifest digests?
+     */
     private boolean enableDigestSHA = false;
 
-    /** Produce MD5 manifest digests? */
+    /**
+     * Produce MD5 manifest digests?
+     */
     private boolean enableDigestMD5 = false;
 
 
@@ -91,6 +109,7 @@ public class GuardDB implements ClassConstants
     /**
      * A classfile database for obfuscation.
      * 
+     * @param inFile
      * @throws IOException
      */
     public GuardDB(File inFile) throws IOException
@@ -99,7 +118,9 @@ public class GuardDB implements ClassConstants
         this.parseManifest();
     }
 
-    /** Close input JAR file and log-file at GC-time. */
+    /**
+     * Close input JAR file and log-file at GC-time.
+     */
     @Override
     protected void finalize()
     {
@@ -109,6 +130,7 @@ public class GuardDB implements ClassConstants
     /**
      * Create a classfile database.
      * 
+     * @param log
      * @throws IOException
      * @throws ClassFileException
      */
@@ -165,6 +187,8 @@ public class GuardDB implements ClassConstants
     /**
      * Go through database marking certain entities for retention, while maintaining polymorphic integrity.
      * 
+     * @param rgsIter
+     * @param log
      * @throws IOException
      * @throws ClassFileException
      * @throws RGSException
@@ -381,6 +405,8 @@ public class GuardDB implements ClassConstants
 
     /**
      * Write any non-suppressed warnings to the log.
+     * 
+     * @param log
      */
     public void logWarnings(PrintWriter log)
     {
@@ -393,6 +419,7 @@ public class GuardDB implements ClassConstants
     /**
      * Generate a mapping table for obfuscation.
      * 
+     * @param log
      * @throws ClassFileException
      * @throws IOException
      */
@@ -443,6 +470,8 @@ public class GuardDB implements ClassConstants
     /**
      * Remap each class based on the remap database, and remove attributes.
      * 
+     * @param out
+     * @param log
      * @throws IOException
      * @throws ClassFileException
      */
@@ -648,7 +677,9 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    /** Close input JAR file. */
+    /**
+     * Close input JAR file.
+     */
     public void close()
     {
         if (this.inJar != null)
@@ -721,7 +752,13 @@ public class GuardDB implements ClassConstants
         }
     }
 
-    /** Update an entry in the manifest file */
+    /**
+     * Update an entry in the manifest file
+     * 
+     * @param inName
+     * @param outName
+     * @param digests
+     */
     private void updateManifest(String inName, String outName, MessageDigest[] digests)
     {
         // Check for section in old manifest

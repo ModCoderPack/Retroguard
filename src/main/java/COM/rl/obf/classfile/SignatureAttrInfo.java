@@ -40,12 +40,21 @@ public class SignatureAttrInfo extends AttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected SignatureAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute; over-ride this in sub-classes. */
+    /**
+     * Return the String name of the attribute; over-ride this in sub-classes.
+     */
     @Override
     protected String getAttrName()
     {
@@ -67,9 +76,10 @@ public class SignatureAttrInfo extends AttrInfo
      * Read the data following the header.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2signatureIndex = din.readUnsignedShort();
     }
@@ -78,9 +88,10 @@ public class SignatureAttrInfo extends AttrInfo
      * Export data following the header to a DataOutput stream.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    public void writeInfo(DataOutput dout) throws IOException
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2signatureIndex);
     }

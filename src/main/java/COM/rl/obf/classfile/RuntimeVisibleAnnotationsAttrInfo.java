@@ -39,12 +39,21 @@ public class RuntimeVisibleAnnotationsAttrInfo extends AnnotationsAttrInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Constructor
+     * 
+     * @param cf
+     * @param attrNameIndex
+     * @param attrLength
+     */
     protected RuntimeVisibleAnnotationsAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
     }
 
-    /** Return the String name of the attribute. */
+    /**
+     * Return the String name of the attribute.
+     */
     @Override
     protected String getAttrName()
     {

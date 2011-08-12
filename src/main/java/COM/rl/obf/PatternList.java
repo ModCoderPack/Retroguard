@@ -45,7 +45,11 @@ public class PatternList
 
 
     // Instance Methods ------------------------------------------------------
-    /** Ctor. */
+    /**
+     * Constructor
+     * 
+     * @param pattern
+     */
     private PatternList(String pattern)
     {
         int scFirst = pattern.indexOf("**");
@@ -72,31 +76,46 @@ public class PatternList
         }
     }
 
-    /** Number of segments in the list. */
+    /**
+     * Number of segments in the list.
+     */
     public int length()
     {
         return this.subs.size();
     }
 
-    /** Does a '**' wildcard segment exist? */
+    /**
+     * Does a '**' wildcard segment exist?
+     */
     public boolean scExists()
     {
         return this.sc >= 0;
     }
 
-    /** Index of the '**' wildcard segment. */
+    /**
+     * Index of the '**' wildcard segment.
+     */
     public int scIndex()
     {
         return this.sc;
     }
 
-    /** Return the i'th segment. */
+    /**
+     * Return the i'th segment.
+     * 
+     * @param i
+     */
     public String getSub(int i)
     {
         return (String)this.subs.get(i);
     }
 
-    /** Return the i'th through j'th segments, joined by package separators. */
+    /**
+     * Return the i'th through j'th segments, joined by package separators.
+     * 
+     * @param i
+     * @param j
+     */
     public String getSub(int i, int j)
     {
         if ((i < 0) || (i > j) || (j >= this.length()))

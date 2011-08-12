@@ -41,6 +41,10 @@ public class ExceptionInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     */
     public static ExceptionInfo create(DataInput din) throws IOException
     {
         ExceptionInfo ei = new ExceptionInfo();
@@ -50,10 +54,17 @@ public class ExceptionInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private ExceptionInfo()
     {
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     */
     private void read(DataInput din) throws IOException
     {
         this.u2startpc = din.readUnsignedShort();
@@ -65,6 +76,7 @@ public class ExceptionInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      */
     public void write(DataOutput dout) throws IOException

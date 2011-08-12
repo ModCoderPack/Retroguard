@@ -40,6 +40,10 @@ public class InnerClassesInfo
 
 
     // Class Methods ---------------------------------------------------------
+    /**
+     * @param din
+     * @throws IOException
+     */
     public static InnerClassesInfo create(DataInput din) throws IOException
     {
         InnerClassesInfo ici = new InnerClassesInfo();
@@ -49,23 +53,34 @@ public class InnerClassesInfo
 
 
     // Instance Methods ------------------------------------------------------
+    /**
+     * Private constructor
+     */
     private InnerClassesInfo()
     {
     }
 
-    /** Return the inner class index. */
+    /**
+     * Return the inner class index.
+     */
     protected int getInnerClassIndex()
     {
         return this.u2innerClassInfoIndex;
     }
 
-    /** Return the name index. */
+    /**
+     * Return the name index.
+     */
     protected int getInnerNameIndex()
     {
         return this.u2innerNameIndex;
     }
 
-    /** Set the name index. */
+    /**
+     * Set the name index.
+     * 
+     * @param index
+     */
     protected void setInnerNameIndex(int index)
     {
         this.u2innerNameIndex = index;
@@ -74,6 +89,7 @@ public class InnerClassesInfo
     /**
      * Check for Utf8 references to constant pool and mark them.
      * 
+     * @param pool
      * @throws ClassFileException
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
@@ -85,6 +101,10 @@ public class InnerClassesInfo
         }
     }
 
+    /**
+     * @param din
+     * @throws IOException
+     */
     private void read(DataInput din) throws IOException
     {
         this.u2innerClassInfoIndex = din.readUnsignedShort();
@@ -96,6 +116,7 @@ public class InnerClassesInfo
     /**
      * Export the representation to a DataOutput stream.
      * 
+     * @param dout
      * @throws IOException
      */
     public void write(DataOutput dout) throws IOException
@@ -109,6 +130,8 @@ public class InnerClassesInfo
     /**
      * Do necessary name remapping.
      * 
+     * @param cf
+     * @param nm
      * @throws ClassFileException
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
