@@ -78,9 +78,10 @@ public class LocalVariableTableAttrInfo extends AttrInfo
      * Read the data following the header.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2localVariableTableLength = din.readUnsignedShort();
         this.localVariableTable = new ArrayList(this.u2localVariableTableLength);
@@ -94,9 +95,10 @@ public class LocalVariableTableAttrInfo extends AttrInfo
      * Export data following the header to a DataOutput stream.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    public void writeInfo(DataOutput dout) throws IOException
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2localVariableTableLength);
         for (Iterator iter = this.localVariableTable.iterator(); iter.hasNext();)

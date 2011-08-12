@@ -70,11 +70,14 @@ public class ConstantPool
      */
     public CpInfo getCpEntry(int i) throws ClassFileException
     {
-        if (i < this.pool.size())
+        try
         {
             return (CpInfo)this.pool.get(i);
         }
-        throw new ClassFileException("Constant Pool index out of range.");
+        catch (IndexOutOfBoundsException e)
+        {
+            throw new ClassFileException("Constant Pool index out of range.");
+        }
     }
 
     /**
@@ -104,7 +107,7 @@ public class ConstantPool
         this.walkPool(new PoolAction()
         {
             @Override
-            public void utf8Action(Utf8CpInfo cpInfo) throws ClassFileException
+            public void utf8Action(Utf8CpInfo cpInfo)
             {
                 if (cpInfo.getRefCount() == 0)
                 {
@@ -121,9 +124,10 @@ public class ConstantPool
      */
     public void incRefCount(int i) throws ClassFileException
     {
-        CpInfo cpInfo = (CpInfo)this.pool.get(i);
+        CpInfo cpInfo = this.getCpEntry(i);
         if (cpInfo == null)
         {
+            // TODO check this
             // This can happen for JDK1.2 code so remove - 981123
 //            throw new ClassFileException("Illegal access to a Constant Pool element.");
             return;
@@ -150,9 +154,10 @@ public class ConstantPool
      */
     public void decRefCount(int i) throws ClassFileException
     {
-        CpInfo cpInfo = (CpInfo)this.pool.get(i);
+        CpInfo cpInfo = this.getCpEntry(i);
         if (cpInfo == null)
         {
+            // TODO check this
             // This can happen for JDK1.2 code so remove - 981123
 //            throw new CPException("Illegal access to a Constant Pool element.");
             return;
@@ -172,10 +177,8 @@ public class ConstantPool
 
     /**
      * Add a string to the constant pool and return its index.
-     * 
-     * @throws ClassFileException
      */
-    protected int addUtf8Entry(String s) throws ClassFileException
+    protected int addUtf8Entry(String s)
     {
         // Search pool for the string. If found, just increment the reference count and return the index
         for (int i = 0; i < this.pool.size(); i++)
@@ -215,10 +218,7 @@ public class ConstantPool
     /** Data walker */
     class PoolAction
     {
-        /**
-         * @throws ClassFileException
-         */
-        public void utf8Action(Utf8CpInfo cpInfo) throws ClassFileException
+        public void utf8Action(Utf8CpInfo cpInfo)
         {
             this.defaultAction(cpInfo);
         }
@@ -228,7 +228,7 @@ public class ConstantPool
         }
     }
 
-    private void walkPool(PoolAction pa) throws ClassFileException
+    private void walkPool(PoolAction pa)
     {
         for (Iterator iter = this.pool.iterator(); iter.hasNext();)
         {

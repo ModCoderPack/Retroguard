@@ -82,7 +82,7 @@ abstract public class RefCpInfo extends CpInfo
     public String getName(ClassFile cf) throws ClassFileException
     {
         NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
-        return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getNameIndex())).getString();
+        return cf.getUtf8(ntCpInfo.getNameIndex());
     }
 
     /**
@@ -93,7 +93,7 @@ abstract public class RefCpInfo extends CpInfo
     public String getDescriptor(ClassFile cf) throws ClassFileException
     {
         NameAndTypeCpInfo ntCpInfo = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
-        return ((Utf8CpInfo)cf.getCpEntry(ntCpInfo.getDescriptorIndex())).getString();
+        return cf.getUtf8(ntCpInfo.getDescriptorIndex());
     }
 
     /**
@@ -133,18 +133,38 @@ abstract public class RefCpInfo extends CpInfo
 
     /**
      * Dump the content of the class file to the specified file (used for debugging).
-     * 
-     * @throws ClassFileException
      */
     @Override
-    public void dump(PrintWriter pw, ClassFile cf, int index) throws ClassFileException
+    public void dump(PrintWriter pw, ClassFile cf, int index)
     {
-        pw.println("  Ref " + Integer.toString(index) + ": "
-            + ((Utf8CpInfo)cf.getCpEntry(((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getNameIndex())).getString()
-            + " "
-            + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getNameIndex())).getString()
-            + " "
-            + ((Utf8CpInfo)cf.getCpEntry(((NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex)).getDescriptorIndex()))
-                .getString());
+        String cl = "";
+        try
+        {
+            ClassCpInfo clCp = (ClassCpInfo)cf.getCpEntry(this.u2classIndex);
+            if (clCp != null)
+            {
+                cl = cf.getUtf8Debug(clCp.getNameIndex());
+            }
+        }
+        catch (ClassFileException e)
+        {
+            cl = "[bad class: " + this.u2classIndex + "]";
+        }
+
+        String nameAndType = "";
+        try
+        {
+            NameAndTypeCpInfo ntCp = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
+            if (ntCp != null)
+            {
+                nameAndType = cf.getUtf8Debug(ntCp.getNameIndex()) + " " + cf.getUtf8Debug(ntCp.getDescriptorIndex());
+            }
+        }
+        catch (ClassFileException e)
+        {
+            nameAndType = "[bad nameAndType: " + this.u2classIndex + "]";
+        }
+
+        pw.println("  Ref " + Integer.toString(index) + ": " + cl + " " + nameAndType);
     }
 }

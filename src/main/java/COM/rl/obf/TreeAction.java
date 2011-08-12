@@ -31,31 +31,42 @@ import COM.rl.obf.classfile.ClassFileException;
  */
 public class TreeAction
 {
-    public void packageAction(Pk pk)
+    /**
+     * @throws ClassFileException
+     */
+    public void packageAction(Pk pk) throws ClassFileException
     {
         this.defaultAction(pk);
     }
 
     /**
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public void classAction(Cl cl) throws ClassFileException, ClassNotFoundException
+    public void classAction(Cl cl) throws ClassFileException
     {
         this.defaultAction(cl);
     }
 
-    public void methodAction(Md md)
+    /**
+     * @throws ClassFileException
+     */
+    public void methodAction(Md md) throws ClassFileException
     {
         this.defaultAction(md);
     }
 
-    public void fieldAction(Fd fd)
+    /**
+     * @throws ClassFileException
+     */
+    public void fieldAction(Fd fd) throws ClassFileException
     {
         this.defaultAction(fd);
     }
 
-    public void defaultAction(TreeItem ti)
+    /**
+     * @throws ClassFileException
+     */
+    public void defaultAction(TreeItem ti) throws ClassFileException
     {
     }
 }

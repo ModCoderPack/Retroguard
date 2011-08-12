@@ -43,9 +43,17 @@ public interface NameListUp
      */
     public String getMethodObfNameUp(String name, String descriptor) throws ClassFileException;
 
-    /** Get output field name from list, or null if no mapping exists. */
-    public String getFieldOutNameUp(String name);
+    /**
+     * Get output field name from list, or null if no mapping exists.
+     * 
+     * @throws ClassFileException
+     */
+    public String getFieldOutNameUp(String name) throws ClassFileException;
 
-    /** Get obfuscated field name from list, or null if no mapping exists. */
-    public String getFieldObfNameUp(String name);
+    /**
+     * Get obfuscated field name from list, or null if no mapping exists.
+     * 
+     * @throws ClassFileException
+     */
+    public String getFieldObfNameUp(String name) throws ClassFileException;
 }

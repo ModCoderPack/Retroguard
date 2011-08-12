@@ -40,7 +40,6 @@ public class MethodInfo extends ClassItemInfo
      * Create a new MethodInfo from the file format data in the DataInput stream.
      * 
      * @throws IOException
-     *             if class file is corrupt or incomplete
      * @throws ClassFileException
      */
     public static MethodInfo create(DataInput din, ClassFile cf) throws IOException, ClassFileException

@@ -81,14 +81,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
 
     // Instance Methods ------------------------------------------------------
-    /**
-     * Ctor.
-     * 
-     * @throws ClassFileException
-     */
+    /** Ctor. */
     public Cl(TreeItem parent, boolean isInnerClass, String name, String superClass, List superInterfaces, int access)
-        throws ClassFileException
-
     {
         super(parent, name);
         this.superClass = superClass;
@@ -97,7 +91,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.access = access;
         if ((parent == null) || "".equals(name))
         {
-            throw new ClassFileException("# Internal error: class must have parent and name");
+            throw new RuntimeException("Internal error: class must have parent and name");
         }
         if (parent instanceof Cl)
         {
@@ -123,12 +117,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.isNoWarn = true;
     }
 
-    /**
-     * Add class's warning.
-     * 
-     * @throws ClassFileException
-     */
-    public void setWarnings(ClassFile cf) throws ClassFileException
+    /** Add class's warning. */
+    public void setWarnings(ClassFile cf)
     {
         this.warningList = cf.listDangerMethods(this.warningList);
     }
@@ -269,7 +259,16 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             else
             {
-                Class superClExt = Class.forName(ClassFile.translate(this.superClass));
+                Class superClExt = null;
+                try
+                {
+                    superClExt = Class.forName(ClassFile.translate(this.superClass));
+                }
+                catch (ClassNotFoundException e)
+                {
+                    // TODO printStackTrace
+                    e.printStackTrace();
+                }
                 if (superClExt != null)
                 {
                     if (Cl.hasAsSuperExt(queryName, checkInterfaces, this.classTree, superClExt))
@@ -293,7 +292,16 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                     else
                     {
-                        Class interClExt = Class.forName(ClassFile.translate(si));
+                        Class interClExt = null;
+                        try
+                        {
+                            interClExt = Class.forName(ClassFile.translate(si));
+                        }
+                        catch (ClassNotFoundException e)
+                        {
+                            // TODO printStackTrace
+                            e.printStackTrace();
+                        }
                         if (interClExt != null)
                         {
                             if (Cl.hasAsSuperExt(queryName, checkInterfaces, this.classTree, interClExt))
@@ -304,12 +312,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
             }
-        }
-        catch (ClassNotFoundException e)
-        {
-            // TODO printStackTrace
-            e.printStackTrace();
-            // fall thru
         }
         catch (ClassFileException e)
         {
@@ -322,6 +324,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 //        {
 //            // fall thru
 //        }
+
         return false;
     }
 
@@ -427,13 +430,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return this.hasAsSuperInt(queryName, false);
     }
 
-    /**
-     * Add an inner class.
-     * 
-     * @throws ClassFileException
-     */
+    /** Add an inner class. */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access) throws ClassFileException
+    public Cl addClass(String name, String superName, List interfaceNames, int access)
     {
         return this.addClass(true, name, superName, interfaceNames, access);
     }
@@ -445,13 +444,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return cl;
     }
 
-    /**
-     * Add a placeholder class.
-     * 
-     * @throws ClassFileException
-     */
+    /** Add a placeholder class. */
     @Override
-    public Cl addPlaceholderClass(String name) throws ClassFileException
+    public Cl addPlaceholderClass(String name)
     {
         return this.addPlaceholderClass(true, name);
     }
@@ -468,12 +463,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return md;
     }
 
-    /**
-     * Add a method.
-     * 
-     * @throws ClassFileException
-     */
-    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags) throws ClassFileException
+    /** Add a method. */
+    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags)
     {
         // Store <init> and <clinit> methods separately - needed only for reference tracking
         Md md;
@@ -509,12 +500,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return fd;
     }
 
-    /**
-     * Add a field.
-     * 
-     * @throws ClassFileException
-     */
-    public Fd addField(boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
+    /** Add a field. */
+    public Fd addField(boolean isSynthetic, String name, String descriptor, int access)
     {
         Fd fd = this.getField(name);
         if (fd == null)
@@ -568,9 +555,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Overload method and field names maximally.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public void resolveOptimally() throws ClassFileException, ClassNotFoundException
+    public void resolveOptimally() throws ClassFileException
     {
         // Already processed, then do nothing
         if (!this.isResolved)
@@ -592,9 +578,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Get lists of method and field names in inheritance namespace
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    private void scanNameSpaceExcept(Cl ignoreCl, List methods, List fields) throws ClassFileException, ClassNotFoundException
+    private void scanNameSpaceExcept(Cl ignoreCl, List methods, List fields) throws ClassFileException
     {
         // Special case: we are java/lang/Object
         if (this.superClass == null)
@@ -653,12 +638,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     /**
      * Get lists of method and field names in inheritance namespace
-     * 
-     * @throws ClassNotFoundException
      */
-    private void scanExtSupers(String name, List methods, List fields) throws ClassNotFoundException
+    private void scanExtSupers(String name, List methods, List fields)
     {
-        Class extClass = Class.forName(ClassFile.translate(name));
+        Class extClass = null;
+        try
+        {
+            extClass = Class.forName(ClassFile.translate(name));
+        }
+        catch (ClassNotFoundException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            return;
+        }
 
         // Get public methods and fields from supers and interfaces up the tree
         List allPubMethods = Arrays.asList(extClass.getMethods());
@@ -747,9 +740,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Resolve an entire inheritance name space optimally.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    private void resolveNameSpaceExcept(Cl ignoreCl) throws ClassFileException, ClassNotFoundException
+    private void resolveNameSpaceExcept(Cl ignoreCl) throws ClassFileException
     {
         // Special case: we are java/lang/Object
         if (this.superClass == null)
@@ -802,9 +794,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * methods/fields -- while for those in the DB, resolve to get the name-mapping lists
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    private void resolveThis() throws ClassFileException, ClassNotFoundException
+    private void resolveThis() throws ClassFileException
     {
         // Special case: we are java/lang/Object
         if (this.superClass == null)
@@ -966,9 +957,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return null;
     }
 
-    /** Get output field name from list, or null if no mapping exists. */
+    /**
+     * Get output field name from list, or null if no mapping exists.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public String getFieldOutNameUp(String name)
+    public String getFieldOutNameUp(String name) throws ClassFileException
     {
         // Check supers
         for (Iterator iter = this.nameListUps.iterator(); iter.hasNext();)
@@ -991,9 +986,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return null;
     }
 
-    /** Get obfuscated field name from list, or null if no mapping exists. */
+    /**
+     * Get obfuscated field name from list, or null if no mapping exists.
+     * 
+     * @throws ClassFileException
+     */
     @Override
-    public String getFieldObfNameUp(String name)
+    public String getFieldObfNameUp(String name) throws ClassFileException
     {
         // Check supers
         for (Iterator iter = this.nameListUps.iterator(); iter.hasNext();)
@@ -1020,10 +1019,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Is the method reserved because of its reservation down the class hierarchy?
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
     @Override
-    public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws ClassFileException, ClassNotFoundException
+    public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws ClassFileException
     {
         // Check ourself for an explicit 'do not obfuscate'
         Md md = this.getMethod(name, descriptor);
@@ -1081,10 +1079,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Is the field reserved because of its reservation down the class hierarchy?
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
     @Override
-    public String getFieldObfNameDown(Cl caller, String name) throws ClassFileException, ClassNotFoundException
+    public String getFieldObfNameDown(Cl caller, String name) throws ClassFileException
     {
         // Check ourself for an explicit 'do not obfuscate'
         Fd fd = this.getField(name);
@@ -1143,9 +1140,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Construct, or retrieve from cache, the NameListUp object for an external class/interface
      * 
-     * @throws ClassNotFoundException
+     * @throws ClassFileException
      */
-    private NameListUp getExtNameListUp(String name) throws ClassNotFoundException
+    private NameListUp getExtNameListUp(String name) throws ClassFileException
     {
         NameListUp nl = (NameListUp)Cl.extNameListUpCache.get(name);
         if (nl == null)
@@ -1166,11 +1163,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         /**
          * Ctor.
          * 
-         * @throws ClassNotFoundException
+         * @throws ClassFileException
          */
-        public ExtNameListUp(String name) throws ClassNotFoundException
+        public ExtNameListUp(String name) throws ClassFileException
         {
-            this.extClass = Class.forName(ClassFile.translate(name));
+            try
+            {
+                this.extClass = Class.forName(ClassFile.translate(name));
+            }
+            catch (ClassNotFoundException e)
+            {
+                // TODO printStackTrace
+                e.printStackTrace();
+                throw new ClassFileException("ClassNotFound " + name);
+            }
         }
 
         /** Ctor. */
@@ -1312,11 +1318,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 {
                     // fall thru
                 }
-                // TODO check for missed exceptions
-//                catch (Exception e)
-//                {
-//                    field = null;
-//                }
                 if (field != null)
                 {
                     return field;
@@ -1333,11 +1334,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 return null;
             }
-            // TODO check for missed exceptions
-//            catch (Exception e)
-//            {
-//                return null;
-//            }
         }
     }
 
@@ -1346,9 +1342,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Must be called after setupNameListDowns() called for all classes.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public void walkGroup(TreeAction ta) throws ClassFileException, ClassNotFoundException
+    public void walkGroup(TreeAction ta) throws ClassFileException
     {
         List done = new ArrayList();
         this.walkGroup(ta, this, done);
@@ -1358,9 +1353,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Walk class inheritance group taking action once only on each class.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    private void walkGroup(TreeAction ta, Cl cl, List done) throws ClassFileException, ClassNotFoundException
+    private void walkGroup(TreeAction ta, Cl cl, List done) throws ClassFileException
     {
         if (!done.contains(cl))
         {
@@ -1428,19 +1422,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     public Iterator getDownClasses()
     {
+        // TODO do we actually need to copy the ArrayList here?
         List clsList = new ArrayList();
         for (Iterator iter = this.nameListDowns.iterator(); iter.hasNext();)
         {
-            // TODO catch Exception
-//            try
-//            {
             Cl cl = (Cl)iter.next();
             clsList.add(cl);
-//            }
-//            catch (Exception e)
-//            {
-//                continue;
-//            }
         }
         return clsList.iterator();
     }

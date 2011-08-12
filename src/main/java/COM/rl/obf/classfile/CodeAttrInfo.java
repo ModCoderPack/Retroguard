@@ -321,10 +321,10 @@ public class CodeAttrInfo extends AttrInfo
                     {
                         MethodrefCpInfo entry = (MethodrefCpInfo)cpInfo;
                         ClassCpInfo classEntry = (ClassCpInfo)this.cf.getCpEntry(entry.getClassIndex());
-                        String className = ((Utf8CpInfo)this.cf.getCpEntry(classEntry.getNameIndex())).getString();
+                        String className = this.cf.getUtf8(classEntry.getNameIndex());
                         NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)this.cf.getCpEntry(entry.getNameAndTypeIndex());
-                        String name = ((Utf8CpInfo)this.cf.getCpEntry(ntEntry.getNameIndex())).getString();
-                        String descriptor = ((Utf8CpInfo)this.cf.getCpEntry(ntEntry.getDescriptorIndex())).getString();
+                        String name = this.cf.getUtf8(ntEntry.getNameIndex());
+                        String descriptor = this.cf.getUtf8(ntEntry.getDescriptorIndex());
                         if (("class$".equals(name) && ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)
                             || "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor)))
                             || ("java/lang/Class".equals(className) && "forName".equals(name)

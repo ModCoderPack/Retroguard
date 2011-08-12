@@ -48,10 +48,8 @@ public class Pk extends PkCl
     // Class Methods ---------------------------------------------------------
     /**
      * Create the root entry for a tree.
-     * 
-     * @throws ClassFileException
      */
-    public static Pk createRoot(ClassTree classTree) throws ClassFileException
+    public static Pk createRoot(ClassTree classTree)
     {
         return new Pk(classTree);
     }
@@ -60,10 +58,8 @@ public class Pk extends PkCl
     // Instance Methods ------------------------------------------------------
     /**
      * Constructor for default package level.
-     * 
-     * @throws ClassFileException
      */
-    public Pk(ClassTree classTree) throws ClassFileException
+    public Pk(ClassTree classTree)
     {
         this(null, "");
         this.classTree = classTree;
@@ -71,19 +67,17 @@ public class Pk extends PkCl
 
     /**
      * Constructor for regular package levels.
-     * 
-     * @throws ClassFileException
      */
-    public Pk(TreeItem parent, String name) throws ClassFileException
+    public Pk(TreeItem parent, String name)
     {
         super(parent, name);
         if ((parent == null) && !name.equals(""))
         {
-            throw new ClassFileException("# Internal error: only the default package has no parent");
+            throw new RuntimeException("Internal error: only the default package has no parent");
         }
         else if ((parent != null) && name.equals(""))
         {
-            throw new ClassFileException("# Internal error: the default package cannot have a parent");
+            throw new RuntimeException("Internal error: the default package cannot have a parent");
         }
     }
 
@@ -159,10 +153,8 @@ public class Pk extends PkCl
 
     /**
      * Add a sub-package level.
-     * 
-     * @throws ClassFileException
      */
-    public Pk addPackage(String name) throws ClassFileException
+    public Pk addPackage(String name)
     {
         Pk pk = this.getPackage(name);
         if (pk == null)
@@ -175,22 +167,18 @@ public class Pk extends PkCl
 
     /**
      * Add a class.
-     * 
-     * @throws ClassFileException
      */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access) throws ClassFileException
+    public Cl addClass(String name, String superName, List interfaceNames, int access)
     {
         return this.addClass(false, name, superName, interfaceNames, access);
     }
 
     /**
      * Add a placeholder class.
-     * 
-     * @throws ClassFileException
      */
     @Override
-    public Cl addPlaceholderClass(String name) throws ClassFileException
+    public Cl addPlaceholderClass(String name)
     {
         return this.addPlaceholderClass(false, name);
     }

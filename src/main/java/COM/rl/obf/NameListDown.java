@@ -33,15 +33,13 @@ public interface NameListDown
      * Is the method reserved because of its reservation down the class hierarchy?
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws ClassFileException, ClassNotFoundException;
+    public String getMethodObfNameDown(Cl caller, String name, String descriptor) throws ClassFileException;
 
     /**
      * Is the field reserved because of its reservation down the class hierarchy?
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public String getFieldObfNameDown(Cl caller, String name) throws ClassFileException, ClassNotFoundException;
+    public String getFieldObfNameDown(Cl caller, String name) throws ClassFileException;
 }

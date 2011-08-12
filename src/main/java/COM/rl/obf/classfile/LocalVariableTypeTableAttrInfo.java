@@ -94,9 +94,10 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
      * Export data following the header to a DataOutput stream.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    public void writeInfo(DataOutput dout) throws IOException
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2localVariableTypeTableLength);
         for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)

@@ -91,7 +91,7 @@ abstract public class ClassItemInfo implements ClassConstants
      */
     public String getName() throws ClassFileException
     {
-        return ((Utf8CpInfo)this.cf.getCpEntry(this.u2nameIndex)).getString();
+        return this.cf.getUtf8(this.u2nameIndex);
     }
 
     /**
@@ -101,7 +101,7 @@ abstract public class ClassItemInfo implements ClassConstants
      */
     public String getDescriptor() throws ClassFileException
     {
-        return ((Utf8CpInfo)this.cf.getCpEntry(this.u2descriptorIndex)).getString();
+        return this.cf.getUtf8(this.u2descriptorIndex);
     }
 
     /** Return access flags. */

@@ -120,12 +120,10 @@ public class AnnotationInfo
 
     /**
      * Provide debugging dump of this object.
-     * 
-     * @throws ClassFileException
      */
-    public void dump(PrintStream ps, ClassFile cf) throws ClassFileException
+    public void dump(PrintStream ps, ClassFile cf)
     {
-        ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8(this.u2typeIndex));
+        ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8Debug(this.u2typeIndex));
         ps.println("u2numMemberValuePairs : " + this.u2numMemberValuePairs);
         for (Iterator iter = this.memberValuePairTable.iterator(); iter.hasNext();)
         {

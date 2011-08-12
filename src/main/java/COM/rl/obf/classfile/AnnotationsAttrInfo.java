@@ -118,11 +118,9 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
 
     /**
      * Provide debugging dump of this object.
-     * 
-     * @throws ClassFileException
      */
     @Override
-    public void dump(PrintStream ps) throws ClassFileException
+    public void dump(PrintStream ps)
     {
         super.dump(ps);
         ps.println("u2numAnnotations : " + this.u2numAnnotations);

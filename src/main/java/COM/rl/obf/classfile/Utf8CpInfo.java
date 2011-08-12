@@ -49,10 +49,8 @@ public class Utf8CpInfo extends CpInfo
 
     /**
      * Ctor used when appending fresh Utf8 entries to the constant pool.
-     * 
-     * @throws ClassFileException
      */
-    public Utf8CpInfo(String s) throws ClassFileException
+    public Utf8CpInfo(String s)
     {
         super(ClassConstants.CONSTANT_Utf8);
         this.setString(s);
@@ -76,10 +74,8 @@ public class Utf8CpInfo extends CpInfo
 
     /**
      * Return UTF8 data as a String.
-     * 
-     * @throws ClassFileException
      */
-    public String getString() throws ClassFileException
+    public String getString()
     {
         if (this.utf8string == null)
         {
@@ -89,9 +85,7 @@ public class Utf8CpInfo extends CpInfo
             }
             catch (UnsupportedEncodingException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
-                throw new ClassFileException("UnsupportedEncodingException");
+                throw new RuntimeException(e);
             }
         }
         return this.utf8string;
@@ -99,10 +93,8 @@ public class Utf8CpInfo extends CpInfo
 
     /**
      * Set UTF8 data as String.
-     * 
-     * @throws ClassFileException
      */
-    public void setString(String str) throws ClassFileException
+    public void setString(String str)
     {
         this.utf8string = str;
         try
@@ -111,19 +103,15 @@ public class Utf8CpInfo extends CpInfo
         }
         catch (UnsupportedEncodingException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
-            throw new ClassFileException("UnsupportedEncodingException");
+            throw new RuntimeException(e);
         }
         this.u2length = this.bytes.length;
     }
 
     /**
      * Set the UTF8 data to empty.
-     * 
-     * @throws ClassFileException
      */
-    public void clearString() throws ClassFileException
+    public void clearString()
     {
         this.u2length = 0;
         this.bytes = new byte[0];
@@ -135,10 +123,9 @@ public class Utf8CpInfo extends CpInfo
      * Read the 'info' data following the u1tag byte.
      * 
      * @throws IOException
-     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException, ClassFileException
+    protected void readInfo(DataInput din) throws IOException
     {
         this.u2length = din.readUnsignedShort();
         this.bytes = new byte[this.u2length];

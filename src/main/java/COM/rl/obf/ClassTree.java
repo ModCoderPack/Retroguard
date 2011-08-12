@@ -103,12 +103,8 @@ public class ClassTree implements NameMapper
 
 
     // Instance Methods ------------------------------------------------------
-    /**
-     * Ctor.
-     * 
-     * @throws ClassFileException
-     */
-    public ClassTree() throws ClassFileException
+    /** Ctor. */
+    public ClassTree()
     {
         this.root = Pk.createRoot(this);
     }
@@ -192,7 +188,8 @@ public class ClassTree implements NameMapper
     {
         // Add the fully qualified class name
         TreeItem ti = this.root;
-        for (Iterator nameIter = ClassTree.getNameIter(cf.getName()); nameIter.hasNext();)
+        String className = cf.getName();
+        for (Iterator nameIter = ClassTree.getNameIter(className); nameIter.hasNext();)
         {
             SimpleName simpleName = (SimpleName)nameIter.next();
             String name = simpleName.getName();
@@ -248,9 +245,8 @@ public class ClassTree implements NameMapper
      * Mark a class/interface type to suppress warnings from it.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public void noWarnClass(String name) throws ClassFileException, ClassNotFoundException
+    public void noWarnClass(String name) throws ClassFileException
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
         for (Iterator clIter = this.getClIter(name); clIter.hasNext();)
@@ -262,39 +258,45 @@ public class ClassTree implements NameMapper
 
     /**
      * Write any non-suppressed warnings to the log.
-     * 
-     * @throws ClassNotFoundException
-     * @throws ClassFileException
      */
-    public void logWarnings(PrintWriter log) throws ClassFileException, ClassNotFoundException
+    public void logWarnings(PrintWriter log)
     {
-        final List hasWarnings = new ArrayList();
-        this.walkTree(new TreeAction()
+        try
         {
-            @Override
-            public void classAction(Cl cl)
-            {
-                if (cl.hasWarnings())
-                {
-                    hasWarnings.add(Boolean.valueOf(true));
-                }
-            }
-        });
-        if (hasWarnings.size() > 0)
-        {
-            log.println("#");
-            log.println(ClassTree.LOG_DANGER_HEADER1);
-            log.println(ClassTree.LOG_DANGER_HEADER2);
-            log.println(ClassTree.LOG_DANGER_HEADER3);
-            final PrintWriter flog = log;
+            final List hasWarnings = new ArrayList();
             this.walkTree(new TreeAction()
             {
                 @Override
                 public void classAction(Cl cl)
                 {
-                    cl.logWarnings(flog);
+                    if (cl.hasWarnings())
+                    {
+                        hasWarnings.add(Boolean.valueOf(true));
+                    }
                 }
             });
+            if (hasWarnings.size() > 0)
+            {
+                log.println("#");
+                log.println(ClassTree.LOG_DANGER_HEADER1);
+                log.println(ClassTree.LOG_DANGER_HEADER2);
+                log.println(ClassTree.LOG_DANGER_HEADER3);
+                final PrintWriter flog = log;
+                this.walkTree(new TreeAction()
+                {
+                    @Override
+                    public void classAction(Cl cl)
+                    {
+                        cl.logWarnings(flog);
+                    }
+                });
+            }
+        }
+        catch (ClassFileException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            // shouldn't get here
         }
     }
 
@@ -308,12 +310,10 @@ public class ClassTree implements NameMapper
      * Mark a class/interface type (and possibly methods and fields defined in class) for retention.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
     public void retainClass(String name, boolean retainToPublic, boolean retainToProtected, boolean retainPubProtOnly,
         boolean retainFieldsOnly, boolean retainMethodsOnly, String extendsName, boolean invert, int accessMask, int accessSetting)
-        throws ClassFileException, ClassNotFoundException
-
+        throws ClassFileException
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
         for (Iterator clIter = this.getClIter(name); clIter.hasNext();)
@@ -383,10 +383,9 @@ public class ClassTree implements NameMapper
      * Mark a method type for retention.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
-        int accessMask, int accessSetting) throws ClassFileException, ClassNotFoundException
+        int accessMask, int accessSetting) throws ClassFileException
     {
         for (Iterator iter = this.getMdIter(name, descriptor); iter.hasNext();)
         {
@@ -417,10 +416,9 @@ public class ClassTree implements NameMapper
      * Mark a field type for retention.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
-        int accessMask, int accessSetting) throws ClassFileException, ClassNotFoundException
+        int accessMask, int accessSetting) throws ClassFileException
     {
         for (Iterator iter = this.getFdIter(name, descriptor); iter.hasNext();)
         {
@@ -454,7 +452,8 @@ public class ClassTree implements NameMapper
      */
     public void retainPackageMap(String name, String obfName) throws ClassFileException
     {
-        this.retainItemMap(this.getPk(name), obfName);
+        Pk pk = this.getPk(name);
+        this.retainItemMap(pk, obfName);
     }
 
     /**
@@ -479,7 +478,8 @@ public class ClassTree implements NameMapper
      */
     public void retainClassMap(String name, String obfName) throws ClassFileException
     {
-        this.retainItemMap(this.getCl(name), obfName);
+        Cl cl = this.getCl(name);
+        this.retainItemMap(cl, obfName);
     }
 
     /**
@@ -489,7 +489,8 @@ public class ClassTree implements NameMapper
      */
     public void retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
     {
-        this.retainItemMap(this.getMd(name, descriptor), obfName);
+        Md md = this.getMd(name, descriptor);
+        this.retainItemMap(md, obfName);
     }
 
     /**
@@ -499,7 +500,8 @@ public class ClassTree implements NameMapper
      */
     public void retainFieldMap(String name, String obfName) throws ClassFileException
     {
-        this.retainItemMap(this.getFd(name), obfName);
+        Fd fd = this.getFd(name);
+        this.retainItemMap(fd, obfName);
     }
 
     /** Mark an item for retention, and specify its new name. */
@@ -519,10 +521,9 @@ public class ClassTree implements NameMapper
     /**
      * Traverse the class tree, generating obfuscated names within each namespace.
      * 
-     * @throws ClassNotFoundException
      * @throws ClassFileException
      */
-    public void generateNames(boolean enableRepackage) throws ClassFileException, ClassNotFoundException
+    public void generateNames(boolean enableRepackage) throws ClassFileException
     {
         // Repackage first, if requested
         // (need TreeItem.isFixed set properly, so must be done first)
@@ -558,10 +559,9 @@ public class ClassTree implements NameMapper
     /**
      * Resolve the polymorphic dependencies of each class.
      * 
-     * @throws ClassNotFoundException
      * @throws ClassFileException
      */
-    public void resolveClasses() throws ClassFileException, ClassNotFoundException
+    public void resolveClasses() throws ClassFileException
     {
         this.walkTree(new TreeAction()
         {
@@ -583,7 +583,7 @@ public class ClassTree implements NameMapper
         this.walkTree(new TreeAction()
         {
             @Override
-            public void classAction(Cl cl) throws ClassFileException, ClassNotFoundException
+            public void classAction(Cl cl) throws ClassFileException
             {
                 cl.resolveOptimally();
             }
@@ -602,9 +602,8 @@ public class ClassTree implements NameMapper
      * (can be wildcarded).
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public Iterator getClIter(String fullName) throws ClassFileException, ClassNotFoundException
+    public Iterator getClIter(String fullName) throws ClassFileException
     {
         final List list = new ArrayList();
         // Wildcard? then return list of all matching classes (including inner)
@@ -660,9 +659,8 @@ public class ClassTree implements NameMapper
      * Get methods in tree from the fully qualified, and possibly wildcarded, name.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public Iterator getMdIter(String fullName, String descriptor) throws ClassFileException, ClassNotFoundException
+    public Iterator getMdIter(String fullName, String descriptor) throws ClassFileException
     {
         final List list = new ArrayList();
         final String fDesc = descriptor;
@@ -718,9 +716,8 @@ public class ClassTree implements NameMapper
      * Get fields in tree from the fully qualified, and possibly wildcarded, name.
      * 
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public Iterator getFdIter(String fullName, String descriptor) throws ClassFileException, ClassNotFoundException
+    public Iterator getFdIter(String fullName, String descriptor) throws ClassFileException
     {
         final List list = new ArrayList();
         // Wildcard? then return list of all matching methods
@@ -1075,99 +1072,105 @@ public class ClassTree implements NameMapper
 
     /**
      * Dump the content of the class tree to the specified file (used for logging).
-     * 
-     * @throws ClassNotFoundException
-     * @throws ClassFileException
      */
-    public void dump(final PrintWriter log) throws ClassFileException, ClassNotFoundException
+    public void dump(final PrintWriter log)
     {
-        log.println("#");
-        log.println(ClassTree.LOG_PRE_UNOBFUSCATED);
-        log.println("#");
-        this.walkTree(new TreeAction()
+        try
         {
-            @Override
-            public void classAction(Cl cl)
+            log.println("#");
+            log.println(ClassTree.LOG_PRE_UNOBFUSCATED);
+            log.println("#");
+            this.walkTree(new TreeAction()
             {
-                if (cl.isFromScript())
+                @Override
+                public void classAction(Cl cl)
                 {
-                    log.println(".class " + cl.getFullInName());
-                }
-            }
-
-            @Override
-            public void methodAction(Md md)
-            {
-                if (md.isFromScript())
-                {
-                    log.println(".method " + md.getFullInName() + " " + md.getDescriptor());
-                }
-            }
-
-            @Override
-            public void fieldAction(Fd fd)
-            {
-                if (fd.isFromScript())
-                {
-                    log.println(".field " + fd.getFullInName() + " " + fd.getDescriptor());
-                }
-            }
-
-            @Override
-            public void packageAction(Pk pk)
-            {
-                // No action
-            }
-        });
-        log.println("#");
-        log.println("#");
-        log.println(ClassTree.LOG_PRE_OBFUSCATED);
-        log.println("#");
-        this.walkTree(new TreeAction()
-        {
-            @Override
-            public void classAction(Cl cl)
-            {
-                if (!cl.isFromScript())
-                {
-                    log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
-                }
-            }
-
-            @Override
-            public void methodAction(Md md)
-            {
-                if (!md.isFromScript())
-                {
-                    log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
-                }
-            }
-
-            @Override
-            public void fieldAction(Fd fd)
-            {
-                if (!fd.isFromScript())
-                {
-                    log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
-                }
-            }
-
-            @Override
-            public void packageAction(Pk pk)
-            {
-                if (!pk.isFromScript() && (pk.getFullInName().length() > 0))
-                {
-                    if (pk.getRepackageName() != null)
+                    if (cl.isFromScript())
                     {
-                        log.println(".repackage_map " + pk.getFullInName() + " " + pk.getRepackageName());
-                    }
-                    else
-                    {
-                        log.println(".package_map " + pk.getFullInName() + " " + pk.getOutName());
+                        log.println(".class " + cl.getFullInName());
                     }
                 }
-            }
-        });
+
+                @Override
+                public void methodAction(Md md)
+                {
+                    if (md.isFromScript())
+                    {
+                        log.println(".method " + md.getFullInName() + " " + md.getDescriptor());
+                    }
+                }
+
+                @Override
+                public void fieldAction(Fd fd)
+                {
+                    if (fd.isFromScript())
+                    {
+                        log.println(".field " + fd.getFullInName() + " " + fd.getDescriptor());
+                    }
+                }
+
+                @Override
+                public void packageAction(Pk pk)
+                {
+                    // No action
+                }
+            });
+            log.println("#");
+            log.println("#");
+            log.println(ClassTree.LOG_PRE_OBFUSCATED);
+            log.println("#");
+            this.walkTree(new TreeAction()
+            {
+                @Override
+                public void classAction(Cl cl)
+                {
+                    if (!cl.isFromScript())
+                    {
+                        log.println(".class_map " + cl.getFullInName() + " " + cl.getOutName());
+                    }
+                }
+
+                @Override
+                public void methodAction(Md md)
+                {
+                    if (!md.isFromScript())
+                    {
+                        log.println(".method_map " + md.getFullInName() + " " + md.getDescriptor() + " " + md.getOutName());
+                    }
+                }
+
+                @Override
+                public void fieldAction(Fd fd)
+                {
+                    if (!fd.isFromScript())
+                    {
+                        log.println(".field_map " + fd.getFullInName() + " " + fd.getOutName());
+                    }
+                }
+
+                @Override
+                public void packageAction(Pk pk)
+                {
+                    if (!pk.isFromScript() && (pk.getFullInName().length() > 0))
+                    {
+                        if (pk.getRepackageName() != null)
+                        {
+                            log.println(".repackage_map " + pk.getFullInName() + " " + pk.getRepackageName());
+                        }
+                        else
+                        {
+                            log.println(".package_map " + pk.getFullInName() + " " + pk.getOutName());
+                        }
+                    }
+                }
+            });
+        }
+        catch (ClassFileException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            // shouldn't get here
+        }
     }
 
     class SortElement
@@ -1212,10 +1215,9 @@ public class ClassTree implements NameMapper
     /**
      * Walk the whole tree taking action once only on each package level, class, method and field.
      * 
-     * @throws ClassNotFoundException
      * @throws ClassFileException
      */
-    public void walkTree(TreeAction ta) throws ClassFileException, ClassNotFoundException
+    public void walkTree(TreeAction ta) throws ClassFileException
     {
         this.walkTree(ta, this.root);
     }
@@ -1223,10 +1225,9 @@ public class ClassTree implements NameMapper
     /**
      * Walk the tree which has TreeItem as its root taking action once only on each package level, class, method and field.
      * 
-     * @throws ClassNotFoundException
      * @throws ClassFileException
      */
-    private void walkTree(TreeAction ta, TreeItem ti) throws ClassFileException, ClassNotFoundException
+    private void walkTree(TreeAction ta, TreeItem ti) throws ClassFileException
     {
         if (ti instanceof Pk)
         {

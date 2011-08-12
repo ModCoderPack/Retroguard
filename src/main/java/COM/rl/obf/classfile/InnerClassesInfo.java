@@ -117,7 +117,7 @@ public class InnerClassesInfo
         {
             // Get the full inner class name
             ClassCpInfo innerClassInfo = (ClassCpInfo)cf.getCpEntry(this.u2innerClassInfoIndex);
-            String innerClassName = ((Utf8CpInfo)cf.getCpEntry(innerClassInfo.getNameIndex())).getString();
+            String innerClassName = cf.getUtf8(innerClassInfo.getNameIndex());
             // It is the remapped simple name that must be stored, so truncate
             String remapClass = nm.mapClass(innerClassName);
             remapClass = remapClass.substring(remapClass.lastIndexOf('$') + 1);

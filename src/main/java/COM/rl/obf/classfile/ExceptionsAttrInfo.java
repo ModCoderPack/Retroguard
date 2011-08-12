@@ -69,9 +69,10 @@ public class ExceptionsAttrInfo extends AttrInfo
      * Read the data following the header.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2numberOfExceptions = din.readUnsignedShort();
         this.u2exceptionIndexTable = new int[this.u2numberOfExceptions];
@@ -85,9 +86,10 @@ public class ExceptionsAttrInfo extends AttrInfo
      * Export data following the header to a DataOutput stream.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    public void writeInfo(DataOutput dout) throws IOException
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numberOfExceptions);
         for (int i = 0; i < this.u2numberOfExceptions; i++)

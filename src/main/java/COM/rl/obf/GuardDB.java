@@ -165,13 +165,11 @@ public class GuardDB implements ClassConstants
     /**
      * Go through database marking certain entities for retention, while maintaining polymorphic integrity.
      * 
-     * @throws ClassFileException
      * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws ClassFileException
      * @throws RGSException
      */
-    public void retain(RgsEnum rgsIter, PrintWriter log) throws IOException, ClassFileException, ClassNotFoundException,
-        RGSException
+    public void retain(RgsEnum rgsIter, PrintWriter log) throws IOException, ClassFileException, RGSException
     {
 
         // Build database if not already done, or if a mapping has already been generated
@@ -181,19 +179,29 @@ public class GuardDB implements ClassConstants
             this.buildClassTree(log);
         }
 
+        try
+        {
+
 // Always retain native methods and their classes, using script entry:
 // .method;native ** * and_class
-        this.classTree.retainMethod("**", "*", true, null, false, ClassConstants.ACC_NATIVE, ClassConstants.ACC_NATIVE);
+            this.classTree.retainMethod("**", "*", true, null, false, ClassConstants.ACC_NATIVE, ClassConstants.ACC_NATIVE);
 
 // Always retain the auto-generated values() and valueOf(...) methods in Enums, using script entries:
 // .method;public;static;final **/values * extends java/lang/Enum
 // .method;public;static **/valueOf * extends java/lang/Enum
-        this.classTree.retainMethod("**/values", "*", false, "java/lang/Enum", false,
-            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL,
-            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
-        this.classTree.retainMethod("**/valueOf", "*", false, "java/lang/Enum", false,
-            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC,
-            ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC);
+            this.classTree.retainMethod("**/values", "*", false, "java/lang/Enum", false,
+                ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL,
+                ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC | ClassConstants.ACC_FINAL);
+            this.classTree.retainMethod("**/valueOf", "*", false, "java/lang/Enum", false,
+                ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC,
+                ClassConstants.ACC_PUBLIC | ClassConstants.ACC_STATIC);
+        }
+        catch (ClassFileException e)
+        {
+            // TODO printStackTrace
+            e.printStackTrace();
+            // shouldn't get here
+        }
 
         // Iterate the entries in the RGS script
         while (rgsIter.hasNext())
@@ -356,12 +364,6 @@ public class GuardDB implements ClassConstants
                         throw new RGSException("Illegal type received from the .rgs script");
                 }
             }
-            catch (ClassNotFoundException e)
-            {
-                // TODO printStackTrace
-                e.printStackTrace();
-                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
-            }
             catch (ClassFileException e)
             {
                 // TODO printStackTrace
@@ -379,11 +381,8 @@ public class GuardDB implements ClassConstants
 
     /**
      * Write any non-suppressed warnings to the log.
-     * 
-     * @throws ClassNotFoundException
-     * @throws ClassFileException
      */
-    public void logWarnings(PrintWriter log) throws ClassFileException, ClassNotFoundException
+    public void logWarnings(PrintWriter log)
     {
         if (this.classTree != null)
         {
@@ -394,11 +393,10 @@ public class GuardDB implements ClassConstants
     /**
      * Generate a mapping table for obfuscation.
      * 
-     * @throws ClassNotFoundException
      * @throws ClassFileException
      * @throws IOException
      */
-    public void createMap(PrintWriter log) throws ClassFileException, ClassNotFoundException, IOException
+    public void createMap(PrintWriter log) throws IOException, ClassFileException
     {
         // Build database if not already done
         if (this.classTree == null)
@@ -447,9 +445,8 @@ public class GuardDB implements ClassConstants
      * 
      * @throws IOException
      * @throws ClassFileException
-     * @throws ClassNotFoundException
      */
-    public void remapTo(File out, PrintWriter log) throws IOException, ClassFileException, ClassNotFoundException
+    public void remapTo(File out, PrintWriter log) throws IOException, ClassFileException
     {
         // Generate map table if not already done
         if (!this.hasMap)

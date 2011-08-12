@@ -57,9 +57,14 @@ public class DeprecatedAttrInfo extends AttrInfo
     {
     }
 
-    /** Export data following the header to a DataOutput stream. */
+    /**
+     * Export data following the header to a DataOutput stream.
+     * 
+     * @throws IOException
+     * @throws ClassFileException
+     */
     @Override
-    public void writeInfo(DataOutput dout)
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
     }
 }

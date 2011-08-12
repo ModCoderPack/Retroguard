@@ -44,7 +44,6 @@ abstract public class CpInfo implements ClassConstants
      * Create a new CpInfo from the data passed.
      * 
      * @throws IOException
-     *             if class file is corrupt or incomplete
      * @throws ClassFileException
      */
     public static CpInfo create(DataInput din) throws IOException, ClassFileException
@@ -135,8 +134,9 @@ abstract public class CpInfo implements ClassConstants
      * Export the representation to a DataOutput stream.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
-    public void write(DataOutput dout) throws IOException
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         if (dout == null)
         {
@@ -150,8 +150,9 @@ abstract public class CpInfo implements ClassConstants
      * Write the 'info' data following the u1tag byte; over-ride this in sub-classes.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
-    abstract protected void writeInfo(DataOutput dout) throws IOException;
+    abstract protected void writeInfo(DataOutput dout) throws IOException, ClassFileException;
 
     /** Return the reference count. */
     public int getRefCount()
@@ -187,10 +188,8 @@ abstract public class CpInfo implements ClassConstants
 
     /**
      * Dump the content of the class file to the specified file (used for debugging).
-     * 
-     * @throws ClassFileException
      */
-    public void dump(PrintWriter pw, ClassFile cf, int index) throws ClassFileException
+    public void dump(PrintWriter pw, ClassFile cf, int index)
     {
     }
 }

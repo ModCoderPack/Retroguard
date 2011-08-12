@@ -40,7 +40,6 @@ public class FieldInfo extends ClassItemInfo
      * Create a new FieldInfo from the file format data in the DataInput stream.
      * 
      * @throws IOException
-     *             if class file is corrupt or incomplete
      * @throws ClassFileException
      */
     public static FieldInfo create(DataInput din, ClassFile cf) throws IOException, ClassFileException

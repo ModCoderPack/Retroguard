@@ -925,33 +925,48 @@ public class NameProvider
                 Cl cls = (Cl)md.getParent();
 
 
-                Md tmpMd;
-                try
-                {
-                    tmpMd = new Md(md.getParent(), md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
-                }
-                catch (Exception e)
-                {
-                    // TODO printStackTrace
-                    e.printStackTrace();
-                    tmpMd = null;
-                }
-                // TODO check for missed exceptions
-//                catch (Exception e)
-//                {
-//                    tmpMd = null;
-//                }
+                Md tmpMd = new Md(cls, md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
 
-                if (tmpMd != null)
+                Iterator children = cls.getDownClasses();
+//                NameProvider.log("Children: " + children.hasMoreElements());
+
+                boolean goingDown = false;
+                do
                 {
-
-                    Iterator children = cls.getDownClasses();
-//                    NameProvider.log("Children: " + children.hasMoreElements());
-
-                    boolean goingDown = false;
-                    do
+                    tmpMd.setParent(cls);
+//                    NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
+                    if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
                     {
-                        tmpMd.setParent(cls);
+                        String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
+                        if (obfName.contains("/"))
+                        {
+                            methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
+                        }
+                        else
+                        {
+                            methodName = obfName;
+                        }
+                        break;
+                    }
+
+                    Iterator iter = null;
+                    try
+                    {
+                        iter = cls.getSuperInterfaces();
+//                        NameProvider.log("Interfaces: " + iter.hasNext());
+                    }
+                    catch (ClassFileException e)
+                    {
+                        // TODO printStackTrace
+                        e.printStackTrace();
+                    }
+
+                    boolean found = false;
+                    while ((iter != null) && iter.hasNext())
+                    {
+                        Cl iface = (Cl)iter.next();
+
+                        tmpMd.setParent(iface);
 //                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
                         if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
                         {
@@ -964,104 +979,50 @@ public class NameProvider
                             {
                                 methodName = obfName;
                             }
-                            break;
+                            found = true;
                         }
+                    }
 
+                    if (found)
+                    {
+                        break;
+                    }
 
-                        Iterator iter;
+                    if (!goingDown)
+                    {
                         try
                         {
-                            iter = cls.getSuperInterfaces();
-//                            NameProvider.log("Interfaces: " + en.hasMoreElements());
+                            cls = cls.getSuperCl();
                         }
                         catch (ClassFileException e)
                         {
                             // TODO printStackTrace
                             e.printStackTrace();
-                            iter = new Iterator()
-                            {
-                                @Override
-                                public boolean hasNext()
-                                {
-                                    return false;
-                                }
-
-                                @Override
-                                public Object next()
-                                {
-                                    return null;
-                                }
-
-                                @Override
-                                public void remove()
-                                {
-                                }
-                            };
+                            cls = null;
                         }
-
-                        boolean found = false;
-                        while (iter.hasNext())
+                        if (cls == null)
                         {
-                            Cl iface = (Cl)iter.next();
-
-                            tmpMd.setParent(iface);
-//                            NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
-                            if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
-                            {
-                                String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
-                                if (obfName.contains("/"))
-                                {
-                                    methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                                }
-                                else
-                                {
-                                    methodName = obfName;
-                                }
-                                found = true;
-                            }
+                            goingDown = true;
                         }
+//                        else
+//                        {
+//                            NameProvider.log("Parent: " + cls.getFullInName());
+//                        }
+                    }
 
-                        if (found)
+                    if (goingDown)
+                    {
+                        if (children.hasNext())
                         {
-                            break;
+                            cls = (Cl)children.next();
+//                            NameProvider.log("Child: " + cls.getFullInName());
                         }
-
-                        if (!goingDown)
+                        else
                         {
-                            try
-                            {
-                                cls = cls.getSuperCl();
-                                if (cls == null)
-                                {
-                                    goingDown = true;
-                                }
-//                                else
-//                                {
-//                                    NameProvider.log("Parent: " + cls.getFullInName());
-//                                }
-                            }
-                            catch (ClassFileException e)
-                            {
-                                // TODO printStackTrace
-                                e.printStackTrace();
-                                goingDown = true;
-                            }
+                            cls = null;
                         }
-
-                        if (goingDown)
-                        {
-                            if (children.hasNext())
-                            {
-                                cls = (Cl)children.next();
-//                                NameProvider.log("Child: " + cls.getFullInName());
-                            }
-                            else
-                            {
-                                cls = null;
-                            }
-                        }
-                    } while (cls != null);
-                }
+                    }
+                } while (cls != null);
             }
 
             int i = 0;

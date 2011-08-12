@@ -665,16 +665,8 @@ public class RgsEnum
 
             // Save exception for throw from nextEntry()
             String excMsg = e.getMessage();
-            if (excMsg != null)
-            {
-                this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno())
-                    + " of script file: " + excMsg);
-            }
-            else
-            {
-                this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno())
-                    + " of script file");
-            }
+            this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno())
+                + " of script file" + ((excMsg != null) ? (": " + excMsg) : ""));
         }
         catch (IOException e)
         {
@@ -696,16 +688,8 @@ public class RgsEnum
 
             // Save exception for throw from nextEntry()
             String excMsg = e.getMessage();
-            if (excMsg != null)
-            {
-                this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno())
-                    + " of script file: " + excMsg);
-            }
-            else
-            {
-                this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno())
-                    + " of script file");
-            }
+            this.nextException = new RGSException("Parser error at line " + Integer.toString(this.tk.lineno())
+                + " of script file" + ((excMsg != null) ? (": " + excMsg) : ""));
         }
     }
 

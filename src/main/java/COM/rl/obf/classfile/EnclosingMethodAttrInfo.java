@@ -69,9 +69,10 @@ public class EnclosingMethodAttrInfo extends AttrInfo
      * Read the data following the header.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    protected void readInfo(DataInput din) throws IOException
+    protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2classIndex = din.readUnsignedShort();
         this.u2methodIndex = din.readUnsignedShort();
@@ -81,9 +82,10 @@ public class EnclosingMethodAttrInfo extends AttrInfo
      * Export data following the header to a DataOutput stream.
      * 
      * @throws IOException
+     * @throws ClassFileException
      */
     @Override
-    public void writeInfo(DataOutput dout) throws IOException
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2classIndex);
         dout.writeShort(this.u2methodIndex);

@@ -98,12 +98,10 @@ public class MemberValuePairInfo
 
     /**
      * Provide debugging dump of this object.
-     * 
-     * @throws ClassFileException
      */
-    public void dump(PrintStream ps, ClassFile cf) throws ClassFileException
+    public void dump(PrintStream ps, ClassFile cf)
     {
-        ps.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8(this.u2memberNameIndex));
+        ps.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8Debug(this.u2memberNameIndex));
         this.value.dump(ps, cf);
     }
 }

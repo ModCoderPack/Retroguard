@@ -46,7 +46,6 @@ public class AttrInfo implements ClassConstants
      * Create a new AttrInfo from the data passed.
      * 
      * @throws IOException
-     *             if class file is corrupt or incomplete
      * @throws ClassFileException
      */
     public static AttrInfo create(DataInput din, ClassFile cf) throws IOException, ClassFileException
@@ -60,90 +59,82 @@ public class AttrInfo implements ClassConstants
         AttrInfo ai = null;
         int attrNameIndex = din.readUnsignedShort();
         int attrLength = din.readInt();
-        CpInfo cpInfo = cf.getCpEntry(attrNameIndex);
-        if (cpInfo instanceof Utf8CpInfo)
+        String attrName = cf.getUtf8(attrNameIndex);
+        if (attrName.equals(ClassConstants.ATTR_Code))
         {
-            String attrName = ((Utf8CpInfo)cpInfo).getString();
-            if (attrName.equals(ClassConstants.ATTR_Code))
-            {
-                ai = new CodeAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_ConstantValue))
-            {
-                ai = new ConstantValueAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_Exceptions))
-            {
-                ai = new ExceptionsAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_LineNumberTable))
-            {
-                ai = new LineNumberTableAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_SourceFile))
-            {
-                ai = new SourceFileAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_LocalVariableTable))
-            {
-                ai = new LocalVariableTableAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_InnerClasses))
-            {
-                ai = new InnerClassesAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_Synthetic))
-            {
-                ai = new SyntheticAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_Deprecated))
-            {
-                ai = new DeprecatedAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_Signature))
-            {
-                ai = new SignatureAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_LocalVariableTypeTable))
-            {
-                ai = new LocalVariableTypeTableAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_RuntimeVisibleAnnotations))
-            {
-                ai = new RuntimeVisibleAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_RuntimeInvisibleAnnotations))
-            {
-                ai = new RuntimeInvisibleAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_RuntimeVisibleParameterAnnotations))
-            {
-                ai = new RuntimeVisibleParameterAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_RuntimeInvisibleParameterAnnotations))
-            {
-                ai = new RuntimeInvisibleParameterAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_AnnotationDefault))
-            {
-                ai = new AnnotationDefaultAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_EnclosingMethod))
-            {
-                ai = new EnclosingMethodAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else if (attrName.equals(ClassConstants.ATTR_StackMapTable))
-            {
-                ai = new StackMapTableAttrInfo(cf, attrNameIndex, attrLength);
-            }
-            else
-            {
-                ai = new AttrInfo(cf, attrNameIndex, attrLength);
-            }
+            ai = new CodeAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_ConstantValue))
+        {
+            ai = new ConstantValueAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_Exceptions))
+        {
+            ai = new ExceptionsAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_LineNumberTable))
+        {
+            ai = new LineNumberTableAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_SourceFile))
+        {
+            ai = new SourceFileAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_LocalVariableTable))
+        {
+            ai = new LocalVariableTableAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_InnerClasses))
+        {
+            ai = new InnerClassesAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_Synthetic))
+        {
+            ai = new SyntheticAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_Deprecated))
+        {
+            ai = new DeprecatedAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_Signature))
+        {
+            ai = new SignatureAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_LocalVariableTypeTable))
+        {
+            ai = new LocalVariableTypeTableAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_RuntimeVisibleAnnotations))
+        {
+            ai = new RuntimeVisibleAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_RuntimeInvisibleAnnotations))
+        {
+            ai = new RuntimeInvisibleAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_RuntimeVisibleParameterAnnotations))
+        {
+            ai = new RuntimeVisibleParameterAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_RuntimeInvisibleParameterAnnotations))
+        {
+            ai = new RuntimeInvisibleParameterAnnotationsAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_AnnotationDefault))
+        {
+            ai = new AnnotationDefaultAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_EnclosingMethod))
+        {
+            ai = new EnclosingMethodAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_StackMapTable))
+        {
+            ai = new StackMapTableAttrInfo(cf, attrNameIndex, attrLength);
         }
         else
         {
-            throw new ClassFileException("Inconsistent reference to Constant Pool.");
+            ai = new AttrInfo(cf, attrNameIndex, attrLength);
         }
         ai.readInfo(din);
         return ai;
@@ -246,12 +237,10 @@ public class AttrInfo implements ClassConstants
 
     /**
      * Provide debugging dump of this object.
-     * 
-     * @throws ClassFileException
      */
-    public void dump(PrintStream ps) throws ClassFileException
+    public void dump(PrintStream ps)
     {
-        ps.println("u2attrNameIndex : " + this.u2attrNameIndex + " " + this.cf.getUtf8(this.u2attrNameIndex));
+        ps.println("u2attrNameIndex : " + this.u2attrNameIndex + " " + this.cf.getUtf8Debug(this.u2attrNameIndex));
         ps.println("u4attrLength : " + this.u4attrLength);
     }
 }

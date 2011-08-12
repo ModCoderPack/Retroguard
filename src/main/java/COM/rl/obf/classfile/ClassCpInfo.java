@@ -64,7 +64,7 @@ public class ClassCpInfo extends CpInfo
      */
     public String getName(ClassFile cf) throws ClassFileException
     {
-        return ((Utf8CpInfo)cf.getCpEntry(this.u2nameIndex)).getString();
+        return cf.getUtf8(this.u2nameIndex);
     }
 
     /**
@@ -102,11 +102,9 @@ public class ClassCpInfo extends CpInfo
 
     /**
      * Dump the content of the class file to the specified file (used for debugging).
-     * 
-     * @throws ClassFileException
      */
-    public void dump(PrintWriter pw, ClassFile cf) throws ClassFileException
+    public void dump(PrintWriter pw, ClassFile cf)
     {
-        pw.println("  Class: " + ((Utf8CpInfo)cf.getCpEntry(this.u2nameIndex)).getString());
+        pw.println("  Class: " + cf.getUtf8Debug(this.u2nameIndex));
     }
 }
