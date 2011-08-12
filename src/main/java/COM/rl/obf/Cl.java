@@ -1225,9 +1225,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     String[] paramAndReturnNames = ClassFile.parseDescriptor(descriptor);
                     Class[] paramTypes = md.getParameterTypes();
                     Class returnType = md.getReturnType();
-                    if (paramAndReturnNames.length == paramTypes.length + 1)
+                    if (paramAndReturnNames.length == (paramTypes.length + 1))
                     {
-                        for (int j = 0; j < paramAndReturnNames.length - 1; j++)
+                        for (int j = 0; j < (paramAndReturnNames.length - 1); j++)
                         {
                             if (!paramAndReturnNames[j].equals(paramTypes[j].getName()))
                             {

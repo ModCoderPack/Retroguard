@@ -52,10 +52,10 @@ public class Tools
         for (int ptr = 0; ptr < b.length; ptr += 3)
         {
             sb.append(Tools.base64[(b[ptr] >> 2) & 0x3F]);
-            if (ptr + 1 < b.length)
+            if ((ptr + 1) < b.length)
             {
                 sb.append(Tools.base64[((b[ptr] << 4) & 0x30) | ((b[ptr + 1] >> 4) & 0x0F)]);
-                if (ptr + 2 < b.length)
+                if ((ptr + 2) < b.length)
                 {
                     sb.append(Tools.base64[((b[ptr + 1] << 2) & 0x3C) | ((b[ptr + 2] >> 6) & 0x03)]);
                     sb.append(Tools.base64[b[ptr + 2] & 0x3F]);

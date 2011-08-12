@@ -59,7 +59,7 @@ public class PatternList
             {
                 pos = pattern.length();
             }
-            if ((scFirst >= 0) && (oldpos + 1 <= scFirst) && (scFirst + 2 <= pos))
+            if ((scFirst >= 0) && ((oldpos + 1) <= scFirst) && ((scFirst + 2) <= pos))
             {
                 this.sc = this.length();
                 pos = pattern.indexOf(ClassTree.PACKAGE_LEVEL, scLast + 2);

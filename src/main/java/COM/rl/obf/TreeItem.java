@@ -128,7 +128,7 @@ public class TreeItem
         int rpos = -1;
         while ((rpos = pattern.indexOf('*', pos + 1)) != -1)
         {
-            if (rpos != pos + 1)
+            if (rpos != (pos + 1))
             {
                 section.add(pattern.substring(pos + 1, rpos));
             }
@@ -190,14 +190,14 @@ public class TreeItem
             // check the tail identifiers (post-** segment)
             for (int i = pl.scIndex() + 1; i < pl.length(); i++)
             {
-                int j = i + sl.length() - pl.length();
+                int j = (i + sl.length()) - pl.length();
                 if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(j)))
                 {
                     return false;
                 }
             }
             // check the merged central identifiers against the ** segment
-            int j = pl.scIndex() + sl.length() - pl.length();
+            int j = (pl.scIndex() + sl.length()) - pl.length();
             if (!TreeItem.isMatch(pl.getSub(pl.scIndex()), sl.getSub(pl.scIndex(), j)))
             {
                 return false;

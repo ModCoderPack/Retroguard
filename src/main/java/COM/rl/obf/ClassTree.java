@@ -334,7 +334,7 @@ public class ClassTree implements NameMapper
                             if ((retainToPublic && Modifier.isPublic(md.getModifiers()))
                                 || (retainToProtected && !Modifier.isPrivate(md.getModifiers()))
                                 || (retainPubProtOnly && (Modifier.isPublic(md.getModifiers())
-                                    || Modifier.isProtected(md.getModifiers()))))
+                                || Modifier.isProtected(md.getModifiers()))))
                             {
                                 if (invert)
                                 {
@@ -359,7 +359,7 @@ public class ClassTree implements NameMapper
                             if ((retainToPublic && Modifier.isPublic(fd.getModifiers()))
                                 || (retainToProtected && !Modifier.isPrivate(fd.getModifiers()))
                                 || (retainPubProtOnly && (Modifier.isPublic(fd.getModifiers())
-                                    || Modifier.isProtected(fd.getModifiers()))))
+                                || Modifier.isProtected(fd.getModifiers()))))
                             {
                                 if (invert)
                                 {

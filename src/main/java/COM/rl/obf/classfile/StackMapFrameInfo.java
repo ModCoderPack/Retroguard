@@ -96,7 +96,7 @@ public class StackMapFrameInfo
         else if ((StackMapFrameInfo.APPEND_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.APPEND_MAX))
         {
             this.u2offsetDelta = din.readUnsignedShort();
-            this.u2numberOfLocals = 1 + this.u1frameType - StackMapFrameInfo.APPEND_MIN;
+            this.u2numberOfLocals = (1 + this.u1frameType) - StackMapFrameInfo.APPEND_MIN;
             this.readLocals(din);
         }
         else if (this.u1frameType == StackMapFrameInfo.FULL_FRAME)

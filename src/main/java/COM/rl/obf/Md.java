@@ -62,10 +62,10 @@ public class Md extends MdFd
         sb.append("(");
         if (types.length > 0)
         {
-            for (int i = 0; i < types.length - 1; i++)
+            for (int i = 0; i < (types.length - 1); i++)
             {
                 sb.append(types[i]);
-                if (i < types.length - 2)
+                if (i < (types.length - 2))
                 {
                     sb.append(", ");
                 }

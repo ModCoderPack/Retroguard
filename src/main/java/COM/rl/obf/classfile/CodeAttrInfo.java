@@ -128,7 +128,7 @@ public class CodeAttrInfo extends AttrInfo
     protected int getAttrInfoLength()
     {
         int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength
-            + this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE;
+            + (this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE);
         for (int i = 0; i < this.u2attributesCount; i++)
         {
             length += AttrInfo.CONSTANT_FIELD_SIZE + this.attributes[i].getAttrInfoLength();
@@ -292,7 +292,7 @@ public class CodeAttrInfo extends AttrInfo
         for (int i = 0; i < this.code.length; i++)
         {
             int opcode = this.code[i] & 0xFF;
-            if ((opcode == 0x12) && (i + 1 < this.code.length)) // ldc
+            if ((opcode == 0x12) && ((i + 1) < this.code.length)) // ldc
             {
                 ldcIndex = this.code[i + 1] & 0xFF;
                 CpInfo ldcCpInfo = this.cf.getCpEntry(ldcIndex);
@@ -301,7 +301,7 @@ public class CodeAttrInfo extends AttrInfo
                     ldcIndex = -1;
                 }
             }
-            else if ((opcode == 0x13) && (i + 2 < this.code.length)) // ldc_w
+            else if ((opcode == 0x13) && ((i + 2) < this.code.length)) // ldc_w
             {
                 ldcIndex = ((this.code[i + 1] & 0xFF) << 8) + (this.code[i + 2] & 0xFF);
                 CpInfo ldcCpInfo = this.cf.getCpEntry(ldcIndex);
@@ -313,7 +313,7 @@ public class CodeAttrInfo extends AttrInfo
             if (((opcodePrev == 0x12) || (opcodePrev == 0x13)) && (ldcIndex != -1)) // ldc or ldc_w and is a StringCpInfo
             {
                 boolean isClassForName = false;
-                if ((opcode == 0xB8) && (i + 2 < this.code.length)) // invokestatic
+                if ((opcode == 0xB8) && ((i + 2) < this.code.length)) // invokestatic
                 {
                     int invokeIndex = ((this.code[i + 1] & 0xFF) << 8) + (this.code[i + 2] & 0xFF);
                     CpInfo cpInfo = this.cf.getCpEntry(invokeIndex);
@@ -328,7 +328,7 @@ public class CodeAttrInfo extends AttrInfo
                         if (("class$".equals(name) && ("(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)
                             || "(Ljava/lang/String;Z)Ljava/lang/Class;".equals(descriptor)))
                             || ("java/lang/Class".equals(className) && "forName".equals(name)
-                                && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
+                            && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
                         {
                             isClassForName = true;
                             if (cpUpdate != null)
@@ -390,7 +390,7 @@ public class CodeAttrInfo extends AttrInfo
                     bytes += 4; // high value
                     if (high >= low)
                     {
-                        bytes += (high - low + 1) * 4; // jump offsets
+                        bytes += ((high - low) + 1) * 4; // jump offsets
                     }
                     break;
                 case 0xAB: // lookupswitch

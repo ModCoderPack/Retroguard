@@ -235,9 +235,9 @@ public class RgsEnum
             if ((((entryType == RgsEntryType.CLASS) || (entryType == RgsEntryType.NOT_CLASS))
                 && !Arrays.asList(RgsEnum.CLASS_ACCESS).contains(flagString))
                 || (((entryType == RgsEntryType.METHOD) || (entryType == RgsEntryType.NOT_METHOD))
-                    && !Arrays.asList(RgsEnum.METHOD_ACCESS).contains(flagString))
+                && !Arrays.asList(RgsEnum.METHOD_ACCESS).contains(flagString))
                 || (((entryType == RgsEntryType.FIELD) || (entryType == RgsEntryType.NOT_FIELD))
-                    && !Arrays.asList(RgsEnum.FIELD_ACCESS).contains(flagString)))
+                && !Arrays.asList(RgsEnum.FIELD_ACCESS).contains(flagString)))
             {
                 throw new RGSException("Invalid access flag '" + flagString + "'");
             }
