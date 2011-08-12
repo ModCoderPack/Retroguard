@@ -603,7 +603,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             else
             {
                 // external to JAR
-                this.scanExtSupers(this.superClass, methods, fields);
+                Cl.scanExtSupers(this.superClass, methods, fields);
             }
             for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
             {
@@ -639,7 +639,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Get lists of method and field names in inheritance namespace
      */
-    private void scanExtSupers(String name, List methods, List fields)
+    private static void scanExtSupers(String name, List methods, List fields)
     {
         Class extClass = null;
         try

@@ -625,31 +625,31 @@ public class ClassFile implements ClassConstants
      * 
      * @throws ClassFileException
      */
-    public void markUtf8Refs(ConstantPool pool) throws ClassFileException
+    public void markUtf8Refs() throws ClassFileException
     {
         // Check for references to Utf8 from outside the constant pool
         for (int i = 0; i < this.fields.length; i++)
         {
-            this.fields[i].markUtf8Refs(pool);
+            this.fields[i].markUtf8Refs(this.constantPool);
         }
         for (int i = 0; i < this.methods.length; i++)
         {
             // also checks Code/LVT attrs here
-            this.methods[i].markUtf8Refs(pool);
+            this.methods[i].markUtf8Refs(this.constantPool);
         }
         for (int i = 0; i < this.attributes.length; i++)
         {
             // checks InnerClasses, SourceFile and all attr names
-            this.attributes[i].markUtf8Refs(pool);
+            this.attributes[i].markUtf8Refs(this.constantPool);
         }
 
         // Now check for references from other CP entries
-        for (Iterator it = pool.iterator(); it.hasNext();)
+        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
         {
             Object o = it.next();
             if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
             {
-                ((CpInfo)o).markUtf8Refs(pool);
+                ((CpInfo)o).markUtf8Refs(this.constantPool);
             }
         }
     }
@@ -659,16 +659,16 @@ public class ClassFile implements ClassConstants
      * 
      * @throws ClassFileException
      */
-    public void markNTRefs(ConstantPool pool) throws ClassFileException
+    public void markNTRefs() throws ClassFileException
     {
         // Now check the method and field CP entries
-        for (Iterator it = pool.iterator(); it.hasNext();)
+        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
         {
             // TODO is this actually right?
             Object o = it.next();
             if (o instanceof RefCpInfo)
             {
-                ((CpInfo)o).markNTRefs(pool);
+                ((CpInfo)o).markNTRefs(this.constantPool);
             }
         }
     }

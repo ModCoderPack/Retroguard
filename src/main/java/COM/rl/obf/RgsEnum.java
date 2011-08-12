@@ -480,12 +480,12 @@ public class RgsEnum
                                 if (name == null)
                                 {
                                     name = this.tk.sval;
-                                    this.checkClassSpec(name);
+                                    RgsEnum.checkClassSpec(name);
                                 }
                                 else
                                 {
                                     String obfName = this.tk.sval;
-                                    this.checkJavaIdentifier(obfName);
+                                    RgsEnum.checkJavaIdentifier(obfName);
                                     entry = new RgsEntry(directive, name);
                                     entry.obfName = obfName;
                                 }
@@ -494,12 +494,12 @@ public class RgsEnum
                                 if (name == null)
                                 {
                                     name = this.tk.sval;
-                                    this.checkClassSpec(name);
+                                    RgsEnum.checkClassSpec(name);
                                 }
                                 else
                                 {
                                     String obfName = this.tk.sval;
-                                    this.checkJavaInnerIdentifier(obfName);
+                                    RgsEnum.checkJavaInnerIdentifier(obfName);
                                     entry = new RgsEntry(directive, name);
                                     entry.obfName = obfName;
                                 }
@@ -508,17 +508,17 @@ public class RgsEnum
                                 if (name == null)
                                 {
                                     name = this.tk.sval;
-                                    this.checkMethodOrFieldSpec(name);
+                                    RgsEnum.checkMethodOrFieldSpec(name);
                                 }
                                 else if (descriptor == null)
                                 {
                                     descriptor = this.tk.sval;
-                                    this.checkMethodDescriptor(descriptor);
+                                    RgsEnum.checkMethodDescriptor(descriptor);
                                 }
                                 else
                                 {
                                     String obfName = this.tk.sval;
-                                    this.checkJavaIdentifier(obfName);
+                                    RgsEnum.checkJavaIdentifier(obfName);
                                     entry = new RgsEntry(directive, name, descriptor);
                                     entry.obfName = obfName;
                                 }
@@ -527,12 +527,12 @@ public class RgsEnum
                                 if (name == null)
                                 {
                                     name = this.tk.sval;
-                                    this.checkMethodOrFieldSpec(name);
+                                    RgsEnum.checkMethodOrFieldSpec(name);
                                 }
                                 else
                                 {
                                     String obfName = this.tk.sval;
-                                    this.checkJavaIdentifier(obfName);
+                                    RgsEnum.checkJavaIdentifier(obfName);
                                     entry = new RgsEntry(directive, name);
                                     entry.obfName = obfName;
                                 }
@@ -596,7 +596,7 @@ public class RgsEnum
                         else if (hasExtends)
                         {
                             extendsName = this.tk.sval;
-                            this.checkClassSpec(extendsName);
+                            RgsEnum.checkClassSpec(extendsName);
                             entry.extendsName = extendsName;
                         }
                         else
@@ -618,7 +618,7 @@ public class RgsEnum
                         else if (hasExtends)
                         {
                             extendsName = this.tk.sval;
-                            this.checkClassSpec(extendsName);
+                            RgsEnum.checkClassSpec(extendsName);
                             entry.extendsName = extendsName;
                         }
                         else
@@ -698,7 +698,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkMethodDescriptor(String s) throws RGSException
+    private static void checkMethodDescriptor(String s) throws RGSException
     {
         if ((s.length() == 0) || (s.charAt(0) != '('))
         {
@@ -709,9 +709,9 @@ public class RgsEnum
         // Check each type
         while ((s.length() > 0) && (s.charAt(0) != ')'))
         {
-            s = this.checkFirstJavaType(s);
+            s = RgsEnum.checkFirstJavaType(s);
         }
-        this.checkJavaType(s.substring(1));
+        RgsEnum.checkJavaType(s.substring(1));
     }
 
     /**
@@ -719,7 +719,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private String checkFirstJavaType(String s) throws RGSException
+    private static String checkFirstJavaType(String s) throws RGSException
     {
         // Pull off the array specifiers
         while (s.charAt(0) == '[')
@@ -753,7 +753,7 @@ public class RgsEnum
                     throw new RGSException("Invalid type '" + s + "'");
                 }
                 // Check the class type
-                this.checkClassSpec(s.substring(0, pos));
+                RgsEnum.checkClassSpec(s.substring(0, pos));
                 break;
 
             default:
@@ -767,9 +767,9 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkJavaType(String s) throws RGSException
+    private static void checkJavaType(String s) throws RGSException
     {
-        if (!this.checkFirstJavaType(s).equals(""))
+        if (!RgsEnum.checkFirstJavaType(s).equals(""))
         {
             throw new RGSException("Invalid type '" + s + "'");
         }
@@ -780,7 +780,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkMethodOrFieldSpec(String s) throws RGSException
+    private static void checkMethodOrFieldSpec(String s) throws RGSException
     {
         if (s.length() == 0)
         {
@@ -793,8 +793,8 @@ public class RgsEnum
         {
             throw new RGSException("Invalid method/field specifier '" + s + "'");
         }
-        this.checkJavaIdentifier(s.substring(pos + 1));
-        this.checkClassSpec(s.substring(0, pos));
+        RgsEnum.checkJavaIdentifier(s.substring(pos + 1));
+        RgsEnum.checkClassSpec(s.substring(0, pos));
     }
 
     /**
@@ -802,7 +802,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkClassSpec(String s) throws RGSException
+    private static void checkClassSpec(String s) throws RGSException
     {
         if (s.length() == 0)
         {
@@ -812,15 +812,15 @@ public class RgsEnum
         int pos = -1;
         while ((pos = s.lastIndexOf('$')) != -1)
         {
-            this.checkJavaInnerIdentifier(s.substring(pos + 1));
+            RgsEnum.checkJavaInnerIdentifier(s.substring(pos + 1));
             s = s.substring(0, pos);
         }
         while ((pos = s.lastIndexOf('/')) != -1)
         {
-            this.checkJavaIdentifier(s.substring(pos + 1));
+            RgsEnum.checkJavaIdentifier(s.substring(pos + 1));
             s = s.substring(0, pos);
         }
-        this.checkJavaIdentifier(s);
+        RgsEnum.checkJavaIdentifier(s);
     }
 
     /**
@@ -828,7 +828,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkClassWCSpec(String s) throws RGSException
+    private static void checkClassWCSpec(String s) throws RGSException
     {
         // Check for wildcard package spec first
         if (s.length() == 0)
@@ -865,15 +865,15 @@ public class RgsEnum
             int pos = -1;
             while ((pos = s.lastIndexOf('/')) != -1)
             {
-                this.checkJavaIdentifier(s.substring(pos + 1));
+                RgsEnum.checkJavaIdentifier(s.substring(pos + 1));
                 s = s.substring(0, pos);
             }
-            this.checkJavaIdentifier(s);
+            RgsEnum.checkJavaIdentifier(s);
         }
         else
         {
             // Check for regular class spec
-            this.checkClassSpec(s);
+            RgsEnum.checkClassSpec(s);
         }
     }
 
@@ -882,7 +882,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkJavaIdentifier(String s) throws RGSException
+    private static void checkJavaIdentifier(String s) throws RGSException
     {
         if ((s.length() == 0) || !Character.isJavaIdentifierStart(s.charAt(0)))
         {
@@ -902,7 +902,7 @@ public class RgsEnum
      * 
      * @throws RGSException
      */
-    private void checkJavaInnerIdentifier(String s) throws RGSException
+    private static void checkJavaInnerIdentifier(String s) throws RGSException
     {
         if (s.length() == 0)
         {

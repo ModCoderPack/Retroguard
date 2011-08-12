@@ -166,11 +166,11 @@ abstract public class PkCl extends TreeItem
     /** Generate unique obfuscated names for this namespace. */
     public void generateNames()
     {
-        this.generateNames(this.cls);
+        PkCl.generateNames(this.cls);
     }
 
     /** Generate unique obfuscated names for a given namespace. */
-    protected void generateNames(Map hash)
+    protected static void generateNames(Map hash)
     {
         for (Iterator iter = hash.values().iterator(); iter.hasNext();)
         {

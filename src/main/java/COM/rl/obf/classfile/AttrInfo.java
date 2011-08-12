@@ -156,6 +156,7 @@ public class AttrInfo implements ClassConstants
     }
 
     /** Return the String name of the attribute; over-ride this in sub-classes. */
+    @SuppressWarnings("static-method")
     protected String getAttrName()
     {
         return ClassConstants.ATTR_Unknown;

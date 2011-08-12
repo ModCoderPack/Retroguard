@@ -188,7 +188,7 @@ public class Pk extends PkCl
     public void generateNames()
     {
         super.generateNames();
-        this.generateNames(this.pks);
+        PkCl.generateNames(this.pks);
     }
 
     /** Generate unique-across-run obfuscated repackage name. */

@@ -453,7 +453,7 @@ public class ClassTree implements NameMapper
     public void retainPackageMap(String name, String obfName) throws ClassFileException
     {
         Pk pk = this.getPk(name);
-        this.retainItemMap(pk, obfName);
+        ClassTree.retainItemMap(pk, obfName);
     }
 
     /**
@@ -479,7 +479,7 @@ public class ClassTree implements NameMapper
     public void retainClassMap(String name, String obfName) throws ClassFileException
     {
         Cl cl = this.getCl(name);
-        this.retainItemMap(cl, obfName);
+        ClassTree.retainItemMap(cl, obfName);
     }
 
     /**
@@ -490,7 +490,7 @@ public class ClassTree implements NameMapper
     public void retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
     {
         Md md = this.getMd(name, descriptor);
-        this.retainItemMap(md, obfName);
+        ClassTree.retainItemMap(md, obfName);
     }
 
     /**
@@ -501,11 +501,11 @@ public class ClassTree implements NameMapper
     public void retainFieldMap(String name, String obfName) throws ClassFileException
     {
         Fd fd = this.getFd(name);
-        this.retainItemMap(fd, obfName);
+        ClassTree.retainItemMap(fd, obfName);
     }
 
     /** Mark an item for retention, and specify its new name. */
-    private void retainItemMap(TreeItem item, String obfName)
+    private static void retainItemMap(TreeItem item, String obfName)
     {
         if (!item.isFixed())
         {

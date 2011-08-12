@@ -98,10 +98,10 @@ public class ConstantPool
         });
 
         // Count the direct references to Utf8 entries
-        this.myClassFile.markUtf8Refs(this);
+        this.myClassFile.markUtf8Refs();
 
         // Count the direct references to NameAndType entries
-        this.myClassFile.markNTRefs(this);
+        this.myClassFile.markNTRefs();
 
         // Go through pool, clearing the Utf8 entries which have no references
         this.walkPool(new PoolAction()
