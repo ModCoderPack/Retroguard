@@ -20,6 +20,8 @@ public enum RgsEntryType
     private String directive;
 
     /**
+     * Constructor
+     * 
      * @param directive
      */
     RgsEntryType(String directive)

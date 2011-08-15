@@ -163,7 +163,7 @@ public class CodeAttrInfo extends AttrInfo
      * <tt>List</tt> are killed).
      */
     @Override
-    protected void trimAttrsExcept(List keepAttrs)
+    protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
         for (int i = 0; i < this.attributes.length; i++)
@@ -179,7 +179,7 @@ public class CodeAttrInfo extends AttrInfo
         }
 
         // Delete the marked attributes
-        List left = new ArrayList();
+        List<AttrInfo> left = new ArrayList<AttrInfo>();
         for (int i = 0; i < this.attributes.length; i++)
         {
             if (this.attributes[i] != null)
@@ -187,7 +187,7 @@ public class CodeAttrInfo extends AttrInfo
                 left.add(this.attributes[i]);
             }
         }
-        this.attributes = (AttrInfo[])left.toArray(new AttrInfo[0]);
+        this.attributes = left.toArray(new AttrInfo[0]);
         this.u2attributesCount = left.size();
     }
 
@@ -289,7 +289,7 @@ public class CodeAttrInfo extends AttrInfo
      * @param cpUpdate
      * @throws ClassFileException
      */
-    protected void walkUpdateClassStrings(Map cpUpdate) throws ClassFileException
+    protected void walkUpdateClassStrings(Map<Integer, ?> cpUpdate) throws ClassFileException
     {
         this.walkClassStrings(null, cpUpdate);
     }
@@ -304,7 +304,7 @@ public class CodeAttrInfo extends AttrInfo
      * @param cpUpdate
      * @throws ClassFileException
      */
-    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Map cpUpdate) throws ClassFileException
+    private FlagHashtable walkClassStrings(FlagHashtable cpToFlag, Map<Integer, ?> cpUpdate) throws ClassFileException
     {
         int opcodePrev = -1;
         int ldcIndex = -1;

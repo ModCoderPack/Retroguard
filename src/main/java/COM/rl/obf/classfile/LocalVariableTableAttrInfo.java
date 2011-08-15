@@ -34,7 +34,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2localVariableTableLength;
-    private List localVariableTable;
+    private List<LocalVariableInfo> localVariableTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -67,7 +67,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
      */
     protected LocalVariableInfo[] getLocalVariableTable()
     {
-        return (LocalVariableInfo[])this.localVariableTable.toArray(new LocalVariableInfo[0]);
+        return this.localVariableTable.toArray(new LocalVariableInfo[0]);
     }
 
     /**
@@ -78,9 +78,9 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator iter = this.localVariableTable.iterator(); iter.hasNext();)
+        for (Iterator<LocalVariableInfo> iter = this.localVariableTable.iterator(); iter.hasNext();)
         {
-            LocalVariableInfo lv = (LocalVariableInfo)iter.next();
+            LocalVariableInfo lv = iter.next();
             lv.markUtf8Refs(pool);
         }
     }
@@ -95,7 +95,7 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2localVariableTableLength = din.readUnsignedShort();
-        this.localVariableTable = new ArrayList(this.u2localVariableTableLength);
+        this.localVariableTable = new ArrayList<LocalVariableInfo>(this.u2localVariableTableLength);
         for (int i = 0; i < this.u2localVariableTableLength; i++)
         {
             this.localVariableTable.add(LocalVariableInfo.create(din));
@@ -112,9 +112,9 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2localVariableTableLength);
-        for (Iterator iter = this.localVariableTable.iterator(); iter.hasNext();)
+        for (Iterator<LocalVariableInfo> iter = this.localVariableTable.iterator(); iter.hasNext();)
         {
-            LocalVariableInfo lv = (LocalVariableInfo)iter.next();
+            LocalVariableInfo lv = iter.next();
             lv.write(dout);
         }
     }
@@ -127,9 +127,9 @@ public class LocalVariableTableAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator iter = this.localVariableTable.iterator(); iter.hasNext();)
+        for (Iterator<LocalVariableInfo> iter = this.localVariableTable.iterator(); iter.hasNext();)
         {
-            LocalVariableInfo lv = (LocalVariableInfo)iter.next();
+            LocalVariableInfo lv = iter.next();
             lv.remap(cf, nm);
         }
     }

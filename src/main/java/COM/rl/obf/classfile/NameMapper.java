@@ -33,7 +33,7 @@ public interface NameMapper
     /**
      * Return a <tt>List</tt> of attributes marked to keep.
      */
-    public List getAttrsToKeep();
+    public List<String> getAttrsToKeep();
 
     /**
      * Mapping for fully qualified class name.

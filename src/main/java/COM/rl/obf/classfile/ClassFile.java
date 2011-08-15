@@ -137,7 +137,7 @@ public class ClassFile implements ClassConstants
     public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws ClassFileException
     {
         // Check for field descriptor
-        List names = new ArrayList();
+        List<String> names = new ArrayList<String>();
         if (descriptor.charAt(0) != '(')
         {
             names.add(descriptor);
@@ -192,16 +192,16 @@ public class ClassFile implements ClassConstants
         if (doTranslate)
         {
             // Translate the names from JVM to Class.forName() format.
-            List translatedNames = new ArrayList();
-            for (Iterator iter = names.iterator(); iter.hasNext();)
+            List<String> translatedNames = new ArrayList<String>();
+            for (Iterator<String> iter = names.iterator(); iter.hasNext();)
             {
-                String name = (String)iter.next();
+                String name = iter.next();
                 translatedNames.add(ClassFile.translateType(name, isDisplay));
             }
-            return (String[])translatedNames.toArray(new String[0]);
+            return translatedNames.toArray(new String[0]);
         }
 
-        return (String[])names.toArray(new String[0]);
+        return names.toArray(new String[0]);
     }
 
     /**
@@ -474,9 +474,9 @@ public class ClassFile implements ClassConstants
      * 
      * @throws ClassFileException
      */
-    public List getInterfaces() throws ClassFileException
+    public List<String> getInterfaces() throws ClassFileException
     {
-        List interfaces = new ArrayList();
+        List<String> interfaces = new ArrayList<String>();
         for (int i = 0; i < this.u2interfacesCount; i++)
         {
             interfaces.add(this.toName(this.u2interfaces[i]));
@@ -612,9 +612,9 @@ public class ClassFile implements ClassConstants
     /**
      * List methods which can break obfuscated code, and log to a <tt>List</tt>.
      */
-    public List getDangerousMethods()
+    public List<String> getDangerousMethods()
     {
-        return this.listDangerMethods(new ArrayList());
+        return this.listDangerMethods(new ArrayList<String>());
     }
 
     /**
@@ -622,7 +622,7 @@ public class ClassFile implements ClassConstants
      * 
      * @param list
      */
-    public List listDangerMethods(List list)
+    public List<String> listDangerMethods(List<String> list)
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
@@ -730,7 +730,7 @@ public class ClassFile implements ClassConstants
      * 
      * @param keepAttrs
      */
-    public void trimAttrsExcept(List keepAttrs)
+    public void trimAttrsExcept(List<String> keepAttrs)
     {
         // Merge additional attributes with required list
         keepAttrs.addAll(Arrays.asList(ClassConstants.REQUIRED_ATTRS));
@@ -757,7 +757,7 @@ public class ClassFile implements ClassConstants
         }
 
         // Delete the marked attributes
-        List left = new ArrayList();
+        List<AttrInfo> left = new ArrayList<AttrInfo>();
         for (int i = 0; i < this.attributes.length; i++)
         {
             if (this.attributes[i] != null)
@@ -765,7 +765,7 @@ public class ClassFile implements ClassConstants
                 left.add(this.attributes[i]);
             }
         }
-        this.attributes = (AttrInfo[])left.toArray(new AttrInfo[0]);
+        this.attributes = left.toArray(new AttrInfo[0]);
         this.u2attributesCount = left.size();
 
         // Signal that unknown attributes are gone
@@ -787,7 +787,7 @@ public class ClassFile implements ClassConstants
      */
     public void trimAttrs()
     {
-        this.trimAttrsExcept(Collections.emptyList());
+        this.trimAttrsExcept(Collections.<String>emptyList());
     }
 
     /**
@@ -797,7 +797,7 @@ public class ClassFile implements ClassConstants
      */
     public void trimAttrs(NameMapper nm)
     {
-        List attrs = nm.getAttrsToKeep();
+        List<String> attrs = nm.getAttrsToKeep();
         this.trimAttrsExcept(attrs);
     }
 
@@ -988,12 +988,12 @@ public class ClassFile implements ClassConstants
             }
         }
         // Analyse String mapping flags and generate updated Strings
-        Map cpUpdate = new HashMap();
-        for (Iterator iter = cpToFlag.entrySet().iterator(); iter.hasNext();)
+        Map<Integer, Integer> cpUpdate = new HashMap<Integer, Integer>();
+        for (Iterator<Map.Entry<CpInfo, StringCpInfoFlags>> iter = cpToFlag.entrySet().iterator(); iter.hasNext();)
         {
-            Map.Entry entry = (Map.Entry)iter.next();
+            Map.Entry<CpInfo, StringCpInfoFlags> entry = iter.next();
             StringCpInfo stringCpInfo = (StringCpInfo)entry.getKey();
-            StringCpInfoFlags flags = (StringCpInfoFlags)entry.getValue();
+            StringCpInfoFlags flags = entry.getValue();
             String name = ClassFile.backTranslate(this.getUtf8(stringCpInfo.getStringIndex()));
             // String accessed as Class.forName or .class?
             if (ClassFile.isClassSpec(name) && flags.forNameFlag)

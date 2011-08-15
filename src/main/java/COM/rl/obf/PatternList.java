@@ -33,7 +33,7 @@ public class PatternList
 
 
     // Fields ----------------------------------------------------------------
-    private List subs = new ArrayList();
+    private List<String> subs = new ArrayList<String>();
     private int sc = -1;
 
 
@@ -46,7 +46,7 @@ public class PatternList
 
     // Instance Methods ------------------------------------------------------
     /**
-     * Constructor
+     * Private constructor
      * 
      * @param pattern
      */
@@ -107,7 +107,7 @@ public class PatternList
      */
     public String getSub(int i)
     {
-        return (String)this.subs.get(i);
+        return this.subs.get(i);
     }
 
     /**

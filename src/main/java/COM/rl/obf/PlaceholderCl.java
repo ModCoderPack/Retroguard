@@ -52,6 +52,6 @@ public class PlaceholderCl extends Cl
      */
     public PlaceholderCl(TreeItem parent, boolean isInnerClass, String name)
     {
-        super(parent, isInnerClass, name, null, Collections.emptyList(), 0);
+        super(parent, isInnerClass, name, null, Collections.<String>emptyList(), 0);
     }
 }

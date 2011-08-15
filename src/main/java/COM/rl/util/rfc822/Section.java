@@ -33,7 +33,7 @@ public class Section
 
 
     // Fields ----------------------------------------------------------------
-    private List headers;
+    private List<Header> headers;
 
 
     // Class Methods ---------------------------------------------------------
@@ -45,7 +45,7 @@ public class Section
      */
     public Section()
     {
-        this.headers = new ArrayList();
+        this.headers = new ArrayList<Header>();
     }
 
     /**
@@ -72,7 +72,7 @@ public class Section
     /**
      * Return an Iterator of headers.
      */
-    public Iterator iterator()
+    public Iterator<Header> iterator()
     {
         return this.headers.iterator();
     }
@@ -86,9 +86,9 @@ public class Section
     {
         if (queryHeader != null)
         {
-            for (Iterator it = this.headers.iterator(); it.hasNext();)
+            for (Iterator<Header> it = this.headers.iterator(); it.hasNext();)
             {
-                Header header = (Header)it.next();
+                Header header = it.next();
                 if (queryHeader.equals(header))
                 {
                     return true;
@@ -112,9 +112,9 @@ public class Section
         }
 
         // For now, do linear search of headers
-        for (Iterator iter = this.headers.iterator(); iter.hasNext();)
+        for (Iterator<Header> iter = this.headers.iterator(); iter.hasNext();)
         {
-            Header header = (Header)iter.next();
+            Header header = iter.next();
             if (tag.equals(header.getTag()))
             {
                 // Found
@@ -134,9 +134,9 @@ public class Section
      */
     public void writeString(Writer writer) throws IOException
     {
-        for (Iterator iter = this.headers.iterator(); iter.hasNext();)
+        for (Iterator<Header> iter = this.headers.iterator(); iter.hasNext();)
         {
-            Header header = (Header)iter.next();
+            Header header = iter.next();
             header.writeString(writer);
         }
         writer.write("\015\012");
@@ -149,9 +149,9 @@ public class Section
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Iterator iter = this.headers.iterator(); iter.hasNext();)
+        for (Iterator<Header> iter = this.headers.iterator(); iter.hasNext();)
         {
-            Header header = (Header)iter.next();
+            Header header = iter.next();
             sb.append(header.toString());
             sb.append("\015\012");
         }

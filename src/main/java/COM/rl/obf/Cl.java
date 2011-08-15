@@ -41,17 +41,17 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Owns a list of methods
      */
-    private Map mds = new HashMap();
+    private Map<String, Md> mds = new HashMap<String, Md>();
 
     /**
      * Owns a list of special methods
      */
-    private Map mdsSpecial = new HashMap();
+    private Map<String, Md> mdsSpecial = new HashMap<String, Md>();
 
     /**
      * Owns a list of fields
      */
-    private Map fds = new HashMap();
+    private Map<String, Fd> fds = new HashMap<String, Fd>();
 
     /**
      * Has the class been resolved already?
@@ -71,7 +71,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Names of implemented interfaces
      */
-    private List superInterfaces;
+    private List<String> superInterfaces;
 
     /**
      * Is this an inner class?
@@ -96,7 +96,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Danger-method warnings
      */
-    private List warningList = new ArrayList();
+    private List<String> warningList = new ArrayList<String>();
 
     public static int nameSpace = 0;
 
@@ -115,7 +115,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param superInterfaces
      * @param access
      */
-    public Cl(TreeItem parent, boolean isInnerClass, String name, String superClass, List superInterfaces, int access)
+    public Cl(TreeItem parent, boolean isInnerClass, String name, String superClass, List<String> superInterfaces, int access)
     {
         super(parent, name);
         this.superClass = superClass;
@@ -181,9 +181,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     {
         if (this.hasWarnings())
         {
-            for (Iterator iter = this.warningList.iterator(); iter.hasNext();)
+            for (Iterator<String> iter = this.warningList.iterator(); iter.hasNext();)
             {
-                String warning = (String)iter.next();
+                String warning = iter.next();
                 log.println("# " + warning);
             }
         }
@@ -197,7 +197,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      */
     public Md getMethod(String name, String descriptor)
     {
-        return (Md)this.mds.get(name + descriptor);
+        return this.mds.get(name + descriptor);
     }
 
     /**
@@ -208,7 +208,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      */
     public Md getMethodSpecial(String name, String descriptor)
     {
-        return (Md)this.mdsSpecial.get(name + descriptor);
+        return this.mdsSpecial.get(name + descriptor);
     }
 
     /**
@@ -216,12 +216,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * 
      * @param name
      */
-    public Iterator getObfMethods(String name)
+    public Iterator<Md> getObfMethods(String name)
     {
-        List mdsMatch = new ArrayList();
-        for (Iterator iter = this.mds.values().iterator(); iter.hasNext();)
+        List<Md> mdsMatch = new ArrayList<Md>();
+        for (Iterator<Md> iter = this.mds.values().iterator(); iter.hasNext();)
         {
-            Md md = (Md)iter.next();
+            Md md = iter.next();
             if (name.equals(md.getOutName()))
             {
                 mdsMatch.add(md);
@@ -237,13 +237,13 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      */
     public Fd getField(String name)
     {
-        return (Fd)this.fds.get(name);
+        return this.fds.get(name);
     }
 
     /**
      * Get an Collection of methods.
      */
-    public Iterator getMethodIter()
+    public Iterator<Md> getMethodIter()
     {
         return this.mds.values().iterator();
     }
@@ -251,7 +251,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * Get an Collection of fields.
      */
-    public Iterator getFieldIter()
+    public Iterator<Fd> getFieldIter()
     {
         return this.fds.values().iterator();
     }
@@ -276,12 +276,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * 
      * @throws ClassFileException
      */
-    public Iterator getSuperInterfaces() throws ClassFileException
+    public Iterator<Cl> getSuperInterfaces() throws ClassFileException
     {
-        List list = new ArrayList();
-        for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+        List<Cl> list = new ArrayList<Cl>();
+        for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
         {
-            String si = (String)iter.next();
+            String si = iter.next();
             Cl interfaceItem = this.classTree.getCl(si);
             if (interfaceItem != null)
             {
@@ -313,9 +313,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (checkInterfaces)
             {
-                for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+                for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
                 {
-                    String si = (String)iter.next();
+                    String si = iter.next();
                     if (queryName.equals(si))
                     {
                         return true;
@@ -333,7 +333,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             else
             {
-                Class superClExt = null;
+                Class<?> superClExt = null;
                 try
                 {
                     superClExt = Class.forName(ClassFile.translate(this.superClass));
@@ -353,9 +353,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (checkInterfaces)
             {
-                for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+                for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
                 {
-                    String si = (String)iter.next();
+                    String si = iter.next();
                     Cl interClInt = this.classTree.getCl(si);
                     if (interClInt != null)
                     {
@@ -366,7 +366,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                     else
                     {
-                        Class interClExt = null;
+                        Class<?> interClExt = null;
                         try
                         {
                             interClExt = Class.forName(ClassFile.translate(si));
@@ -410,7 +410,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param classTree
      * @param clExt
      */
-    protected static boolean hasAsSuperExt(String queryName, boolean checkInterfaces, ClassTree classTree, Class clExt)
+    protected static boolean hasAsSuperExt(String queryName, boolean checkInterfaces, ClassTree classTree, Class<?> clExt)
     {
         try
         {
@@ -421,8 +421,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             // Check our parents
             String queryNameExt = ClassFile.translate(queryName);
-            Class superClass = clExt.getSuperclass();
-            List superInterfaces = Arrays.asList(clExt.getInterfaces());
+            Class<?> superClass = clExt.getSuperclass();
+            List<Class<?>> superInterfaces = Arrays.asList(clExt.getInterfaces());
             if (superClass != null)
             {
                 if (queryNameExt.equals(superClass.getName()))
@@ -432,9 +432,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (checkInterfaces)
             {
-                for (Iterator iter = superInterfaces.iterator(); iter.hasNext();)
+                for (Iterator<Class<?>> iter = superInterfaces.iterator(); iter.hasNext();)
                 {
-                    Class si = (Class)iter.next();
+                    Class<?> si = iter.next();
                     if (queryNameExt.equals(si.getName()))
                     {
                         return true;
@@ -454,7 +454,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 else
                 {
-                    Class superClExt = superClass;
+                    Class<?> superClExt = superClass;
                     if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, superClExt))
                     {
                         return true;
@@ -463,9 +463,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             if (checkInterfaces)
             {
-                for (Iterator iter = superInterfaces.iterator(); iter.hasNext();)
+                for (Iterator<Class<?>> iter = superInterfaces.iterator(); iter.hasNext();)
                 {
-                    Class si = (Class)iter.next();
+                    Class<?> si = iter.next();
                     Cl interClInt = classTree.getCl(ClassFile.backTranslate(si.getName()));
                     if (interClInt != null)
                     {
@@ -476,7 +476,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                     else
                     {
-                        Class interClExt = si;
+                        Class<?> interClExt = si;
                         if (Cl.hasAsSuperExt(queryName, checkInterfaces, classTree, interClExt))
                         {
                             return true;
@@ -523,7 +523,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * Add an inner class.
      */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access)
+    public Cl addClass(String name, String superName, List<String> interfaceNames, int access)
     {
         return this.addClass(true, name, superName, interfaceNames, access);
     }
@@ -656,9 +656,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             superClassItem.nameListDowns.add(this);
         }
-        for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+        for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
         {
-            String si = (String)iter.next();
+            String si = iter.next();
             Cl interfaceItem = this.classTree.getCl(si);
             if (interfaceItem != null)
             {
@@ -679,8 +679,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         if (!this.isResolved)
         {
             // Get lists of method and field names in inheritance namespace
-            List methods = new ArrayList();
-            List fields = new ArrayList();
+            List<String> methods = new ArrayList<String>();
+            List<String> fields = new ArrayList<String>();
             this.scanNameSpaceExcept(null, methods, fields);
 
             // Resolve a full name space
@@ -699,7 +699,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param fields
      * @throws ClassFileException
      */
-    private void scanNameSpaceExcept(Cl ignoreCl, List methods, List fields) throws ClassFileException
+    private void scanNameSpaceExcept(Cl ignoreCl, List<String> methods, List<String> fields) throws ClassFileException
     {
         // Special case: we are java/lang/Object
         if (this.superClass == null)
@@ -725,9 +725,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 // external to JAR
                 Cl.scanExtSupers(this.superClass, methods, fields);
             }
-            for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+            for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
             {
-                String si = (String)iter.next();
+                String si = iter.next();
                 Cl interfaceItem = this.classTree.getCl(si);
                 if ((interfaceItem != null) && (interfaceItem != ignoreCl))
                 {
@@ -763,9 +763,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param methods
      * @param fields
      */
-    private static void scanExtSupers(String name, List methods, List fields)
+    private static void scanExtSupers(String name, List<String> methods, List<String> fields)
     {
-        Class extClass = null;
+        Class<?> extClass = null;
         try
         {
             extClass = Class.forName(ClassFile.translate(name));
@@ -778,20 +778,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Get public methods and fields from supers and interfaces up the tree
-        List allPubMethods = Arrays.asList(extClass.getMethods());
-        for (Iterator iter = allPubMethods.iterator(); iter.hasNext();)
+        List<Method> allPubMethods = Arrays.asList(extClass.getMethods());
+        for (Iterator<Method> iter = allPubMethods.iterator(); iter.hasNext();)
         {
-            Method md = (Method)iter.next();
+            Method md = iter.next();
             String methodName = md.getName();
             if (!methods.contains(methodName))
             {
                 methods.add(methodName);
             }
         }
-        List allPubFields = Arrays.asList(extClass.getFields());
-        for (Iterator iter = allPubFields.iterator(); iter.hasNext();)
+        List<Field> allPubFields = Arrays.asList(extClass.getFields());
+        for (Iterator<Field> iter = allPubFields.iterator(); iter.hasNext();)
         {
-            Field fd = (Field)iter.next();
+            Field fd = iter.next();
             String fieldName = fd.getName();
             if (!fields.contains(fieldName))
             {
@@ -801,10 +801,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         // Go up the super hierarchy, adding all non-public methods/fields
         while (extClass != null)
         {
-            List allClassMethods = Arrays.asList(extClass.getDeclaredMethods());
-            for (Iterator iter = allClassMethods.iterator(); iter.hasNext();)
+            List<Method> allClassMethods = Arrays.asList(extClass.getDeclaredMethods());
+            for (Iterator<Method> iter = allClassMethods.iterator(); iter.hasNext();)
             {
-                Method md = (Method)iter.next();
+                Method md = iter.next();
                 if (!Modifier.isPublic(md.getModifiers()))
                 {
                     String methodName = md.getName();
@@ -814,10 +814,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
             }
-            List allClassFields = Arrays.asList(extClass.getDeclaredFields());
-            for (Iterator iter = allClassFields.iterator(); iter.hasNext();)
+            List<Field> allClassFields = Arrays.asList(extClass.getDeclaredFields());
+            for (Iterator<Field> iter = allClassFields.iterator(); iter.hasNext();)
             {
-                Field fd = (Field)iter.next();
+                Field fd = iter.next();
                 if (!Modifier.isPublic(fd.getModifiers()))
                 {
                     String fieldName = fd.getName();
@@ -837,11 +837,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param methods
      * @param fields
      */
-    private void scanThis(List methods, List fields)
+    private void scanThis(List<String> methods, List<String> fields)
     {
-        for (Iterator mdIter = this.mds.values().iterator(); mdIter.hasNext();)
+        for (Iterator<Md> mdIter = this.mds.values().iterator(); mdIter.hasNext();)
         {
-            Md md = (Md)mdIter.next();
+            Md md = mdIter.next();
             if (md.isFixed())
             {
                 String name = md.getOutName();
@@ -851,9 +851,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
             }
         }
-        for (Iterator fdIter = this.fds.values().iterator(); fdIter.hasNext();)
+        for (Iterator<Fd> fdIter = this.fds.values().iterator(); fdIter.hasNext();)
         {
-            Fd fd = (Fd)fdIter.next();
+            Fd fd = fdIter.next();
             if (fd.isFixed())
             {
                 String name = fd.getOutName();
@@ -888,9 +888,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 superCl.resolveNameSpaceExcept(this);
             }
-            for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+            for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
             {
-                String si = (String)iter.next();
+                String si = iter.next();
                 Cl interfaceItem = this.classTree.getCl(si);
                 if ((interfaceItem != null) && (interfaceItem != ignoreCl))
                 {
@@ -935,18 +935,18 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         Cl superClassItem = this.classTree.getCl(this.superClass);
         this.nameListUps.add(superClassItem != null ? (NameListUp)superClassItem : this.getExtNameListUp(this.superClass));
-        for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+        for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
         {
-            String si = (String)iter.next();
+            String si = iter.next();
             Cl interfaceItem = this.classTree.getCl(si);
             this.nameListUps.add(interfaceItem != null ? (NameListUp)interfaceItem : this.getExtNameListUp(si));
         }
 
         // Run through each method/field in this class checking for reservations and obfuscating accordingly
         nextMethod:
-        for (Iterator mdIter = this.mds.values().iterator(); mdIter.hasNext();)
+        for (Iterator<Md> mdIter = this.mds.values().iterator(); mdIter.hasNext();)
         {
-            Md md = (Md)mdIter.next();
+            Md md = mdIter.next();
             if (!md.isFixed())
             {
                 // Check for name reservation via derived classes
@@ -986,9 +986,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
         }
         nextField:
-        for (Iterator fdIter = this.fds.values().iterator(); fdIter.hasNext();)
+        for (Iterator<Fd> fdIter = this.fds.values().iterator(); fdIter.hasNext();)
         {
-            Fd fd = (Fd)fdIter.next();
+            Fd fd = fdIter.next();
             if (!fd.isFixed())
             {
                 // Check for name reservation via derived classes
@@ -1174,9 +1174,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     return theObfName;
                 }
             }
-            for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+            for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
             {
-                String si = (String)iter.next();
+                String si = iter.next();
                 Cl interfaceItem = this.classTree.getCl(si);
                 if (interfaceItem != caller)
                 {
@@ -1234,9 +1234,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     return theObfName;
                 }
             }
-            for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+            for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
             {
-                String si = (String)iter.next();
+                String si = iter.next();
                 Cl interfaceItem = this.classTree.getCl(si);
                 if (interfaceItem != caller)
                 {
@@ -1265,7 +1265,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return null;
     }
 
-    private static Map extNameListUpCache = new HashMap();
+    private static Map<String, NameListUp> extNameListUpCache = new HashMap<String, NameListUp>();
 
     /**
      * Construct, or retrieve from cache, the NameListUp object for an external class/interface
@@ -1275,7 +1275,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      */
     private NameListUp getExtNameListUp(String name) throws ClassFileException
     {
-        NameListUp nl = (NameListUp)Cl.extNameListUpCache.get(name);
+        NameListUp nl = Cl.extNameListUpCache.get(name);
         if (nl == null)
         {
             nl = new ExtNameListUp(name);
@@ -1290,8 +1290,8 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     class ExtNameListUp implements NameListUp
     {
         // Class's fully qualified name
-        private Class extClass;
-        private List methods = null;
+        private Class<?> extClass;
+        private List<Method> methods = null;
 
         /**
          * Constructor
@@ -1318,7 +1318,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
          * 
          * @param extClass
          */
-        public ExtNameListUp(Class extClass)
+        public ExtNameListUp(Class<?> extClass)
         {
             this.extClass = extClass;
         }
@@ -1346,10 +1346,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (this.methods == null)
             {
                 this.methods = this.getAllDeclaredMethods(this.extClass);
-                List pruned = new ArrayList();
-                for (Iterator iter = this.methods.iterator(); iter.hasNext();)
+                List<Method> pruned = new ArrayList<Method>();
+                for (Iterator<Method> iter = this.methods.iterator(); iter.hasNext();)
                 {
-                    Method md = (Method)iter.next();
+                    Method md = iter.next();
                     int modifiers = md.getModifiers();
                     if (!Modifier.isPrivate(modifiers))
                     {
@@ -1361,14 +1361,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
             // Check each public/protected class method against the named one
             nextMethod:
-            for (Iterator iter = this.methods.iterator(); iter.hasNext();)
+            for (Iterator<Method> iter = this.methods.iterator(); iter.hasNext();)
             {
-                Method md = (Method)iter.next();
+                Method md = iter.next();
                 if (name.equals(md.getName()))
                 {
                     String[] paramAndReturnNames = ClassFile.parseDescriptor(descriptor);
-                    Class[] paramTypes = md.getParameterTypes();
-                    Class returnType = md.getReturnType();
+                    Class<?>[] paramTypes = md.getParameterTypes();
+                    Class<?> returnType = md.getReturnType();
                     if (paramAndReturnNames.length == (paramTypes.length + 1))
                     {
                         for (int j = 0; j < (paramAndReturnNames.length - 1); j++)
@@ -1430,9 +1430,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
          * 
          * @param theClass
          */
-        private List getAllDeclaredMethods(Class theClass)
+        private List<Method> getAllDeclaredMethods(Class<?> theClass)
         {
-            List ma = new ArrayList();
+            List<Method> ma = new ArrayList<Method>();
 
             // Get the public methods from all supers and interfaces up the tree
             ma.addAll(Arrays.asList(theClass.getMethods()));
@@ -1453,9 +1453,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
          * @param theClass
          * @param name
          */
-        private Field getAllDeclaredField(Class theClass, String name)
+        private Field getAllDeclaredField(Class<?> theClass, String name)
         {
-            Class origClass = theClass;
+            Class<?> origClass = theClass;
 
             // Check for field in supers
             while (theClass != null)
@@ -1497,7 +1497,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      */
     public void walkGroup(TreeAction ta) throws ClassFileException
     {
-        List done = new ArrayList();
+        List<Cl> done = new ArrayList<Cl>();
         this.walkGroup(ta, this, done);
     }
 
@@ -1509,7 +1509,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param done
      * @throws ClassFileException
      */
-    private void walkGroup(TreeAction ta, Cl cl, List done) throws ClassFileException
+    private void walkGroup(TreeAction ta, Cl cl, List<Cl> done) throws ClassFileException
     {
         if (!done.contains(cl))
         {
@@ -1524,9 +1524,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 this.walkGroup(ta, superCl, done);
             }
             // Traverse super interfaces
-            for (Iterator iter = this.superInterfaces.iterator(); iter.hasNext();)
+            for (Iterator<String> iter = this.superInterfaces.iterator(); iter.hasNext();)
             {
-                String si = (String)iter.next();
+                String si = iter.next();
                 Cl interfaceItem = this.classTree.getCl(si);
                 // ignore external to JAR
                 if (interfaceItem != null)
@@ -1575,10 +1575,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         return clName;
     }
 
-    public Iterator getDownClasses()
+    public Iterator<Cl> getDownClasses()
     {
         // TODO do we actually need to copy the ArrayList here?
-        List clsList = new ArrayList();
+        List<Cl> clsList = new ArrayList<Cl>();
         for (Iterator iter = this.nameListDowns.iterator(); iter.hasNext();)
         {
             Cl cl = (Cl)iter.next();

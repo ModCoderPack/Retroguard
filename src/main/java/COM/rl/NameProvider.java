@@ -927,7 +927,7 @@ public class NameProvider
 
                 Md tmpMd = new Md(cls, md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
 
-                Iterator children = cls.getDownClasses();
+                Iterator<Cl> children = cls.getDownClasses();
 //                NameProvider.log("Children: " + children.hasMoreElements());
 
                 boolean goingDown = false;
@@ -949,7 +949,7 @@ public class NameProvider
                         break;
                     }
 
-                    Iterator iter = null;
+                    Iterator<Cl> iter = null;
                     try
                     {
                         iter = cls.getSuperInterfaces();
@@ -964,7 +964,7 @@ public class NameProvider
                     boolean found = false;
                     while ((iter != null) && iter.hasNext())
                     {
-                        Cl iface = (Cl)iter.next();
+                        Cl iface = iter.next();
 
                         tmpMd.setParent(iface);
 //                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
@@ -1014,7 +1014,7 @@ public class NameProvider
                     {
                         if (children.hasNext())
                         {
-                            cls = (Cl)children.next();
+                            cls = children.next();
 //                            NameProvider.log("Child: " + cls.getFullInName());
                         }
                         else

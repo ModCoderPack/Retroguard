@@ -50,6 +50,8 @@ public class RgsEntry
 
     // Instance Methods-------------------------------------------------------
     /**
+     * Constructor
+     * 
      * @param type
      * @param name
      */
@@ -60,6 +62,8 @@ public class RgsEntry
     }
 
     /**
+     * Constructor
+     * 
      * @param type
      * @param name
      * @param descriptor

@@ -30,12 +30,6 @@ import java.util.*;
 public class Tools
 {
     // Constants -------------------------------------------------------------
-
-
-    // Fields ----------------------------------------------------------------
-
-
-    // Class Methods ---------------------------------------------------------
     private static final char[] base64 =
     {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -45,6 +39,11 @@ public class Tools
     };
     private static final char pad = '=';
 
+
+    // Fields ----------------------------------------------------------------
+
+
+    // Class Methods ---------------------------------------------------------
     /**
      * Encode a byte[] as a Base64 (see RFC1521, Section 5.2) String.
      * 

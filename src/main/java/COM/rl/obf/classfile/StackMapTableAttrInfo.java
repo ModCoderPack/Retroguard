@@ -34,7 +34,7 @@ public class StackMapTableAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2numberOfEntries;
-    private List entries;
+    private List<StackMapFrameInfo> entries;
 
 
     // Class Methods ---------------------------------------------------------
@@ -70,9 +70,9 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator iter = this.entries.iterator(); iter.hasNext();)
+        for (Iterator<StackMapFrameInfo> iter = this.entries.iterator(); iter.hasNext();)
         {
-            StackMapFrameInfo smf = (StackMapFrameInfo)iter.next();
+            StackMapFrameInfo smf = iter.next();
             smf.markUtf8Refs(pool);
         }
     }
@@ -87,7 +87,7 @@ public class StackMapTableAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2numberOfEntries = din.readUnsignedShort();
-        this.entries = new ArrayList(this.u2numberOfEntries);
+        this.entries = new ArrayList<StackMapFrameInfo>(this.u2numberOfEntries);
         for (int i = 0; i < this.u2numberOfEntries; i++)
         {
             this.entries.add(StackMapFrameInfo.create(din));
@@ -104,9 +104,9 @@ public class StackMapTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numberOfEntries);
-        for (Iterator iter = this.entries.iterator(); iter.hasNext();)
+        for (Iterator<StackMapFrameInfo> iter = this.entries.iterator(); iter.hasNext();)
         {
-            StackMapFrameInfo smf = (StackMapFrameInfo)iter.next();
+            StackMapFrameInfo smf = iter.next();
             smf.write(dout);
         }
     }

@@ -34,7 +34,7 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2localVariableTypeTableLength;
-    private List localVariableTypeTable;
+    private List<LocalVariableTypeInfo> localVariableTypeTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -67,7 +67,7 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
      */
     protected LocalVariableTypeInfo[] getLocalVariableTypeTable()
     {
-        return (LocalVariableTypeInfo[])this.localVariableTypeTable.toArray(new LocalVariableTypeInfo[0]);
+        return this.localVariableTypeTable.toArray(new LocalVariableTypeInfo[0]);
     }
 
     /**
@@ -78,9 +78,9 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
+        for (Iterator<LocalVariableTypeInfo> iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
         {
-            LocalVariableTypeInfo lvt = (LocalVariableTypeInfo)iter.next();
+            LocalVariableTypeInfo lvt = iter.next();
             lvt.markUtf8Refs(pool);
         }
     }
@@ -95,7 +95,7 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2localVariableTypeTableLength = din.readUnsignedShort();
-        this.localVariableTypeTable = new ArrayList(this.u2localVariableTypeTableLength);
+        this.localVariableTypeTable = new ArrayList<LocalVariableTypeInfo>(this.u2localVariableTypeTableLength);
         for (int i = 0; i < this.u2localVariableTypeTableLength; i++)
         {
             this.localVariableTypeTable.add(LocalVariableTypeInfo.create(din));
@@ -112,9 +112,9 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2localVariableTypeTableLength);
-        for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
+        for (Iterator<LocalVariableTypeInfo> iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
         {
-            LocalVariableTypeInfo lvt = (LocalVariableTypeInfo)iter.next();
+            LocalVariableTypeInfo lvt = iter.next();
             lvt.write(dout);
         }
     }
@@ -127,9 +127,9 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
+        for (Iterator<LocalVariableTypeInfo> iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
         {
-            LocalVariableTypeInfo lvt = (LocalVariableTypeInfo)iter.next();
+            LocalVariableTypeInfo lvt = iter.next();
             lvt.remap(cf, nm);
         }
     }

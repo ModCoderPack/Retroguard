@@ -45,7 +45,7 @@ public class MemberValueInfo
     private AnnotationInfo annotationValue;
 
     private int u2numValues;
-    private List values;
+    private List<MemberValueInfo> values;
 
 
     // Class Methods ---------------------------------------------------------
@@ -111,9 +111,9 @@ public class MemberValueInfo
                 this.annotationValue.markUtf8Refs(pool);
                 break;
             case '[':
-                for (Iterator iter = this.values.iterator(); iter.hasNext();)
+                for (Iterator<MemberValueInfo> iter = this.values.iterator(); iter.hasNext();)
                 {
-                    MemberValueInfo mv = (MemberValueInfo)iter.next();
+                    MemberValueInfo mv = iter.next();
                     mv.markUtf8Refs(pool);
                 }
                 break;
@@ -155,7 +155,7 @@ public class MemberValueInfo
                 break;
             case '[':
                 this.u2numValues = din.readUnsignedShort();
-                this.values = new ArrayList(this.u2numValues);
+                this.values = new ArrayList<MemberValueInfo>(this.u2numValues);
                 for (int i = 0; i < this.u2numValues; i++)
                 {
                     this.values.add(MemberValueInfo.create(din));
@@ -201,9 +201,9 @@ public class MemberValueInfo
                 break;
             case '[':
                 dout.writeShort(this.u2numValues);
-                for (Iterator iter = this.values.iterator(); iter.hasNext();)
+                for (Iterator<MemberValueInfo> iter = this.values.iterator(); iter.hasNext();)
                 {
-                    MemberValueInfo mv = (MemberValueInfo)iter.next();
+                    MemberValueInfo mv = iter.next();
                     mv.write(dout);
                 }
                 break;
@@ -244,9 +244,9 @@ public class MemberValueInfo
                 this.annotationValue.remap(cf, nm);
                 break;
             case '[':
-                for (Iterator iter = this.values.iterator(); iter.hasNext();)
+                for (Iterator<MemberValueInfo> iter = this.values.iterator(); iter.hasNext();)
                 {
-                    MemberValueInfo mv = (MemberValueInfo)iter.next();
+                    MemberValueInfo mv = iter.next();
                     mv.remap(cf, nm);
                 }
                 break;

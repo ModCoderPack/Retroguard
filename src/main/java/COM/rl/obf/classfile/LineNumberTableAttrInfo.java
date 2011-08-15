@@ -34,7 +34,7 @@ public class LineNumberTableAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2lineNumberTableLength;
-    private List lineNumberTable;
+    private List<LineNumberInfo> lineNumberTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -72,7 +72,7 @@ public class LineNumberTableAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2lineNumberTableLength = din.readUnsignedShort();
-        this.lineNumberTable = new ArrayList(this.u2lineNumberTableLength);
+        this.lineNumberTable = new ArrayList<LineNumberInfo>(this.u2lineNumberTableLength);
         for (int i = 0; i < this.u2lineNumberTableLength; i++)
         {
             this.lineNumberTable.add(LineNumberInfo.create(din));
@@ -89,9 +89,9 @@ public class LineNumberTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2lineNumberTableLength);
-        for (Iterator iter = this.lineNumberTable.iterator(); iter.hasNext();)
+        for (Iterator<LineNumberInfo> iter = this.lineNumberTable.iterator(); iter.hasNext();)
         {
-            LineNumberInfo ln = (LineNumberInfo)iter.next();
+            LineNumberInfo ln = iter.next();
             ln.write(dout);
         }
     }

@@ -145,6 +145,8 @@ public class AttrInfo implements ClassConstants
 
     // Instance Methods ------------------------------------------------------
     /**
+     * Constructor
+     * 
      * @param cf
      * @param attrNameIndex
      * @param attrLength
@@ -178,7 +180,7 @@ public class AttrInfo implements ClassConstants
      * 
      * @param keepAttrs
      */
-    protected void trimAttrsExcept(List keepAttrs)
+    protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // do nothing
     }
@@ -226,7 +228,7 @@ public class AttrInfo implements ClassConstants
      * @throws IOException
      * @throws ClassFileException
      */
-    public final void write(DataOutput dout) throws IOException, ClassFileException
+    public void write(DataOutput dout) throws IOException, ClassFileException
     {
         if (dout == null)
         {

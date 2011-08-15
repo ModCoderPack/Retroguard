@@ -34,7 +34,7 @@ public class ParameterAnnotationsInfo
 
     // Fields ----------------------------------------------------------------
     private int u2numAnnotations;
-    private List annotationTable;
+    private List<AnnotationInfo> annotationTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -64,7 +64,7 @@ public class ParameterAnnotationsInfo
      */
     protected AnnotationInfo[] getAnnotationTable()
     {
-        return (AnnotationInfo[])this.annotationTable.toArray(new AnnotationInfo[0]);
+        return this.annotationTable.toArray(new AnnotationInfo[0]);
     }
 
     /**
@@ -75,9 +75,9 @@ public class ParameterAnnotationsInfo
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
+        for (Iterator<AnnotationInfo> iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            AnnotationInfo a = (AnnotationInfo)iter.next();
+            AnnotationInfo a = iter.next();
             a.markUtf8Refs(pool);
         }
     }
@@ -90,7 +90,7 @@ public class ParameterAnnotationsInfo
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2numAnnotations = din.readUnsignedShort();
-        this.annotationTable = new ArrayList(this.u2numAnnotations);
+        this.annotationTable = new ArrayList<AnnotationInfo>(this.u2numAnnotations);
         for (int i = 0; i < this.u2numAnnotations; i++)
         {
             this.annotationTable.add(AnnotationInfo.create(din));
@@ -107,9 +107,9 @@ public class ParameterAnnotationsInfo
     public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numAnnotations);
-        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
+        for (Iterator<AnnotationInfo> iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            AnnotationInfo a = (AnnotationInfo)iter.next();
+            AnnotationInfo a = iter.next();
             a.write(dout);
         }
     }
@@ -123,9 +123,9 @@ public class ParameterAnnotationsInfo
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator iter = this.annotationTable.iterator(); iter.hasNext();)
+        for (Iterator<AnnotationInfo> iter = this.annotationTable.iterator(); iter.hasNext();)
         {
-            AnnotationInfo a = (AnnotationInfo)iter.next();
+            AnnotationInfo a = iter.next();
             a.remap(cf, nm);
         }
     }

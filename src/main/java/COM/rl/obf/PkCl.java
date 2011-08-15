@@ -41,7 +41,7 @@ abstract public class PkCl extends TreeItem
     /**
      * Owns a list of classes.
      */
-    protected Map cls = new HashMap();
+    protected Map<String, Cl> cls = new HashMap<String, Cl>();
 
 
     // Class Methods ---------------------------------------------------------
@@ -66,7 +66,7 @@ abstract public class PkCl extends TreeItem
      */
     public Cl getClass(String name)
     {
-        return (Cl)this.cls.get(name);
+        return this.cls.get(name);
     }
 
     /**
@@ -76,9 +76,9 @@ abstract public class PkCl extends TreeItem
      */
     public Cl getObfClass(String name)
     {
-        for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
+        for (Iterator<Cl> iter = this.cls.values().iterator(); iter.hasNext();)
         {
-            Cl cl = (Cl)iter.next();
+            Cl cl = iter.next();
             if (name.equals(cl.getOutName()))
             {
                 return cl;
@@ -90,7 +90,7 @@ abstract public class PkCl extends TreeItem
     /**
      * Get an Iterator of classes directly beneath this PkCl.
      */
-    public Iterator getClassIter()
+    public Iterator<Cl> getClassIter()
     {
         return this.cls.values().iterator();
     }
@@ -98,9 +98,9 @@ abstract public class PkCl extends TreeItem
     /**
      * Get an Iterator of all classes (outer and inner) in the tree beneath this PkCl.
      */
-    public Iterator getAllClassIter()
+    public Iterator<Cl> getAllClassIter()
     {
-        List allClasses = new ArrayList();
+        List<Cl> allClasses = new ArrayList<Cl>();
         this.addAllClasses(allClasses);
         return allClasses.iterator();
     }
@@ -110,11 +110,11 @@ abstract public class PkCl extends TreeItem
      * 
      * @param allClasses
      */
-    protected void addAllClasses(List allClasses)
+    protected void addAllClasses(List<Cl> allClasses)
     {
-        for (Iterator iter = this.cls.values().iterator(); iter.hasNext();)
+        for (Iterator<Cl> iter = this.cls.values().iterator(); iter.hasNext();)
         {
-            Cl cl = (Cl)iter.next();
+            Cl cl = iter.next();
             allClasses.add(cl);
             cl.addAllClasses(allClasses);
         }
@@ -136,7 +136,7 @@ abstract public class PkCl extends TreeItem
      * @param interfaceNames
      * @param access
      */
-    abstract public Cl addClass(String name, String superName, List interfaceNames, int access);
+    abstract public Cl addClass(String name, String superName, List<String> interfaceNames, int access);
 
     /**
      * Add a class to the list of owned classes.
@@ -147,7 +147,7 @@ abstract public class PkCl extends TreeItem
      * @param interfaceNames
      * @param access
      */
-    public Cl addClass(boolean isInnerClass, String name, String superName, List interfaceNames, int access)
+    public Cl addClass(boolean isInnerClass, String name, String superName, List<String> interfaceNames, int access)
     {
         Cl cl = this.getClass(name);
 
@@ -170,9 +170,9 @@ abstract public class PkCl extends TreeItem
         // Copy over the inner class data from the placeholder, if any
         if (plClassItem != null)
         {
-            for (Iterator iter = plClassItem.getClassIter(); iter.hasNext();)
+            for (Iterator<Cl> iter = plClassItem.getClassIter(); iter.hasNext();)
             {
-                Cl innerCl = (Cl)iter.next();
+                Cl innerCl = iter.next();
                 innerCl.setParent(cl);
                 cl.addClass(innerCl);
             }
@@ -217,11 +217,11 @@ abstract public class PkCl extends TreeItem
      * 
      * @param hash
      */
-    protected static void generateNames(Map hash)
+    protected static void generateNames(Map<String, ? extends TreeItem> hash)
     {
-        for (Iterator iter = hash.values().iterator(); iter.hasNext();)
+        for (Iterator<? extends TreeItem> iter = hash.values().iterator(); iter.hasNext();)
         {
-            TreeItem ti = (TreeItem)iter.next();
+            TreeItem ti = iter.next();
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);

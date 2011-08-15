@@ -137,7 +137,7 @@ abstract public class ClassItemInfo implements ClassConstants
      * 
      * @param keepAttrs
      */
-    protected void trimAttrsExcept(List keepAttrs)
+    protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
         for (int i = 0; i < this.attributes.length; i++)
@@ -153,7 +153,7 @@ abstract public class ClassItemInfo implements ClassConstants
         }
 
         // Delete the marked attributes
-        List left = new ArrayList();
+        List<AttrInfo> left = new ArrayList<AttrInfo>();
         for (int i = 0; i < this.attributes.length; i++)
         {
             if (this.attributes[i] != null)
@@ -161,7 +161,7 @@ abstract public class ClassItemInfo implements ClassConstants
                 left.add(this.attributes[i]);
             }
         }
-        this.attributes = (AttrInfo[])left.toArray(new AttrInfo[0]);
+        this.attributes = left.toArray(new AttrInfo[0]);
         this.u2attributesCount = left.size();
     }
 

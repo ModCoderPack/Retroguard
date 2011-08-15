@@ -33,7 +33,7 @@ public class SectionList
 
 
     // Fields ----------------------------------------------------------------
-    private List sections;
+    private List<Section> sections;
 
     // Class Methods ---------------------------------------------------------
 
@@ -44,7 +44,7 @@ public class SectionList
      */
     public SectionList()
     {
-        this.sections = new ArrayList();
+        this.sections = new ArrayList<Section>();
     }
 
     /**
@@ -132,7 +132,7 @@ public class SectionList
     /**
      * Return an Iterator of sections.
      */
-    public Iterator iterator()
+    public Iterator<Section> iterator()
     {
         return this.sections.iterator();
     }
@@ -155,9 +155,9 @@ public class SectionList
      */
     public Section find(Header header)
     {
-        for (Iterator iter = this.iterator(); iter.hasNext();)
+        for (Iterator<Section> iter = this.iterator(); iter.hasNext();)
         {
-            Section section = (Section)iter.next();
+            Section section = iter.next();
             if (section.hasHeader(header))
             {
                 return section;
@@ -174,9 +174,9 @@ public class SectionList
      */
     public void writeString(Writer writer) throws IOException
     {
-        for (Iterator iter = this.iterator(); iter.hasNext();)
+        for (Iterator<Section> iter = this.iterator(); iter.hasNext();)
         {
-            Section section = (Section)iter.next();
+            Section section = iter.next();
             section.writeString(writer);
         }
     }
@@ -188,9 +188,9 @@ public class SectionList
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Iterator iter = this.iterator(); iter.hasNext();)
+        for (Iterator<Section> iter = this.iterator(); iter.hasNext();)
         {
-            Section section = (Section)iter.next();
+            Section section = iter.next();
             sb.append(section.toString());
         }
         return sb.toString();

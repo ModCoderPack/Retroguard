@@ -41,7 +41,7 @@ public class Pk extends PkCl
     /**
      * Owns a list of sub-package levels
      */
-    private Map pks = new HashMap();
+    private Map<String, Pk> pks = new HashMap<String, Pk>();
 
     /**
      * Compact name for this package
@@ -124,7 +124,7 @@ public class Pk extends PkCl
      */
     public Pk getPackage(String name)
     {
-        return (Pk)this.pks.get(name);
+        return this.pks.get(name);
     }
 
     /**
@@ -134,9 +134,9 @@ public class Pk extends PkCl
      */
     public Pk getObfPackage(String name)
     {
-        for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
+        for (Iterator<Pk> iter = this.pks.values().iterator(); iter.hasNext();)
         {
-            Pk pk = (Pk)iter.next();
+            Pk pk = iter.next();
             if (name.equals(pk.getOutName()))
             {
                 return pk;
@@ -152,9 +152,9 @@ public class Pk extends PkCl
      */
     public Pk getObfRepackage(String name)
     {
-        for (Iterator iter = this.pks.values().iterator(); iter.hasNext();)
+        for (Iterator<Pk> iter = this.pks.values().iterator(); iter.hasNext();)
         {
-            Pk pk = (Pk)iter.next();
+            Pk pk = iter.next();
             if (name.equals(pk.getRepackageName()))
             {
                 return pk;
@@ -171,7 +171,7 @@ public class Pk extends PkCl
     /**
      * Get an Iterator of packages.
      */
-    public Iterator getPackageIter()
+    public Iterator<Pk> getPackageIter()
     {
         return this.pks.values().iterator();
     }
@@ -204,7 +204,7 @@ public class Pk extends PkCl
      * Add a class.
      */
     @Override
-    public Cl addClass(String name, String superName, List interfaceNames, int access)
+    public Cl addClass(String name, String superName, List<String> interfaceNames, int access)
     {
         return this.addClass(false, name, superName, interfaceNames, access);
     }

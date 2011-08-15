@@ -34,7 +34,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u1numParameters;
-    private List parameterAnnotationsTable;
+    private List<ParameterAnnotationsInfo> parameterAnnotationsTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -58,7 +58,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
      */
     protected ParameterAnnotationsInfo[] getParameterAnnotationsTable()
     {
-        return (ParameterAnnotationsInfo[])this.parameterAnnotationsTable.toArray(new ParameterAnnotationsInfo[0]);
+        return this.parameterAnnotationsTable.toArray(new ParameterAnnotationsInfo[0]);
     }
 
     /**
@@ -69,9 +69,9 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
+        for (Iterator<ParameterAnnotationsInfo> iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
         {
-            ParameterAnnotationsInfo pa = (ParameterAnnotationsInfo)iter.next();
+            ParameterAnnotationsInfo pa = iter.next();
             pa.markUtf8Refs(pool);
         }
     }
@@ -86,7 +86,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u1numParameters = din.readUnsignedByte();
-        this.parameterAnnotationsTable = new ArrayList(this.u1numParameters);
+        this.parameterAnnotationsTable = new ArrayList<ParameterAnnotationsInfo>(this.u1numParameters);
         for (int i = 0; i < this.u1numParameters; i++)
         {
             this.parameterAnnotationsTable.add(ParameterAnnotationsInfo.create(din));
@@ -103,9 +103,9 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeByte(this.u1numParameters);
-        for (Iterator iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
+        for (Iterator<ParameterAnnotationsInfo> iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
         {
-            ParameterAnnotationsInfo pa = (ParameterAnnotationsInfo)iter.next();
+            ParameterAnnotationsInfo pa = iter.next();
             pa.write(dout);
         }
     }
@@ -118,9 +118,9 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
+        for (Iterator<ParameterAnnotationsInfo> iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
         {
-            ParameterAnnotationsInfo pa = (ParameterAnnotationsInfo)iter.next();
+            ParameterAnnotationsInfo pa = iter.next();
             pa.remap(cf, nm);
         }
     }
