@@ -47,9 +47,9 @@ public class StackMapFrameInfo
     private int u1frameType;
     private int u2offsetDelta;
     private int u2numberOfStackItems;
-    private List<VerificationTypeInfo> stack;
+    private List<VerificationTypeInfo> stack = Collections.emptyList();
     private int u2numberOfLocals;
-    private List<VerificationTypeInfo> locals;
+    private List<VerificationTypeInfo> locals = Collections.emptyList();
 
 
     // Class Methods ---------------------------------------------------------
@@ -130,13 +130,15 @@ public class StackMapFrameInfo
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
-        for (int i = 0; i < this.u2numberOfStackItems; i++)
+        for (Iterator<VerificationTypeInfo> iter = this.stack.iterator(); iter.hasNext();)
         {
-            this.stack.get(i).markUtf8Refs(pool);
+            VerificationTypeInfo vt = iter.next();
+            vt.markUtf8Refs(pool);
         }
-        for (int i = 0; i < this.u2numberOfLocals; i++)
+        for (Iterator<VerificationTypeInfo> iter = this.locals.iterator(); iter.hasNext();)
         {
-            this.locals.get(i).markUtf8Refs(pool);
+            VerificationTypeInfo vt = iter.next();
+            vt.markUtf8Refs(pool);
         }
     }
 
