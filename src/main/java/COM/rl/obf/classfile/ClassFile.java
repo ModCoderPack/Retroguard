@@ -68,13 +68,13 @@ public class ClassFile implements ClassConstants
     private int u2thisClass;
     private int u2superClass;
     private int u2interfacesCount;
-    private int u2interfaces[];
+    private List<Integer> u2interfaces;
     private int u2fieldsCount;
-    private FieldInfo fields[];
+    private List<FieldInfo> fields;
     private int u2methodsCount;
-    private MethodInfo methods[];
+    private List<MethodInfo> methods;
     private int u2attributesCount;
-    private AttrInfo attributes[];
+    private List<AttrInfo> attributes;
 
     private boolean isUnkAttrGone = false;
     private boolean hasReflection = false;
@@ -107,7 +107,7 @@ public class ClassFile implements ClassConstants
      * @param descriptor
      * @throws ClassFileException
      */
-    public static String[] parseDescriptor(String descriptor) throws ClassFileException
+    public static List<String> parseDescriptor(String descriptor) throws ClassFileException
     {
         return ClassFile.parseDescriptor(descriptor, false, true);
     }
@@ -120,7 +120,7 @@ public class ClassFile implements ClassConstants
      * @param isDisplay
      * @throws ClassFileException
      */
-    public static String[] parseDescriptor(String descriptor, boolean isDisplay) throws ClassFileException
+    public static List<String> parseDescriptor(String descriptor, boolean isDisplay) throws ClassFileException
     {
         return ClassFile.parseDescriptor(descriptor, isDisplay, true);
     }
@@ -134,7 +134,7 @@ public class ClassFile implements ClassConstants
      * @param doTranslate
      * @throws ClassFileException
      */
-    public static String[] parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws ClassFileException
+    public static List<String> parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws ClassFileException
     {
         // Check for field descriptor
         List<String> names = new ArrayList<String>();
@@ -198,10 +198,10 @@ public class ClassFile implements ClassConstants
                 String name = iter.next();
                 translatedNames.add(ClassFile.translateType(name, isDisplay));
             }
-            return translatedNames.toArray(new String[0]);
+            return translatedNames;
         }
 
-        return names.toArray(new String[0]);
+        return names;
     }
 
     /**
@@ -349,14 +349,17 @@ public class ClassFile implements ClassConstants
 //        }
 
         int u2constantPoolCount = din.readUnsignedShort();
-        CpInfo[] cpInfo = new CpInfo[u2constantPoolCount];
+        List<CpInfo> cpInfo = new ArrayList<CpInfo>(u2constantPoolCount);
         // Fill the constant pool, recalling the zero entry is not persisted, nor are the entries following a Long or Double
+        cpInfo.add(null);
         for (int i = 1; i < u2constantPoolCount; i++)
         {
-            cpInfo[i] = CpInfo.create(din);
-            if ((cpInfo[i] instanceof LongCpInfo) || (cpInfo[i] instanceof DoubleCpInfo))
+            CpInfo cp = CpInfo.create(din);
+            cpInfo.add(cp);
+            if ((cp instanceof LongCpInfo) || (cp instanceof DoubleCpInfo))
             {
                 i++;
+                cpInfo.add(null);
             }
         }
         this.constantPool = new ConstantPool(this, cpInfo);
@@ -365,28 +368,32 @@ public class ClassFile implements ClassConstants
         this.u2thisClass = din.readUnsignedShort();
         this.u2superClass = din.readUnsignedShort();
         this.u2interfacesCount = din.readUnsignedShort();
-        this.u2interfaces = new int[this.u2interfacesCount];
+        this.u2interfaces = new ArrayList<Integer>(this.u2interfacesCount);
         for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            this.u2interfaces[i] = din.readUnsignedShort();
+            Integer intf = din.readUnsignedShort();
+            this.u2interfaces.add(intf);
         }
         this.u2fieldsCount = din.readUnsignedShort();
-        this.fields = new FieldInfo[this.u2fieldsCount];
+        this.fields = new ArrayList<FieldInfo>(this.u2fieldsCount);
         for (int i = 0; i < this.u2fieldsCount; i++)
         {
-            this.fields[i] = FieldInfo.create(din, this);
+            FieldInfo fd = FieldInfo.create(din, this);
+            this.fields.add(fd);
         }
         this.u2methodsCount = din.readUnsignedShort();
-        this.methods = new MethodInfo[this.u2methodsCount];
+        this.methods = new ArrayList<MethodInfo>(this.u2methodsCount);
         for (int i = 0; i < this.u2methodsCount; i++)
         {
-            this.methods[i] = MethodInfo.create(din, this);
+            MethodInfo md = MethodInfo.create(din, this);
+            this.methods.add(md);
         }
         this.u2attributesCount = din.readUnsignedShort();
-        this.attributes = new AttrInfo[this.u2attributesCount];
+        this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
         for (int i = 0; i < this.u2attributesCount; i++)
         {
-            this.attributes[i] = AttrInfo.create(din, this);
+            AttrInfo at = AttrInfo.create(din, this);
+            this.attributes.add(at);
         }
         this.checkReflection();
     }
@@ -478,9 +485,11 @@ public class ClassFile implements ClassConstants
     public List<String> getInterfaces() throws ClassFileException
     {
         List<String> interfaces = new ArrayList<String>();
-        for (int i = 0; i < this.u2interfacesCount; i++)
+        for (Iterator<Integer> iter = this.u2interfaces.iterator(); iter.hasNext();)
         {
-            interfaces.add(this.toName(this.u2interfaces[i]));
+            int intf = iter.next();
+            String intfName = this.toName(intf);
+            interfaces.add(intfName);
         }
         return interfaces;
     }
@@ -496,7 +505,7 @@ public class ClassFile implements ClassConstants
         CpInfo classEntry = this.getCpEntry(u2index);
         if (classEntry instanceof ClassCpInfo)
         {
-            return this.getUtf8(((ClassCpInfo)classEntry).getNameIndex());
+            return ((ClassCpInfo)classEntry).getName(this);
         }
 
         throw new ClassFileException("Inconsistent Constant Pool in class file.");
@@ -507,7 +516,7 @@ public class ClassFile implements ClassConstants
      */
     public int getMethodCount()
     {
-        return this.methods.length;
+        return this.methods.size();
     }
 
     /**
@@ -517,7 +526,7 @@ public class ClassFile implements ClassConstants
      */
     public MethodInfo getMethod(int i)
     {
-        return this.methods[i];
+        return this.methods.get(i);
     }
 
     /**
@@ -525,7 +534,7 @@ public class ClassFile implements ClassConstants
      */
     public int getFieldCount()
     {
-        return this.fields.length;
+        return this.fields.size();
     }
 
     /**
@@ -535,7 +544,7 @@ public class ClassFile implements ClassConstants
      */
     public FieldInfo getField(int i)
     {
-        return this.fields[i];
+        return this.fields.get(i);
     }
 
     /**
@@ -681,19 +690,22 @@ public class ClassFile implements ClassConstants
     public void markUtf8Refs() throws ClassFileException
     {
         // Check for references to Utf8 from outside the constant pool
-        for (int i = 0; i < this.fields.length; i++)
+        for (Iterator<FieldInfo> iter = this.fields.iterator(); iter.hasNext();)
         {
-            this.fields[i].markUtf8Refs(this.constantPool);
+            FieldInfo fd = iter.next();
+            fd.markUtf8Refs(this.constantPool);
         }
-        for (int i = 0; i < this.methods.length; i++)
+        for (Iterator<MethodInfo> iter = this.methods.iterator(); iter.hasNext();)
         {
             // also checks Code/LVT attrs here
-            this.methods[i].markUtf8Refs(this.constantPool);
+            MethodInfo md = iter.next();
+            md.markUtf8Refs(this.constantPool);
         }
-        for (int i = 0; i < this.attributes.length; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
             // checks InnerClasses, SourceFile and all attr names
-            this.attributes[i].markUtf8Refs(this.constantPool);
+            AttrInfo at = iter.next();
+            at.markUtf8Refs(this.constantPool);
         }
 
         // Now check for references from other CP entries
@@ -739,37 +751,30 @@ public class ClassFile implements ClassConstants
         keepAttrs.addAll(Arrays.asList(ClassConstants.REQUIRED_ATTRS));
 
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < this.fields.length; i++)
+        for (Iterator<FieldInfo> iter = this.fields.iterator(); iter.hasNext();)
         {
-            this.fields[i].trimAttrsExcept(keepAttrs);
+            FieldInfo fd = iter.next();
+            fd.trimAttrsExcept(keepAttrs);
         }
-        for (int i = 0; i < this.methods.length; i++)
+        for (Iterator<MethodInfo> iter = this.methods.iterator(); iter.hasNext();)
         {
-            this.methods[i].trimAttrsExcept(keepAttrs);
+            MethodInfo md = iter.next();
+            md.trimAttrsExcept(keepAttrs);
         }
-        for (int i = 0; i < this.attributes.length; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            if (keepAttrs.contains(this.attributes[i].getAttrName()))
+            AttrInfo at = iter.next();
+            if (keepAttrs.contains(at.getAttrName()))
             {
-                this.attributes[i].trimAttrsExcept(keepAttrs);
+                at.trimAttrsExcept(keepAttrs);
             }
             else
             {
-                this.attributes[i] = null;
+                iter.remove();
             }
         }
 
-        // Delete the marked attributes
-        List<AttrInfo> left = new ArrayList<AttrInfo>();
-        for (int i = 0; i < this.attributes.length; i++)
-        {
-            if (this.attributes[i] != null)
-            {
-                left.add(this.attributes[i]);
-            }
-        }
-        this.attributes = left.toArray(new AttrInfo[0]);
-        this.u2attributesCount = left.size();
+        this.u2attributesCount = this.attributes.size();
 
         // Signal that unknown attributes are gone
         this.isUnkAttrGone = true;
@@ -817,10 +822,10 @@ public class ClassFile implements ClassConstants
         // Go through all of class's fields and methods mapping 'name' and 'descriptor' references
         ClassCpInfo cls = (ClassCpInfo)this.getCpEntry(this.u2thisClass);
         String thisClassName = this.getUtf8(cls.getNameIndex());
-        for (int i = 0; i < this.u2fieldsCount; i++)
+        for (Iterator<FieldInfo> iter = this.fields.iterator(); iter.hasNext();)
         {
             // Remap field 'name', unless it is 'Synthetic'
-            FieldInfo field = this.fields[i];
+            FieldInfo field = iter.next();
             if (!field.isSynthetic())
             {
                 String name = this.getUtf8(field.getNameIndex());
@@ -833,10 +838,10 @@ public class ClassFile implements ClassConstants
             String remapDesc = nm.mapDescriptor(desc);
             field.setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, field.getDescriptorIndex()));
         }
-        for (int i = 0; i < this.u2methodsCount; i++)
+        for (Iterator<MethodInfo> iter = this.methods.iterator(); iter.hasNext();)
         {
             // Remap method 'name', unless it is 'Synthetic'
-            MethodInfo method = this.methods[i];
+            MethodInfo method = iter.next();
             String desc = this.getUtf8(method.getDescriptorIndex());
             if (!method.isSynthetic())
             {
@@ -938,22 +943,27 @@ public class ClassFile implements ClassConstants
         }
 
         // Remap all annotation type references to Utf8 classes
-        for (int j = 0; j < this.u2attributesCount; j++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[j].remap(this, nm);
+            AttrInfo at = iter.next();
+            at.remap(this, nm);
         }
-        for (int i = 0; i < this.u2methodsCount; i++)
+        for (Iterator<MethodInfo> mdIter = this.methods.iterator(); mdIter.hasNext();)
         {
-            for (int j = 0; j < this.methods[i].u2attributesCount; j++)
+            MethodInfo md = mdIter.next();
+            for (Iterator<AttrInfo> iter = md.attributes.iterator(); iter.hasNext();)
             {
-                this.methods[i].attributes[j].remap(this, nm);
+                AttrInfo at = iter.next();
+                at.remap(this, nm);
             }
         }
-        for (int i = 0; i < this.u2fieldsCount; i++)
+        for (Iterator<FieldInfo> fdIter = this.fields.iterator(); fdIter.hasNext();)
         {
-            for (int j = 0; j < this.fields[i].u2attributesCount; j++)
+            FieldInfo fd = fdIter.next();
+            for (Iterator<AttrInfo> iter = fd.attributes.iterator(); iter.hasNext();)
             {
-                this.fields[i].attributes[j].remap(this, nm);
+                AttrInfo at = iter.next();
+                at.remap(this, nm);
             }
         }
 
@@ -978,12 +988,12 @@ public class ClassFile implements ClassConstants
     {
         // Visit all method Code attributes, collecting information on remap
         FlagHashtable cpToFlag = new FlagHashtable();
-        for (int i = 0; i < this.methods.length; i++)
+        for (Iterator<MethodInfo> mdIter = this.methods.iterator(); mdIter.hasNext();)
         {
-            MethodInfo methodInfo = this.methods[i];
-            for (int j = 0; j < methodInfo.attributes.length; j++)
+            MethodInfo methodInfo = mdIter.next();
+            for (Iterator<AttrInfo> iter = methodInfo.attributes.iterator(); iter.hasNext();)
             {
-                AttrInfo attrInfo = methodInfo.attributes[j];
+                AttrInfo attrInfo = iter.next();
                 if (attrInfo instanceof CodeAttrInfo)
                 {
                     cpToFlag = ((CodeAttrInfo)attrInfo).walkFindClassStrings(cpToFlag);
@@ -1044,12 +1054,12 @@ public class ClassFile implements ClassConstants
             }
         }
         // Visit all method Code attributes, remapping .class/Class.forName
-        for (int i = 0; i < this.methods.length; i++)
+        for (Iterator<MethodInfo> mdIter = this.methods.iterator(); mdIter.hasNext();)
         {
-            MethodInfo methodInfo = this.methods[i];
-            for (int j = 0; j < methodInfo.attributes.length; j++)
+            MethodInfo methodInfo = mdIter.next();
+            for (Iterator<AttrInfo> atIter = methodInfo.attributes.iterator(); atIter.hasNext();)
             {
-                AttrInfo attrInfo = methodInfo.attributes[j];
+                AttrInfo attrInfo = atIter.next();
                 if (attrInfo instanceof CodeAttrInfo)
                 {
                     ((CodeAttrInfo)attrInfo).walkUpdateClassStrings(cpUpdate);
@@ -1139,24 +1149,28 @@ public class ClassFile implements ClassConstants
         dout.writeShort(this.u2thisClass);
         dout.writeShort(this.u2superClass);
         dout.writeShort(this.u2interfacesCount);
-        for (int i = 0; i < this.u2interfacesCount; i++)
+        for (Iterator<Integer> iter = this.u2interfaces.iterator(); iter.hasNext();)
         {
-            dout.writeShort(this.u2interfaces[i]);
+            int intf = iter.next();
+            dout.writeShort(intf);
         }
         dout.writeShort(this.u2fieldsCount);
-        for (int i = 0; i < this.u2fieldsCount; i++)
+        for (Iterator<FieldInfo> iter = this.fields.iterator(); iter.hasNext();)
         {
-            this.fields[i].write(dout);
+            FieldInfo fd = iter.next();
+            fd.write(dout);
         }
         dout.writeShort(this.u2methodsCount);
-        for (int i = 0; i < this.u2methodsCount; i++)
+        for (Iterator<MethodInfo> iter = this.methods.iterator(); iter.hasNext();)
         {
-            this.methods[i].write(dout);
+            MethodInfo md = iter.next();
+            md.write(dout);
         }
         dout.writeShort(this.u2attributesCount);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[i].write(dout);
+            AttrInfo at = iter.next();
+            at.write(dout);
         }
     }
 
@@ -1198,7 +1212,8 @@ public class ClassFile implements ClassConstants
         pw.println("Interfaces count: " + Integer.toHexString(this.u2interfacesCount));
         for (int i = 0; i < this.u2interfacesCount; i++)
         {
-            CpInfo info = this.getCpEntry(this.u2interfaces[i]);
+            int intf = this.u2interfaces.get(i);
+            CpInfo info = this.getCpEntry(intf);
             if (info == null)
             {
                 pw.println("  Interface " + Integer.toHexString(i) + ": (null)");
@@ -1212,7 +1227,7 @@ public class ClassFile implements ClassConstants
         pw.println("Fields count: " + Integer.toHexString(this.u2fieldsCount));
         for (int i = 0; i < this.u2fieldsCount; i++)
         {
-            ClassItemInfo info = this.fields[i];
+            ClassItemInfo info = this.fields.get(i);
             if (info == null)
             {
                 pw.println("  Field " + Integer.toHexString(i) + ": (null)");
@@ -1225,14 +1240,14 @@ public class ClassFile implements ClassConstants
                 pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
 //                for (int j = 0; j < info.u2attributesCount; j++)
 //                {
-//                    info.attributes[j].dump(pw, this);
+//                    info.attributes.get(j).dump(pw, this);
 //                }
             }
         }
         pw.println("Methods count: " + Integer.toHexString(this.u2methodsCount));
         for (int i = 0; i < this.u2methodsCount; i++)
         {
-            ClassItemInfo info = this.methods[i];
+            ClassItemInfo info = this.methods.get(i);
             if (info == null)
             {
                 pw.println("  Method " + Integer.toHexString(i) + ": (null)");
@@ -1243,17 +1258,17 @@ public class ClassFile implements ClassConstants
                     + this.getUtf8Debug(info.getNameIndex()) + " "
                     + this.getUtf8Debug(info.getDescriptorIndex()) + " "
                     + Integer.toHexString(info.getAccessFlags()));
-//                pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
+                pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
 //                for (int j = 0; j < info.u2attributesCount; j++)
 //                {
-//                    info.attributes[j].dump(pw, this);
+//                    info.attributes.get(j).dump(pw, this);
 //                }
             }
         }
         pw.println("Attrs count: " + Integer.toHexString(this.u2attributesCount));
 //        for (int i = 0; i < this.u2attributesCount; i++)
 //        {
-//            this.attributes[i].dump(pw, this);
+//            this.attributes.get(i).dump(pw, this);
 //        }
     }
 }

@@ -39,7 +39,7 @@ abstract public class ClassItemInfo implements ClassConstants
     private int u2nameIndex;
     private int u2descriptorIndex;
     protected int u2attributesCount;
-    protected AttrInfo attributes[];
+    protected List<AttrInfo> attributes;
 
     protected ClassFile cf;
     private boolean isSynthetic = false;
@@ -140,29 +140,20 @@ abstract public class ClassItemInfo implements ClassConstants
     protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < this.attributes.length; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            if (keepAttrs.contains(this.attributes[i].getAttrName()))
+            AttrInfo at = iter.next();
+            if (keepAttrs.contains(at.getAttrName()))
             {
-                this.attributes[i].trimAttrsExcept(keepAttrs);
+                at.trimAttrsExcept(keepAttrs);
             }
             else
             {
-                this.attributes[i] = null;
+                iter.remove();
             }
         }
 
-        // Delete the marked attributes
-        List<AttrInfo> left = new ArrayList<AttrInfo>();
-        for (int i = 0; i < this.attributes.length; i++)
-        {
-            if (this.attributes[i] != null)
-            {
-                left.add(this.attributes[i]);
-            }
-        }
-        this.attributes = left.toArray(new AttrInfo[0]);
-        this.u2attributesCount = left.size();
+        this.u2attributesCount = this.attributes.size();
     }
 
     /**
@@ -175,9 +166,10 @@ abstract public class ClassItemInfo implements ClassConstants
     {
         pool.incRefCount(this.u2nameIndex);
         pool.incRefCount(this.u2descriptorIndex);
-        for (int i = 0; i < this.attributes.length; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[i].markUtf8Refs(pool);
+            AttrInfo at = iter.next();
+            at.markUtf8Refs(pool);
         }
     }
 
@@ -194,11 +186,12 @@ abstract public class ClassItemInfo implements ClassConstants
         this.u2nameIndex = din.readUnsignedShort();
         this.u2descriptorIndex = din.readUnsignedShort();
         this.u2attributesCount = din.readUnsignedShort();
-        this.attributes = new AttrInfo[this.u2attributesCount];
+        this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
         for (int i = 0; i < this.u2attributesCount; i++)
         {
-            this.attributes[i] = AttrInfo.create(din, this.cf);
-            if (this.attributes[i].getAttrName().equals(ClassConstants.ATTR_Synthetic))
+            AttrInfo at = AttrInfo.create(din, this.cf);
+            this.attributes.add(at);
+            if (at.getAttrName().equals(ClassConstants.ATTR_Synthetic))
             {
                 this.isSynthetic = true;
             }
@@ -222,9 +215,10 @@ abstract public class ClassItemInfo implements ClassConstants
         dout.writeShort(this.u2nameIndex);
         dout.writeShort(this.u2descriptorIndex);
         dout.writeShort(this.u2attributesCount);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[i].write(dout);
+            AttrInfo at = iter.next();
+            at.write(dout);
         }
     }
 }

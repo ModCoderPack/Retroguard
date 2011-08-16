@@ -63,11 +63,11 @@ public class InnerClassesAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the array of inner classes data.
+     * Return the list of inner classes data.
      */
-    protected InnerClassesInfo[] getInfo()
+    protected List<InnerClassesInfo> getInfo()
     {
-        return this.classes.toArray(new InnerClassesInfo[0]);
+        return this.classes;
     }
 
     /**

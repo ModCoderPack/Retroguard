@@ -47,9 +47,9 @@ public class StackMapFrameInfo
     private int u1frameType;
     private int u2offsetDelta;
     private int u2numberOfStackItems;
-    private VerificationTypeInfo stack[];
+    private List<VerificationTypeInfo> stack;
     private int u2numberOfLocals;
-    private VerificationTypeInfo locals[];
+    private List<VerificationTypeInfo> locals;
 
 
     // Class Methods ---------------------------------------------------------
@@ -132,11 +132,11 @@ public class StackMapFrameInfo
     {
         for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
-            this.stack[i].markUtf8Refs(pool);
+            this.stack.get(i).markUtf8Refs(pool);
         }
         for (int i = 0; i < this.u2numberOfLocals; i++)
         {
-            this.locals[i].markUtf8Refs(pool);
+            this.locals.get(i).markUtf8Refs(pool);
         }
     }
 
@@ -196,10 +196,11 @@ public class StackMapFrameInfo
      */
     private void readLocals(DataInput din) throws IOException, ClassFileException
     {
-        this.locals = new VerificationTypeInfo[this.u2numberOfLocals];
+        this.locals = new ArrayList<VerificationTypeInfo>(this.u2numberOfLocals);
         for (int i = 0; i < this.u2numberOfLocals; i++)
         {
-            this.locals[i] = VerificationTypeInfo.create(din);
+            VerificationTypeInfo vt = VerificationTypeInfo.create(din);
+            this.locals.add(vt);
         }
     }
 
@@ -212,9 +213,10 @@ public class StackMapFrameInfo
      */
     private void writeLocals(DataOutput dout) throws IOException, ClassFileException
     {
-        for (int i = 0; i < this.u2numberOfLocals; i++)
+        for (Iterator<VerificationTypeInfo> iter = this.locals.iterator(); iter.hasNext();)
         {
-            this.locals[i].write(dout);
+            VerificationTypeInfo vt = iter.next();
+            vt.write(dout);
         }
     }
 
@@ -227,10 +229,11 @@ public class StackMapFrameInfo
      */
     private void readStackItems(DataInput din) throws IOException, ClassFileException
     {
-        this.stack = new VerificationTypeInfo[this.u2numberOfStackItems];
+        this.stack = new ArrayList<VerificationTypeInfo>(this.u2numberOfStackItems);
         for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
-            this.stack[i] = VerificationTypeInfo.create(din);
+            VerificationTypeInfo vt = VerificationTypeInfo.create(din);
+            this.stack.add(vt);
         }
     }
 
@@ -243,9 +246,10 @@ public class StackMapFrameInfo
      */
     private void writeStackItems(DataOutput dout) throws ClassFileException, IOException
     {
-        for (int i = 0; i < this.u2numberOfStackItems; i++)
+        for (Iterator<VerificationTypeInfo> iter = this.stack.iterator(); iter.hasNext();)
         {
-            this.stack[i].write(dout);
+            VerificationTypeInfo vt = iter.next();
+            vt.write(dout);
         }
     }
 }

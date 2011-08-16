@@ -63,11 +63,11 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the array of local variable type table entries.
+     * Return the list of local variable type table entries.
      */
-    protected LocalVariableTypeInfo[] getLocalVariableTypeTable()
+    protected List<LocalVariableTypeInfo> getLocalVariableTypeTable()
     {
-        return this.localVariableTypeTable.toArray(new LocalVariableTypeInfo[0]);
+        return this.localVariableTypeTable;
     }
 
     /**

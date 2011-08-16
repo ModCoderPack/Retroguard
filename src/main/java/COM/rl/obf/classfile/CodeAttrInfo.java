@@ -42,9 +42,9 @@ public class CodeAttrInfo extends AttrInfo
     private int u4codeLength;
     private byte[] code;
     private int u2exceptionTableLength;
-    private ExceptionInfo[] exceptionTable;
+    private List<ExceptionInfo> exceptionTable;
     protected int u2attributesCount;
-    protected AttrInfo[] attributes;
+    protected List<AttrInfo> attributes;
 
 
     // Class Methods ---------------------------------------------------------
@@ -142,9 +142,10 @@ public class CodeAttrInfo extends AttrInfo
     {
         int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength
             + (this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            length += AttrInfo.CONSTANT_FIELD_SIZE + this.attributes[i].getAttrInfoLength();
+            AttrInfo at = iter.next();
+            length += AttrInfo.CONSTANT_FIELD_SIZE + at.getAttrInfoLength();
         }
         return length;
     }
@@ -166,29 +167,20 @@ public class CodeAttrInfo extends AttrInfo
     protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
-        for (int i = 0; i < this.attributes.length; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            if (keepAttrs.contains(this.attributes[i].getAttrName()))
+            AttrInfo at = iter.next();
+            if (keepAttrs.contains(at.getAttrName()))
             {
-                this.attributes[i].trimAttrsExcept(keepAttrs);
+                at.trimAttrsExcept(keepAttrs);
             }
             else
             {
-                this.attributes[i] = null;
+                iter.remove();
             }
         }
 
-        // Delete the marked attributes
-        List<AttrInfo> left = new ArrayList<AttrInfo>();
-        for (int i = 0; i < this.attributes.length; i++)
-        {
-            if (this.attributes[i] != null)
-            {
-                left.add(this.attributes[i]);
-            }
-        }
-        this.attributes = left.toArray(new AttrInfo[0]);
-        this.u2attributesCount = left.size();
+        this.u2attributesCount = this.attributes.size();
     }
 
     /**
@@ -199,9 +191,10 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (int i = 0; i < this.attributes.length; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[i].markUtf8Refs(pool);
+            AttrInfo at = iter.next();
+            at.markUtf8Refs(pool);
         }
     }
 
@@ -220,16 +213,18 @@ public class CodeAttrInfo extends AttrInfo
         this.code = new byte[this.u4codeLength];
         din.readFully(this.code);
         this.u2exceptionTableLength = din.readUnsignedShort();
-        this.exceptionTable = new ExceptionInfo[this.u2exceptionTableLength];
+        this.exceptionTable = new ArrayList<ExceptionInfo>(this.u2exceptionTableLength);
         for (int i = 0; i < this.u2exceptionTableLength; i++)
         {
-            this.exceptionTable[i] = ExceptionInfo.create(din);
+            ExceptionInfo ex = ExceptionInfo.create(din);
+            this.exceptionTable.add(ex);
         }
         this.u2attributesCount = din.readUnsignedShort();
-        this.attributes = new AttrInfo[this.u2attributesCount];
+        this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
         for (int i = 0; i < this.u2attributesCount; i++)
         {
-            this.attributes[i] = AttrInfo.create(din, this.cf);
+            AttrInfo at = AttrInfo.create(din, this.cf);
+            this.attributes.add(at);
         }
     }
 
@@ -247,14 +242,16 @@ public class CodeAttrInfo extends AttrInfo
         dout.writeInt(this.u4codeLength);
         dout.write(this.code);
         dout.writeShort(this.u2exceptionTableLength);
-        for (int i = 0; i < this.u2exceptionTableLength; i++)
+        for (Iterator<ExceptionInfo> iter = this.exceptionTable.iterator(); iter.hasNext();)
         {
-            this.exceptionTable[i].write(dout);
+            ExceptionInfo ex = iter.next();
+            ex.write(dout);
         }
         dout.writeShort(this.u2attributesCount);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[i].write(dout);
+            AttrInfo at = iter.next();
+            at.write(dout);
         }
     }
 
@@ -266,9 +263,10 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (int i = 0; i < this.u2attributesCount; i++)
+        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
         {
-            this.attributes[i].remap(cf, nm);
+            AttrInfo at = iter.next();
+            at.remap(cf, nm);
         }
     }
 
@@ -366,8 +364,8 @@ public class CodeAttrInfo extends AttrInfo
                                             this.code[i - 1] = (byte)remapStringIndex;
                                             break;
                                         default: // error
-                                            throw new ClassFileException(".class or Class.forName remap of non-ldc/ldc_w"
-                                                + " - please report this error");
+                                            throw new RuntimeException("Internal error: "
+                                                + ".class or Class.forName remap of non-ldc/ldc_w");
                                     }
                                 }
                             }

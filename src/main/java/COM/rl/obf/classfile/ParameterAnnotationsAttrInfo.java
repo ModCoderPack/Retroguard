@@ -54,11 +54,11 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the array of parameter annotations table entries.
+     * Return the list of parameter annotations table entries.
      */
-    protected ParameterAnnotationsInfo[] getParameterAnnotationsTable()
+    protected List<ParameterAnnotationsInfo> getParameterAnnotationsTable()
     {
-        return this.parameterAnnotationsTable.toArray(new ParameterAnnotationsInfo[0]);
+        return this.parameterAnnotationsTable;
     }
 
     /**

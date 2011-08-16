@@ -165,8 +165,8 @@ abstract public class MdFd extends TreeItem
      */
     protected String getReturnTypeName()
     {
-        String[] types = this.parseTypes();
-        return (types.length > 0 ? types[types.length - 1] : "") + " ";
+        List<String> types = this.parseTypes();
+        return (types.size() > 0 ? types.get(types.size() - 1) : "") + " ";
     }
 
     /**
@@ -174,12 +174,12 @@ abstract public class MdFd extends TreeItem
      */
     abstract protected String getDescriptorName();
 
-    private String[] parsedTypes = null;
+    private List<String> parsedTypes = null;
 
     /**
      * Return the parsed descriptor types array.
      */
-    protected String[] parseTypes()
+    protected List<String> parseTypes()
     {
         // TODO move into constructor?
         if (this.parsedTypes == null)

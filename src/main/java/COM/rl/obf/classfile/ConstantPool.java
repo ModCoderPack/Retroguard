@@ -50,10 +50,10 @@ public class ConstantPool
      * @param classFile
      * @param cpInfo
      */
-    public ConstantPool(ClassFile classFile, CpInfo[] cpInfo)
+    public ConstantPool(ClassFile classFile, List<CpInfo> cpInfo)
     {
         this.myClassFile = classFile;
-        this.pool = new ArrayList<CpInfo>(Arrays.asList(cpInfo));
+        this.pool = new ArrayList<CpInfo>(cpInfo);
     }
 
     /**
@@ -173,7 +173,7 @@ public class ConstantPool
         {
             // TODO check this
             // This can happen for JDK1.2 code so remove - 981123
-//            throw new CPException("Illegal access to a Constant Pool element.");
+//            throw new ClassFileException("Illegal access to a Constant Pool element.");
             return;
         }
 

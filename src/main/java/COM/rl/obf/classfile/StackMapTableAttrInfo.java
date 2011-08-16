@@ -90,7 +90,8 @@ public class StackMapTableAttrInfo extends AttrInfo
         this.entries = new ArrayList<StackMapFrameInfo>(this.u2numberOfEntries);
         for (int i = 0; i < this.u2numberOfEntries; i++)
         {
-            this.entries.add(StackMapFrameInfo.create(din));
+            StackMapFrameInfo smf = StackMapFrameInfo.create(din);
+            this.entries.add(smf);
         }
     }
 

@@ -34,7 +34,7 @@ public class ExceptionsAttrInfo extends AttrInfo
 
     // Fields ----------------------------------------------------------------
     private int u2numberOfExceptions;
-    private int[] u2exceptionIndexTable;
+    private ArrayList<Integer> u2exceptionIndexTable;
 
 
     // Class Methods ---------------------------------------------------------
@@ -67,7 +67,7 @@ public class ExceptionsAttrInfo extends AttrInfo
      */
     public int count()
     {
-        return this.u2exceptionIndexTable.length;
+        return this.u2exceptionIndexTable.size();
     }
 
     /**
@@ -77,7 +77,7 @@ public class ExceptionsAttrInfo extends AttrInfo
      */
     public int getIndex(int i)
     {
-        return this.u2exceptionIndexTable[i];
+        return this.u2exceptionIndexTable.get(i);
     }
 
     /**
@@ -90,10 +90,11 @@ public class ExceptionsAttrInfo extends AttrInfo
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
         this.u2numberOfExceptions = din.readUnsignedShort();
-        this.u2exceptionIndexTable = new int[this.u2numberOfExceptions];
+        this.u2exceptionIndexTable = new ArrayList<Integer>(this.u2numberOfExceptions);
         for (int i = 0; i < this.u2numberOfExceptions; i++)
         {
-            this.u2exceptionIndexTable[i] = din.readUnsignedShort();
+            Integer ex = din.readUnsignedShort();
+            this.u2exceptionIndexTable.add(ex);
         }
     }
 
@@ -107,9 +108,10 @@ public class ExceptionsAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numberOfExceptions);
-        for (int i = 0; i < this.u2numberOfExceptions; i++)
+        for (Iterator<Integer> iter = this.u2exceptionIndexTable.iterator(); iter.hasNext();)
         {
-            dout.writeShort(this.u2exceptionIndexTable[i]);
+            int ex = iter.next();
+            dout.writeShort(ex);
         }
     }
 }

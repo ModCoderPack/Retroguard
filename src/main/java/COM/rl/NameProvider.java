@@ -395,7 +395,7 @@ public class NameProvider
             return;
         }
 
-        String[] lines = NameProvider.readAllLines(NameProvider.packagesFile);
+        List<String> lines = NameProvider.readAllLines(NameProvider.packagesFile);
 
         for (String line : lines)
         {
@@ -433,7 +433,7 @@ public class NameProvider
             return;
         }
 
-        String[] lines = NameProvider.readAllLines(NameProvider.classesFile);
+        List<String> lines = NameProvider.readAllLines(NameProvider.classesFile);
 
         for (String line : lines)
         {
@@ -457,7 +457,7 @@ public class NameProvider
             return;
         }
 
-        String[] lines = NameProvider.readAllLines(NameProvider.methodsFile);
+        List<String> lines = NameProvider.readAllLines(NameProvider.methodsFile);
 
         for (String line : lines)
         {
@@ -486,7 +486,7 @@ public class NameProvider
             return;
         }
 
-        String[] lines = NameProvider.readAllLines(NameProvider.fieldsFile);
+        List<String> lines = NameProvider.readAllLines(NameProvider.fieldsFile);
 
         for (String line : lines)
         {
@@ -503,7 +503,7 @@ public class NameProvider
         }
     }
 
-    private static String[] readAllLines(File file)
+    private static List<String> readAllLines(File file)
     {
         List<String> lines = new ArrayList<String>();
 
@@ -548,7 +548,7 @@ public class NameProvider
             }
         }
 
-        return lines.toArray(new String[0]);
+        return lines;
     }
 
     private static void log(String text)

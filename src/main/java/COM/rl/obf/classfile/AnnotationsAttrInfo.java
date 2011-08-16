@@ -54,11 +54,11 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the array of annotation table entries.
+     * Return the list of annotation table entries.
      */
-    protected AnnotationInfo[] getAnnotationTable()
+    protected List<AnnotationInfo> getAnnotationTable()
     {
-        return this.annotationTable.toArray(new AnnotationInfo[0]);
+        return this.annotationTable;
     }
 
     /**
