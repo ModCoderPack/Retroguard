@@ -417,8 +417,9 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
         // not interfaces.
-        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
+        for (Iterator<CpInfo> it = this.constantPool.iterator(); it.hasNext();)
         {
+            // TODO is this actually right?
             Object o = it.next();
             if (o instanceof MethodrefCpInfo)
             {
@@ -626,8 +627,9 @@ public class ClassFile implements ClassConstants
     {
         // Need only check CONSTANT_Methodref entries of constant pool since dangerous methods belong to classes 'Class' and
         // 'ClassLoader', not to interfaces.
-        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
+        for (Iterator<CpInfo> it = this.constantPool.iterator(); it.hasNext();)
         {
+            // TODO is this actually right?
             Object o = it.next();
             if (o instanceof MethodrefCpInfo)
             {
@@ -695,8 +697,9 @@ public class ClassFile implements ClassConstants
         }
 
         // Now check for references from other CP entries
-        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
+        for (Iterator<CpInfo> it = this.constantPool.iterator(); it.hasNext();)
         {
+            // TODO is this actually right?
             Object o = it.next();
             if ((o instanceof NameAndTypeCpInfo) || (o instanceof ClassCpInfo) || (o instanceof StringCpInfo))
             {
@@ -713,7 +716,7 @@ public class ClassFile implements ClassConstants
     public void markNTRefs() throws ClassFileException
     {
         // Now check the method and field CP entries
-        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
+        for (Iterator<CpInfo> it = this.constantPool.iterator(); it.hasNext();)
         {
             // TODO is this actually right?
             Object o = it.next();
@@ -1120,9 +1123,9 @@ public class ClassFile implements ClassConstants
         dout.writeShort(this.u2minorVersion);
         dout.writeShort(this.u2majorVersion);
         dout.writeShort(this.constantPool.length() + (this.cpIdString != null ? 1 : 0));
-        for (Iterator it = this.constantPool.iterator(); it.hasNext();)
+        for (Iterator<CpInfo> it = this.constantPool.iterator(); it.hasNext();)
         {
-            CpInfo cpInfo = (CpInfo)it.next();
+            CpInfo cpInfo = it.next();
             if (cpInfo != null)
             {
                 cpInfo.write(dout);

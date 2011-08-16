@@ -37,7 +37,7 @@ public class ConstantPool
 
     // Fields ----------------------------------------------------------------
     private ClassFile myClassFile;
-    private List pool;
+    private List<CpInfo> pool;
 
 
     // Class Methods ---------------------------------------------------------
@@ -53,13 +53,13 @@ public class ConstantPool
     public ConstantPool(ClassFile classFile, CpInfo[] cpInfo)
     {
         this.myClassFile = classFile;
-        this.pool = new ArrayList(Arrays.asList(cpInfo));
+        this.pool = new ArrayList<CpInfo>(Arrays.asList(cpInfo));
     }
 
     /**
      * Return an Iterator of all Constant Pool entries.
      */
-    public Iterator iterator()
+    public Iterator<CpInfo> iterator()
     {
         return this.pool.iterator();
     }
@@ -82,7 +82,7 @@ public class ConstantPool
     {
         try
         {
-            return (CpInfo)this.pool.get(i);
+            return this.pool.get(i);
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -262,7 +262,7 @@ public class ConstantPool
      */
     private void walkPool(PoolAction pa)
     {
-        for (Iterator iter = this.pool.iterator(); iter.hasNext();)
+        for (Iterator<CpInfo> iter = this.pool.iterator(); iter.hasNext();)
         {
             Object o = iter.next();
             if (o instanceof Utf8CpInfo)

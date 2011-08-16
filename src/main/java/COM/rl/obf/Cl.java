@@ -81,12 +81,12 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     /**
      * NameListUp interfaces for super-class/interfaces
      */
-    private List nameListUps = new ArrayList();
+    private List<NameListUp> nameListUps = new ArrayList<NameListUp>();
 
     /**
      * NameListDown interfaces for derived class/interfaces
      */
-    private List nameListDowns = new ArrayList();
+    private List<NameListDown> nameListDowns = new ArrayList<NameListDown>();
 
     /**
      * Are danger-method warnings suppressed?
@@ -745,7 +745,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
 
             // Finally step down to derived classes, resolving them
-            for (Iterator clIter = this.nameListDowns.iterator(); clIter.hasNext();)
+            for (Iterator<NameListDown> clIter = this.nameListDowns.iterator(); clIter.hasNext();)
             {
                 Cl cl = (Cl)clIter.next();
                 if (cl != ignoreCl)
@@ -908,7 +908,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
 
             // Finally step down to derived classes, resolving them
-            for (Iterator clIter = this.nameListDowns.iterator(); clIter.hasNext();)
+            for (Iterator<NameListDown> clIter = this.nameListDowns.iterator(); clIter.hasNext();)
             {
                 Cl cl = (Cl)clIter.next();
                 if (cl != ignoreCl)
@@ -950,9 +950,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (!md.isFixed())
             {
                 // Check for name reservation via derived classes
-                for (Iterator nlIter = this.nameListDowns.iterator(); nlIter.hasNext();)
+                for (Iterator<NameListDown> nlIter = this.nameListDowns.iterator(); nlIter.hasNext();)
                 {
-                    NameListDown nl = (NameListDown)nlIter.next();
+                    NameListDown nl = nlIter.next();
                     String theOutName = nl.getMethodObfNameDown(this, md.getInName(), md.getDescriptor());
                     if (theOutName != null)
                     {
@@ -963,9 +963,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
                 // Check for name reservation via super classes
-                for (Iterator nlIter = this.nameListUps.iterator(); nlIter.hasNext();)
+                for (Iterator<NameListUp> nlIter = this.nameListUps.iterator(); nlIter.hasNext();)
                 {
-                    NameListUp nl = (NameListUp)nlIter.next();
+                    NameListUp nl = nlIter.next();
                     String theOutName = nl.getMethodOutNameUp(md.getInName(), md.getDescriptor());
                     if (theOutName != null)
                     {
@@ -992,9 +992,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             if (!fd.isFixed())
             {
                 // Check for name reservation via derived classes
-                for (Iterator nlIter = this.nameListDowns.iterator(); nlIter.hasNext();)
+                for (Iterator<NameListDown> nlIter = this.nameListDowns.iterator(); nlIter.hasNext();)
                 {
-                    NameListDown nl = (NameListDown)nlIter.next();
+                    NameListDown nl = nlIter.next();
                     String theOutName = nl.getFieldObfNameDown(this, fd.getInName());
                     if (theOutName != null)
                     {
@@ -1005,9 +1005,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     }
                 }
                 // Check for name reservation via super classes
-                for (Iterator nlIter = this.nameListUps.iterator(); nlIter.hasNext();)
+                for (Iterator<NameListUp> nlIter = this.nameListUps.iterator(); nlIter.hasNext();)
                 {
-                    NameListUp nl = (NameListUp)nlIter.next();
+                    NameListUp nl = nlIter.next();
                     String theOutName = nl.getFieldOutNameUp(fd.getInName());
                     if (theOutName != null)
                     {
@@ -1038,9 +1038,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getMethodOutNameUp(String name, String descriptor) throws ClassFileException
     {
         // Check supers
-        for (Iterator iter = this.nameListUps.iterator(); iter.hasNext();)
+        for (Iterator<NameListUp> iter = this.nameListUps.iterator(); iter.hasNext();)
         {
-            NameListUp nl = (NameListUp)iter.next();
+            NameListUp nl = iter.next();
             String superOutName = nl.getMethodOutNameUp(name, descriptor);
             if (superOutName != null)
             {
@@ -1067,9 +1067,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getMethodObfNameUp(String name, String descriptor) throws ClassFileException
     {
         // Check supers
-        for (Iterator iter = this.nameListUps.iterator(); iter.hasNext();)
+        for (Iterator<NameListUp> iter = this.nameListUps.iterator(); iter.hasNext();)
         {
-            NameListUp nl = (NameListUp)iter.next();
+            NameListUp nl = iter.next();
             String superObfName = nl.getMethodObfNameUp(name, descriptor);
             if (superObfName != null)
             {
@@ -1096,9 +1096,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getFieldOutNameUp(String name) throws ClassFileException
     {
         // Check supers
-        for (Iterator iter = this.nameListUps.iterator(); iter.hasNext();)
+        for (Iterator<NameListUp> iter = this.nameListUps.iterator(); iter.hasNext();)
         {
-            NameListUp nl = (NameListUp)iter.next();
+            NameListUp nl = iter.next();
             String superOutName = nl.getFieldOutNameUp(name);
             if (superOutName != null)
             {
@@ -1125,9 +1125,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public String getFieldObfNameUp(String name) throws ClassFileException
     {
         // Check supers
-        for (Iterator iter = this.nameListUps.iterator(); iter.hasNext();)
+        for (Iterator<NameListUp> iter = this.nameListUps.iterator(); iter.hasNext();)
         {
-            NameListUp nl = (NameListUp)iter.next();
+            NameListUp nl = iter.next();
             String superObfName = nl.getFieldObfNameUp(name);
             if (superObfName != null)
             {
@@ -1191,9 +1191,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Check our derived classes
-        for (Iterator iter = this.nameListDowns.iterator(); iter.hasNext();)
+        for (Iterator<NameListDown> iter = this.nameListDowns.iterator(); iter.hasNext();)
         {
-            NameListDown nl = (NameListDown)iter.next();
+            NameListDown nl = iter.next();
             theObfName = nl.getMethodObfNameDown(this, name, descriptor);
             if (theObfName != null)
             {
@@ -1251,9 +1251,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         // Check our derived classes
-        for (Iterator iter = this.nameListDowns.iterator(); iter.hasNext();)
+        for (Iterator<NameListDown> iter = this.nameListDowns.iterator(); iter.hasNext();)
         {
-            NameListDown nl = (NameListDown)iter.next();
+            NameListDown nl = iter.next();
             theObfName = nl.getFieldObfNameDown(this, name);
             if (theObfName != null)
             {
@@ -1535,7 +1535,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
             }
             // Traverse derived classes
-            for (Iterator clIter = this.nameListDowns.iterator(); clIter.hasNext();)
+            for (Iterator<NameListDown> clIter = this.nameListDowns.iterator(); clIter.hasNext();)
             {
                 Cl subCl = (Cl)clIter.next();
                 if (subCl != null)
@@ -1579,7 +1579,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     {
         // TODO do we actually need to copy the ArrayList here?
         List<Cl> clsList = new ArrayList<Cl>();
-        for (Iterator iter = this.nameListDowns.iterator(); iter.hasNext();)
+        for (Iterator<NameListDown> iter = this.nameListDowns.iterator(); iter.hasNext();)
         {
             Cl cl = (Cl)iter.next();
             clsList.add(cl);
