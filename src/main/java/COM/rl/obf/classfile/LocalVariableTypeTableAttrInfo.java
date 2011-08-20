@@ -78,9 +78,8 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<LocalVariableTypeInfo> iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
+        for (LocalVariableTypeInfo lvt : this.localVariableTypeTable)
         {
-            LocalVariableTypeInfo lvt = iter.next();
             lvt.markUtf8Refs(pool);
         }
     }
@@ -112,9 +111,8 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2localVariableTypeTableLength);
-        for (Iterator<LocalVariableTypeInfo> iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
+        for (LocalVariableTypeInfo lvt : this.localVariableTypeTable)
         {
-            LocalVariableTypeInfo lvt = iter.next();
             lvt.write(dout);
         }
     }
@@ -127,9 +125,8 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator<LocalVariableTypeInfo> iter = this.localVariableTypeTable.iterator(); iter.hasNext();)
+        for (LocalVariableTypeInfo lvt : this.localVariableTypeTable)
         {
-            LocalVariableTypeInfo lvt = iter.next();
             lvt.remap(cf, nm);
         }
     }

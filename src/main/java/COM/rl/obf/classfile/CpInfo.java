@@ -144,7 +144,7 @@ abstract public class CpInfo implements ClassConstants
     }
 
     /**
-     * Export the representation to a DataOutput stream.
+     * Export the representation to a {@code DataOutput} stream.
      * 
      * @param dout
      * @throws IOException

@@ -75,9 +75,8 @@ public class ParameterAnnotationsInfo
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<AnnotationInfo> iter = this.annotationTable.iterator(); iter.hasNext();)
+        for (AnnotationInfo a : this.annotationTable)
         {
-            AnnotationInfo a = iter.next();
             a.markUtf8Refs(pool);
         }
     }
@@ -107,9 +106,8 @@ public class ParameterAnnotationsInfo
     public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numAnnotations);
-        for (Iterator<AnnotationInfo> iter = this.annotationTable.iterator(); iter.hasNext();)
+        for (AnnotationInfo a : this.annotationTable)
         {
-            AnnotationInfo a = iter.next();
             a.write(dout);
         }
     }
@@ -123,9 +121,8 @@ public class ParameterAnnotationsInfo
      */
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator<AnnotationInfo> iter = this.annotationTable.iterator(); iter.hasNext();)
+        for (AnnotationInfo a : this.annotationTable)
         {
-            AnnotationInfo a = iter.next();
             a.remap(cf, nm);
         }
     }

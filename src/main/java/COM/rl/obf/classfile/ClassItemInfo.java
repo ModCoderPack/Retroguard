@@ -140,18 +140,20 @@ abstract public class ClassItemInfo implements ClassConstants
     protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        List<AttrInfo> delAttrs = new ArrayList<AttrInfo>();
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             if (keepAttrs.contains(at.getAttrName()))
             {
                 at.trimAttrsExcept(keepAttrs);
             }
             else
             {
-                iter.remove();
+                delAttrs.add(at);
             }
         }
+
+        this.attributes.removeAll(delAttrs);
 
         this.u2attributesCount = this.attributes.size();
     }
@@ -166,9 +168,8 @@ abstract public class ClassItemInfo implements ClassConstants
     {
         pool.incRefCount(this.u2nameIndex);
         pool.incRefCount(this.u2descriptorIndex);
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             at.markUtf8Refs(pool);
         }
     }
@@ -215,9 +216,8 @@ abstract public class ClassItemInfo implements ClassConstants
         dout.writeShort(this.u2nameIndex);
         dout.writeShort(this.u2descriptorIndex);
         dout.writeShort(this.u2attributesCount);
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             at.write(dout);
         }
     }

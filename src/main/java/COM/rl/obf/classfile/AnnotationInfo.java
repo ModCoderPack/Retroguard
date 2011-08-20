@@ -77,9 +77,8 @@ public class AnnotationInfo
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
         pool.incRefCount(this.u2typeIndex);
-        for (Iterator<MemberValuePairInfo> iter = this.memberValuePairTable.iterator(); iter.hasNext();)
+        for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
-            MemberValuePairInfo mvp = iter.next();
             mvp.markUtf8Refs(pool);
         }
     }
@@ -111,9 +110,8 @@ public class AnnotationInfo
     {
         dout.writeShort(this.u2typeIndex);
         dout.writeShort(this.u2numMemberValuePairs);
-        for (Iterator<MemberValuePairInfo> iter = this.memberValuePairTable.iterator(); iter.hasNext();)
+        for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
-            MemberValuePairInfo mvp = iter.next();
             mvp.write(dout);
         }
     }
@@ -130,9 +128,8 @@ public class AnnotationInfo
         String oldType = cf.getUtf8(this.u2typeIndex);
         String newType = nm.mapDescriptor(oldType);
         this.u2typeIndex = cf.remapUtf8To(newType, this.u2typeIndex);
-        for (Iterator<MemberValuePairInfo> iter = this.memberValuePairTable.iterator(); iter.hasNext();)
+        for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
-            MemberValuePairInfo mvp = iter.next();
             mvp.remap(cf, nm);
         }
     }
@@ -147,9 +144,8 @@ public class AnnotationInfo
     {
         ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8Debug(this.u2typeIndex));
         ps.println("u2numMemberValuePairs : " + this.u2numMemberValuePairs);
-        for (Iterator<MemberValuePairInfo> iter = this.memberValuePairTable.iterator(); iter.hasNext();)
+        for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
-            MemberValuePairInfo mvp = iter.next();
             mvp.dump(ps, cf);
         }
     }

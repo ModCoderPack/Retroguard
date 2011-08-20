@@ -30,7 +30,7 @@ import COM.rl.util.*;
  * 
  * @author Mark Welsh
  */
-public class ConstantPool
+public class ConstantPool implements Iterable<CpInfo>
 {
     // Constants -------------------------------------------------------------
 
@@ -59,9 +59,18 @@ public class ConstantPool
     /**
      * Return an Iterator of all Constant Pool entries.
      */
+    @Override
     public Iterator<CpInfo> iterator()
     {
         return this.pool.iterator();
+    }
+
+    /**
+     * Return an ListIterator of all Constant Pool entries.
+     */
+    public ListIterator<CpInfo> listIterator()
+    {
+        return this.pool.listIterator();
     }
 
     /**
@@ -187,7 +196,7 @@ public class ConstantPool
      */
     public int addEntry(CpInfo entry)
     {
-        // Try to replace an old, blanked Utf8 entry
+        // Add new entry to end of pool
         int index = this.pool.size();
         this.pool.add(entry);
         return index;
@@ -201,12 +210,13 @@ public class ConstantPool
     protected int addUtf8Entry(String s)
     {
         // Search pool for the string. If found, just increment the reference count and return the index
-        for (int i = 0; i < this.pool.size(); i++)
+        for (ListIterator<CpInfo> iter = this.pool.listIterator(); iter.hasNext();)
         {
-            Object o = this.pool.get(i);
-            if (o instanceof Utf8CpInfo)
+            int i = iter.nextIndex();
+            CpInfo cpInfo = iter.next();
+            if (cpInfo instanceof Utf8CpInfo)
             {
-                Utf8CpInfo entry = (Utf8CpInfo)o;
+                Utf8CpInfo entry = (Utf8CpInfo)cpInfo;
                 if (entry.getString().equals(s))
                 {
                     entry.incRefCount();
@@ -216,12 +226,13 @@ public class ConstantPool
         }
 
         // No luck, so try to overwrite an old, blanked entry
-        for (int i = 0; i < this.pool.size(); i++)
+        for (ListIterator<CpInfo> iter = this.pool.listIterator(); iter.hasNext();)
         {
-            Object o = this.pool.get(i);
-            if (o instanceof Utf8CpInfo)
+            int i = iter.nextIndex();
+            CpInfo cpInfo = iter.next();
+            if (cpInfo instanceof Utf8CpInfo)
             {
-                Utf8CpInfo entry = (Utf8CpInfo)o;
+                Utf8CpInfo entry = (Utf8CpInfo)cpInfo;
                 if (entry.getRefCount() == 0)
                 {
                     entry.setString(s);
@@ -262,16 +273,15 @@ public class ConstantPool
      */
     private void walkPool(PoolAction pa)
     {
-        for (Iterator<CpInfo> iter = this.pool.iterator(); iter.hasNext();)
+        for (CpInfo cpInfo : this.pool)
         {
-            Object o = iter.next();
-            if (o instanceof Utf8CpInfo)
+            if (cpInfo instanceof Utf8CpInfo)
             {
-                pa.utf8Action((Utf8CpInfo)o);
+                pa.utf8Action((Utf8CpInfo)cpInfo);
             }
-            else if (o instanceof CpInfo)
+            else if (cpInfo != null)
             {
-                pa.defaultAction((CpInfo)o);
+                pa.defaultAction(cpInfo);
             }
         }
     }

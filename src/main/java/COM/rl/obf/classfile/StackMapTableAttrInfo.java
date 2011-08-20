@@ -70,9 +70,8 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<StackMapFrameInfo> iter = this.entries.iterator(); iter.hasNext();)
+        for (StackMapFrameInfo smf : this.entries)
         {
-            StackMapFrameInfo smf = iter.next();
             smf.markUtf8Refs(pool);
         }
     }
@@ -105,9 +104,8 @@ public class StackMapTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numberOfEntries);
-        for (Iterator<StackMapFrameInfo> iter = this.entries.iterator(); iter.hasNext();)
+        for (StackMapFrameInfo smf : this.entries)
         {
-            StackMapFrameInfo smf = iter.next();
             smf.write(dout);
         }
     }

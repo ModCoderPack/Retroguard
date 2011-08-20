@@ -130,14 +130,12 @@ public class StackMapFrameInfo
      */
     protected void markUtf8Refs(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<VerificationTypeInfo> iter = this.stack.iterator(); iter.hasNext();)
+        for (VerificationTypeInfo vt : this.stack)
         {
-            VerificationTypeInfo vt = iter.next();
             vt.markUtf8Refs(pool);
         }
-        for (Iterator<VerificationTypeInfo> iter = this.locals.iterator(); iter.hasNext();)
+        for (VerificationTypeInfo vt : this.locals)
         {
-            VerificationTypeInfo vt = iter.next();
             vt.markUtf8Refs(pool);
         }
     }
@@ -201,8 +199,7 @@ public class StackMapFrameInfo
         this.locals = new ArrayList<VerificationTypeInfo>(this.u2numberOfLocals);
         for (int i = 0; i < this.u2numberOfLocals; i++)
         {
-            VerificationTypeInfo vt = VerificationTypeInfo.create(din);
-            this.locals.add(vt);
+            this.locals.add(VerificationTypeInfo.create(din));
         }
     }
 
@@ -215,9 +212,8 @@ public class StackMapFrameInfo
      */
     private void writeLocals(DataOutput dout) throws IOException, ClassFileException
     {
-        for (Iterator<VerificationTypeInfo> iter = this.locals.iterator(); iter.hasNext();)
+        for (VerificationTypeInfo vt : this.locals)
         {
-            VerificationTypeInfo vt = iter.next();
             vt.write(dout);
         }
     }
@@ -234,8 +230,7 @@ public class StackMapFrameInfo
         this.stack = new ArrayList<VerificationTypeInfo>(this.u2numberOfStackItems);
         for (int i = 0; i < this.u2numberOfStackItems; i++)
         {
-            VerificationTypeInfo vt = VerificationTypeInfo.create(din);
-            this.stack.add(vt);
+            this.stack.add(VerificationTypeInfo.create(din));
         }
     }
 
@@ -246,11 +241,10 @@ public class StackMapFrameInfo
      * @throws IOException
      * @throws ClassFileException
      */
-    private void writeStackItems(DataOutput dout) throws ClassFileException, IOException
+    private void writeStackItems(DataOutput dout) throws IOException, ClassFileException
     {
-        for (Iterator<VerificationTypeInfo> iter = this.stack.iterator(); iter.hasNext();)
+        for (VerificationTypeInfo vt : this.stack)
         {
-            VerificationTypeInfo vt = iter.next();
             vt.write(dout);
         }
     }

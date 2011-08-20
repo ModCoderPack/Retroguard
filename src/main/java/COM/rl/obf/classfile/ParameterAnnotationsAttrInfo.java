@@ -69,9 +69,8 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<ParameterAnnotationsInfo> iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
+        for (ParameterAnnotationsInfo pa : this.parameterAnnotationsTable)
         {
-            ParameterAnnotationsInfo pa = iter.next();
             pa.markUtf8Refs(pool);
         }
     }
@@ -103,9 +102,8 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeByte(this.u1numParameters);
-        for (Iterator<ParameterAnnotationsInfo> iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
+        for (ParameterAnnotationsInfo pa : this.parameterAnnotationsTable)
         {
-            ParameterAnnotationsInfo pa = iter.next();
             pa.write(dout);
         }
     }
@@ -118,9 +116,8 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator<ParameterAnnotationsInfo> iter = this.parameterAnnotationsTable.iterator(); iter.hasNext();)
+        for (ParameterAnnotationsInfo pa : this.parameterAnnotationsTable)
         {
-            ParameterAnnotationsInfo pa = iter.next();
             pa.remap(cf, nm);
         }
     }

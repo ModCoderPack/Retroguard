@@ -89,9 +89,8 @@ public class LineNumberTableAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2lineNumberTableLength);
-        for (Iterator<LineNumberInfo> iter = this.lineNumberTable.iterator(); iter.hasNext();)
+        for (LineNumberInfo ln : this.lineNumberTable)
         {
-            LineNumberInfo ln = iter.next();
             ln.write(dout);
         }
     }

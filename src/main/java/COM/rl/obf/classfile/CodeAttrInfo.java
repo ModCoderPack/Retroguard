@@ -142,9 +142,8 @@ public class CodeAttrInfo extends AttrInfo
     {
         int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength
             + (this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE);
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             length += AttrInfo.CONSTANT_FIELD_SIZE + at.getAttrInfoLength();
         }
         return length;
@@ -167,18 +166,20 @@ public class CodeAttrInfo extends AttrInfo
     protected void trimAttrsExcept(List<String> keepAttrs)
     {
         // Traverse all attributes, removing all except those on 'keep' list
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        List<AttrInfo> delAttrs = new ArrayList<AttrInfo>();
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             if (keepAttrs.contains(at.getAttrName()))
             {
                 at.trimAttrsExcept(keepAttrs);
             }
             else
             {
-                iter.remove();
+                delAttrs.add(at);
             }
         }
+
+        this.attributes.removeAll(delAttrs);
 
         this.u2attributesCount = this.attributes.size();
     }
@@ -191,9 +192,8 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             at.markUtf8Refs(pool);
         }
     }
@@ -216,15 +216,13 @@ public class CodeAttrInfo extends AttrInfo
         this.exceptionTable = new ArrayList<ExceptionInfo>(this.u2exceptionTableLength);
         for (int i = 0; i < this.u2exceptionTableLength; i++)
         {
-            ExceptionInfo ex = ExceptionInfo.create(din);
-            this.exceptionTable.add(ex);
+            this.exceptionTable.add(ExceptionInfo.create(din));
         }
         this.u2attributesCount = din.readUnsignedShort();
         this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
         for (int i = 0; i < this.u2attributesCount; i++)
         {
-            AttrInfo at = AttrInfo.create(din, this.cf);
-            this.attributes.add(at);
+            this.attributes.add(AttrInfo.create(din, this.cf));
         }
     }
 
@@ -242,15 +240,13 @@ public class CodeAttrInfo extends AttrInfo
         dout.writeInt(this.u4codeLength);
         dout.write(this.code);
         dout.writeShort(this.u2exceptionTableLength);
-        for (Iterator<ExceptionInfo> iter = this.exceptionTable.iterator(); iter.hasNext();)
+        for (ExceptionInfo ex : this.exceptionTable)
         {
-            ExceptionInfo ex = iter.next();
             ex.write(dout);
         }
         dout.writeShort(this.u2attributesCount);
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             at.write(dout);
         }
     }
@@ -263,9 +259,8 @@ public class CodeAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator<AttrInfo> iter = this.attributes.iterator(); iter.hasNext();)
+        for (AttrInfo at : this.attributes)
         {
-            AttrInfo at = iter.next();
             at.remap(cf, nm);
         }
     }
@@ -278,7 +273,7 @@ public class CodeAttrInfo extends AttrInfo
      */
     protected FlagHashtable walkFindClassStrings(FlagHashtable cpToFlag) throws ClassFileException
     {
-        return this.walkClassStrings(cpToFlag, null);
+        return this.walkClassStrings(cpToFlag, Collections.<Integer, Integer>emptyMap());
     }
 
     /**
@@ -348,25 +343,23 @@ public class CodeAttrInfo extends AttrInfo
                             && "(Ljava/lang/String;)Ljava/lang/Class;".equals(descriptor)))
                         {
                             isClassForName = true;
-                            if (cpUpdate != null)
+                            // Update StringCpInfo index in ldc to new one
+                            Object o = cpUpdate.get(new Integer(ldcIndex));
+                            if (o instanceof Integer)
                             {
-                                // Update StringCpInfo index in ldc to new one
-                                Object o = cpUpdate.get(new Integer(ldcIndex));
-                                if (o instanceof Integer)
+                                Integer oi = (Integer)o;
+                                int remapStringIndex = oi.intValue();
+                                switch (opcodePrev)
                                 {
-                                    int remapStringIndex = ((Integer)o).intValue();
-                                    switch (opcodePrev)
-                                    {
-                                        case 0x13: // ldc_w
-                                            this.code[i - 2] = 0;
-                                            //$FALL-THROUGH$
-                                        case 0x12: // ldc
-                                            this.code[i - 1] = (byte)remapStringIndex;
-                                            break;
-                                        default: // error
-                                            throw new RuntimeException("Internal error: "
-                                                + ".class or Class.forName remap of non-ldc/ldc_w");
-                                    }
+                                    case 0x13: // ldc_w
+                                        this.code[i - 2] = 0;
+                                        //$FALL-THROUGH$
+                                    case 0x12: // ldc
+                                        this.code[i - 1] = (byte)remapStringIndex;
+                                        break;
+                                    default: // error
+                                        throw new RuntimeException("Internal error: "
+                                            + ".class or Class.forName remap of non-ldc/ldc_w");
                                 }
                             }
                         }

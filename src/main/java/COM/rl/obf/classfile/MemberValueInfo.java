@@ -111,9 +111,8 @@ public class MemberValueInfo
                 this.annotationValue.markUtf8Refs(pool);
                 break;
             case '[':
-                for (Iterator<MemberValueInfo> iter = this.values.iterator(); iter.hasNext();)
+                for (MemberValueInfo mv : this.values)
                 {
-                    MemberValueInfo mv = iter.next();
                     mv.markUtf8Refs(pool);
                 }
                 break;
@@ -201,9 +200,8 @@ public class MemberValueInfo
                 break;
             case '[':
                 dout.writeShort(this.u2numValues);
-                for (Iterator<MemberValueInfo> iter = this.values.iterator(); iter.hasNext();)
+                for (MemberValueInfo mv : this.values)
                 {
-                    MemberValueInfo mv = iter.next();
                     mv.write(dout);
                 }
                 break;
@@ -244,9 +242,8 @@ public class MemberValueInfo
                 this.annotationValue.remap(cf, nm);
                 break;
             case '[':
-                for (Iterator<MemberValueInfo> iter = this.values.iterator(); iter.hasNext();)
+                for (MemberValueInfo mv : this.values)
                 {
-                    MemberValueInfo mv = iter.next();
                     mv.remap(cf, nm);
                 }
                 break;

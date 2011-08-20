@@ -78,9 +78,8 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void markUtf8RefsInInfo(ConstantPool pool) throws ClassFileException
     {
-        for (Iterator<InnerClassesInfo> iter = this.classes.iterator(); iter.hasNext();)
+        for (InnerClassesInfo cl : this.classes)
         {
-            InnerClassesInfo cl = iter.next();
             cl.markUtf8Refs(pool);
         }
     }
@@ -112,9 +111,8 @@ public class InnerClassesAttrInfo extends AttrInfo
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2numberOfClasses);
-        for (Iterator<InnerClassesInfo> iter = this.classes.iterator(); iter.hasNext();)
+        for (InnerClassesInfo cl : this.classes)
         {
-            InnerClassesInfo cl = iter.next();
             cl.write(dout);
         }
     }
@@ -127,9 +125,8 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
-        for (Iterator<InnerClassesInfo> iter = this.classes.iterator(); iter.hasNext();)
+        for (InnerClassesInfo cl : this.classes)
         {
-            InnerClassesInfo cl = iter.next();
             cl.remap(cf, nm);
         }
     }
