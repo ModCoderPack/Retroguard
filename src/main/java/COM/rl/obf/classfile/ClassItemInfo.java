@@ -133,7 +133,7 @@ abstract public class ClassItemInfo implements ClassConstants
 
     /**
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
-     * <tt>List</tt> are killed).
+     * {@code List<String>} are killed).
      * 
      * @param keepAttrs
      */

@@ -31,7 +31,7 @@ public interface NameMapper
 {
     // Interface Methods -----------------------------------------------------
     /**
-     * Return a <tt>List</tt> of attributes marked to keep.
+     * Return a {@code List<String>} of attributes marked to keep.
      */
     public List<String> getAttrsToKeep();
 

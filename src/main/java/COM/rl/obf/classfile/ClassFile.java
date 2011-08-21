@@ -727,12 +727,13 @@ public class ClassFile implements ClassConstants
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
      * {@code List<String>} are killed).
      * 
-     * @param keepAttrs
+     * @param extraAttrs
      */
-    public void trimAttrsExcept(List<String> keepAttrs)
+    public void trimAttrsExcept(List<String> extraAttrs)
     {
         // Merge additional attributes with required list
-        keepAttrs.addAll(Arrays.asList(ClassConstants.REQUIRED_ATTRS));
+        List<String> keepAttrs = new ArrayList<String>(Arrays.asList(ClassConstants.REQUIRED_ATTRS));
+        keepAttrs.addAll(extraAttrs);
 
         // Traverse all attributes, removing all except those on 'keep' list
         for (FieldInfo fd : this.fields)
@@ -790,8 +791,7 @@ public class ClassFile implements ClassConstants
      */
     public void trimAttrs(NameMapper nm)
     {
-        List<String> attrs = nm.getAttrsToKeep();
-        this.trimAttrsExcept(attrs);
+        this.trimAttrsExcept(nm.getAttrsToKeep());
     }
 
     /**

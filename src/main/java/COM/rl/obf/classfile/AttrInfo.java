@@ -176,7 +176,7 @@ public class AttrInfo implements ClassConstants
     }
 
     /**
-     * Trim attributes from the classfile except those in the <tt>List</tt>.
+     * Trim attributes from the classfile except those in the {@code List<String>}.
      * 
      * @param keepAttrs
      */

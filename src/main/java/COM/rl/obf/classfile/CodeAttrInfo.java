@@ -160,7 +160,7 @@ public class CodeAttrInfo extends AttrInfo
 
     /**
      * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others except those in the
-     * <tt>List</tt> are killed).
+     * {@code List<String>} are killed).
      */
     @Override
     protected void trimAttrsExcept(List<String> keepAttrs)

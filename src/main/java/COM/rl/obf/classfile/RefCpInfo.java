@@ -85,7 +85,8 @@ abstract public class RefCpInfo extends CpInfo
      */
     public String getClassName(ClassFile cf) throws ClassFileException
     {
-        return ((ClassCpInfo)cf.getCpEntry(this.u2classIndex)).getName(cf);
+        ClassCpInfo entry = (ClassCpInfo)cf.getCpEntry(this.u2classIndex);
+        return entry.getName(cf);
     }
 
     /**
