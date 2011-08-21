@@ -160,9 +160,8 @@ public class TreeItem
             pos = rpos;
         }
         // Check each section for a non-overlapping match in the string
-        for (Iterator<String> iter = section.iterator(); iter.hasNext();)
+        for (String chunk : section)
         {
-            String chunk = iter.next();
             pos = string.indexOf(chunk);
             if (pos == -1)
             {
@@ -307,7 +306,11 @@ public class TreeItem
      */
     public String getOutName()
     {
-        return this.outName != null ? this.outName : this.inName;
+        if (this.outName != null)
+        {
+            return this.outName;
+        }
+        return this.inName;
     }
 
     /**

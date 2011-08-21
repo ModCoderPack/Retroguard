@@ -134,9 +134,8 @@ public class Pk extends PkCl
      */
     public Pk getObfPackage(String name)
     {
-        for (Iterator<Pk> iter = this.pks.values().iterator(); iter.hasNext();)
+        for (Pk pk : this.pks.values())
         {
-            Pk pk = iter.next();
             if (name.equals(pk.getOutName()))
             {
                 return pk;
@@ -152,9 +151,8 @@ public class Pk extends PkCl
      */
     public Pk getObfRepackage(String name)
     {
-        for (Iterator<Pk> iter = this.pks.values().iterator(); iter.hasNext();)
+        for (Pk pk : this.pks.values())
         {
-            Pk pk = iter.next();
             if (name.equals(pk.getRepackageName()))
             {
                 return pk;
@@ -169,11 +167,11 @@ public class Pk extends PkCl
     }
 
     /**
-     * Get an Iterator of packages.
+     * Get a {@code Collection<Pk>} of packages.
      */
-    public Iterator<Pk> getPackageIter()
+    public Collection<Pk> getPackages()
     {
-        return this.pks.values().iterator();
+        return this.pks.values();
     }
 
     /**

@@ -27,13 +27,13 @@ import java.util.*;
  * 
  * @author Mark Welsh
  */
-public class Section
+public class Section implements Iterable<Header>
 {
     // Constants -------------------------------------------------------------
 
 
     // Fields ----------------------------------------------------------------
-    private List<Header> headers;
+    private List<Header> headers = new ArrayList<Header>();
 
 
     // Class Methods ---------------------------------------------------------
@@ -45,7 +45,6 @@ public class Section
      */
     public Section()
     {
-        this.headers = new ArrayList<Header>();
     }
 
     /**
@@ -72,6 +71,7 @@ public class Section
     /**
      * Return an Iterator of headers.
      */
+    @Override
     public Iterator<Header> iterator()
     {
         return this.headers.iterator();
@@ -86,9 +86,8 @@ public class Section
     {
         if (queryHeader != null)
         {
-            for (Iterator<Header> it = this.headers.iterator(); it.hasNext();)
+            for (Header header : this.headers)
             {
-                Header header = it.next();
                 if (queryHeader.equals(header))
                 {
                     return true;
@@ -112,9 +111,8 @@ public class Section
         }
 
         // For now, do linear search of headers
-        for (Iterator<Header> iter = this.headers.iterator(); iter.hasNext();)
+        for (Header header : this.headers)
         {
-            Header header = iter.next();
             if (tag.equals(header.getTag()))
             {
                 // Found
@@ -134,9 +132,8 @@ public class Section
      */
     public void writeString(Writer writer) throws IOException
     {
-        for (Iterator<Header> iter = this.headers.iterator(); iter.hasNext();)
+        for (Header header : this.headers)
         {
-            Header header = iter.next();
             header.writeString(writer);
         }
         writer.write("\015\012");
@@ -149,9 +146,8 @@ public class Section
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Iterator<Header> iter = this.headers.iterator(); iter.hasNext();)
+        for (Header header : this.headers)
         {
-            Header header = iter.next();
             sb.append(header.toString());
             sb.append("\015\012");
         }

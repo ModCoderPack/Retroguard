@@ -166,7 +166,11 @@ abstract public class MdFd extends TreeItem
     protected String getReturnTypeName()
     {
         List<String> types = this.parseTypes();
-        return (types.size() > 0 ? types.get(types.size() - 1) : "") + " ";
+        if (types.size() > 0)
+        {
+            return types.get(types.size() - 1) + " ";
+        }
+        return "";
     }
 
     /**

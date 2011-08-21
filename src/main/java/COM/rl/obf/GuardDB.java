@@ -537,6 +537,7 @@ public class GuardDB implements ClassConstants
                             outJar.putNextEntry(outEntry);
 
                             // Create an OutputStream piped through a number of digest generators for the manifest
+                            List<MessageDigest> digests = new ArrayList<MessageDigest>();
                             MessageDigest shaDigest = null;
                             MessageDigest md5Digest = null;
                             OutputStream outputStream = outJar;
@@ -545,6 +546,7 @@ public class GuardDB implements ClassConstants
                                 try
                                 {
                                     shaDigest = MessageDigest.getInstance("SHA-1");
+                                    digests.add(shaDigest);
                                     outputStream = new DigestOutputStream(outputStream, shaDigest);
                                 }
                                 catch (NoSuchAlgorithmException e)
@@ -559,6 +561,7 @@ public class GuardDB implements ClassConstants
                                 try
                                 {
                                     md5Digest = MessageDigest.getInstance("MD5");
+                                    digests.add(md5Digest);
                                     outputStream = new DigestOutputStream(outputStream, md5Digest);
                                 }
                                 catch (NoSuchAlgorithmException e)
@@ -576,10 +579,6 @@ public class GuardDB implements ClassConstants
                             outJar.closeEntry();
 
                             // Now update the manifest entry for the class with new name and new digests
-                            MessageDigest[] digests =
-                            {
-                                shaDigest, md5Digest
-                            };
                             this.updateManifest(inName, cf.getName() + GuardDB.CLASS_EXT, digests);
                         }
                     }
@@ -604,6 +603,7 @@ public class GuardDB implements ClassConstants
                             outJar.putNextEntry(outEntry);
 
                             // Create an OutputStream piped through a number of digest generators for the manifest
+                            List<MessageDigest> digests = new ArrayList<MessageDigest>();
                             MessageDigest shaDigest = null;
                             MessageDigest md5Digest = null;
                             OutputStream outputStream = outJar;
@@ -612,6 +612,7 @@ public class GuardDB implements ClassConstants
                                 try
                                 {
                                     shaDigest = MessageDigest.getInstance("SHA-1");
+                                    digests.add(shaDigest);
                                     outputStream = new DigestOutputStream(outputStream, shaDigest);
                                 }
                                 catch (NoSuchAlgorithmException e)
@@ -626,6 +627,7 @@ public class GuardDB implements ClassConstants
                                 try
                                 {
                                     md5Digest = MessageDigest.getInstance("MD5");
+                                    digests.add(md5Digest);
                                     outputStream = new DigestOutputStream(outputStream, md5Digest);
                                 }
                                 catch (NoSuchAlgorithmException e)
@@ -643,10 +645,6 @@ public class GuardDB implements ClassConstants
                             outJar.closeEntry();
 
                             // Now update the manifest entry for the entry with new name and new digests
-                            MessageDigest[] digests =
-                            {
-                                shaDigest, md5Digest
-                            };
                             this.updateManifest(inName, outName, digests);
                         }
                     }
@@ -730,9 +728,8 @@ public class GuardDB implements ClassConstants
         this.newManifest.add(version);
 
         // copy through all the none-filename sections, apart from the version
-        for (Iterator<Section> iter = this.oldManifest.iterator(); iter.hasNext();)
+        for (Section section : this.oldManifest)
         {
-            Section section = iter.next();
             if ((section != null) && (section != version))
             {
                 Header name = section.findTag(GuardDB.MANIFEST_NAME_TAG);
@@ -759,7 +756,7 @@ public class GuardDB implements ClassConstants
      * @param outName
      * @param digests
      */
-    private void updateManifest(String inName, String outName, MessageDigest[] digests)
+    private void updateManifest(String inName, String outName, List<MessageDigest> digests)
     {
         // Check for section in old manifest
         Section oldSection = this.oldManifest.find(GuardDB.MANIFEST_NAME_TAG, inName);
@@ -770,9 +767,8 @@ public class GuardDB implements ClassConstants
             newSection.add(GuardDB.MANIFEST_NAME_TAG, outName);
 
             // Copy over non-"Name", non-digest entries
-            for (Iterator<Header> iter = oldSection.iterator(); iter.hasNext();)
+            for (Header header : oldSection)
             {
-                Header header = iter.next();
                 if (!header.getTag().equals(GuardDB.MANIFEST_NAME_TAG) && (header.getTag().indexOf("Digest") == -1))
                 {
                     newSection.add(header);
@@ -780,17 +776,14 @@ public class GuardDB implements ClassConstants
             }
 
             // Create fresh digest entries in the new section
-            if ((digests != null) && (digests.length > 0))
+            if (digests.size() > 0)
             {
                 // Digest-Algorithms header
                 StringBuffer sb = new StringBuffer();
-                for (int i = 0; i < digests.length; i++)
+                for (MessageDigest digest : digests)
                 {
-                    if (digests[i] != null)
-                    {
-                        sb.append(digests[i].getAlgorithm());
-                        sb.append(" ");
-                    }
+                    sb.append(digest.getAlgorithm());
+                    sb.append(" ");
                 }
                 if (sb.length() > 0)
                 {
@@ -798,12 +791,9 @@ public class GuardDB implements ClassConstants
                 }
 
                 // *-Digest headers
-                for (int i = 0; i < digests.length; i++)
+                for (MessageDigest digest : digests)
                 {
-                    if (digests[i] != null)
-                    {
-                        newSection.add(digests[i].getAlgorithm() + "-Digest", Tools.toBase64(digests[i].digest()));
-                    }
+                    newSection.add(digest.getAlgorithm() + "-Digest", Tools.toBase64(digest.digest()));
                 }
             }
 

@@ -27,7 +27,7 @@ import java.util.*;
  * 
  * @author Mark Welsh
  */
-public class SectionList
+public class SectionList implements Iterable<Section>
 {
     // Constants -------------------------------------------------------------
 
@@ -132,6 +132,7 @@ public class SectionList
     /**
      * Return an Iterator of sections.
      */
+    @Override
     public Iterator<Section> iterator()
     {
         return this.sections.iterator();
@@ -155,9 +156,8 @@ public class SectionList
      */
     public Section find(Header header)
     {
-        for (Iterator<Section> iter = this.iterator(); iter.hasNext();)
+        for (Section section : this.sections)
         {
-            Section section = iter.next();
             if (section.hasHeader(header))
             {
                 return section;
@@ -174,9 +174,8 @@ public class SectionList
      */
     public void writeString(Writer writer) throws IOException
     {
-        for (Iterator<Section> iter = this.iterator(); iter.hasNext();)
+        for (Section section : this.sections)
         {
-            Section section = iter.next();
             section.writeString(writer);
         }
     }
@@ -188,9 +187,8 @@ public class SectionList
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        for (Iterator<Section> iter = this.iterator(); iter.hasNext();)
+        for (Section section : this.sections)
         {
-            Section section = iter.next();
             sb.append(section.toString());
         }
         return sb.toString();

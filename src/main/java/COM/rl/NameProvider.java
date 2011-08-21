@@ -949,38 +949,32 @@ public class NameProvider
                         break;
                     }
 
-                    Iterator<Cl> iter = null;
+                    boolean found = false;
                     try
                     {
-                        iter = cls.getSuperInterfaces();
-//                        NameProvider.log("Interfaces: " + iter.hasNext());
+                        for (Cl iface : cls.getSuperInterfaces())
+                        {
+                            tmpMd.setParent(iface);
+//                            NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
+                            if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
+                            {
+                                String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
+                                if (obfName.contains("/"))
+                                {
+                                    methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
+                                }
+                                else
+                                {
+                                    methodName = obfName;
+                                }
+                                found = true;
+                            }
+                        }
                     }
                     catch (ClassFileException e)
                     {
-                        // TODO printStackTrace
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
-                    }
-
-                    boolean found = false;
-                    while ((iter != null) && iter.hasNext())
-                    {
-                        Cl iface = iter.next();
-
-                        tmpMd.setParent(iface);
-//                        NameProvider.log("CHECKING: " + tmpMd.getFullInName() + desc);
-                        if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
-                        {
-                            String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
-                            if (obfName.contains("/"))
-                            {
-                                methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                            }
-                            else
-                            {
-                                methodName = obfName;
-                            }
-                            found = true;
-                        }
                     }
 
                     if (found)

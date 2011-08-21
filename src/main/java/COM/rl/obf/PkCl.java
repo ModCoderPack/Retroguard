@@ -76,9 +76,8 @@ abstract public class PkCl extends TreeItem
      */
     public Cl getObfClass(String name)
     {
-        for (Iterator<Cl> iter = this.cls.values().iterator(); iter.hasNext();)
+        for (Cl cl : this.cls.values())
         {
-            Cl cl = iter.next();
             if (name.equals(cl.getOutName()))
             {
                 return cl;
@@ -88,21 +87,19 @@ abstract public class PkCl extends TreeItem
     }
 
     /**
-     * Get an Iterator of classes directly beneath this PkCl.
+     * Get a {@code Collection<Cl>} of classes directly beneath this {@code PkCl}.
      */
-    public Iterator<Cl> getClassIter()
+    public Collection<Cl> getClasses()
     {
-        return this.cls.values().iterator();
+        return this.cls.values();
     }
 
     /**
-     * Get an Iterator of all classes (outer and inner) in the tree beneath this PkCl.
+     * Get an {@code List<Cl>} of all classes (outer and inner) in the tree beneath this {@code PkCl}.
      */
-    public Iterator<Cl> getAllClassIter()
+    public List<Cl> getAllClassList()
     {
-        List<Cl> allClasses = new ArrayList<Cl>();
-        this.addAllClasses(allClasses);
-        return allClasses.iterator();
+        return this.addAllClasses(new ArrayList<Cl>());
     }
 
     /**
@@ -110,14 +107,15 @@ abstract public class PkCl extends TreeItem
      * 
      * @param allClasses
      */
-    protected void addAllClasses(List<Cl> allClasses)
+    protected List<Cl> addAllClasses(List<Cl> allClasses)
     {
-        for (Iterator<Cl> iter = this.cls.values().iterator(); iter.hasNext();)
+        for (Cl cl : this.cls.values())
         {
-            Cl cl = iter.next();
             allClasses.add(cl);
             cl.addAllClasses(allClasses);
         }
+
+        return allClasses;
     }
 
     /**
@@ -170,9 +168,8 @@ abstract public class PkCl extends TreeItem
         // Copy over the inner class data from the placeholder, if any
         if (plClassItem != null)
         {
-            for (Iterator<Cl> iter = plClassItem.getClassIter(); iter.hasNext();)
+            for (Cl innerCl : plClassItem.getClasses())
             {
-                Cl innerCl = iter.next();
                 innerCl.setParent(cl);
                 cl.addClass(innerCl);
             }
@@ -219,9 +216,8 @@ abstract public class PkCl extends TreeItem
      */
     protected static void generateNames(Map<String, ? extends TreeItem> hash)
     {
-        for (Iterator<? extends TreeItem> iter = hash.values().iterator(); iter.hasNext();)
+        for (TreeItem ti : hash.values())
         {
-            TreeItem ti = iter.next();
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);
