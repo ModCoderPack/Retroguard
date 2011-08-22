@@ -33,7 +33,6 @@ public class StackMapTableAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2numberOfEntries;
     private List<StackMapFrameInfo> entries;
 
 
@@ -85,9 +84,9 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u2numberOfEntries = din.readUnsignedShort();
-        this.entries = new ArrayList<StackMapFrameInfo>(this.u2numberOfEntries);
-        for (int i = 0; i < this.u2numberOfEntries; i++)
+        int u2numberOfEntries = din.readUnsignedShort();
+        this.entries = new ArrayList<StackMapFrameInfo>(u2numberOfEntries);
+        for (int i = 0; i < u2numberOfEntries; i++)
         {
             StackMapFrameInfo smf = StackMapFrameInfo.create(din);
             this.entries.add(smf);
@@ -103,7 +102,7 @@ public class StackMapTableAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2numberOfEntries);
+        dout.writeShort(this.entries.size());
         for (StackMapFrameInfo smf : this.entries)
         {
             smf.write(dout);

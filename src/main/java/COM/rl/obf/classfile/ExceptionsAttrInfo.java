@@ -33,7 +33,6 @@ public class ExceptionsAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2numberOfExceptions;
     private ArrayList<Integer> u2exceptionIndexTable;
 
 
@@ -89,9 +88,9 @@ public class ExceptionsAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u2numberOfExceptions = din.readUnsignedShort();
-        this.u2exceptionIndexTable = new ArrayList<Integer>(this.u2numberOfExceptions);
-        for (int i = 0; i < this.u2numberOfExceptions; i++)
+        int u2numberOfExceptions = din.readUnsignedShort();
+        this.u2exceptionIndexTable = new ArrayList<Integer>(u2numberOfExceptions);
+        for (int i = 0; i < u2numberOfExceptions; i++)
         {
             this.u2exceptionIndexTable.add(din.readUnsignedShort());
         }
@@ -106,7 +105,7 @@ public class ExceptionsAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2numberOfExceptions);
+        dout.writeShort(this.u2exceptionIndexTable.size());
         for (int ex : this.u2exceptionIndexTable)
         {
             dout.writeShort(ex);

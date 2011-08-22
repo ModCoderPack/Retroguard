@@ -34,7 +34,6 @@ public class AnnotationInfo
 
     // Fields ----------------------------------------------------------------
     private int u2typeIndex;
-    private int u2numMemberValuePairs;
     private List<MemberValuePairInfo> memberValuePairTable;
 
 
@@ -91,9 +90,9 @@ public class AnnotationInfo
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u2typeIndex = din.readUnsignedShort();
-        this.u2numMemberValuePairs = din.readUnsignedShort();
-        this.memberValuePairTable = new ArrayList<MemberValuePairInfo>(this.u2numMemberValuePairs);
-        for (int i = 0; i < this.u2numMemberValuePairs; i++)
+        int u2numMemberValuePairs = din.readUnsignedShort();
+        this.memberValuePairTable = new ArrayList<MemberValuePairInfo>(u2numMemberValuePairs);
+        for (int i = 0; i < u2numMemberValuePairs; i++)
         {
             this.memberValuePairTable.add(MemberValuePairInfo.create(din));
         }
@@ -109,7 +108,7 @@ public class AnnotationInfo
     public void write(DataOutput dout) throws IOException, ClassFileException
     {
         dout.writeShort(this.u2typeIndex);
-        dout.writeShort(this.u2numMemberValuePairs);
+        dout.writeShort(this.memberValuePairTable.size());
         for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
             mvp.write(dout);
@@ -143,7 +142,7 @@ public class AnnotationInfo
     public void dump(PrintStream ps, ClassFile cf)
     {
         ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8Debug(this.u2typeIndex));
-        ps.println("u2numMemberValuePairs : " + this.u2numMemberValuePairs);
+        ps.println("u2numMemberValuePairs : " + this.memberValuePairTable.size());
         for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
             mvp.dump(ps, cf);

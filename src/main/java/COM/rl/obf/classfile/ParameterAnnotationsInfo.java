@@ -33,7 +33,6 @@ public class ParameterAnnotationsInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2numAnnotations;
     private List<AnnotationInfo> annotationTable;
 
 
@@ -88,9 +87,9 @@ public class ParameterAnnotationsInfo
      */
     private void read(DataInput din) throws IOException, ClassFileException
     {
-        this.u2numAnnotations = din.readUnsignedShort();
-        this.annotationTable = new ArrayList<AnnotationInfo>(this.u2numAnnotations);
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        int u2numAnnotations = din.readUnsignedShort();
+        this.annotationTable = new ArrayList<AnnotationInfo>(u2numAnnotations);
+        for (int i = 0; i < u2numAnnotations; i++)
         {
             this.annotationTable.add(AnnotationInfo.create(din));
         }
@@ -105,7 +104,7 @@ public class ParameterAnnotationsInfo
      */
     public void write(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2numAnnotations);
+        dout.writeShort(this.annotationTable.size());
         for (AnnotationInfo a : this.annotationTable)
         {
             a.write(dout);

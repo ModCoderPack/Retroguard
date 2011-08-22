@@ -84,9 +84,9 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u2numAnnotations = din.readUnsignedShort();
-        this.annotationTable = new ArrayList<AnnotationInfo>(this.u2numAnnotations);
-        for (int i = 0; i < this.u2numAnnotations; i++)
+        int u2numAnnotations = din.readUnsignedShort();
+        this.annotationTable = new ArrayList<AnnotationInfo>(u2numAnnotations);
+        for (int i = 0; i < u2numAnnotations; i++)
         {
             this.annotationTable.add(AnnotationInfo.create(din));
         }
@@ -101,7 +101,7 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2numAnnotations);
+        dout.writeShort(this.annotationTable.size());
         for (AnnotationInfo ai : this.annotationTable)
         {
             ai.write(dout);
@@ -129,7 +129,7 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     public void dump(PrintStream ps)
     {
         super.dump(ps);
-        ps.println("u2numAnnotations : " + this.u2numAnnotations);
+        ps.println("u2numAnnotations : " + this.annotationTable.size());
         for (AnnotationInfo ai : this.annotationTable)
         {
             ai.dump(ps, this.cf);

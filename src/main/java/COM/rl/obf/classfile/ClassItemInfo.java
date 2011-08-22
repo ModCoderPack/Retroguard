@@ -38,7 +38,6 @@ abstract public class ClassItemInfo implements ClassConstants
     private int u2accessFlags;
     private int u2nameIndex;
     private int u2descriptorIndex;
-    protected int u2attributesCount;
     protected List<AttrInfo> attributes;
 
     protected ClassFile cf;
@@ -154,8 +153,6 @@ abstract public class ClassItemInfo implements ClassConstants
         }
 
         this.attributes.removeAll(delAttrs);
-
-        this.u2attributesCount = this.attributes.size();
     }
 
     /**
@@ -186,9 +183,9 @@ abstract public class ClassItemInfo implements ClassConstants
         this.u2accessFlags = din.readUnsignedShort();
         this.u2nameIndex = din.readUnsignedShort();
         this.u2descriptorIndex = din.readUnsignedShort();
-        this.u2attributesCount = din.readUnsignedShort();
-        this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        int u2attributesCount = din.readUnsignedShort();
+        this.attributes = new ArrayList<AttrInfo>(u2attributesCount);
+        for (int i = 0; i < u2attributesCount; i++)
         {
             AttrInfo at = AttrInfo.create(din, this.cf);
             this.attributes.add(at);
@@ -215,7 +212,7 @@ abstract public class ClassItemInfo implements ClassConstants
         dout.writeShort(this.u2accessFlags);
         dout.writeShort(this.u2nameIndex);
         dout.writeShort(this.u2descriptorIndex);
-        dout.writeShort(this.u2attributesCount);
+        dout.writeShort(this.attributes.size());
         for (AttrInfo at : this.attributes)
         {
             at.write(dout);

@@ -33,7 +33,6 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u1numParameters;
     private List<ParameterAnnotationsInfo> parameterAnnotationsTable;
 
 
@@ -84,9 +83,9 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u1numParameters = din.readUnsignedByte();
-        this.parameterAnnotationsTable = new ArrayList<ParameterAnnotationsInfo>(this.u1numParameters);
-        for (int i = 0; i < this.u1numParameters; i++)
+        int u1numParameters = din.readUnsignedByte();
+        this.parameterAnnotationsTable = new ArrayList<ParameterAnnotationsInfo>(u1numParameters);
+        for (int i = 0; i < u1numParameters; i++)
         {
             this.parameterAnnotationsTable.add(ParameterAnnotationsInfo.create(din));
         }
@@ -101,7 +100,7 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeByte(this.u1numParameters);
+        dout.writeByte(this.parameterAnnotationsTable.size());
         for (ParameterAnnotationsInfo pa : this.parameterAnnotationsTable)
         {
             pa.write(dout);

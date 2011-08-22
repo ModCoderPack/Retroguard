@@ -33,7 +33,6 @@ public class InnerClassesAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2numberOfClasses;
     private List<InnerClassesInfo> classes;
 
 
@@ -93,9 +92,9 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u2numberOfClasses = din.readUnsignedShort();
-        this.classes = new ArrayList<InnerClassesInfo>(this.u2numberOfClasses);
-        for (int i = 0; i < this.u2numberOfClasses; i++)
+        int u2numberOfClasses = din.readUnsignedShort();
+        this.classes = new ArrayList<InnerClassesInfo>(u2numberOfClasses);
+        for (int i = 0; i < u2numberOfClasses; i++)
         {
             this.classes.add(InnerClassesInfo.create(din));
         }
@@ -110,7 +109,7 @@ public class InnerClassesAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2numberOfClasses);
+        dout.writeShort(this.classes.size());
         for (InnerClassesInfo cl : this.classes)
         {
             cl.write(dout);

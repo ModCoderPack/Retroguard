@@ -33,7 +33,6 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2localVariableTypeTableLength;
     private List<LocalVariableTypeInfo> localVariableTypeTable;
 
 
@@ -93,9 +92,9 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u2localVariableTypeTableLength = din.readUnsignedShort();
-        this.localVariableTypeTable = new ArrayList<LocalVariableTypeInfo>(this.u2localVariableTypeTableLength);
-        for (int i = 0; i < this.u2localVariableTypeTableLength; i++)
+        int u2localVariableTypeTableLength = din.readUnsignedShort();
+        this.localVariableTypeTable = new ArrayList<LocalVariableTypeInfo>(u2localVariableTypeTableLength);
+        for (int i = 0; i < u2localVariableTypeTableLength; i++)
         {
             this.localVariableTypeTable.add(LocalVariableTypeInfo.create(din));
         }
@@ -110,7 +109,7 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2localVariableTypeTableLength);
+        dout.writeShort(this.localVariableTypeTable.size());
         for (LocalVariableTypeInfo lvt : this.localVariableTypeTable)
         {
             lvt.write(dout);

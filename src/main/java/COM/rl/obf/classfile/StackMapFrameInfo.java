@@ -46,9 +46,7 @@ public class StackMapFrameInfo
     // Fields ----------------------------------------------------------------
     private int u1frameType;
     private int u2offsetDelta;
-    private int u2numberOfStackItems;
     private List<VerificationTypeInfo> stack = Collections.emptyList();
-    private int u2numberOfLocals;
     private List<VerificationTypeInfo> locals = Collections.emptyList();
 
 
@@ -89,14 +87,12 @@ public class StackMapFrameInfo
         else if ((StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MIN <= this.u1frameType)
             && (this.u1frameType <= StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_MAX))
         {
-            this.u2numberOfStackItems = 1;
-            this.readStackItems(din);
+            this.readStackItems(din, 1);
         }
         else if (this.u1frameType == StackMapFrameInfo.SAME_LOCALS_1_STACK_ITEM_EXTENDED)
         {
             this.u2offsetDelta = din.readUnsignedShort();
-            this.u2numberOfStackItems = 1;
-            this.readStackItems(din);
+            this.readStackItems(din, 1);
         }
         else if ((StackMapFrameInfo.CHOP_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.CHOP_MAX))
         {
@@ -109,16 +105,16 @@ public class StackMapFrameInfo
         else if ((StackMapFrameInfo.APPEND_MIN <= this.u1frameType) && (this.u1frameType <= StackMapFrameInfo.APPEND_MAX))
         {
             this.u2offsetDelta = din.readUnsignedShort();
-            this.u2numberOfLocals = (1 + this.u1frameType) - StackMapFrameInfo.APPEND_MIN;
-            this.readLocals(din);
+            int u2numberOfLocals = (1 + this.u1frameType) - StackMapFrameInfo.APPEND_MIN;
+            this.readLocals(din, u2numberOfLocals);
         }
         else if (this.u1frameType == StackMapFrameInfo.FULL_FRAME)
         {
             this.u2offsetDelta = din.readUnsignedShort();
-            this.u2numberOfLocals = din.readUnsignedShort();
-            this.readLocals(din);
-            this.u2numberOfStackItems = din.readUnsignedShort();
-            this.readStackItems(din);
+            int u2numberOfLocals = din.readUnsignedShort();
+            this.readLocals(din, u2numberOfLocals);
+            int u2numberOfStackItems = din.readUnsignedShort();
+            this.readStackItems(din, u2numberOfStackItems);
         }
     }
 
@@ -180,9 +176,9 @@ public class StackMapFrameInfo
         else if (this.u1frameType == StackMapFrameInfo.FULL_FRAME)
         {
             dout.writeShort(this.u2offsetDelta);
-            dout.writeShort(this.u2numberOfLocals);
+            dout.writeShort(this.locals.size());
             this.writeLocals(dout);
-            dout.writeShort(this.u2numberOfStackItems);
+            dout.writeShort(this.stack.size());
             this.writeStackItems(dout);
         }
     }
@@ -194,10 +190,10 @@ public class StackMapFrameInfo
      * @throws IOException
      * @throws ClassFileException
      */
-    private void readLocals(DataInput din) throws IOException, ClassFileException
+    private void readLocals(DataInput din, int items) throws IOException, ClassFileException
     {
-        this.locals = new ArrayList<VerificationTypeInfo>(this.u2numberOfLocals);
-        for (int i = 0; i < this.u2numberOfLocals; i++)
+        this.locals = new ArrayList<VerificationTypeInfo>(items);
+        for (int i = 0; i < items; i++)
         {
             this.locals.add(VerificationTypeInfo.create(din));
         }
@@ -225,10 +221,10 @@ public class StackMapFrameInfo
      * @throws IOException
      * @throws ClassFileException
      */
-    private void readStackItems(DataInput din) throws IOException, ClassFileException
+    private void readStackItems(DataInput din, int items) throws IOException, ClassFileException
     {
-        this.stack = new ArrayList<VerificationTypeInfo>(this.u2numberOfStackItems);
-        for (int i = 0; i < this.u2numberOfStackItems; i++)
+        this.stack = new ArrayList<VerificationTypeInfo>(items);
+        for (int i = 0; i < items; i++)
         {
             this.stack.add(VerificationTypeInfo.create(din));
         }

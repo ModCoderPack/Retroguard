@@ -41,9 +41,7 @@ public class CodeAttrInfo extends AttrInfo
     private int u2maxLocals;
     private int u4codeLength;
     private byte[] code;
-    private int u2exceptionTableLength;
     private List<ExceptionInfo> exceptionTable;
-    protected int u2attributesCount;
     protected List<AttrInfo> attributes;
 
 
@@ -141,7 +139,7 @@ public class CodeAttrInfo extends AttrInfo
     protected int getAttrInfoLength()
     {
         int length = CodeAttrInfo.CONSTANT_FIELD_SIZE + this.u4codeLength
-            + (this.u2exceptionTableLength * ExceptionInfo.CONSTANT_FIELD_SIZE);
+            + (this.exceptionTable.size() * ExceptionInfo.CONSTANT_FIELD_SIZE);
         for (AttrInfo at : this.attributes)
         {
             length += AttrInfo.CONSTANT_FIELD_SIZE + at.getAttrInfoLength();
@@ -180,8 +178,6 @@ public class CodeAttrInfo extends AttrInfo
         }
 
         this.attributes.removeAll(delAttrs);
-
-        this.u2attributesCount = this.attributes.size();
     }
 
     /**
@@ -212,15 +208,15 @@ public class CodeAttrInfo extends AttrInfo
         this.u4codeLength = din.readInt();
         this.code = new byte[this.u4codeLength];
         din.readFully(this.code);
-        this.u2exceptionTableLength = din.readUnsignedShort();
-        this.exceptionTable = new ArrayList<ExceptionInfo>(this.u2exceptionTableLength);
-        for (int i = 0; i < this.u2exceptionTableLength; i++)
+        int u2exceptionTableLength = din.readUnsignedShort();
+        this.exceptionTable = new ArrayList<ExceptionInfo>(u2exceptionTableLength);
+        for (int i = 0; i < u2exceptionTableLength; i++)
         {
             this.exceptionTable.add(ExceptionInfo.create(din));
         }
-        this.u2attributesCount = din.readUnsignedShort();
-        this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        int u2attributesCount = din.readUnsignedShort();
+        this.attributes = new ArrayList<AttrInfo>(u2attributesCount);
+        for (int i = 0; i < u2attributesCount; i++)
         {
             this.attributes.add(AttrInfo.create(din, this.cf));
         }
@@ -239,12 +235,12 @@ public class CodeAttrInfo extends AttrInfo
         dout.writeShort(this.u2maxLocals);
         dout.writeInt(this.u4codeLength);
         dout.write(this.code);
-        dout.writeShort(this.u2exceptionTableLength);
+        dout.writeShort(this.exceptionTable.size());
         for (ExceptionInfo ex : this.exceptionTable)
         {
             ex.write(dout);
         }
-        dout.writeShort(this.u2attributesCount);
+        dout.writeShort(this.attributes.size());
         for (AttrInfo at : this.attributes)
         {
             at.write(dout);

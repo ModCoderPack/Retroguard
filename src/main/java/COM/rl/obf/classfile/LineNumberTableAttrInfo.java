@@ -33,7 +33,6 @@ public class LineNumberTableAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2lineNumberTableLength;
     private List<LineNumberInfo> lineNumberTable;
 
 
@@ -71,9 +70,9 @@ public class LineNumberTableAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        this.u2lineNumberTableLength = din.readUnsignedShort();
-        this.lineNumberTable = new ArrayList<LineNumberInfo>(this.u2lineNumberTableLength);
-        for (int i = 0; i < this.u2lineNumberTableLength; i++)
+        int u2lineNumberTableLength = din.readUnsignedShort();
+        this.lineNumberTable = new ArrayList<LineNumberInfo>(u2lineNumberTableLength);
+        for (int i = 0; i < u2lineNumberTableLength; i++)
         {
             this.lineNumberTable.add(LineNumberInfo.create(din));
         }
@@ -88,7 +87,7 @@ public class LineNumberTableAttrInfo extends AttrInfo
     @Override
     public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        dout.writeShort(this.u2lineNumberTableLength);
+        dout.writeShort(this.lineNumberTable.size());
         for (LineNumberInfo ln : this.lineNumberTable)
         {
             ln.write(dout);

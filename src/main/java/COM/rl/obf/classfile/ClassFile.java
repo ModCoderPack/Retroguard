@@ -68,13 +68,9 @@ public class ClassFile implements ClassConstants
     private int u2accessFlags;
     private int u2thisClass;
     private int u2superClass;
-    private int u2interfacesCount;
     private List<Integer> u2interfaces;
-    private int u2fieldsCount;
     private List<FieldInfo> fields;
-    private int u2methodsCount;
     private List<MethodInfo> methods;
-    private int u2attributesCount;
     private List<AttrInfo> attributes;
 
     private boolean isUnkAttrGone = false;
@@ -367,27 +363,27 @@ public class ClassFile implements ClassConstants
         this.u2accessFlags = din.readUnsignedShort();
         this.u2thisClass = din.readUnsignedShort();
         this.u2superClass = din.readUnsignedShort();
-        this.u2interfacesCount = din.readUnsignedShort();
-        this.u2interfaces = new ArrayList<Integer>(this.u2interfacesCount);
-        for (int i = 0; i < this.u2interfacesCount; i++)
+        int u2interfacesCount = din.readUnsignedShort();
+        this.u2interfaces = new ArrayList<Integer>(u2interfacesCount);
+        for (int i = 0; i < u2interfacesCount; i++)
         {
             this.u2interfaces.add(din.readUnsignedShort());
         }
-        this.u2fieldsCount = din.readUnsignedShort();
-        this.fields = new ArrayList<FieldInfo>(this.u2fieldsCount);
-        for (int i = 0; i < this.u2fieldsCount; i++)
+        int u2fieldsCount = din.readUnsignedShort();
+        this.fields = new ArrayList<FieldInfo>(u2fieldsCount);
+        for (int i = 0; i < u2fieldsCount; i++)
         {
             this.fields.add(FieldInfo.create(din, this));
         }
-        this.u2methodsCount = din.readUnsignedShort();
-        this.methods = new ArrayList<MethodInfo>(this.u2methodsCount);
-        for (int i = 0; i < this.u2methodsCount; i++)
+        int u2methodsCount = din.readUnsignedShort();
+        this.methods = new ArrayList<MethodInfo>(u2methodsCount);
+        for (int i = 0; i < u2methodsCount; i++)
         {
             this.methods.add(MethodInfo.create(din, this));
         }
-        this.u2attributesCount = din.readUnsignedShort();
-        this.attributes = new ArrayList<AttrInfo>(this.u2attributesCount);
-        for (int i = 0; i < this.u2attributesCount; i++)
+        int u2attributesCount = din.readUnsignedShort();
+        this.attributes = new ArrayList<AttrInfo>(u2attributesCount);
+        for (int i = 0; i < u2attributesCount; i++)
         {
             this.attributes.add(AttrInfo.create(din, this));
         }
@@ -760,8 +756,6 @@ public class ClassFile implements ClassConstants
 
         this.attributes.removeAll(delAttrs);
 
-        this.u2attributesCount = this.attributes.size();
-
         // Signal that unknown attributes are gone
         this.isUnkAttrGone = true;
     }
@@ -1116,22 +1110,22 @@ public class ClassFile implements ClassConstants
         dout.writeShort(this.u2accessFlags);
         dout.writeShort(this.u2thisClass);
         dout.writeShort(this.u2superClass);
-        dout.writeShort(this.u2interfacesCount);
+        dout.writeShort(this.u2interfaces.size());
         for (int intf : this.u2interfaces)
         {
             dout.writeShort(intf);
         }
-        dout.writeShort(this.u2fieldsCount);
+        dout.writeShort(this.fields.size());
         for (FieldInfo fd : this.fields)
         {
             fd.write(dout);
         }
-        dout.writeShort(this.u2methodsCount);
+        dout.writeShort(this.methods.size());
         for (MethodInfo md : this.methods)
         {
             md.write(dout);
         }
-        dout.writeShort(this.u2attributesCount);
+        dout.writeShort(this.attributes.size());
         for (AttrInfo at : this.attributes)
         {
             at.write(dout);
@@ -1173,8 +1167,8 @@ public class ClassFile implements ClassConstants
         pw.println("Access: " + Integer.toHexString(this.u2accessFlags));
         pw.println("This class: " + this.getName());
         pw.println("Superclass: " + this.getSuper());
-        pw.println("Interfaces count: " + Integer.toHexString(this.u2interfacesCount));
-        for (int i = 0; i < this.u2interfacesCount; i++)
+        pw.println("Interfaces count: " + Integer.toHexString(this.u2interfaces.size()));
+        for (int i = 0; i < this.u2interfaces.size(); i++)
         {
             int intf = this.u2interfaces.get(i);
             CpInfo info = this.getCpEntry(intf);
@@ -1188,8 +1182,8 @@ public class ClassFile implements ClassConstants
                     + this.getUtf8Debug(((ClassCpInfo)info).getNameIndex()));
             }
         }
-        pw.println("Fields count: " + Integer.toHexString(this.u2fieldsCount));
-        for (int i = 0; i < this.u2fieldsCount; i++)
+        pw.println("Fields count: " + Integer.toHexString(this.fields.size()));
+        for (int i = 0; i < this.fields.size(); i++)
         {
             ClassItemInfo info = this.fields.get(i);
             if (info == null)
@@ -1201,15 +1195,15 @@ public class ClassFile implements ClassConstants
                 pw.println("  Field " + Integer.toHexString(i) + ": "
                     + this.getUtf8Debug(info.getNameIndex()) + " "
                     + this.getUtf8Debug(info.getDescriptorIndex()));
-                pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
-//                for (int j = 0; j < info.u2attributesCount; j++)
+                pw.println("    Attrs count: " + Integer.toHexString(info.attributes.size()));
+//                for (int j = 0; j < info.attributes.size(); j++)
 //                {
 //                    info.attributes.get(j).dump(pw, this);
 //                }
             }
         }
-        pw.println("Methods count: " + Integer.toHexString(this.u2methodsCount));
-        for (int i = 0; i < this.u2methodsCount; i++)
+        pw.println("Methods count: " + Integer.toHexString(this.methods.size()));
+        for (int i = 0; i < this.methods.size(); i++)
         {
             ClassItemInfo info = this.methods.get(i);
             if (info == null)
@@ -1222,15 +1216,15 @@ public class ClassFile implements ClassConstants
                     + this.getUtf8Debug(info.getNameIndex()) + " "
                     + this.getUtf8Debug(info.getDescriptorIndex()) + " "
                     + Integer.toHexString(info.getAccessFlags()));
-                pw.println("    Attrs count: " + Integer.toHexString(info.u2attributesCount));
-//                for (int j = 0; j < info.u2attributesCount; j++)
+                pw.println("    Attrs count: " + Integer.toHexString(info.attributes.size()));
+//                for (int j = 0; j < info.attributes.size(); j++)
 //                {
 //                    info.attributes.get(j).dump(pw, this);
 //                }
             }
         }
-        pw.println("Attrs count: " + Integer.toHexString(this.u2attributesCount));
-//        for (int i = 0; i < this.u2attributesCount; i++)
+        pw.println("Attrs count: " + Integer.toHexString(this.attributes.size()));
+//        for (int i = 0; i < this.attributes.size(); i++)
 //        {
 //            this.attributes.get(i).dump(pw, this);
 //        }

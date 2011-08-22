@@ -44,7 +44,6 @@ public class MemberValueInfo
 
     private AnnotationInfo annotationValue;
 
-    private int u2numValues;
     private List<MemberValueInfo> values;
 
 
@@ -129,6 +128,7 @@ public class MemberValueInfo
     private void read(DataInput din) throws IOException, ClassFileException
     {
         this.u1tag = din.readUnsignedByte();
+        int u2numValues;
         switch (this.u1tag)
         {
             case 'B':
@@ -153,9 +153,9 @@ public class MemberValueInfo
                 this.annotationValue = AnnotationInfo.create(din);
                 break;
             case '[':
-                this.u2numValues = din.readUnsignedShort();
-                this.values = new ArrayList<MemberValueInfo>(this.u2numValues);
-                for (int i = 0; i < this.u2numValues; i++)
+                u2numValues = din.readUnsignedShort();
+                this.values = new ArrayList<MemberValueInfo>(u2numValues);
+                for (int i = 0; i < u2numValues; i++)
                 {
                     this.values.add(MemberValueInfo.create(din));
                 }
@@ -199,7 +199,7 @@ public class MemberValueInfo
                 this.annotationValue.write(dout);
                 break;
             case '[':
-                dout.writeShort(this.u2numValues);
+                dout.writeShort(this.values.size());
                 for (MemberValueInfo mv : this.values)
                 {
                     mv.write(dout);
