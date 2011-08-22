@@ -122,7 +122,7 @@ public class PatternList
         {
             throw new IllegalArgumentException();
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int k = i; k <= j; k++)
         {
             sb.append(this.getSub(k));

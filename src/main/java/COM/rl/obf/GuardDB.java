@@ -779,7 +779,7 @@ public class GuardDB implements ClassConstants
             if (digests.size() > 0)
             {
                 // Digest-Algorithms header
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 for (MessageDigest digest : digests)
                 {
                     sb.append(digest.getAlgorithm());

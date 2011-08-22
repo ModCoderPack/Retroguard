@@ -111,7 +111,7 @@ abstract public class MdFd extends TreeItem
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int modifiers = this.getModifiers();
         // NOTE - could update with new JDK1.5 modifiers, but that would cause incompatibility with earlier systems for RG
         if (Modifier.isAbstract(modifiers))

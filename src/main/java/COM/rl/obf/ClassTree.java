@@ -134,7 +134,7 @@ public class ClassTree implements NameMapper
         try
         {
             TreeItem ti = this.root;
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (SimpleName simpleName : ClassTree.getNameList(inName))
             {
                 String name = simpleName.getName();
@@ -150,7 +150,7 @@ public class ClassTree implements NameMapper
                             String repackageName = pk2.getRepackageName();
                             if (repackageName != null)
                             {
-                                sb = new StringBuffer(repackageName);
+                                sb = new StringBuilder(repackageName);
                             }
                             else
                             {
@@ -946,7 +946,7 @@ public class ClassTree implements NameMapper
         // Check for array -- requires special handling
         if ((className.length() > 0) && (className.charAt(0) == '['))
         {
-            StringBuffer newName = new StringBuffer();
+            StringBuilder newName = new StringBuilder();
             int i = 0;
             while (i < className.length())
             {
@@ -1098,7 +1098,7 @@ public class ClassTree implements NameMapper
     public String mapDescriptor(String descriptor) throws ClassFileException
     {
         // Pass everything through unchanged, except for the String between 'L' and ';' -- this is passed through mapClass(String)
-        StringBuffer newDesc = new StringBuffer();
+        StringBuilder newDesc = new StringBuilder();
         int i = 0;
         while (i < descriptor.length())
         {

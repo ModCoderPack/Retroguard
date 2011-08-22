@@ -64,7 +64,7 @@ public class Md extends MdFd
     protected String getDescriptorName()
     {
         List<String> types = this.parseTypes();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("(");
         if (types.size() > 0)
         {

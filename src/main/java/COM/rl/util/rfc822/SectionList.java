@@ -186,7 +186,7 @@ public class SectionList implements Iterable<Section>
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Section section : this.sections)
         {
             sb.append(section.toString());

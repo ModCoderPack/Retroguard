@@ -51,7 +51,7 @@ public class Tools
      */
     public static String toBase64(byte[] b)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int ptr = 0; ptr < b.length; ptr += 3)
         {
             sb.append(Tools.base64[(b[ptr] >> 2) & 0x3F]);

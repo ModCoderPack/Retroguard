@@ -145,7 +145,7 @@ public class Section implements Iterable<Header>
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Header header : this.headers)
         {
             sb.append(header.toString());
