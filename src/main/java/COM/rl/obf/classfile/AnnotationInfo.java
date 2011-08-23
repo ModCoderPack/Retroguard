@@ -136,16 +136,16 @@ public class AnnotationInfo
     /**
      * Provide debugging dump of this object.
      * 
-     * @param ps
+     * @param pw
      * @param cf
      */
-    public void dump(PrintStream ps, ClassFile cf)
+    public void dump(PrintWriter pw, ClassFile cf)
     {
-        ps.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8Debug(this.u2typeIndex));
-        ps.println("u2numMemberValuePairs : " + this.memberValuePairTable.size());
+        pw.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8Debug(this.u2typeIndex));
+        pw.println("u2numMemberValuePairs : " + this.memberValuePairTable.size());
         for (MemberValuePairInfo mvp : this.memberValuePairTable)
         {
-            mvp.dump(ps, cf);
+            mvp.dump(pw, cf);
         }
     }
 }

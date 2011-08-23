@@ -255,11 +255,11 @@ public class MemberValueInfo
     /**
      * Provide debugging dump of this object.
      * 
-     * @param ps
+     * @param pw
      * @param cf
      */
-    public void dump(PrintStream ps, ClassFile cf)
+    public void dump(PrintWriter pw, ClassFile cf)
     {
-        ps.println("u1tag : " + this.u1tag);
+        pw.println("u1tag : " + this.u1tag);
     }
 }

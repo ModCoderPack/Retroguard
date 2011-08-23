@@ -124,15 +124,18 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
 
     /**
      * Provide debugging dump of this object.
+     * 
+     * @param pw
+     * @param cf
      */
     @Override
-    public void dump(PrintStream ps)
+    public void dump(PrintWriter pw, ClassFile cf)
     {
-        super.dump(ps);
-        ps.println("u2numAnnotations : " + this.annotationTable.size());
+        super.dump(pw, cf);
+        pw.println("u2numAnnotations : " + this.annotationTable.size());
         for (AnnotationInfo ai : this.annotationTable)
         {
-            ai.dump(ps, this.cf);
+            ai.dump(pw, cf);
         }
     }
 }

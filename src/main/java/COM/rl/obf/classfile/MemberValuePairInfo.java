@@ -118,12 +118,12 @@ public class MemberValuePairInfo
     /**
      * Provide debugging dump of this object.
      * 
-     * @param ps
+     * @param pw
      * @param cf
      */
-    public void dump(PrintStream ps, ClassFile cf)
+    public void dump(PrintWriter pw, ClassFile cf)
     {
-        ps.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8Debug(this.u2memberNameIndex));
-        this.value.dump(ps, cf);
+        pw.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8Debug(this.u2memberNameIndex));
+        this.value.dump(pw, cf);
     }
 }
