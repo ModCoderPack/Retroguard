@@ -182,65 +182,52 @@ public class TreeItem
     public static boolean isGMatch(String pattern, String string)
     {
         PatternList pl, sl;
-        // TODO check exceptions
-        try
+        pl = PatternList.create(pattern);
+        sl = PatternList.create(string);
+        if (!pl.scExists())
         {
-            pl = PatternList.create(pattern);
-            sl = PatternList.create(string);
-            if (!pl.scExists())
+            if (pl.length() != sl.length())
             {
-                if (pl.length() != sl.length())
-                {
-                    return false;
-                }
-                // check each string identifier against the non-** pattern
-                for (int i = 0; i < pl.length(); i++)
-                {
-                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i)))
-                    {
-                        return false;
-                    }
-                }
+                return false;
             }
-            else
+            // check each string identifier against the non-** pattern
+            for (int i = 0; i < pl.length(); i++)
             {
-                if (pl.length() > sl.length())
-                {
-                    return false;
-                }
-                // check the head identifiers (pre-** segment)
-                for (int i = 0; i < pl.scIndex(); i++)
-                {
-                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i)))
-                    {
-                        return false;
-                    }
-                }
-                // check the tail identifiers (post-** segment)
-                for (int i = pl.scIndex() + 1; i < pl.length(); i++)
-                {
-                    int j = (i + sl.length()) - pl.length();
-                    if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(j)))
-                    {
-                        return false;
-                    }
-                }
-                // check the merged central identifiers against the ** segment
-                int j = (pl.scIndex() + sl.length()) - pl.length();
-                if (!TreeItem.isMatch(pl.getSub(pl.scIndex()), sl.getSub(pl.scIndex(), j)))
+                if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i)))
                 {
                     return false;
                 }
             }
         }
-        // TODO catch Exception
-//        catch (Exception e)
-//        {
-//            return false;
-//        }
-        finally
+        else
         {
-            // TODO finally
+            if (pl.length() > sl.length())
+            {
+                return false;
+            }
+            // check the head identifiers (pre-** segment)
+            for (int i = 0; i < pl.scIndex(); i++)
+            {
+                if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(i)))
+                {
+                    return false;
+                }
+            }
+            // check the tail identifiers (post-** segment)
+            for (int i = pl.scIndex() + 1; i < pl.length(); i++)
+            {
+                int j = (i + sl.length()) - pl.length();
+                if (!TreeItem.isMatch(pl.getSub(i), sl.getSub(j)))
+                {
+                    return false;
+                }
+            }
+            // check the merged central identifiers against the ** segment
+            int j = (pl.scIndex() + sl.length()) - pl.length();
+            if (!TreeItem.isMatch(pl.getSub(pl.scIndex()), sl.getSub(pl.scIndex(), j)))
+            {
+                return false;
+            }
         }
         return true;
     }

@@ -388,12 +388,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             e.printStackTrace();
             // fall thru
         }
-        // TODO check for missed exceptions
-//        catch (Exception e)
-//        {
-//            // fall thru
-//        }
-
         return false;
     }
 
@@ -484,11 +478,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             e.printStackTrace();
             // fall thru
         }
-        // TODO check for missed exceptions
-//        catch (Exception e)
-//        {
-//            // fall thru
-//        }
         return false;
     }
 
@@ -1584,7 +1573,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
     public Iterator<Cl> getDownClasses()
     {
-        // TODO do we actually need to copy the ArrayList here?
         List<Cl> clsList = new ArrayList<Cl>();
         for (NameListDown nameListDown : this.nameListDowns)
         {

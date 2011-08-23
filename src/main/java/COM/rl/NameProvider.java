@@ -973,7 +973,7 @@ public class NameProvider
                     }
                     catch (ClassFileException e)
                     {
-                        // TODO Auto-generated catch block
+                        // TODO printStackTrace
                         e.printStackTrace();
                     }
 

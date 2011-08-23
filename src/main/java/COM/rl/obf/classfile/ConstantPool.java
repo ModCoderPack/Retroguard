@@ -147,7 +147,6 @@ public class ConstantPool implements Iterable<CpInfo>
         CpInfo cpInfo = this.getCpEntry(i);
         if (cpInfo == null)
         {
-            // TODO check this
             // This can happen for JDK1.2 code so remove - 981123
 //            throw new ClassFileException("Illegal access to a Constant Pool element.");
             return;
@@ -180,7 +179,6 @@ public class ConstantPool implements Iterable<CpInfo>
         CpInfo cpInfo = this.getCpEntry(i);
         if (cpInfo == null)
         {
-            // TODO check this
             // This can happen for JDK1.2 code so remove - 981123
 //            throw new ClassFileException("Illegal access to a Constant Pool element.");
             return;

@@ -431,7 +431,7 @@ public class GuardDB implements ClassConstants
             this.buildClassTree(log);
         }
 
-        // TODO: Searge: check if those two walks are obsolete
+        // TODO: Searge: check if those two walks are obsolete, they are done below in classTree.resolveClasses also
         this.classTree.walkTree(new TreeAction()
         {
             @Override

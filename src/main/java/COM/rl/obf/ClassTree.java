@@ -185,11 +185,6 @@ public class ClassTree implements NameMapper
             e.printStackTrace();
             // Just drop through and return the original name
         }
-        // TODO check for missed exceptions
-//        catch (Exception e)
-//        {
-//            // Just drop through and return the original name
-//        }
         return inName;
     }
 
