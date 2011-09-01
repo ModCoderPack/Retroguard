@@ -218,9 +218,11 @@ public class Pk extends PkCl
 
     /**
      * Generate unique obfuscated names for this namespace.
+     * 
+     * @throws ClassFileException
      */
     @Override
-    public void generateNames()
+    public void generateNames() throws ClassFileException
     {
         super.generateNames();
         PkCl.generateNames(this.pks);
@@ -248,7 +250,7 @@ public class Pk extends PkCl
                 {
                     fullOutName = ".";
                 }
-                System.out.println("# Package " + fullInName + " renamed to " + fullOutName + " from name maker.");
+                NameProvider.log("# Package " + fullInName + " renamed to " + fullOutName + " from name maker.");
             }
         }
     }

@@ -157,9 +157,10 @@ public class GuardDB implements ClassConstants
                 }
                 catch (ClassFileException e)
                 {
-                    // TODO printStackTrace
-                    e.printStackTrace();
-                    log.println(GuardDB.ERROR_CORRUPT_CLASS + name + " (" + e.getMessage() + ")");
+                    log.println(GuardDB.ERROR_CORRUPT_CLASS + name
+                        + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
+                    System.err.println(GuardDB.ERROR_CORRUPT_CLASS + name
+                        + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
                 }
                 finally
                 {
@@ -222,8 +223,6 @@ public class GuardDB implements ClassConstants
         }
         catch (ClassFileException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // shouldn't get here
         }
 
@@ -390,15 +389,17 @@ public class GuardDB implements ClassConstants
             }
             catch (ClassFileException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
-                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
+                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name
+                    + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
+                System.err.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name
+                    + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
             }
             catch (RGSException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
-                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name);
+                log.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name
+                    + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
+                System.err.println(GuardDB.WARNING_SCRIPT_ENTRY_ABSENT + entry.name
+                    + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
             }
         }
     }
@@ -520,66 +521,73 @@ public class GuardDB implements ClassConstants
                         inName.length() - GuardDB.CLASS_EXT.length(), inName.length()).equals(GuardDB.CLASS_EXT))
                     {
                         // Write obfuscated class to the output Jar
-                        ClassFile cf = ClassFile.create(inStream);
-                        // To reduce output jar size in Pro, no class ID string
-                        if (Version.isLite)
+                        ClassFile cf = null;
+                        try
                         {
-                            cf.setIdString(Version.getClassIdString());
+                            cf = ClassFile.create(inStream);
                         }
-                        Cl cl = this.classTree.getCl(cf.getName());
-                        // Trim entire class if requested
-                        if (cl != null)
+                        catch (ClassFileException e)
                         {
-                            cf.trimAttrs(this.classTree);
-                            cf.updateRefCount();
-                            cf.remap(this.classTree, log, this.enableMapClassString);
-                            ZipEntry outEntry = new ZipEntry(cf.getName() + GuardDB.CLASS_EXT);
-                            outJar.putNextEntry(outEntry);
-
-                            // Create an OutputStream piped through a number of digest generators for the manifest
-                            List<MessageDigest> digests = new ArrayList<MessageDigest>();
-                            MessageDigest shaDigest = null;
-                            MessageDigest md5Digest = null;
-                            OutputStream outputStream = outJar;
-                            if (this.enableDigestSHA)
+                            // don't copy corrupt classes
+                        }
+                        if (cf != null)
+                        {
+                            // To reduce output jar size in Pro, no class ID string
+                            if (Version.isLite)
                             {
-                                try
-                                {
-                                    shaDigest = MessageDigest.getInstance("SHA-1");
-                                    digests.add(shaDigest);
-                                    outputStream = new DigestOutputStream(outputStream, shaDigest);
-                                }
-                                catch (NoSuchAlgorithmException e)
-                                {
-                                    // TODO printStackTrace
-                                    e.printStackTrace();
-                                    this.enableDigestSHA = false;
-                                }
+                                cf.setIdString(Version.getClassIdString());
                             }
-                            if (this.enableDigestMD5)
+                            Cl cl = this.classTree.getCl(cf.getName());
+                            // Trim entire class if requested
+                            if (cl != null)
                             {
-                                try
+                                cf.trimAttrs(this.classTree);
+                                cf.updateRefCount();
+                                cf.remap(this.classTree, log, this.enableMapClassString);
+                                ZipEntry outEntry = new ZipEntry(cf.getName() + GuardDB.CLASS_EXT);
+                                outJar.putNextEntry(outEntry);
+
+                                // Create an OutputStream piped through a number of digest generators for the manifest
+                                List<MessageDigest> digests = new ArrayList<MessageDigest>();
+                                MessageDigest shaDigest = null;
+                                MessageDigest md5Digest = null;
+                                OutputStream outputStream = outJar;
+                                if (this.enableDigestSHA)
                                 {
-                                    md5Digest = MessageDigest.getInstance("MD5");
-                                    digests.add(md5Digest);
-                                    outputStream = new DigestOutputStream(outputStream, md5Digest);
+                                    try
+                                    {
+                                        shaDigest = MessageDigest.getInstance("SHA-1");
+                                        digests.add(shaDigest);
+                                        outputStream = new DigestOutputStream(outputStream, shaDigest);
+                                    }
+                                    catch (NoSuchAlgorithmException e)
+                                    {
+                                        this.enableDigestSHA = false;
+                                    }
                                 }
-                                catch (NoSuchAlgorithmException e)
+                                if (this.enableDigestMD5)
                                 {
-                                    // TODO printStackTrace
-                                    e.printStackTrace();
-                                    this.enableDigestMD5 = false;
+                                    try
+                                    {
+                                        md5Digest = MessageDigest.getInstance("MD5");
+                                        digests.add(md5Digest);
+                                        outputStream = new DigestOutputStream(outputStream, md5Digest);
+                                    }
+                                    catch (NoSuchAlgorithmException e)
+                                    {
+                                        this.enableDigestMD5 = false;
+                                    }
                                 }
+                                DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+
+                                // Dump the classfile, while creating the digests
+                                cf.write(dataOutputStream);
+                                dataOutputStream.flush();
+                                outJar.closeEntry();
+
+                                // Now update the manifest entry for the class with new name and new digests
+                                this.updateManifest(inName, cf.getName() + GuardDB.CLASS_EXT, digests);
                             }
-                            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-
-                            // Dump the classfile, while creating the digests
-                            cf.write(dataOutputStream);
-                            dataOutputStream.flush();
-                            outJar.closeEntry();
-
-                            // Now update the manifest entry for the class with new name and new digests
-                            this.updateManifest(inName, cf.getName() + GuardDB.CLASS_EXT, digests);
                         }
                     }
                     else if (GuardDB.STREAM_NAME_MANIFEST.equals(inName.toUpperCase())
@@ -617,8 +625,6 @@ public class GuardDB implements ClassConstants
                                 }
                                 catch (NoSuchAlgorithmException e)
                                 {
-                                    // TODO printStackTrace
-                                    e.printStackTrace();
                                     this.enableDigestSHA = false;
                                 }
                             }
@@ -632,8 +638,6 @@ public class GuardDB implements ClassConstants
                                 }
                                 catch (NoSuchAlgorithmException e)
                                 {
-                                    // TODO printStackTrace
-                                    e.printStackTrace();
                                     this.enableDigestMD5 = false;
                                 }
                             }
@@ -688,8 +692,7 @@ public class GuardDB implements ClassConstants
             }
             catch (IOException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
+                // ignore
             }
             this.inJar = null;
         }

@@ -51,8 +51,9 @@ public class Fd extends MdFd
      * @param name
      * @param descriptor
      * @param access
+     * @throws ClassFileException
      */
-    public Fd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
+    public Fd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         super(parent, isSynthetic, name, descriptor, access);
     }

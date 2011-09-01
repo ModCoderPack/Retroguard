@@ -336,8 +336,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 }
                 catch (ClassNotFoundException e)
                 {
-                    // TODO printStackTrace
-                    e.printStackTrace();
+                    // fall thru
                 }
                 if (superClExt != null)
                 {
@@ -368,8 +367,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         }
                         catch (ClassNotFoundException e)
                         {
-                            // TODO printStackTrace
-                            e.printStackTrace();
+                            // fall thru
                         }
                         if (interClExt != null)
                         {
@@ -384,8 +382,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
         catch (ClassFileException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // fall thru
         }
         return false;
@@ -474,8 +470,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
         catch (ClassFileException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // fall thru
         }
         return false;
@@ -549,8 +543,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param name
      * @param descriptor
      * @param accessFlags
+     * @throws ClassFileException
      */
-    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags)
+    public Md addMethod(boolean isSynthetic, String name, String descriptor, int accessFlags) throws ClassFileException
     {
         // Store <init> and <clinit> methods separately - needed only for reference tracking
         Md md;
@@ -594,8 +589,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
      * @param name
      * @param descriptor
      * @param access
+     * @throws ClassFileException
      */
-    public Fd addField(boolean isSynthetic, String name, String descriptor, int access)
+    public Fd addField(boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         Fd fd = this.getField(name);
         if (fd == null)
@@ -749,8 +745,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
         catch (ClassNotFoundException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             return;
         }
 
@@ -938,7 +932,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (theOutName != null)
                     {
                         md.setOutName(theOutName);
-                        System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
+                        NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
                             + " because of derived class.");
                         continue nextMethod;
                     }
@@ -951,7 +945,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         md.setOutName(theOutName);
                         md.setIsOverride();
-                        System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
+                        NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
                             + " because of super class.");
                         continue nextMethod;
                     }
@@ -961,7 +955,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     md.setOutName(theOutName);
-                    System.out.println("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
+                    NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
                 }
             }
         }
@@ -977,7 +971,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (theOutName != null)
                     {
                         fd.setOutName(theOutName);
-                        System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
+                        NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
                             + " because of derived class.");
                         continue nextField;
                     }
@@ -990,7 +984,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         fd.setOutName(theOutName);
                         fd.setIsOverride();
-                        System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
+                        NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
                             + " because of super class.");
                         continue nextField;
                     }
@@ -1000,7 +994,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     fd.setOutName(theOutName);
-                    System.out.println("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
+                    NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
                 }
             }
         }
@@ -1308,8 +1302,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             }
             catch (ClassNotFoundException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
                 throw new ClassFileException("ClassNotFound " + name);
             }
         }
@@ -1365,19 +1357,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (name.equals(md.getName()))
                 {
                     List<String> paramAndReturnNames = ClassFile.parseDescriptor(descriptor);
+                    List<String> paramNames = paramAndReturnNames.subList(0, paramAndReturnNames.size() - 1);
+                    String returnName = paramAndReturnNames.get(paramAndReturnNames.size() - 1);
                     List<Class<?>> paramTypes = Arrays.asList(md.getParameterTypes());
                     Class<?> returnType = md.getReturnType();
-                    if (paramAndReturnNames.size() == (paramTypes.size() + 1))
+                    if (paramNames.size() == paramTypes.size())
                     {
-                        for (int j = 0; j < (paramAndReturnNames.size() - 1); j++)
+                        for (int j = 0; j < paramNames.size(); j++)
                         {
-                            if (!paramAndReturnNames.get(j).equals(paramTypes.get(j).getName()))
+                            if (!paramNames.get(j).equals(paramTypes.get(j).getName()))
                             {
                                 continue nextMethod;
                             }
                         }
-                        String returnName = returnType.getName();
-                        if (!paramAndReturnNames.get(paramAndReturnNames.size() - 1).equals(returnName))
+                        if (!returnName.equals(returnType.getName()))
                         {
                             continue nextMethod;
                         }

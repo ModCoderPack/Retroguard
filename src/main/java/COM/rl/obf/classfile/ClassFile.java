@@ -668,8 +668,7 @@ public class ClassFile implements ClassConstants
                 }
                 catch (ClassFileException e)
                 {
-                    // TODO printStackTrace
-                    e.printStackTrace();
+                    // ignore
                 }
             }
         }

@@ -47,8 +47,6 @@ public class NameProvider
 
     public static String[] parseCommandLine(String[] args)
     {
-        System.out.println("# Parsing " + args.length + " parameters");
-
         if ((args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
         {
             return NameProvider.parseNameSheetModeArgs(args);
@@ -66,13 +64,9 @@ public class NameProvider
         }
         catch (NumberFormatException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
-            System.out.println("Invalid start index: " + args[4]);
+            System.err.println("ERROR: Invalid start index: " + args[4]);
             throw e;
         }
-
-        System.out.println("# New start index is " + idx);
 
         NameProvider.uniqueStart = idx;
 
@@ -214,9 +208,7 @@ public class NameProvider
                         }
                         catch (NumberFormatException e)
                         {
-                            // TODO printStackTrace
-                            e.printStackTrace();
-                            System.out.println("Invalid start index: " + args[4]);
+                            System.err.println("Invalid start index: " + args[4]);
                             throw e;
                         }
                     }
@@ -229,8 +221,6 @@ public class NameProvider
         }
         catch (IOException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             return null;
         }
         finally
@@ -248,8 +238,7 @@ public class NameProvider
             }
             catch (IOException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
+                // ignore
             }
         }
 
@@ -277,73 +266,74 @@ public class NameProvider
             return null;
         }
 
-        NameProvider.initLogfiles();
-        NameProvider.readSRGFiles();
+        try
+        {
+            NameProvider.initLogfiles();
+            NameProvider.readSRGFiles();
+        }
+        catch (IOException e)
+        {
+            return null;
+        }
 
         return newArgs;
     }
 
-    private static void initLogfiles()
+    private static void initLogfiles() throws IOException
     {
-        try
+        if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
-            if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
+            if (NameProvider.npLog != null)
             {
-                if (NameProvider.npLog != null)
+                FileWriter writer = null;
+                try
                 {
-                    FileWriter writer = null;
-                    try
+                    writer = new FileWriter(NameProvider.npLog);
+                }
+                finally
+                {
+                    if (writer != null)
                     {
-                        writer = new FileWriter(NameProvider.npLog);
-                    }
-                    catch (IOException e)
-                    {
-                        // TODO printStackTrace
-                        e.printStackTrace();
-                    }
-                    finally
-                    {
-                        if (writer != null)
+                        try
                         {
                             writer.close();
                         }
-                    }
-                }
-            }
-            else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
-            {
-                if (NameProvider.roLog != null)
-                {
-                    FileWriter writer = null;
-                    try
-                    {
-                        writer = new FileWriter(NameProvider.roLog);
-                    }
-                    catch (IOException e)
-                    {
-                        // TODO printStackTrace
-                        e.printStackTrace();
-                    }
-                    finally
-                    {
-                        if (writer != null)
+                        catch (IOException e)
                         {
-                            writer.close();
+                            // ignore
                         }
                     }
                 }
             }
         }
-        catch (IOException e)
+        else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
-            NameProvider.npLog = null;
-            NameProvider.roLog = null;
+            if (NameProvider.roLog != null)
+            {
+                FileWriter writer = null;
+                try
+                {
+                    writer = new FileWriter(NameProvider.roLog);
+                }
+                finally
+                {
+                    if (writer != null)
+                    {
+                        try
+                        {
+                            writer.close();
+                        }
+                        catch (IOException e)
+                        {
+                            // ignore
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private static void readSRGFiles()
+    private static void readSRGFiles() throws IOException
     {
         if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
@@ -388,7 +378,7 @@ public class NameProvider
         }
     }
 
-    private static void readPackagesSRG()
+    private static void readPackagesSRG() throws IOException
     {
         if (NameProvider.packagesFile == null)
         {
@@ -426,7 +416,7 @@ public class NameProvider
         }
     }
 
-    private static void readClassesSRG()
+    private static void readClassesSRG() throws IOException
     {
         if (NameProvider.classesFile == null)
         {
@@ -450,7 +440,7 @@ public class NameProvider
         }
     }
 
-    private static void readMethodsSRG()
+    private static void readMethodsSRG() throws IOException
     {
         if (NameProvider.methodsFile == null)
         {
@@ -479,7 +469,7 @@ public class NameProvider
         }
     }
 
-    private static void readFieldsSRG()
+    private static void readFieldsSRG() throws IOException
     {
         if (NameProvider.fieldsFile == null)
         {
@@ -503,7 +493,7 @@ public class NameProvider
         }
     }
 
-    private static List<String> readAllLines(File file)
+    private static List<String> readAllLines(File file) throws IOException
     {
         List<String> lines = new ArrayList<String>();
 
@@ -521,12 +511,6 @@ public class NameProvider
                 line = reader.readLine();
             }
         }
-        catch (IOException e)
-        {
-            // TODO printStackTrace
-            e.printStackTrace();
-            return null;
-        }
         finally
         {
             try
@@ -542,16 +526,14 @@ public class NameProvider
             }
             catch (IOException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
-                return null;
+                // ignore
             }
         }
 
         return lines;
     }
 
-    private static void log(String text)
+    public static void log(String text)
     {
         System.out.println(text);
 
@@ -584,8 +566,6 @@ public class NameProvider
         }
         catch (IOException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             return;
         }
         finally
@@ -603,13 +583,12 @@ public class NameProvider
             }
             catch (IOException e)
             {
-                // TODO printStackTrace
-                e.printStackTrace();
+                // ignore
             }
         }
     }
 
-    public static String getNewTreeItemName(TreeItem ti)
+    public static String getNewTreeItemName(TreeItem ti) throws ClassFileException
     {
 //        NameProvider.log("TI: " + ti.getFullInName());
         if (ti instanceof Pk)
@@ -810,7 +789,7 @@ public class NameProvider
         return className;
     }
 
-    public static String getNewMethodName(Md md)
+    public static String getNewMethodName(Md md) throws ClassFileException
     {
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {

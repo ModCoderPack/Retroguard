@@ -51,8 +51,9 @@ public class Md extends MdFd
      * @param name
      * @param descriptor
      * @param access
+     * @throws ClassFileException
      */
-    public Md(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
+    public Md(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         super(parent, isSynthetic, name, descriptor, access);
     }
@@ -63,18 +64,15 @@ public class Md extends MdFd
     @Override
     protected String getDescriptorName()
     {
-        List<String> types = this.parseTypes();
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        if (types.size() > 0)
+        for (Iterator<String> iter = this.paramTypes.iterator(); iter.hasNext();)
         {
-            for (int i = 0; i < (types.size() - 1); i++)
+            String type = iter.next();
+            sb.append(type);
+            if (iter.hasNext())
             {
-                sb.append(types.get(i));
-                if (i < (types.size() - 2))
-                {
-                    sb.append(", ");
-                }
+                sb.append(", ");
             }
         }
         sb.append(");");

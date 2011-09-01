@@ -39,6 +39,8 @@ abstract public class MdFd extends TreeItem
     // Fields ----------------------------------------------------------------
     private String descriptor = null;
     private boolean isOverride = false;
+    protected String returnType = null;
+    protected List<String> paramTypes = null;
 
 
     // Class Methods ---------------------------------------------------------
@@ -53,8 +55,9 @@ abstract public class MdFd extends TreeItem
      * @param name
      * @param descriptor
      * @param access
+     * @throws ClassFileException
      */
-    public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access)
+    public MdFd(TreeItem parent, boolean isSynthetic, String name, String descriptor, int access) throws ClassFileException
     {
         super(parent, name);
         this.descriptor = descriptor;
@@ -65,6 +68,10 @@ abstract public class MdFd extends TreeItem
             throw new RuntimeException("Internal error: method/field must have name and descriptor, "
                 + "and have Class or Interface as parent");
         }
+
+        List<String> fullTypes = ClassFile.parseDescriptor(this.getDescriptor(), true);
+        this.returnType = fullTypes.get(fullTypes.size() - 1);
+        this.paramTypes = fullTypes.subList(0, fullTypes.size() - 1);
 
         // Disallow obfuscation of 'Synthetic' methods
         if (isSynthetic)
@@ -155,6 +162,7 @@ abstract public class MdFd extends TreeItem
             sb.append("final ");
         }
         sb.append(this.getReturnTypeName());
+        sb.append(" ");
         sb.append(this.getInName());
         sb.append(this.getDescriptorName());
         return sb.toString();
@@ -165,41 +173,13 @@ abstract public class MdFd extends TreeItem
      */
     protected String getReturnTypeName()
     {
-        List<String> types = this.parseTypes();
-        if (types.size() > 0)
-        {
-            return types.get(types.size() - 1) + " ";
-        }
-        return "";
+        return this.returnType;
     }
 
     /**
      * Return the display name of the descriptor types.
      */
     abstract protected String getDescriptorName();
-
-    private List<String> parsedTypes = null;
-
-    /**
-     * Return the parsed descriptor types array.
-     */
-    protected List<String> parseTypes()
-    {
-        // TODO move into constructor?
-        if (this.parsedTypes == null)
-        {
-            try
-            {
-                this.parsedTypes = ClassFile.parseDescriptor(this.getDescriptor(), true);
-            }
-            catch (ClassFileException e)
-            {
-                // TODO printStackTrace
-                e.printStackTrace();
-            }
-        }
-        return this.parsedTypes;
-    }
 
     /**
      * Does this member match the wildcard pattern? (** and * supported)

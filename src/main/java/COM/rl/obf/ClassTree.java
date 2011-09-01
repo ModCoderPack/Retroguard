@@ -23,6 +23,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import COM.rl.NameProvider;
 import COM.rl.obf.classfile.*;
 
 /**
@@ -181,8 +182,6 @@ public class ClassTree implements NameMapper
         }
         catch (ClassFileException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // Just drop through and return the original name
         }
         return inName;
@@ -308,8 +307,6 @@ public class ClassTree implements NameMapper
         }
         catch (ClassFileException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // shouldn't get here
         }
     }
@@ -563,7 +560,7 @@ public class ClassTree implements NameMapper
         }
         else
         {
-            System.out.println("# Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName() + " to " + obfName);
+            NameProvider.log("# Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName() + " to " + obfName);
         }
     }
 
@@ -593,13 +590,13 @@ public class ClassTree implements NameMapper
         this.walkTree(new TreeAction()
         {
             @Override
-            public void packageAction(Pk pk)
+            public void packageAction(Pk pk) throws ClassFileException
             {
                 pk.generateNames();
             }
 
             @Override
-            public void classAction(Cl cl)
+            public void classAction(Cl cl) throws ClassFileException
             {
                 cl.generateNames();
             }
@@ -1237,8 +1234,6 @@ public class ClassTree implements NameMapper
         }
         catch (ClassFileException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // shouldn't get here
         }
     }

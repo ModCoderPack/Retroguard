@@ -203,8 +203,10 @@ abstract public class PkCl extends TreeItem
 
     /**
      * Generate unique obfuscated names for this namespace.
+     * 
+     * @throws ClassFileException
      */
-    public void generateNames()
+    public void generateNames() throws ClassFileException
     {
         PkCl.generateNames(this.cls);
     }
@@ -213,8 +215,9 @@ abstract public class PkCl extends TreeItem
      * Generate unique obfuscated names for a given namespace.
      * 
      * @param hash
+     * @throws ClassFileException
      */
-    protected static void generateNames(Map<String, ? extends TreeItem> hash)
+    protected static void generateNames(Map<String, ? extends TreeItem> hash) throws ClassFileException
     {
         for (TreeItem ti : hash.values())
         {
@@ -243,7 +246,7 @@ abstract public class PkCl extends TreeItem
                     {
                         thisType = "Class";
                     }
-                    System.out.println("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker.");
+                    NameProvider.log("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker.");
                 }
             }
         }

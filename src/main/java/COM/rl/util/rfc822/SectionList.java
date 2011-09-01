@@ -111,8 +111,6 @@ public class SectionList implements Iterable<Section>
         }
         catch (IOException e)
         {
-            // TODO printStackTrace
-            e.printStackTrace();
             // Unexpected EOF during readLine() can cause this.
             // Just terminate the read quietly.
             return;

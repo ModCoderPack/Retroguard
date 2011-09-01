@@ -46,9 +46,11 @@ public class RetroGuard
      * LOG-FILE is the file name of the output log file in which name mappings are listed (defaults to 'retroguard.log').
      * 
      * @param args
+     * @throws Exception
      */
-    public static void main(String args[])
+    public static void main(String args[]) throws Exception
     {
+        System.err.println(Version.getVersionComment());
         // Check arg-list for validity
         try
         {
@@ -84,7 +86,7 @@ public class RetroGuard
         }
         catch (IllegalArgumentException e)
         {
-            System.err.println(Version.getVersionComment());
+            System.err.println();
             System.err.println("Problem: " + (e.getMessage() != null ? e.getMessage() : ""));
             RetroGuard.showUsage();
             System.exit(-1);
