@@ -341,7 +341,12 @@ public class ClassTree implements NameMapper
         throws ClassFileException
     {
         // Mark the class (or classes, if this is a wildcarded specifier)
-        for (Cl cl : this.getClList(name))
+        List<Cl> classes = this.getClList(name);
+        if (classes.size() == 0)
+        {
+            throw new ClassFileException("ClassNotFound");
+        }
+        for (Cl cl : classes)
         {
             if (((extendsName == null) || cl.hasAsSuperOrInterface(extendsName))
                 && cl.modifiersMatchMask(accessMask, accessSetting))
@@ -416,7 +421,12 @@ public class ClassTree implements NameMapper
     public void retainMethod(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
         int accessMask, int accessSetting) throws ClassFileException
     {
-        for (Md md : this.getMdList(name, descriptor))
+        List<Md> methods = this.getMdList(name, descriptor);
+        if (methods.size() == 0)
+        {
+            throw new ClassFileException("MethodNotFound");
+        }
+        for (Md md : methods)
         {
             Cl thisCl = (Cl)md.getParent();
             if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName))
@@ -455,7 +465,12 @@ public class ClassTree implements NameMapper
     public void retainField(String name, String descriptor, boolean retainAndClass, String extendsName, boolean invert,
         int accessMask, int accessSetting) throws ClassFileException
     {
-        for (Fd fd : this.getFdList(name, descriptor))
+        List<Fd> fields = this.getFdList(name, descriptor);
+        if (fields.size() == 0)
+        {
+            throw new ClassFileException("FieldNotFound");
+        }
+        for (Fd fd : fields)
         {
             Cl thisCl = (Cl)fd.getParent();
             if (((extendsName == null) || thisCl.hasAsSuperOrInterface(extendsName))
@@ -488,7 +503,12 @@ public class ClassTree implements NameMapper
      */
     public void retainPackageMap(String name, String obfName) throws ClassFileException
     {
-        ClassTree.retainItemMap(this.getPk(name), obfName);
+        Pk pk = this.getPk(name);
+        if (pk == null)
+        {
+            throw new ClassFileException("PackageNotFound");
+        }
+        ClassTree.retainItemMap(pk, obfName);
     }
 
     /**
@@ -501,6 +521,10 @@ public class ClassTree implements NameMapper
     public void retainRepackageMap(String name, String obfName) throws ClassFileException
     {
         Pk pk = this.getPk(name);
+        if (pk == null)
+        {
+            throw new ClassFileException("PackageNotFound");
+        }
         if (!pk.isFixed())
         {
             pk.setRepackageName(obfName);
@@ -517,7 +541,12 @@ public class ClassTree implements NameMapper
      */
     public void retainClassMap(String name, String obfName) throws ClassFileException
     {
-        ClassTree.retainItemMap(this.getCl(name), obfName);
+        Cl cl = this.getCl(name);
+        if (cl == null)
+        {
+            throw new ClassFileException("ClassNotFound");
+        }
+        ClassTree.retainItemMap(cl, obfName);
     }
 
     /**
@@ -530,7 +559,12 @@ public class ClassTree implements NameMapper
      */
     public void retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
     {
-        ClassTree.retainItemMap(this.getMd(name, descriptor), obfName);
+        Md md = this.getMd(name, descriptor);
+        if (md == null)
+        {
+            throw new ClassFileException("MethodNotFound");
+        }
+        ClassTree.retainItemMap(md, obfName);
     }
 
     /**
@@ -542,7 +576,12 @@ public class ClassTree implements NameMapper
      */
     public void retainFieldMap(String name, String obfName) throws ClassFileException
     {
-        ClassTree.retainItemMap(this.getFd(name), obfName);
+        Fd fd = this.getFd(name);
+        if (fd == null)
+        {
+            throw new ClassFileException("FieldNotFound");
+        }
+        ClassTree.retainItemMap(fd, obfName);
     }
 
     /**
@@ -908,8 +947,14 @@ public class ClassTree implements NameMapper
     {
         // Split into class and method names
         int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
-        Cl cl = this.getCl(fullName.substring(0, pos));
-        return cl.getMethod(fullName.substring(pos + 1), descriptor);
+        String className = fullName.substring(0, pos);
+        String methodName = fullName.substring(pos + 1);
+        Cl cl = this.getCl(className);
+        if (cl == null)
+        {
+            return null;
+        }
+        return cl.getMethod(methodName, descriptor);
     }
 
     /**
@@ -922,8 +967,14 @@ public class ClassTree implements NameMapper
     {
         // Split into class and field names
         int pos = fullName.lastIndexOf(ClassTree.METHOD_FIELD_LEVEL);
-        Cl cl = this.getCl(fullName.substring(0, pos));
-        return cl.getField(fullName.substring(pos + 1));
+        String className = fullName.substring(0, pos);
+        String fieldName = fullName.substring(pos + 1);
+        Cl cl = this.getCl(className);
+        if (cl == null)
+        {
+            return null;
+        }
+        return cl.getField(fieldName);
     }
 
     /**
