@@ -1131,7 +1131,7 @@ public class ClassTree implements NameMapper
     public String mapSignature(String signature) throws ClassFileException
     {
         SignatureWriter sw = new SignatureWriter();
-        SignatureVisitor sa = new MapSignatureAdapter(sw);
+        SignatureVisitor sa = new MapSignatureAdapter(sw, this);
         SignatureReader sr = new SignatureReader(signature);
         sr.accept(sa);
         String newSig = sw.toString();

@@ -5,16 +5,21 @@ package COM.rl;
 
 import org.objectweb.asm.signature.SignatureVisitor;
 
+import COM.rl.obf.classfile.ClassFileException;
+import COM.rl.obf.classfile.NameMapper;
+
 public class MapSignatureAdapter implements SignatureVisitor
 {
     private SignatureVisitor sv;
+    private NameMapper nm;
 
     /**
      * Constructor
      */
-    public MapSignatureAdapter(SignatureVisitor sv)
+    public MapSignatureAdapter(SignatureVisitor sv, NameMapper nm)
     {
         this.sv = sv;
+        this.nm = nm;
     }
 
     /**
@@ -130,8 +135,18 @@ public class MapSignatureAdapter implements SignatureVisitor
     @Override
     public void visitClassType(String name)
     {
-        System.err.println("visitClassType: " + name);
-        this.sv.visitClassType(name);
+        String newName = null;
+        try
+        {
+            newName = this.nm.mapClass(name);
+            System.err.println("visitClassType: " + name + " => " + newName);
+        }
+        catch (ClassFileException e)
+        {
+            // ignore
+            System.err.println("visitClassType: " + e.toString());
+        }
+        this.sv.visitClassType(newName == null ? name : newName);
     }
 
     /**
