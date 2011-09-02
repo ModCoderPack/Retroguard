@@ -23,6 +23,9 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.objectweb.asm.signature.*;
+
+import COM.rl.MapSignatureAdapter;
 import COM.rl.NameProvider;
 import COM.rl.obf.classfile.*;
 
@@ -1127,8 +1130,13 @@ public class ClassTree implements NameMapper
     @Override
     public String mapSignature(String signature) throws ClassFileException
     {
-        // NOTE - not currently parsed and mapped; reserve identifiers appearing in type signatures for reflective methods to work.
-        return signature;
+        SignatureWriter sw = new SignatureWriter();
+        SignatureVisitor sa = new MapSignatureAdapter(sw);
+        SignatureReader sr = new SignatureReader(signature);
+        sr.accept(sa);
+        String newSig = sw.toString();
+        System.err.println("! " + signature + " => " + newSig);
+        return newSig;
     }
 
     /**
