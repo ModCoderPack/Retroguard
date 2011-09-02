@@ -35,7 +35,8 @@ package org.objectweb.asm.signature;
  * @author Thomas Hallgren
  * @author Eric Bruneton
  */
-public class SignatureWriter implements SignatureVisitor {
+public class SignatureWriter implements SignatureVisitor
+{
 
     /**
      * Buffer used to construct the signature.
@@ -53,123 +54,160 @@ public class SignatureWriter implements SignatureVisitor {
     private boolean hasParameters;
 
     /**
-     * Stack used to keep track of class types that have arguments. Each element
-     * of this stack is a boolean encoded in one bit. The top of the stack is
-     * the lowest order bit. Pushing false = *2, pushing true = *2+1, popping =
-     * /2.
+     * Stack used to keep track of class types that have arguments. Each element of this stack is a boolean encoded in one bit.
+     * The top of the stack is the lowest order bit. Pushing false = *2, pushing true = *2+1, popping = /2.
      */
     private int argumentStack;
 
     /**
      * Constructs a new {@link SignatureWriter} object.
      */
-    public SignatureWriter() {
+    public SignatureWriter()
+    {
     }
 
     // ------------------------------------------------------------------------
     // Implementation of the SignatureVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visitFormalTypeParameter(final String name) {
-        if (!hasFormals) {
-            hasFormals = true;
-            buf.append('<');
+    @Override
+    public void visitFormalTypeParameter(final String name)
+    {
+        if (!this.hasFormals)
+        {
+            this.hasFormals = true;
+            this.buf.append('<');
         }
-        buf.append(name);
-        buf.append(':');
+        this.buf.append(name);
+        this.buf.append(':');
     }
 
-    public SignatureVisitor visitClassBound() {
+    @Override
+    public SignatureVisitor visitClassBound()
+    {
         return this;
     }
 
-    public SignatureVisitor visitInterfaceBound() {
-        buf.append(':');
+    @Override
+    public SignatureVisitor visitInterfaceBound()
+    {
+        this.buf.append(':');
         return this;
     }
 
-    public SignatureVisitor visitSuperclass() {
-        endFormals();
+    @Override
+    public SignatureVisitor visitSuperclass()
+    {
+        this.endFormals();
         return this;
     }
 
-    public SignatureVisitor visitInterface() {
+    @Override
+    public SignatureVisitor visitInterface()
+    {
         return this;
     }
 
-    public SignatureVisitor visitParameterType() {
-        endFormals();
-        if (!hasParameters) {
-            hasParameters = true;
-            buf.append('(');
-        }
-        return this;
-    }
-
-    public SignatureVisitor visitReturnType() {
-        endFormals();
-        if (!hasParameters) {
-            buf.append('(');
-        }
-        buf.append(')');
-        return this;
-    }
-
-    public SignatureVisitor visitExceptionType() {
-        buf.append('^');
-        return this;
-    }
-
-    public void visitBaseType(final char descriptor) {
-        buf.append(descriptor);
-    }
-
-    public void visitTypeVariable(final String name) {
-        buf.append('T');
-        buf.append(name);
-        buf.append(';');
-    }
-
-    public SignatureVisitor visitArrayType() {
-        buf.append('[');
-        return this;
-    }
-
-    public void visitClassType(final String name) {
-        buf.append('L');
-        buf.append(name);
-        argumentStack *= 2;
-    }
-
-    public void visitInnerClassType(final String name) {
-        endArguments();
-        buf.append('.');
-        buf.append(name);
-        argumentStack *= 2;
-    }
-
-    public void visitTypeArgument() {
-        if (argumentStack % 2 == 0) {
-            ++argumentStack;
-            buf.append('<');
-        }
-        buf.append('*');
-    }
-
-    public SignatureVisitor visitTypeArgument(final char wildcard) {
-        if (argumentStack % 2 == 0) {
-            ++argumentStack;
-            buf.append('<');
-        }
-        if (wildcard != '=') {
-            buf.append(wildcard);
+    @Override
+    public SignatureVisitor visitParameterType()
+    {
+        this.endFormals();
+        if (!this.hasParameters)
+        {
+            this.hasParameters = true;
+            this.buf.append('(');
         }
         return this;
     }
 
-    public void visitEnd() {
-        endArguments();
-        buf.append(';');
+    @Override
+    public SignatureVisitor visitReturnType()
+    {
+        this.endFormals();
+        if (!this.hasParameters)
+        {
+            this.buf.append('(');
+        }
+        this.buf.append(')');
+        return this;
+    }
+
+    @Override
+    public SignatureVisitor visitExceptionType()
+    {
+        this.buf.append('^');
+        return this;
+    }
+
+    @Override
+    public void visitBaseType(final char descriptor)
+    {
+        this.buf.append(descriptor);
+    }
+
+    @Override
+    public void visitTypeVariable(final String name)
+    {
+        this.buf.append('T');
+        this.buf.append(name);
+        this.buf.append(';');
+    }
+
+    @Override
+    public SignatureVisitor visitArrayType()
+    {
+        this.buf.append('[');
+        return this;
+    }
+
+    @Override
+    public void visitClassType(final String name)
+    {
+        this.buf.append('L');
+        this.buf.append(name);
+        this.argumentStack *= 2;
+    }
+
+    @Override
+    public void visitInnerClassType(final String name)
+    {
+        this.endArguments();
+        this.buf.append('.');
+        this.buf.append(name);
+        this.argumentStack *= 2;
+    }
+
+    @Override
+    public void visitTypeArgument()
+    {
+        if ((this.argumentStack % 2) == 0)
+        {
+            ++this.argumentStack;
+            this.buf.append('<');
+        }
+        this.buf.append('*');
+    }
+
+    @Override
+    public SignatureVisitor visitTypeArgument(final char wildcard)
+    {
+        if ((this.argumentStack % 2) == 0)
+        {
+            ++this.argumentStack;
+            this.buf.append('<');
+        }
+        if (wildcard != '=')
+        {
+            this.buf.append(wildcard);
+        }
+        return this;
+    }
+
+    @Override
+    public void visitEnd()
+    {
+        this.endArguments();
+        this.buf.append(';');
     }
 
     /**
@@ -177,8 +215,10 @@ public class SignatureWriter implements SignatureVisitor {
      * 
      * @return the signature that was built by this signature writer.
      */
-    public String toString() {
-        return buf.toString();
+    @Override
+    public String toString()
+    {
+        return this.buf.toString();
     }
 
     // ------------------------------------------------------------------------
@@ -188,20 +228,24 @@ public class SignatureWriter implements SignatureVisitor {
     /**
      * Ends the formal type parameters section of the signature.
      */
-    private void endFormals() {
-        if (hasFormals) {
-            hasFormals = false;
-            buf.append('>');
+    private void endFormals()
+    {
+        if (this.hasFormals)
+        {
+            this.hasFormals = false;
+            this.buf.append('>');
         }
     }
 
     /**
      * Ends the type arguments of a class or inner class type.
      */
-    private void endArguments() {
-        if (argumentStack % 2 != 0) {
-            buf.append('>');
+    private void endArguments()
+    {
+        if ((this.argumentStack % 2) != 0)
+        {
+            this.buf.append('>');
         }
-        argumentStack /= 2;
+        this.argumentStack /= 2;
     }
 }

@@ -30,29 +30,22 @@
 package org.objectweb.asm.signature;
 
 /**
- * A visitor to visit a generic signature. The methods of this interface must be
- * called in one of the three following orders (the last one is the only valid
- * order for a {@link SignatureVisitor} that is returned by a method of this
- * interface): <ul> <li><i>ClassSignature</i> = (
- * <tt>visitFormalTypeParameter</tt> 
- *   <tt>visitClassBound</tt>?
- * <tt>visitInterfaceBound</tt>* )* ( <tt>visitSuperClass</tt> 
- *   <tt>visitInterface</tt>* )</li>
- * <li><i>MethodSignature</i> = ( <tt>visitFormalTypeParameter</tt> 
- *   <tt>visitClassBound</tt>?
- * <tt>visitInterfaceBound</tt>* )* ( <tt>visitParameterType</tt>*
- * <tt>visitReturnType</tt> 
- *   <tt>visitExceptionType</tt>* )</li> <li><i>TypeSignature</i> =
- * <tt>visitBaseType</tt> | <tt>visitTypeVariable</tt> |
- * <tt>visitArrayType</tt> | (
- * <tt>visitClassType</tt> <tt>visitTypeArgument</tt>* (
- * <tt>visitInnerClassType</tt> <tt>visitTypeArgument</tt>* )*
- * <tt>visitEnd</tt> ) )</li> </ul>
+ * A visitor to visit a generic signature. The methods of this interface must be called in one of the three following orders (the
+ * last one is the only valid order for a {@link SignatureVisitor} that is returned by a method of this interface):
+ * <ul>
+ * <li><i>ClassSignature</i> = {@code ( visitFormalTypeParameter visitClassBound? visitInterfaceBound* )* ( visitSuperClass
+ * visitInterface* )}</li>
+ * <li><i>MethodSignature</i> = {@code ( visitFormalTypeParameter visitClassBound? visitInterfaceBound* )* ( visitParameterType*
+ * visitReturnType visitExceptionType>* )}</li>
+ * <li><i>TypeSignature</i> = {@code visitBaseType | visitTypeVariable | visitArrayType | (visitClassType visitTypeArgument* (
+ * visitInnerClassType visitTypeArgument* )* visitEnd ) )}</li>
+ * </ul>
  * 
  * @author Thomas Hallgren
  * @author Eric Bruneton
  */
-public interface SignatureVisitor {
+public interface SignatureVisitor
+{
 
     /**
      * Wildcard for an "extends" type argument.
@@ -72,7 +65,8 @@ public interface SignatureVisitor {
     /**
      * Visits a formal type parameter.
      * 
-     * @param name the name of the formal parameter.
+     * @param name
+     *            the name of the formal parameter.
      */
     void visitFormalTypeParameter(String name);
 
@@ -129,15 +123,16 @@ public interface SignatureVisitor {
     /**
      * Visits a signature corresponding to a primitive type.
      * 
-     * @param descriptor the descriptor of the primitive type, or 'V' for
-     *        <tt>void</tt>.
+     * @param descriptor
+     *            the descriptor of the primitive type, or 'V' for {@code void}.
      */
     void visitBaseType(char descriptor);
 
     /**
      * Visits a signature corresponding to a type variable.
      * 
-     * @param name the name of the type variable.
+     * @param name
+     *            the name of the type variable.
      */
     void visitTypeVariable(String name);
 
@@ -153,14 +148,16 @@ public interface SignatureVisitor {
      * Starts the visit of a signature corresponding to a class or interface
      * type.
      * 
-     * @param name the internal name of the class or interface.
+     * @param name
+     *            the internal name of the class or interface.
      */
     void visitClassType(String name);
 
     /**
      * Visits an inner class.
      * 
-     * @param name the local name of the inner class in its enclosing class.
+     * @param name
+     *            the local name of the inner class in its enclosing class.
      */
     void visitInnerClassType(String name);
 
@@ -173,7 +170,8 @@ public interface SignatureVisitor {
     /**
      * Visits a type argument of the last visited class or inner class type.
      * 
-     * @param wildcard '+', '-' or '='.
+     * @param wildcard
+     *            '+', '-' or '='.
      * @return a non null visitor to visit the signature of the type argument.
      */
     SignatureVisitor visitTypeArgument(char wildcard);
