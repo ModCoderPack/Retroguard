@@ -16,8 +16,9 @@ public class NameProvider
     public static final String DEFAULT_CFG_FILE_NAME = "retroguard.cfg";
 
     public static int uniqueStart = 100000;
-
     public static int currentMode = NameProvider.CLASSIC_MODE;
+    public static boolean quiet = false;
+    public static boolean oldHash = false;
 
     private static File packagesFile = null;
     private static File classesFile = null;
@@ -215,6 +216,22 @@ public class NameProvider
                     else if (defines[0].equalsIgnoreCase("protectedpackage"))
                     {
                         NameProvider.protectedPackages.add(defines[1]);
+                    }
+                    else if (defines[0].equalsIgnoreCase("quiet"))
+                    {
+                        String value = defines[1].substring(0, 1);
+                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        {
+                            NameProvider.quiet = true;
+                        }
+                    }
+                    else if (defines[0].equalsIgnoreCase("oldhash"))
+                    {
+                        String value = defines[1].substring(0, 1);
+                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        {
+                            NameProvider.oldHash = true;
+                        }
                     }
                 }
             }
@@ -535,7 +552,10 @@ public class NameProvider
 
     public static void log(String text)
     {
-        System.out.println(text);
+        if (!NameProvider.quiet)
+        {
+            System.out.println(text);
+        }
 
         File log = null;
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)

@@ -82,6 +82,12 @@ public class Pk extends PkCl
     public Pk(TreeItem parent, String name)
     {
         super(parent, name);
+        
+        if (NameProvider.oldHash)
+        {
+            this.pks = new Hashtable<String, Pk>();
+        }
+
         if ((parent == null) && !name.equals(""))
         {
             throw new RuntimeException("Internal error: only the default package has no parent");

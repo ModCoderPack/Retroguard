@@ -94,7 +94,7 @@ public class RetroGuard
         catch (Exception e)
         {
             System.err.println();
-            System.err.println("RetroGuard error: " + e.getMessage());
+            System.err.println("RetroGuard error: " + e.toString());
             System.exit(-1);
         }
     }

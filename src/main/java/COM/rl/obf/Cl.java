@@ -118,6 +118,14 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     public Cl(TreeItem parent, boolean isInnerClass, String name, String superClass, List<String> superInterfaces, int access)
     {
         super(parent, name);
+        
+        if (NameProvider.oldHash)
+        {
+            this.mds = new Hashtable<String, Md>();
+            this.mdsSpecial = new Hashtable<String, Md>();
+            this.fds = new Hashtable<String, Fd>();
+        }
+
         this.superClass = superClass;
         this.superInterfaces = superInterfaces;
         this.isInnerClass = isInnerClass;

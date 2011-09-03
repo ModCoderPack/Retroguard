@@ -57,6 +57,11 @@ abstract public class PkCl extends TreeItem
     public PkCl(TreeItem parent, String name)
     {
         super(parent, name);
+        
+        if (NameProvider.oldHash)
+        {
+            this.cls = new Hashtable<String, Cl>();
+        }
     }
 
     /**
