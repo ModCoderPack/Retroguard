@@ -71,10 +71,18 @@ public interface NameMapper
     public String mapDescriptor(String descriptor) throws ClassFileException;
 
     /**
-     * Mapping for generic type signature.
+     * Mapping for generic type signature of class or method.
      * 
      * @param signature
      * @throws ClassFileException
      */
     public String mapSignature(String signature) throws ClassFileException;
+
+    /**
+     * Mapping for generic type signature of field.
+     * 
+     * @param signature
+     * @throws ClassFileException
+     */
+    public String mapSignatureField(String signature) throws ClassFileException;
 }

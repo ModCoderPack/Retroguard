@@ -105,7 +105,15 @@ public class SignatureAttrInfo extends AttrInfo
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         String oldDesc = cf.getUtf8(this.u2signatureIndex);
-        String newDesc = nm.mapSignature(oldDesc);
+        String newDesc;
+        if (this.fromField)
+        {
+            newDesc = nm.mapSignatureField(oldDesc);
+        }
+        else
+        {
+            newDesc = nm.mapSignature(oldDesc);
+        }
         this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }

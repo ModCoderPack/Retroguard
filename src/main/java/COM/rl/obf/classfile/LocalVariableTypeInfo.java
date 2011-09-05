@@ -127,7 +127,7 @@ public class LocalVariableTypeInfo
     protected void remap(ClassFile cf, NameMapper nm) throws ClassFileException
     {
         String oldDesc = cf.getUtf8(this.u2signatureIndex);
-        String newDesc = nm.mapSignature(oldDesc);
+        String newDesc = nm.mapSignatureField(oldDesc);
         this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }

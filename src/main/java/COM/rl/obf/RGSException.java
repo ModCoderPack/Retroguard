@@ -17,10 +17,20 @@ public class RGSException extends Exception
     /**
      * Constructor
      * 
-     * @param s
+     * @param message
      */
-    public RGSException(String s)
+    public RGSException(String message)
     {
-        super(s);
+        super(message);
+    }
+
+    public RGSException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    public RGSException(String message, Throwable cause)
+    {
+        super(message, cause);
     }
 }

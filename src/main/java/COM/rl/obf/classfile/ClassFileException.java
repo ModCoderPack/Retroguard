@@ -17,10 +17,20 @@ public class ClassFileException extends Exception
     /**
      * Constructor
      * 
-     * @param s
+     * @param message
      */
-    public ClassFileException(String s)
+    public ClassFileException(String message)
     {
-        super(s);
+        super(message);
+    }
+
+    public ClassFileException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    public ClassFileException(String message, Throwable cause)
+    {
+        super(message, cause);
     }
 }

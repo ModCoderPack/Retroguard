@@ -68,21 +68,21 @@ public interface SignatureVisitor
      * @param name
      *            the name of the formal parameter.
      */
-    void visitFormalTypeParameter(String name);
+    void visitFormalTypeParameter(String name) throws SignatureException;
 
     /**
      * Visits the class bound of the last visited formal type parameter.
      * 
      * @return a non null visitor to visit the signature of the class bound.
      */
-    SignatureVisitor visitClassBound();
+    SignatureVisitor visitClassBound() throws SignatureException;
 
     /**
      * Visits an interface bound of the last visited formal type parameter.
      * 
      * @return a non null visitor to visit the signature of the interface bound.
      */
-    SignatureVisitor visitInterfaceBound();
+    SignatureVisitor visitInterfaceBound() throws SignatureException;
 
     /**
      * Visits the type of the super class.
@@ -90,35 +90,35 @@ public interface SignatureVisitor
      * @return a non null visitor to visit the signature of the super class
      *         type.
      */
-    SignatureVisitor visitSuperclass();
+    SignatureVisitor visitSuperclass() throws SignatureException;
 
     /**
      * Visits the type of an interface implemented by the class.
      * 
      * @return a non null visitor to visit the signature of the interface type.
      */
-    SignatureVisitor visitInterface();
+    SignatureVisitor visitInterface() throws SignatureException;
 
     /**
      * Visits the type of a method parameter.
      * 
      * @return a non null visitor to visit the signature of the parameter type.
      */
-    SignatureVisitor visitParameterType();
+    SignatureVisitor visitParameterType() throws SignatureException;
 
     /**
      * Visits the return type of the method.
      * 
      * @return a non null visitor to visit the signature of the return type.
      */
-    SignatureVisitor visitReturnType();
+    SignatureVisitor visitReturnType() throws SignatureException;
 
     /**
      * Visits the type of a method exception.
      * 
      * @return a non null visitor to visit the signature of the exception type.
      */
-    SignatureVisitor visitExceptionType();
+    SignatureVisitor visitExceptionType() throws SignatureException;
 
     /**
      * Visits a signature corresponding to a primitive type.
@@ -126,7 +126,7 @@ public interface SignatureVisitor
      * @param descriptor
      *            the descriptor of the primitive type, or 'V' for {@code void}.
      */
-    void visitBaseType(char descriptor);
+    void visitBaseType(char descriptor) throws SignatureException;
 
     /**
      * Visits a signature corresponding to a type variable.
@@ -134,7 +134,7 @@ public interface SignatureVisitor
      * @param name
      *            the name of the type variable.
      */
-    void visitTypeVariable(String name);
+    void visitTypeVariable(String name) throws SignatureException;
 
     /**
      * Visits a signature corresponding to an array type.
@@ -142,7 +142,7 @@ public interface SignatureVisitor
      * @return a non null visitor to visit the signature of the array element
      *         type.
      */
-    SignatureVisitor visitArrayType();
+    SignatureVisitor visitArrayType() throws SignatureException;
 
     /**
      * Starts the visit of a signature corresponding to a class or interface
@@ -151,7 +151,7 @@ public interface SignatureVisitor
      * @param name
      *            the internal name of the class or interface.
      */
-    void visitClassType(String name);
+    void visitClassType(String name) throws SignatureException;
 
     /**
      * Visits an inner class.
@@ -159,13 +159,13 @@ public interface SignatureVisitor
      * @param name
      *            the local name of the inner class in its enclosing class.
      */
-    void visitInnerClassType(String name);
+    void visitInnerClassType(String name) throws SignatureException;
 
     /**
      * Visits an unbounded type argument of the last visited class or inner
      * class type.
      */
-    void visitTypeArgument();
+    void visitTypeArgument() throws SignatureException;
 
     /**
      * Visits a type argument of the last visited class or inner class type.
@@ -174,10 +174,10 @@ public interface SignatureVisitor
      *            '+', '-' or '='.
      * @return a non null visitor to visit the signature of the type argument.
      */
-    SignatureVisitor visitTypeArgument(char wildcard);
+    SignatureVisitor visitTypeArgument(char wildcard) throws SignatureException;
 
     /**
      * Ends the visit of a signature corresponding to a class or interface type.
      */
-    void visitEnd();
+    void visitEnd() throws SignatureException;
 }

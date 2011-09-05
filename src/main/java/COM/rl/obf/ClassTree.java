@@ -1122,7 +1122,7 @@ public class ClassTree implements NameMapper
     }
 
     /**
-     * Mapping for generic type signature.
+     * Mapping for generic type signature of class or method.
      * 
      * @throws ClassFileException
      * @see NameMapper#mapSignature
@@ -1133,9 +1133,49 @@ public class ClassTree implements NameMapper
         SignatureWriter sw = new SignatureWriter();
         SignatureVisitor sa = new MapSignatureAdapter(sw, this);
         SignatureReader sr = new SignatureReader(signature);
-        sr.accept(sa);
+        try
+        {
+            sr.accept(sa);
+        }
+        catch (SignatureException e)
+        {
+            if (e.getCause() instanceof ClassFileException)
+            {
+                throw (ClassFileException)e.getCause();
+            }
+            throw new ClassFileException(e);
+        }
         String newSig = sw.toString();
-        System.err.println("! " + signature + " => " + newSig);
+        System.err.println("!m " + signature + " => " + newSig);
+        return newSig;
+    }
+
+    /**
+     * Mapping for generic type signature of field.
+     * 
+     * @throws ClassFileException
+     * @see NameMapper#mapSignatureField
+     */
+    @Override
+    public String mapSignatureField(String signature) throws ClassFileException
+    {
+        SignatureWriter sw = new SignatureWriter();
+        SignatureVisitor sa = new MapSignatureAdapter(sw, this);
+        SignatureReader sr = new SignatureReader(signature);
+        try
+        {
+            sr.acceptType(sa);
+        }
+        catch (SignatureException e)
+        {
+            if (e.getCause() instanceof ClassFileException)
+            {
+                throw (ClassFileException)e.getCause();
+            }
+            throw new ClassFileException(e);
+        }
+        String newSig = sw.toString();
+        System.err.println("!f " + signature + " => " + newSig);
         return newSig;
     }
 

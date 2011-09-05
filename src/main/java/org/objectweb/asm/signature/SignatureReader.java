@@ -66,7 +66,7 @@ public class SignatureReader
      * @param v
      *            the visitor that must visit this signature.
      */
-    public void accept(final SignatureVisitor v)
+    public void accept(final SignatureVisitor v) throws SignatureException
     {
         String signature = this.signature;
         int len = signature.length();
@@ -132,7 +132,7 @@ public class SignatureReader
      * @param v
      *            the visitor that must visit this signature.
      */
-    public void acceptType(final SignatureVisitor v)
+    public void acceptType(final SignatureVisitor v) throws SignatureException
     {
         SignatureReader.parseType(this.signature, 0, v);
     }
@@ -148,7 +148,7 @@ public class SignatureReader
      *            the visitor that must visit this signature.
      * @return the index of the first character after the parsed signature.
      */
-    private static int parseType(final String signature, int pos, final SignatureVisitor v)
+    private static int parseType(final String signature, int pos, final SignatureVisitor v) throws SignatureException
     {
         char c;
         int start, end;

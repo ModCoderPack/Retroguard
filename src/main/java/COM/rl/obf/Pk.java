@@ -82,7 +82,7 @@ public class Pk extends PkCl
     public Pk(TreeItem parent, String name)
     {
         super(parent, name);
-        
+
         if (NameProvider.oldHash)
         {
             this.pks = new Hashtable<String, Pk>();
