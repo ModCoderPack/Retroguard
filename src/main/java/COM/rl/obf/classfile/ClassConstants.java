@@ -157,4 +157,9 @@ public interface ClassConstants
         ClassConstants.OPTION_Repackage,
         ClassConstants.OPTION_Generic,
     };
+
+    public enum AttrSource
+    {
+        CLASS, FIELD, METHOD, CODE;
+    }
 }

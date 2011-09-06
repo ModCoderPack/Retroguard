@@ -48,25 +48,14 @@ public class SignatureReader
      * Constructs a {@link SignatureReader} for the given signature.
      * 
      * @param signature
-     *            A <i>ClassSignature</i>, <i>MethodTypeSignature</i>,
-     *            or <i>FieldTypeSignature</i>.
+     *            A <i>ClassSignature</i>, <i>MethodTypeSignature</i>, or <i>FieldTypeSignature</i>.
      */
     public SignatureReader(final String signature)
     {
         this.signature = signature;
     }
 
-    /**
-     * Makes the given visitor visit the signature of this {@link SignatureReader}. This signature is the one specified in the
-     * constructor (see {@link #SignatureReader(String) SignatureReader}).
-     * This method is intended to be called on a {@link SignatureReader} that was created using a <i>ClassSignature</i> (such as
-     * the {@code signature} parameter of the {@code ClassVisitor.visit} method) or a <i>MethodTypeSignature</i> (such as the
-     * {@code signature} parameter of the {@code ClassVisitor.visitMethod} method).
-     * 
-     * @param v
-     *            the visitor that must visit this signature.
-     */
-    public void accept(final SignatureVisitor v) throws SignatureException
+    private void accept(final SignatureVisitor v, boolean isClass) throws SignatureException
     {
         String signature = this.signature;
         int len = signature.length();
@@ -99,7 +88,15 @@ public class SignatureReader
             pos = 0;
         }
 
-        if (signature.charAt(pos) == '(')
+        if (isClass)
+        {
+            pos = SignatureReader.parseType(signature, pos, v.visitSuperclass());
+            while (pos < len)
+            {
+                pos = SignatureReader.parseType(signature, pos, v.visitInterface());
+            }
+        }
+        else if (signature.charAt(pos) == '(')
         {
             pos++;
             while (signature.charAt(pos) != ')')
@@ -114,12 +111,36 @@ public class SignatureReader
         }
         else
         {
-            pos = SignatureReader.parseType(signature, pos, v.visitSuperclass());
-            while (pos < len)
-            {
-                pos = SignatureReader.parseType(signature, pos, v.visitInterface());
-            }
+            throw new SignatureException("Invalid signature '" + signature + "'");
         }
+    }
+
+    /**
+     * Makes the given visitor visit the signature of this {@link SignatureReader}. This signature is the one specified in the
+     * constructor (see {@link #SignatureReader(String) SignatureReader}).
+     * This method is intended to be called on a {@link SignatureReader} that was created using a <i>ClassSignature</i> (such as
+     * the {@code signature} parameter of the {@code ClassVisitor.visit} method).
+     * 
+     * @param v
+     *            the visitor that must visit this signature.
+     */
+    public void acceptClassType(final SignatureVisitor v) throws SignatureException
+    {
+        this.accept(v, true);
+    }
+
+    /**
+     * Makes the given visitor visit the signature of this {@link SignatureReader}. This signature is the one specified in the
+     * constructor (see {@link #SignatureReader(String) SignatureReader}).
+     * This method is intended to be called on a {@link SignatureReader} that was created using a <i>MethodTypeSignature</i>
+     * (such as the {@code signature} parameter of the {@code ClassVisitor.visitMethod} method).
+     * 
+     * @param v
+     *            the visitor that must visit this signature.
+     */
+    public void acceptMethodType(final SignatureVisitor v) throws SignatureException
+    {
+        this.accept(v, false);
     }
 
     /**
@@ -132,7 +153,7 @@ public class SignatureReader
      * @param v
      *            the visitor that must visit this signature.
      */
-    public void acceptType(final SignatureVisitor v) throws SignatureException
+    public void acceptFieldType(final SignatureVisitor v) throws SignatureException
     {
         SignatureReader.parseType(this.signature, 0, v);
     }
@@ -177,11 +198,11 @@ public class SignatureReader
                 v.visitTypeVariable(signature.substring(pos, end));
                 return end + 1;
 
-            default: // case 'L':
+            case 'L':
                 start = pos;
                 visited = false;
                 inner = false;
-                for (;;)
+                while (true)
                 {
                     switch (c = signature.charAt(pos++))
                     {
@@ -221,7 +242,7 @@ public class SignatureReader
                             }
                             visited = true;
                             top:
-                            for (;;)
+                            while (true)
                             {
                                 switch (c = signature.charAt(pos))
                                 {
@@ -243,8 +264,12 @@ public class SignatureReader
                                         break;
                                 }
                             }
+                            break;
                     }
                 }
+
+            default:
+                throw new SignatureException("Invalid signature '" + signature + "'");
         }
     }
 }

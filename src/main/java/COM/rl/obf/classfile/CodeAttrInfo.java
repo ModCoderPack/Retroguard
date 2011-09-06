@@ -218,7 +218,7 @@ public class CodeAttrInfo extends AttrInfo
         this.attributes = new ArrayList<AttrInfo>(u2attributesCount);
         for (int i = 0; i < u2attributesCount; i++)
         {
-            this.attributes.add(AttrInfo.create(din, this.cf));
+            this.attributes.add(AttrInfo.create(din, this.cf, AttrSource.CODE));
         }
     }
 

@@ -37,6 +37,7 @@ public class AttrInfo implements ClassConstants
     private int u2attrNameIndex;
     private int u4attrLength;
     private byte info[];
+    protected AttrSource source;
 
     protected ClassFile cf;
 
@@ -50,7 +51,7 @@ public class AttrInfo implements ClassConstants
      * @throws IOException
      * @throws ClassFileException
      */
-    public static AttrInfo create(DataInput din, ClassFile cf) throws IOException, ClassFileException
+    public static AttrInfo create(DataInput din, ClassFile cf, AttrSource source) throws IOException, ClassFileException
     {
         if (din == null)
         {
@@ -138,6 +139,7 @@ public class AttrInfo implements ClassConstants
         {
             ai = new AttrInfo(cf, attrNameIndex, attrLength);
         }
+        ai.source = source;
         ai.readInfo(din);
         return ai;
     }

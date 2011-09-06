@@ -34,7 +34,7 @@ import COM.rl.obf.classfile.*;
  * 
  * @author Mark Welsh
  */
-public class ClassTree implements NameMapper
+public class ClassTree implements NameMapper, ClassConstants
 {
     // Constants -------------------------------------------------------------
     public static final char PACKAGE_LEVEL = '/';
@@ -1121,21 +1121,31 @@ public class ClassTree implements NameMapper
         return outName;
     }
 
-    /**
-     * Mapping for generic type signature of class or method.
-     * 
-     * @throws ClassFileException
-     * @see NameMapper#mapSignature
-     */
-    @Override
-    public String mapSignature(String signature) throws ClassFileException
+    private String mapSignature(String signature, AttrSource source) throws ClassFileException
     {
         SignatureWriter sw = new SignatureWriter();
         SignatureVisitor sa = new MapSignatureAdapter(sw, this);
         SignatureReader sr = new SignatureReader(signature);
         try
         {
-            sr.accept(sa);
+            switch (source)
+            {
+                case CLASS:
+                    sr.acceptClassType(sa);
+                    break;
+
+                case METHOD:
+                    sr.acceptMethodType(sa);
+                    break;
+
+                case FIELD:
+                    sr.acceptFieldType(sa);
+                    break;
+
+                default:
+                    throw new ClassFileException("Invalid attribute source");
+            }
+
         }
         catch (SignatureException e)
         {
@@ -1146,6 +1156,33 @@ public class ClassTree implements NameMapper
             throw new ClassFileException(e);
         }
         String newSig = sw.toString();
+        return newSig;
+    }
+
+    /**
+     * Mapping for generic type signature of class.
+     * 
+     * @throws ClassFileException
+     * @see NameMapper#mapSignatureClass
+     */
+    @Override
+    public String mapSignatureClass(String signature) throws ClassFileException
+    {
+        String newSig = this.mapSignature(signature, AttrSource.CLASS);
+        System.err.println("!c " + signature + " => " + newSig);
+        return newSig;
+    }
+
+    /**
+     * Mapping for generic type signature of method.
+     * 
+     * @throws ClassFileException
+     * @see NameMapper#mapSignatureMethod
+     */
+    @Override
+    public String mapSignatureMethod(String signature) throws ClassFileException
+    {
+        String newSig = this.mapSignature(signature, AttrSource.METHOD);
         System.err.println("!m " + signature + " => " + newSig);
         return newSig;
     }
@@ -1159,22 +1196,7 @@ public class ClassTree implements NameMapper
     @Override
     public String mapSignatureField(String signature) throws ClassFileException
     {
-        SignatureWriter sw = new SignatureWriter();
-        SignatureVisitor sa = new MapSignatureAdapter(sw, this);
-        SignatureReader sr = new SignatureReader(signature);
-        try
-        {
-            sr.acceptType(sa);
-        }
-        catch (SignatureException e)
-        {
-            if (e.getCause() instanceof ClassFileException)
-            {
-                throw (ClassFileException)e.getCause();
-            }
-            throw new ClassFileException(e);
-        }
-        String newSig = sw.toString();
+        String newSig = this.mapSignature(signature, AttrSource.FIELD);
         System.err.println("!f " + signature + " => " + newSig);
         return newSig;
     }

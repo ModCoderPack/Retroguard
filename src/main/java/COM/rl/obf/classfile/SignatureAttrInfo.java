@@ -106,7 +106,24 @@ public class SignatureAttrInfo extends AttrInfo
     {
         String oldDesc = cf.getUtf8(this.u2signatureIndex);
         String newDesc;
-        newDesc = nm.mapSignature(oldDesc);
+        switch (this.source)
+        {
+            case CLASS:
+                newDesc = nm.mapSignatureClass(oldDesc);
+                break;
+
+            case METHOD:
+                newDesc = nm.mapSignatureMethod(oldDesc);
+                break;
+
+            case FIELD:
+                newDesc = nm.mapSignatureField(oldDesc);
+                break;
+
+            default:
+                throw new ClassFileException("Invalid attribute source");
+        }
+
         this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }

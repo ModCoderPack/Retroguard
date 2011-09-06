@@ -385,7 +385,7 @@ public class ClassFile implements ClassConstants
         this.attributes = new ArrayList<AttrInfo>(u2attributesCount);
         for (int i = 0; i < u2attributesCount; i++)
         {
-            this.attributes.add(AttrInfo.create(din, this));
+            this.attributes.add(AttrInfo.create(din, this, AttrSource.CLASS));
         }
         this.checkReflection();
     }
