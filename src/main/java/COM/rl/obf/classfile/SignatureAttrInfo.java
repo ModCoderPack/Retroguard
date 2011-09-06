@@ -106,14 +106,7 @@ public class SignatureAttrInfo extends AttrInfo
     {
         String oldDesc = cf.getUtf8(this.u2signatureIndex);
         String newDesc;
-        if (this.fromField)
-        {
-            newDesc = nm.mapSignatureField(oldDesc);
-        }
-        else
-        {
-            newDesc = nm.mapSignature(oldDesc);
-        }
+        newDesc = nm.mapSignature(oldDesc);
         this.u2signatureIndex = cf.remapUtf8To(newDesc, this.u2signatureIndex);
     }
 }

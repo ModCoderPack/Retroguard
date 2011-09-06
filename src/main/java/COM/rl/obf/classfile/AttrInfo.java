@@ -39,7 +39,6 @@ public class AttrInfo implements ClassConstants
     private byte info[];
 
     protected ClassFile cf;
-    protected boolean fromField = false;
 
 
     // Class Methods ---------------------------------------------------------
@@ -274,10 +273,5 @@ public class AttrInfo implements ClassConstants
     {
         pw.println("u2attrNameIndex : " + this.u2attrNameIndex + " " + this.cf.getUtf8Debug(this.u2attrNameIndex));
         pw.println("u4attrLength : " + this.u4attrLength);
-    }
-
-    public void setFromField()
-    {
-        this.fromField = true;
     }
 }

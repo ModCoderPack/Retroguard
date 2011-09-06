@@ -188,10 +188,6 @@ abstract public class ClassItemInfo implements ClassConstants
         for (int i = 0; i < u2attributesCount; i++)
         {
             AttrInfo at = AttrInfo.create(din, this.cf);
-            if (this instanceof FieldInfo)
-            {
-                at.setFromField();
-            }
             this.attributes.add(at);
             if (at.getAttrName().equals(ClassConstants.ATTR_Synthetic))
             {
