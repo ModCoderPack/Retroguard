@@ -64,6 +64,9 @@ public interface ClassConstants
     public static final int CONSTANT_Methodref = 10;
     public static final int CONSTANT_InterfaceMethodref = 11;
     public static final int CONSTANT_NameAndType = 12;
+    public static final int CONSTANT_MethodHandle = 15;
+    public static final int CONSTANT_MethodType = 16;
+    public static final int CONSTANT_InvokeDynamic = 18;
 
     public static final String ATTR_Unknown = "Unknown";
     public static final String ATTR_Code = "Code";
@@ -84,6 +87,7 @@ public interface ClassConstants
     public static final String ATTR_AnnotationDefault = "AnnotationDefault";
     public static final String ATTR_EnclosingMethod = "EnclosingMethod";
     public static final String ATTR_StackMapTable = "StackMapTable";
+    public static final String ATTR_BootstrapMethods = "BootstrapMethods";
 
     /**
      * List of known attributes
@@ -108,6 +112,7 @@ public interface ClassConstants
         ClassConstants.ATTR_AnnotationDefault,
         ClassConstants.ATTR_EnclosingMethod,
         ClassConstants.ATTR_StackMapTable,
+        ClassConstants.ATTR_BootstrapMethods,
     };
 
     /**
@@ -121,6 +126,7 @@ public interface ClassConstants
         ClassConstants.ATTR_InnerClasses,
         ClassConstants.ATTR_Synthetic,
         ClassConstants.ATTR_StackMapTable,
+        ClassConstants.ATTR_BootstrapMethods,
     };
 
 

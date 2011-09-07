@@ -93,6 +93,15 @@ abstract public class CpInfo implements ClassConstants
             case CONSTANT_NameAndType:
                 ci = new NameAndTypeCpInfo();
                 break;
+            case CONSTANT_MethodHandle:
+                ci = new MethodHandleCpInfo();
+                break;
+            case CONSTANT_MethodType:
+                ci = new MethodTypeCpInfo();
+                break;
+            case CONSTANT_InvokeDynamic:
+                ci = new InvokeDynamicCpInfo();
+                break;
             default:
                 throw new ClassFileException("Unknown tag type in constant pool.");
         }
