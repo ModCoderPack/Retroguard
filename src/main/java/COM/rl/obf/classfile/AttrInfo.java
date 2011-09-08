@@ -135,6 +135,10 @@ public class AttrInfo implements ClassConstants
         {
             ai = new StackMapTableAttrInfo(cf, attrNameIndex, attrLength);
         }
+        else if (attrName.equals(ClassConstants.ATTR_BootstrapMethods))
+        {
+            ai = new BootstrapMethodsAttrInfo(cf, attrNameIndex, attrLength);
+        }
         else
         {
             ai = new AttrInfo(cf, attrNameIndex, attrLength);
