@@ -47,7 +47,7 @@ public class MethodHandleCpInfo extends CpInfo
     {
         return this.u2referenceIndex;
     }
-    
+
     /**
      * Return the method's string name.
      * 

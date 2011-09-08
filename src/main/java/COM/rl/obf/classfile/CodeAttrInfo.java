@@ -110,6 +110,7 @@ public class CodeAttrInfo extends AttrInfo
             case 0xC5:
                 return 3;
             case 0xB9:
+            case 0xBA:
             case 0xC8:
             case 0xC9:
                 return 4;
@@ -443,18 +444,17 @@ public class CodeAttrInfo extends AttrInfo
         return bytes;
     }
 
-    /**
-     * Convert int to 2 char hex string
-     * 
-     * @param i
-     */
-    private static String toHexString(int i)
-    {
-        String hex = "0" + Integer.toHexString(i);
-        return hex.substring(hex.length() - 2);
-    }
-
-
+//    /**
+//     * Convert int to 2 char hex string
+//     * 
+//     * @param i
+//     */
+//    private static String toHexString(int i)
+//    {
+//        String hex = "0" + Integer.toHexString(i);
+//        return hex.substring(hex.length() - 2);
+//    }
+//
 //    private static final String OPCODE_UNUSED = "<unused>";
 //    private static final String OPCODE_RESERVED = "<reserved>";
 //    private static final String[] opcodeName =
@@ -645,7 +645,7 @@ public class CodeAttrInfo extends AttrInfo
 //        "invokespecial", // 0xB7
 //        "invokestatic", // 0xB8
 //        "invokeinterface", // 0xB9
-//        CodeAttrInfo.OPCODE_UNUSED, // 0xBA
+//        "invokedynamic", // 0xBA
 //        "new", // 0xBB
 //        "newarray", // 0xBC
 //        "anewarray", // 0xBD
