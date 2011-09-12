@@ -50,7 +50,6 @@ public class RetroGuard
      */
     public static void main(String args[]) throws Exception
     {
-        System.err.println(Version.getVersionComment());
         // Check arg-list for validity
         try
         {
@@ -101,6 +100,7 @@ public class RetroGuard
 
     private static void showUsage()
     {
+        System.err.println(Version.getVersionComment());
         System.err.println("Usage: java RetroGuard [INPUT-FILE [OUTPUT-FILE [SCRIPT-FILE [LOG-FILE]]]]");
         System.err.println("  where INPUT-FILE is the JAR to be obfuscated (default: '"
             + RetroGuardImpl.DEFAULT_IN_FILE_NAME + "')");
