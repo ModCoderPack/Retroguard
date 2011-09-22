@@ -181,6 +181,10 @@ public class RetroGuardImpl
                 }
                 db.remapTo(this.outFile, log);
             }
+            catch(Exception ex)
+            {
+            	ex.printStackTrace();
+            }
             finally
             {
                 db.close();

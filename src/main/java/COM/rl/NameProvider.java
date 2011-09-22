@@ -888,12 +888,13 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + clsName + ";", "L" + newPkg + newCls + ";");
+                                newDesc = newDesc.replaceFirst("L" + clsName.replaceAll("$", "\\$") + ";",
+                            		"L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";",
-                                    "L" + newPkg + newCls + ";");
+                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName.replaceAll("$", "\\$") + ";",
+                                    "L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
                             }
 
                             i = j;
@@ -1052,12 +1053,13 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + clsName + ";", "L" + newPkg + newCls + ";");
+                                newDesc = newDesc.replaceFirst("L" + clsName.replaceAll("$", "\\$") + ";",
+                            		"L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";",
-                                    "L" + newPkg + newCls + ";");
+                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName.replaceAll("$", "\\$") + ";",
+                                    "L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
                             }
 
                             i = j;
