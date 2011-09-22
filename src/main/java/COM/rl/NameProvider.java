@@ -2,6 +2,7 @@ package COM.rl;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
 
 import COM.rl.obf.*;
 import COM.rl.obf.classfile.ClassFileException;
@@ -888,13 +889,13 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + clsName.replaceAll("$", "\\$") + ";",
-                            		"L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
+                                newDesc = newDesc.replaceFirst("L" + clsName + ";",
+                            		"L" + newPkg + Matcher.quoteReplacement(newCls) + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName.replaceAll("$", "\\$") + ";",
-                                    "L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
+                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";",
+                                    "L" + newPkg + Matcher.quoteReplacement(newCls) + ";");
                             }
 
                             i = j;
