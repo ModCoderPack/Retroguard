@@ -889,13 +889,13 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + clsName + ";",
-                            		"L" + newPkg + Matcher.quoteReplacement(newCls) + ";");
+                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(clsName) + ";",
+                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName + ";",
-                                    "L" + newPkg + Matcher.quoteReplacement(newCls) + ";");
+                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
+                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
 
                             i = j;
@@ -1054,13 +1054,13 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + clsName.replaceAll("$", "\\$") + ";",
-                            		"L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
+                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(clsName) + ";",
+                            		"L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + pkgName + "/" + clsName.replaceAll("$", "\\$") + ";",
-                                    "L" + newPkg + newCls.replaceAll("$", "\\$") + ";");
+                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
+                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
 
                             i = j;
