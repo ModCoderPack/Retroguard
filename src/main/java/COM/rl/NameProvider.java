@@ -20,6 +20,7 @@ public class NameProvider
     public static int currentMode = NameProvider.CLASSIC_MODE;
     public static boolean quiet = false;
     public static boolean oldHash = false;
+    public static boolean repackage = false;
 
     private static File packagesFile = null;
     private static File classesFile = null;
@@ -49,7 +50,7 @@ public class NameProvider
 
     public static String[] parseCommandLine(String[] args)
     {
-        if ((args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
+        if ((args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch") || args[0].equalsIgnoreCase("-mojang")))
         {
             return NameProvider.parseNameSheetModeArgs(args);
         }
@@ -267,6 +268,11 @@ public class NameProvider
         else if (args[0].equalsIgnoreCase("-notch"))
         {
             NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
+        }
+        else if (args[0].equalsIgnoreCase("-mojang"))
+        {
+            NameProvider.currentMode = NameProvider.DEOBFUSCATION_MODE;
+            NameProvider.repackage = true;
         }
         else
         {
@@ -662,8 +668,7 @@ public class NameProvider
                 {
                     String deobfName = NameProvider.packagesObf2Deobf.get(pk.getFullInName()).deobfName;
                     packageName = deobfName;
-                    pk.setRepackageName(deobfName);
-                    NameProvider.packageNameLookup.put(pk.getFullInName(), deobfName);
+                    pk.setRepackageName(packageName);
                 }
                 else
                 {
@@ -674,7 +679,6 @@ public class NameProvider
                         packageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                         pk.setRepackageName(packageName);
                     }
-                    NameProvider.packageNameLookup.put(pk.getFullInName(), packageName);
                 }
             }
             else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
@@ -683,8 +687,7 @@ public class NameProvider
                 {
                     String obfName = NameProvider.packagesDeobf2Obf.get(pk.getFullInName()).obfName;
                     packageName = obfName;
-                    pk.setRepackageName(obfName);
-                    NameProvider.packageNameLookup.put(pk.getFullInName(), obfName);
+                    pk.setRepackageName(packageName);
                 }
                 else
                 {
@@ -695,9 +698,16 @@ public class NameProvider
                         packageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                         pk.setRepackageName(packageName);
                     }
-                    NameProvider.packageNameLookup.put(pk.getFullInName(), packageName);
                 }
             }
+            
+            if(NameProvider.repackage)
+            {
+                packageName = ".";
+                pk.setRepackageName(packageName);
+            }
+            
+            NameProvider.packageNameLookup.put(pk.getFullInName(), packageName);
         }
 
         pk.setOutName(packageName);
@@ -761,7 +771,7 @@ public class NameProvider
             if (NameProvider.classesObf2Deobf.containsKey(cl.getFullInName()))
             {
                 String deobfName = NameProvider.classesObf2Deobf.get(cl.getFullInName()).deobfName;
-                if (deobfName.contains("/"))
+                if (deobfName.contains("/") && !NameProvider.repackage)
                 {
                     className = deobfName.substring(deobfName.lastIndexOf('/') + 1);
                 }
@@ -787,7 +797,7 @@ public class NameProvider
             if (NameProvider.classesDeobf2Obf.containsKey(cl.getFullInName()))
             {
                 String obfName = NameProvider.classesDeobf2Obf.get(cl.getFullInName()).obfName;
-                if (obfName.contains("/"))
+                if (obfName.contains("/") && !NameProvider.repackage)
                 {
                     className = obfName.substring(obfName.lastIndexOf('/') + 1);
                 }
