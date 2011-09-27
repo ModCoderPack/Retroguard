@@ -166,6 +166,9 @@ public interface ClassConstants
 
     public enum AttrSource
     {
-        CLASS, FIELD, METHOD, CODE;
+        CLASS,
+        FIELD,
+        METHOD,
+        CODE;
     }
 }

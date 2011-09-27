@@ -50,7 +50,8 @@ public class NameProvider
 
     public static String[] parseCommandLine(String[] args)
     {
-        if ((args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch") || args[0].equalsIgnoreCase("-mojang")))
+        if ((args.length > 0)
+            && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch") || args[0].equalsIgnoreCase("-mojang")))
         {
             return NameProvider.parseNameSheetModeArgs(args);
         }
@@ -700,13 +701,13 @@ public class NameProvider
                     }
                 }
             }
-            
-            if(NameProvider.repackage)
+
+            if (NameProvider.repackage)
             {
                 packageName = ".";
                 pk.setRepackageName(packageName);
             }
-            
+
             NameProvider.packageNameLookup.put(pk.getFullInName(), packageName);
         }
 
@@ -899,12 +900,14 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(clsName) + ";",
+                                newDesc = newDesc.replaceFirst(
+                                    "L" + Matcher.quoteReplacement(clsName) + ";",
                                     "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
+                                newDesc = newDesc.replaceFirst(
+                                    "L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
                                     "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
 
@@ -1064,12 +1067,14 @@ public class NameProvider
                             String newPkg = NameProvider.getNewPackageName(pkgName);
                             if (pkgName.equals(""))
                             {
-                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(clsName) + ";",
-                            		"L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
+                                newDesc = newDesc.replaceFirst(
+                                    "L" + Matcher.quoteReplacement(clsName) + ";",
+                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
                             else
                             {
-                                newDesc = newDesc.replaceFirst("L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
+                                newDesc = newDesc.replaceFirst(
+                                    "L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
                                     "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
                             }
 
