@@ -931,6 +931,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         nextMethod:
         for (Md md : this.mds.values())
         {
+            String theInName = md.getInName();
             if (!md.isFixed())
             {
                 // Check for name reservation via derived classes
@@ -940,8 +941,15 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (theOutName != null)
                     {
                         md.setOutName(theOutName);
-                        NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
-                            + " because of derived class.");
+                        if (theOutName.equals(theInName))
+                        {
+                            NameProvider.log("# Method " + md.getFullInName() + " unchanged from derived class");
+                        }
+                        else
+                        {
+                            NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
+                                + " from derived class");
+                        }
                         continue nextMethod;
                     }
                 }
@@ -953,8 +961,15 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         md.setOutName(theOutName);
                         md.setIsOverride();
-                        NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
-                            + " because of super class.");
+                        if (theOutName.equals(theInName))
+                        {
+                            NameProvider.log("# Method " + md.getFullInName() + " unchanged from super class");
+                        }
+                        else
+                        {
+                            NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName()
+                                + " from super class");
+                        }
                         continue nextMethod;
                     }
                 }
@@ -963,13 +978,25 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     md.setOutName(theOutName);
-                    NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker.");
+                    if (theOutName.equals(theInName))
+                    {
+                        NameProvider.log("# Method " + md.getFullInName() + " unchanged from name maker");
+                    }
+                    else
+                    {
+                        NameProvider.log("# Method " + md.getFullInName() + " renamed to " + md.getOutName() + " from name maker");
+                    }
+                }
+                else
+                {
+                    NameProvider.log("# Method " + md.getFullInName() + " null from name maker");
                 }
             }
         }
         nextField:
         for (Fd fd : this.fds.values())
         {
+            String theInName = fd.getInName();
             if (!fd.isFixed())
             {
                 // Check for name reservation via derived classes
@@ -979,8 +1006,15 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     if (theOutName != null)
                     {
                         fd.setOutName(theOutName);
-                        NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
-                            + " because of derived class.");
+                        if (theOutName.equals(theInName))
+                        {
+                            NameProvider.log("# Field " + fd.getFullInName() + " unchanged from derived class");
+                        }
+                        else
+                        {
+                            NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
+                                + " from derived class");
+                        }
                         continue nextField;
                     }
                 }
@@ -992,8 +1026,15 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     {
                         fd.setOutName(theOutName);
                         fd.setIsOverride();
-                        NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
-                            + " because of super class.");
+                        if (theOutName.equals(theInName))
+                        {
+                            NameProvider.log("# Field " + fd.getFullInName() + " unchanged from super class");
+                        }
+                        else
+                        {
+                            NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName()
+                                + " from super class");
+                        }
                         continue nextField;
                     }
                 }
@@ -1002,7 +1043,18 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     fd.setOutName(theOutName);
-                    NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker.");
+                    if (theOutName.equals(theInName))
+                    {
+                        NameProvider.log("# Field " + fd.getFullInName() + " unchanged from name maker");
+                    }
+                    else
+                    {
+                        NameProvider.log("# Field " + fd.getFullInName() + " renamed to " + fd.getOutName() + " from name maker");
+                    }
+                }
+                else
+                {
+                    NameProvider.log("# Field " + fd.getFullInName() + " null from name maker");
                 }
             }
         }

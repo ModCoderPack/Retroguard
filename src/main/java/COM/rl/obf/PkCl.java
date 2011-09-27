@@ -226,33 +226,49 @@ abstract public class PkCl extends TreeItem
     {
         for (TreeItem ti : hash.values())
         {
+            String fullInName = ti.getFullInName();
+            if (fullInName == "")
+            {
+                fullInName = ".";
+            }
+            String thisType = "Misc";
+            if (ti instanceof Pk)
+            {
+                thisType = "Package";
+            }
+            if (ti instanceof Cl)
+            {
+                thisType = "Class";
+            }
+
             if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!ti.isFixed()))
             {
                 String theOutName = NameProvider.getNewTreeItemName(ti);
                 if (theOutName != null)
                 {
                     ti.setOutName(theOutName);
-                    String fullInName = ti.getFullInName();
-                    if (fullInName == "")
-                    {
-                        fullInName = ".";
-                    }
                     String fullOutName = ti.getFullOutName();
                     if (fullOutName == "")
                     {
                         fullOutName = ".";
                     }
-                    String thisType = "Misc";
-                    if (ti instanceof Pk)
+                    if (fullOutName.equals(fullInName))
                     {
-                        thisType = "Package";
+                        NameProvider.log("# " + thisType + " " + fullInName + " unchanged from name maker");
                     }
-                    if (ti instanceof Cl)
+                    else
                     {
-                        thisType = "Class";
+                        NameProvider.log("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker");
                     }
-                    NameProvider.log("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker.");
                 }
+                else
+                {
+                    NameProvider.log("# " + thisType + " " + fullInName + " null from name maker");
+                }
+            }
+            else
+            {
+                NameProvider.log("# " + thisType + " " + fullInName + " is fixed");
             }
         }
     }

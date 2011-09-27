@@ -239,6 +239,11 @@ public class Pk extends PkCl
      */
     public void repackageName()
     {
+        String fullInName = this.getFullInName();
+        if (fullInName == "")
+        {
+            fullInName = ".";
+        }
         if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
         {
             String theOutName = NameProvider.getNewPackageName(this);
@@ -246,18 +251,28 @@ public class Pk extends PkCl
             {
                 this.setRepackageName(theOutName);
                 this.setOutName(this.getInName());
-                String fullInName = this.getFullInName();
-                if (fullInName == "")
-                {
-                    fullInName = ".";
-                }
                 String fullOutName = this.getFullOutName();
                 if (fullOutName == "")
                 {
                     fullOutName = ".";
                 }
-                NameProvider.log("# Package " + fullInName + " renamed to " + fullOutName + " from name maker.");
+                if (fullOutName.equals(fullInName))
+                {
+                    NameProvider.log("# Package " + fullInName + " unchanged from name maker");
+                }
+                else
+                {
+                    NameProvider.log("# Package " + fullInName + " renamed to " + fullOutName + " from name maker");
+                }
             }
+            else
+            {
+                NameProvider.log("# Package " + fullInName + " null from name maker");
+            }
+        }
+        else
+        {
+            NameProvider.log("# Package " + fullInName + " is fixed");
         }
     }
 
