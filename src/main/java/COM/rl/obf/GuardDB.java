@@ -432,24 +432,6 @@ public class GuardDB implements ClassConstants
             this.buildClassTree(log);
         }
 
-        // TODO: Searge: check if those two walks are obsolete, they are done below in classTree.resolveClasses also
-        this.classTree.walkTree(new TreeAction()
-        {
-            @Override
-            public void classAction(Cl cl)
-            {
-                cl.resetResolve();
-            }
-        });
-        this.classTree.walkTree(new TreeAction()
-        {
-            @Override
-            public void classAction(Cl cl) throws ClassFileException
-            {
-                cl.setupNameListDowns();
-            }
-        });
-
         // Traverse the class tree, generating obfuscated names within package and class namespaces
         this.classTree.generateNames(this.enableRepackage);
 
