@@ -638,23 +638,22 @@ public class NameProvider
         else
         {
             NameProvider.log("# Warning: trying to rename unknown type " + ti.getFullInName());
-            return null;
         }
+        return null;
     }
 
     public static String getNewPackageName(Pk pk)
     {
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
-            NameProvider.log("PK: " + pk.getFullInName() + " " + pk.getFullInName());
+            pk.setOutput();
             return null;
         }
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
             String packageName = "p_" + (++NameProvider.uniqueStart) + "_" + pk.getInName();
-            pk.setOutName(packageName);
-            NameProvider.log("PK: " + pk.getFullInName() + " " + pk.getFullOutName());
+            pk.setOutput();
             return packageName;
         }
 
@@ -727,7 +726,7 @@ public class NameProvider
 
         if (!NameProvider.isInProtectedPackage(inName + "/") && !known)
         {
-            NameProvider.log("PK: " + inName + " " + outName);
+            pk.setOutput();
         }
 
         return packageName;
@@ -753,15 +752,14 @@ public class NameProvider
     {
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
-            NameProvider.log("CL: " + cl.getFullInName() + " " + cl.getFullInName());
+            cl.setOutput();
             return null;
         }
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
             String className = "C_" + (++NameProvider.uniqueStart) + "_" + cl.getInName();
-            cl.setOutName(className);
-            NameProvider.log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
+            cl.setOutput();
             return className;
         }
 
@@ -815,7 +813,7 @@ public class NameProvider
 
         if (!NameProvider.isInProtectedPackage(cl.getFullInName()))
         {
-            NameProvider.log("CL: " + cl.getFullInName() + " " + cl.getFullOutName());
+            cl.setOutput();
         }
 
         return className;
@@ -825,17 +823,14 @@ public class NameProvider
     {
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
-            NameProvider.log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " "
-                + md.getFullInName() + " " + md.getDescriptor());
+            md.setOutput();
             return null;
         }
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
             String methodName = "func_" + (++NameProvider.uniqueStart) + "_" + md.getInName();
-            md.setOutName(methodName);
-            NameProvider.log("MD: " + md.getFullInName() + " " + md.getDescriptor() + " "
-                + md.getFullOutName() + " " + md.getDescriptor());
+            md.setOutput();
             return methodName;
         }
 
@@ -1092,7 +1087,7 @@ public class NameProvider
 
         if (!NameProvider.isInProtectedPackage(md.getFullInName()))
         {
-            NameProvider.log("MD: " + md.getFullInName() + " " + desc + " " + md.getFullOutName() + " " + newDesc);
+            md.setOutput();
         }
 
         return methodName;
@@ -1102,15 +1097,14 @@ public class NameProvider
     {
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
-            NameProvider.log("FD: " + fd.getFullInName() + " " + fd.getFullInName());
+            fd.setOutput();
             return null;
         }
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
             String fieldName = "field_" + (++NameProvider.uniqueStart) + "_" + fd.getInName();
-            fd.setOutName(fieldName);
-            NameProvider.log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
+            fd.setOutput();
             return fieldName;
         }
 
@@ -1158,7 +1152,7 @@ public class NameProvider
 
         if (!NameProvider.isInProtectedPackage(fd.getFullInName()))
         {
-            NameProvider.log("FD: " + fd.getFullInName() + " " + fd.getFullOutName());
+            fd.setOutput();
         }
 
         return fieldName;
@@ -1176,6 +1170,26 @@ public class NameProvider
         return false;
     }
 
+    public static void outputPackage(Pk pk)
+    {
+        NameProvider.log("PK: " + pk.getFullInName(true) + " " + pk.getFullOutName(true));
+    }
+
+    public static void outputClass(Cl cl)
+    {
+        NameProvider.log("CL: " + cl.getFullInName(true) + " " + cl.getFullOutName(true));
+    }
+
+    public static void outputMethod(Md md)
+    {
+        NameProvider.log("MD: " + md.getFullInName(true) + " " + md.getDescriptor() + " " + md.getFullOutName(true) + " "
+            + md.getOutDescriptor());
+    }
+
+    public static void outputField(Fd fd)
+    {
+        NameProvider.log("FD: " + fd.getFullInName(true) + " " + fd.getFullOutName(true));
+    }
 }
 
 class PackageEntry

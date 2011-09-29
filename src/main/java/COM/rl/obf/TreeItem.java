@@ -88,6 +88,11 @@ public class TreeItem
      */
     private boolean isFromScriptMap = false;
 
+    /**
+     * Should a mapping for this item be output
+     */
+    protected boolean isOutput = false;
+
 
     // Class Methods ---------------------------------------------------------
     /**
@@ -337,6 +342,14 @@ public class TreeItem
     }
 
     /**
+     * Signal that we should output a mapping for this
+     */
+    public void setOutput()
+    {
+        this.isOutput = true;
+    }
+
+    /**
      * Has the entry been fixed already?
      */
     public boolean isFixed()
@@ -366,6 +379,14 @@ public class TreeItem
     public boolean isSynthetic()
     {
         return this.isSynthetic;
+    }
+
+    /**
+     * Should this mapping be output?
+     */
+    public boolean isOutput()
+    {
+        return this.isOutput;
     }
 
     /**
@@ -411,7 +432,25 @@ public class TreeItem
     }
 
     /**
-     * Construct and return the full obfuscated name of the entry.
+     * Construct and return the full original name of the entry.
+     * 
+     * @param output
+     *            replace default package with .
+     */
+    public String getFullInName(boolean output)
+    {
+        String s = this.getFullInName();
+
+        if (output && s.equals(""))
+        {
+            s = ".";
+        }
+
+        return s;
+    }
+
+    /**
+     * Construct and return the full modified name of the entry.
      */
     public String getFullOutName()
     {
@@ -432,6 +471,24 @@ public class TreeItem
             }
             return s + this.sep + this.getOutName();
         }
+    }
+
+    /**
+     * Construct and return the full modified name of the entry.
+     * 
+     * @param output
+     *            replace default package with .
+     */
+    public String getFullOutName(boolean output)
+    {
+        String s = this.getFullOutName();
+
+        if (output && s.equals(""))
+        {
+            s = ".";
+        }
+
+        return s;
     }
 
     /**

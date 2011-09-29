@@ -226,11 +226,7 @@ abstract public class PkCl extends TreeItem
     {
         for (TreeItem ti : hash.values())
         {
-            String fullInName = ti.getFullInName();
-            if (fullInName == "")
-            {
-                fullInName = ".";
-            }
+            String fullInName = ti.getFullInName(true);
             String thisType = "Misc";
             if (ti instanceof Pk)
             {
@@ -247,11 +243,7 @@ abstract public class PkCl extends TreeItem
                 if (theOutName != null)
                 {
                     ti.setOutName(theOutName);
-                    String fullOutName = ti.getFullOutName();
-                    if (fullOutName == "")
-                    {
-                        fullOutName = ".";
-                    }
+                    String fullOutName = ti.getFullOutName(true);
                     if (fullOutName.equals(fullInName))
                     {
                         NameProvider.log("# " + thisType + " " + fullInName + " unchanged from name maker");
@@ -265,10 +257,6 @@ abstract public class PkCl extends TreeItem
                 {
                     NameProvider.log("# " + thisType + " " + fullInName + " null from name maker");
                 }
-            }
-            else
-            {
-                NameProvider.log("# " + thisType + " " + fullInName + " is fixed");
             }
         }
     }

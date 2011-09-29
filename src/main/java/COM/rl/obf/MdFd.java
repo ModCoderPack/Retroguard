@@ -88,6 +88,20 @@ abstract public class MdFd extends TreeItem
         return this.descriptor;
     }
 
+    public String getOutDescriptor()
+    {
+        try
+        {
+            return this.classTree.mapDescriptor(this.descriptor);
+        }
+        catch (ClassFileException e)
+        {
+            // ignore
+        }
+
+        return this.descriptor;
+    }
+
     /**
      * Is this member static?
      */

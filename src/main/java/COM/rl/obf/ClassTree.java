@@ -1352,6 +1352,45 @@ public class ClassTree implements NameMapper, ClassConstants
                     }
                 }
             });
+
+            this.walkTree(new TreeAction()
+            {
+                @Override
+                public void classAction(Cl cl)
+                {
+                    if (cl.isOutput())
+                    {
+                        NameProvider.outputClass(cl);
+                    }
+                }
+
+                @Override
+                public void methodAction(Md md)
+                {
+                    if (md.isOutput())
+                    {
+                        NameProvider.outputMethod(md);
+                    }
+                }
+
+                @Override
+                public void fieldAction(Fd fd)
+                {
+                    if (fd.isOutput())
+                    {
+                        NameProvider.outputField(fd);
+                    }
+                }
+
+                @Override
+                public void packageAction(Pk pk)
+                {
+                    if (pk.isOutput())
+                    {
+                        NameProvider.outputPackage(pk);
+                    }
+                }
+            });
         }
         catch (ClassFileException e)
         {
