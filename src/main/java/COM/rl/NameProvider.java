@@ -618,7 +618,6 @@ public class NameProvider
 
     public static String getNewTreeItemName(TreeItem ti) throws ClassFileException
     {
-//        NameProvider.log("TI: " + ti.getFullInName());
         if (ti instanceof Pk)
         {
             return NameProvider.getNewPackageName((Pk)ti);
@@ -712,17 +711,7 @@ public class NameProvider
 
         pk.setOutName(packageName);
 
-        String inName = pk.getFullInName();
-        String outName = pk.getFullOutName();
-
-        if (inName.equals(""))
-        {
-            inName = ".";
-        }
-        if (outName.equals(""))
-        {
-            outName = ".";
-        }
+        String inName = pk.getFullInName(true);
 
         if (!NameProvider.isInProtectedPackage(inName + "/") && !known)
         {
@@ -734,18 +723,17 @@ public class NameProvider
 
     private static String getNewPackageName(String pkgName)
     {
-        String newPkg = "";
-
         if (NameProvider.packageNameLookup.containsKey(pkgName))
         {
-            newPkg = NameProvider.packageNameLookup.get(pkgName);
+            pkgName = NameProvider.packageNameLookup.get(pkgName);
         }
-        else
+        
+        if (pkgName.equals(""))
         {
-            newPkg = pkgName;
+            return "";
         }
 
-        return newPkg.equals("") ? newPkg : newPkg + "/";
+        return pkgName + "/";
     }
 
     public static String getNewClassName(Cl cl)
@@ -770,9 +758,9 @@ public class NameProvider
             if (NameProvider.classesObf2Deobf.containsKey(cl.getFullInName()))
             {
                 String deobfName = NameProvider.classesObf2Deobf.get(cl.getFullInName()).deobfName;
-                if (deobfName.contains("/") && !NameProvider.repackage)
+                if (!NameProvider.repackage)
                 {
-                    className = deobfName.substring(deobfName.lastIndexOf('/') + 1);
+                    className = getShortName(deobfName);
                 }
                 else
                 {
@@ -796,9 +784,9 @@ public class NameProvider
             if (NameProvider.classesDeobf2Obf.containsKey(cl.getFullInName()))
             {
                 String obfName = NameProvider.classesDeobf2Obf.get(cl.getFullInName()).obfName;
-                if (obfName.contains("/") && !NameProvider.repackage)
+                if (!NameProvider.repackage)
                 {
-                    className = obfName.substring(obfName.lastIndexOf('/') + 1);
+                    className = getShortName(obfName);
                 }
                 else
                 {
@@ -837,21 +825,13 @@ public class NameProvider
         String methodName = md.getInName();
 
         String desc = md.getDescriptor();
-        String newDesc = desc;
 
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
             if (NameProvider.methodsObf2Deobf.containsKey(md.getFullInName() + desc))
             {
                 String deobfName = NameProvider.methodsObf2Deobf.get(md.getFullInName() + desc).deobfName;
-                if (deobfName.contains("/"))
-                {
-                    methodName = deobfName.substring(deobfName.lastIndexOf('/') + 1);
-                }
-                else
-                {
-                    methodName = deobfName;
-                }
+                methodName = getShortName(deobfName);
             }
             else
             {
@@ -860,74 +840,13 @@ public class NameProvider
                     methodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
                 }
             }
-
-            int i = 0;
-            while (i < desc.length())
-            {
-                if (desc.charAt(i) == 'L')
-                {
-                    int j = i;
-                    while (j < desc.length())
-                    {
-                        if (desc.charAt(j) == ';')
-                        {
-                            String cls = desc.substring(i + 1, j);
-
-                            String pkgName;
-                            String clsName;
-                            if (cls.contains("/"))
-                            {
-                                pkgName = cls.substring(0, cls.lastIndexOf('/'));
-                                clsName = cls.substring(cls.lastIndexOf('/') + 1);
-                            }
-                            else
-                            {
-                                pkgName = "";
-                                clsName = cls;
-                            }
-
-                            String newCls = clsName;
-                            if (NameProvider.classNameLookup.containsKey(clsName))
-                            {
-                                newCls = NameProvider.classNameLookup.get(clsName);
-                            }
-
-                            String newPkg = NameProvider.getNewPackageName(pkgName);
-                            if (pkgName.equals(""))
-                            {
-                                newDesc = newDesc.replaceFirst(
-                                    "L" + Matcher.quoteReplacement(clsName) + ";",
-                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
-                            }
-                            else
-                            {
-                                newDesc = newDesc.replaceFirst(
-                                    "L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
-                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
-                            }
-
-                            i = j;
-                            break;
-                        }
-                        ++j;
-                    }
-                }
-                ++i;
-            }
         }
         else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
             if (NameProvider.methodsDeobf2Obf.containsKey(md.getFullInName() + desc))
             {
                 String obfName = NameProvider.methodsDeobf2Obf.get(md.getFullInName() + desc).obfName;
-                if (obfName.contains("/"))
-                {
-                    methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                }
-                else
-                {
-                    methodName = obfName;
-                }
+                methodName = getShortName(obfName);
             }
             else
             {
@@ -947,14 +866,7 @@ public class NameProvider
                     if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
                     {
                         String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
-                        if (obfName.contains("/"))
-                        {
-                            methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                        }
-                        else
-                        {
-                            methodName = obfName;
-                        }
+                        methodName = getShortName(obfName);
                         break;
                     }
 
@@ -968,14 +880,7 @@ public class NameProvider
                             if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + desc))
                             {
                                 String obfName = NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName() + desc).obfName;
-                                if (obfName.contains("/"))
-                                {
-                                    methodName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                                }
-                                else
-                                {
-                                    methodName = obfName;
-                                }
+                                methodName = getShortName(obfName);
                                 found = true;
                             }
                         }
@@ -1027,60 +932,6 @@ public class NameProvider
                     }
                 } while (cls != null);
             }
-
-            int i = 0;
-            while (i < desc.length())
-            {
-                if (desc.charAt(i) == 'L')
-                {
-                    int j = i;
-                    while (j < desc.length())
-                    {
-                        if (desc.charAt(j) == ';')
-                        {
-                            String cls = desc.substring(i + 1, j);
-
-                            String pkgName;
-                            String clsName;
-                            if (cls.contains("/"))
-                            {
-                                pkgName = cls.substring(0, cls.lastIndexOf('/'));
-                                clsName = cls.substring(cls.lastIndexOf('/') + 1);
-                            }
-                            else
-                            {
-                                pkgName = "";
-                                clsName = cls;
-                            }
-
-                            String newCls = clsName;
-                            if (NameProvider.classNameLookup.containsKey(clsName))
-                            {
-                                newCls = NameProvider.classNameLookup.get(clsName);
-                            }
-
-                            String newPkg = NameProvider.getNewPackageName(pkgName);
-                            if (pkgName.equals(""))
-                            {
-                                newDesc = newDesc.replaceFirst(
-                                    "L" + Matcher.quoteReplacement(clsName) + ";",
-                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
-                            }
-                            else
-                            {
-                                newDesc = newDesc.replaceFirst(
-                                    "L" + Matcher.quoteReplacement(pkgName) + "/" + Matcher.quoteReplacement(clsName) + ";",
-                                    "L" + Matcher.quoteReplacement(newPkg) + Matcher.quoteReplacement(newCls) + ";");
-                            }
-
-                            i = j;
-                            break;
-                        }
-                        ++j;
-                    }
-                }
-                ++i;
-            }
         }
 
         md.setOutName(methodName);
@@ -1115,14 +966,7 @@ public class NameProvider
             if (NameProvider.fieldsObf2Deobf.containsKey(fd.getFullInName()))
             {
                 String deobfName = NameProvider.fieldsObf2Deobf.get(fd.getFullInName()).deobfName;
-                if (deobfName.contains("/"))
-                {
-                    fieldName = deobfName.substring(deobfName.lastIndexOf('/') + 1);
-                }
-                else
-                {
-                    fieldName = deobfName;
-                }
+                fieldName = getShortName(deobfName);
             }
             else
             {
@@ -1137,14 +981,7 @@ public class NameProvider
             if (NameProvider.fieldsDeobf2Obf.containsKey(fd.getFullInName()))
             {
                 String obfName = NameProvider.fieldsDeobf2Obf.get(fd.getFullInName()).obfName;
-                if (obfName.contains("/"))
-                {
-                    fieldName = obfName.substring(obfName.lastIndexOf('/') + 1);
-                }
-                else
-                {
-                    fieldName = obfName;
-                }
+                fieldName = getShortName(obfName);
             }
         }
 
@@ -1168,6 +1005,16 @@ public class NameProvider
             }
         }
         return false;
+    }
+    
+    private static String getShortName(String name)
+    {
+        if (name.contains("/"))
+        {
+            name = name.substring(name.lastIndexOf('/') + 1);
+        }
+        
+        return name;
     }
 
     public static void outputPackage(Pk pk)
