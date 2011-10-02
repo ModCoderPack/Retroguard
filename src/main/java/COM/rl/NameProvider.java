@@ -737,6 +737,10 @@ public class NameProvider
 
     public static String getNewClassName(Cl cl)
     {
+        String className = cl.getInName();
+        String fullClassName = cl.getFullInName();
+        String newClassName = null;
+
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
             cl.setOutput();
@@ -745,18 +749,16 @@ public class NameProvider
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
-            String newClassName = "C_" + (++NameProvider.uniqueStart) + "_" + cl.getInName();
+            newClassName = "C_" + (++NameProvider.uniqueStart) + "_" + className;
             cl.setOutput();
             return newClassName;
         }
 
-        String newClassName = null;
-
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
-            if (NameProvider.classesObf2Deobf.containsKey(cl.getFullInName()))
+            if (NameProvider.classesObf2Deobf.containsKey(fullClassName))
             {
-                newClassName = NameProvider.classesObf2Deobf.get(cl.getFullInName()).deobfName;
+                newClassName = NameProvider.classesObf2Deobf.get(fullClassName).deobfName;
                 if (!NameProvider.repackage)
                 {
                     newClassName = NameProvider.getShortName(newClassName);
@@ -764,20 +766,20 @@ public class NameProvider
             }
             else
             {
-                if (!NameProvider.isInProtectedPackage(cl.getFullInName()))
+                if (!NameProvider.isInProtectedPackage(fullClassName))
                 {
                     if (NameProvider.uniqueStart > 0)
                     {
-                        newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + cl.getInName();
+                        newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + className;
                     }
                 }
             }
         }
         else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
-            if (NameProvider.classesDeobf2Obf.containsKey(cl.getFullInName()))
+            if (NameProvider.classesDeobf2Obf.containsKey(fullClassName))
             {
-                newClassName = NameProvider.classesDeobf2Obf.get(cl.getFullInName()).obfName;
+                newClassName = NameProvider.classesDeobf2Obf.get(fullClassName).obfName;
                 if (!NameProvider.repackage)
                 {
                     newClassName = NameProvider.getShortName(newClassName);
@@ -785,7 +787,7 @@ public class NameProvider
             }
         }
 
-        if (!NameProvider.isInProtectedPackage(cl.getFullInName()))
+        if (!NameProvider.isInProtectedPackage(fullClassName))
         {
             cl.setOutput();
         }
@@ -795,6 +797,11 @@ public class NameProvider
 
     public static String getNewMethodName(Md md) throws ClassFileException
     {
+        String methodName = md.getInName();
+        String fullMethodName = md.getFullInName();
+        String methodNameKey = fullMethodName + md.getDescriptor();
+        String newMethodName = null;
+
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
             md.setOutput();
@@ -803,37 +810,35 @@ public class NameProvider
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
-            String newMethodName = "func_" + (++NameProvider.uniqueStart) + "_" + md.getInName();
+            newMethodName = "func_" + (++NameProvider.uniqueStart) + "_" + methodName;
             md.setOutput();
             return newMethodName;
         }
 
-        String newMethodName = null;
-
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
-            if (NameProvider.methodsObf2Deobf.containsKey(md.getFullInName() + md.getDescriptor()))
+            if (NameProvider.methodsObf2Deobf.containsKey(methodNameKey))
             {
-                newMethodName = NameProvider.getShortName(NameProvider.methodsObf2Deobf.get(md.getFullInName()
-                    + md.getDescriptor()).deobfName);
+                newMethodName = NameProvider.methodsObf2Deobf.get(methodNameKey).deobfName;
+                newMethodName = NameProvider.getShortName(newMethodName);
             }
             else
             {
-                if (!NameProvider.isInProtectedPackage(md.getFullInName()))
+                if (!NameProvider.isInProtectedPackage(fullMethodName))
                 {
                     if (NameProvider.uniqueStart > 0)
                     {
-                        newMethodName = "func_" + (NameProvider.uniqueStart++) + "_" + md.getInName();
+                        newMethodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
                     }
                 }
             }
         }
         else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
-            if (NameProvider.methodsDeobf2Obf.containsKey(md.getFullInName() + md.getDescriptor()))
+            if (NameProvider.methodsDeobf2Obf.containsKey(methodNameKey))
             {
-                newMethodName = NameProvider.getShortName(NameProvider.methodsDeobf2Obf.get(md.getFullInName()
-                    + md.getDescriptor()).obfName);
+                newMethodName = NameProvider.methodsDeobf2Obf.get(methodNameKey).obfName;
+                newMethodName = NameProvider.getShortName(newMethodName);
             }
             else
             {
@@ -842,14 +847,17 @@ public class NameProvider
 
                 Md tmpMd = new Md(cls, md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
 
+                String tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
+
                 boolean goingDown = false;
                 do
                 {
                     tmpMd.setParent(cls);
-                    if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + tmpMd.getDescriptor()))
+                    tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
+                    if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
                     {
-                        newMethodName = NameProvider.getShortName(NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName()
-                            + tmpMd.getDescriptor()).obfName);
+                        newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
+                        newMethodName = NameProvider.getShortName(newMethodName);
                         break;
                     }
 
@@ -859,10 +867,11 @@ public class NameProvider
                         for (Cl iface : cls.getSuperInterfaces())
                         {
                             tmpMd.setParent(iface);
-                            if (NameProvider.methodsDeobf2Obf.containsKey(tmpMd.getFullInName() + tmpMd.getDescriptor()))
+                            tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
+                            if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
                             {
-                                newMethodName = NameProvider.getShortName(NameProvider.methodsDeobf2Obf.get(tmpMd.getFullInName()
-                                    + tmpMd.getDescriptor()).obfName);
+                                newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
+                                newMethodName = NameProvider.getShortName(newMethodName);
                                 found = true;
                             }
                         }
@@ -910,7 +919,7 @@ public class NameProvider
             }
         }
 
-        if (!NameProvider.isInProtectedPackage(md.getFullInName()))
+        if (!NameProvider.isInProtectedPackage(fullMethodName))
         {
             md.setOutput();
         }
@@ -920,6 +929,10 @@ public class NameProvider
 
     public static String getNewFieldName(Fd fd)
     {
+        String fieldName = fd.getInName();
+        String fullFieldName = fd.getFullInName();
+        String newFieldName = null;
+
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
             fd.setOutput();
@@ -928,39 +941,39 @@ public class NameProvider
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
-            String newFieldName = "field_" + (++NameProvider.uniqueStart) + "_" + fd.getInName();
+            newFieldName = "field_" + (++NameProvider.uniqueStart) + "_" + fieldName;
             fd.setOutput();
             return newFieldName;
         }
 
-        String newFieldName = null;
-
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
-            if (NameProvider.fieldsObf2Deobf.containsKey(fd.getFullInName()))
+            if (NameProvider.fieldsObf2Deobf.containsKey(fullFieldName))
             {
-                newFieldName = NameProvider.getShortName(NameProvider.fieldsObf2Deobf.get(fd.getFullInName()).deobfName);
+                newFieldName = NameProvider.fieldsObf2Deobf.get(fullFieldName).deobfName;
+                newFieldName = NameProvider.getShortName(newFieldName);
             }
             else
             {
-                if (!NameProvider.isInProtectedPackage(fd.getFullInName()))
+                if (!NameProvider.isInProtectedPackage(fullFieldName))
                 {
                     if (NameProvider.uniqueStart > 0)
                     {
-                        newFieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fd.getInName();
+                        newFieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fieldName;
                     }
                 }
             }
         }
         else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
-            if (NameProvider.fieldsDeobf2Obf.containsKey(fd.getFullInName()))
+            if (NameProvider.fieldsDeobf2Obf.containsKey(fullFieldName))
             {
-                newFieldName = NameProvider.getShortName(NameProvider.fieldsDeobf2Obf.get(fd.getFullInName()).obfName);
+                newFieldName = NameProvider.fieldsDeobf2Obf.get(fullFieldName).obfName;
+                newFieldName = NameProvider.getShortName(newFieldName);
             }
         }
 
-        if (!NameProvider.isInProtectedPackage(fd.getFullInName()))
+        if (!NameProvider.isInProtectedPackage(fullFieldName))
         {
             fd.setOutput();
         }
@@ -1002,8 +1015,8 @@ public class NameProvider
 
     public static void outputMethod(Md md)
     {
-        NameProvider.log("MD: " + md.getFullInName(true) + " " + md.getDescriptor() + " " + md.getFullOutName(true) + " "
-            + md.getOutDescriptor());
+        NameProvider.log("MD: " + md.getFullInName(true) + " " + md.getDescriptor()
+            + " " + md.getFullOutName(true) + " " + md.getOutDescriptor());
     }
 
     public static void outputField(Fd fd)
