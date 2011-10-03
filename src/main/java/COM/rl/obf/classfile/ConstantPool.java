@@ -66,14 +66,6 @@ public class ConstantPool implements Iterable<CpInfo>
     }
 
     /**
-     * Return an ListIterator of all Constant Pool entries.
-     */
-    public ListIterator<CpInfo> listIterator()
-    {
-        return this.pool.listIterator();
-    }
-
-    /**
      * Return the Constant Pool length.
      */
     public int length()

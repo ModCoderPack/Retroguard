@@ -62,24 +62,6 @@ public class ExceptionsAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the number of exception class indices.
-     */
-    public int count()
-    {
-        return this.u2exceptionIndexTable.size();
-    }
-
-    /**
-     * Return the i'th exception class indices.
-     * 
-     * @param i
-     */
-    public int getIndex(int i)
-    {
-        return this.u2exceptionIndexTable.get(i);
-    }
-
-    /**
      * Read the data following the header.
      * 
      * @throws IOException

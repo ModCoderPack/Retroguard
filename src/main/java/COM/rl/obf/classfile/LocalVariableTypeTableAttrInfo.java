@@ -62,14 +62,6 @@ public class LocalVariableTypeTableAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the list of local variable type table entries.
-     */
-    protected List<LocalVariableTypeInfo> getLocalVariableTypeTable()
-    {
-        return this.localVariableTypeTable;
-    }
-
-    /**
      * Check for Utf8 references in the 'info' data to the constant pool and mark them.
      * 
      * @throws ClassFileException

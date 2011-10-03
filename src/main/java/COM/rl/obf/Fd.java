@@ -57,13 +57,4 @@ public class Fd extends MdFd
     {
         super(parent, isSynthetic, name, descriptor, access);
     }
-
-    /**
-     * Return the display name of the descriptor types.
-     */
-    @Override
-    protected String getDescriptorName()
-    {
-        return ";";
-    }
 }

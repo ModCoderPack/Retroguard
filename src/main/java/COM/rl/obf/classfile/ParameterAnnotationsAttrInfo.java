@@ -53,14 +53,6 @@ abstract public class ParameterAnnotationsAttrInfo extends AttrInfo
     }
 
     /**
-     * Return the list of parameter annotations table entries.
-     */
-    protected List<ParameterAnnotationsInfo> getParameterAnnotationsTable()
-    {
-        return this.parameterAnnotationsTable;
-    }
-
-    /**
      * Check for Utf8 references in the 'info' data to the constant pool and mark them.
      * 
      * @throws ClassFileException

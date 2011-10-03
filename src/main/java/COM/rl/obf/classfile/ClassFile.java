@@ -73,7 +73,6 @@ public class ClassFile implements ClassConstants
     private List<MethodInfo> methods;
     private List<AttrInfo> attributes;
 
-    private boolean isUnkAttrGone = false;
     private CpInfo cpIdString = null;
 
 
@@ -685,9 +684,6 @@ public class ClassFile implements ClassConstants
         }
 
         this.attributes.removeAll(delAttrs);
-
-        // Signal that unknown attributes are gone
-        this.isUnkAttrGone = true;
     }
 
     /**

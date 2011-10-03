@@ -59,14 +59,6 @@ public class ParameterAnnotationsInfo
     }
 
     /**
-     * Return the list of annotation table entries.
-     */
-    protected List<AnnotationInfo> getAnnotationTable()
-    {
-        return this.annotationTable;
-    }
-
-    /**
      * Check for Utf8 references to constant pool and mark them.
      * 
      * @param pool

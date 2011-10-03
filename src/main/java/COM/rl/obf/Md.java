@@ -59,27 +59,6 @@ public class Md extends MdFd
     }
 
     /**
-     * Return the display name of the descriptor types.
-     */
-    @Override
-    protected String getDescriptorName()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        for (Iterator<String> iter = this.paramTypes.iterator(); iter.hasNext();)
-        {
-            String type = iter.next();
-            sb.append(type);
-            if (iter.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
-        sb.append(");");
-        return sb.toString();
-    }
-
-    /**
      * Does this method match the wildcard pattern? (compatibility mode)
      * 
      * @param namePattern

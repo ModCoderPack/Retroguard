@@ -33,7 +33,6 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
 
 
     // Fields ----------------------------------------------------------------
-    private int u2numAnnotations;
     private List<AnnotationInfo> annotationTable;
 
 
@@ -51,14 +50,6 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
     protected AnnotationsAttrInfo(ClassFile cf, int attrNameIndex, int attrLength)
     {
         super(cf, attrNameIndex, attrLength);
-    }
-
-    /**
-     * Return the list of annotation table entries.
-     */
-    protected List<AnnotationInfo> getAnnotationTable()
-    {
-        return this.annotationTable;
     }
 
     /**
