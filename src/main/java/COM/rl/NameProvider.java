@@ -749,7 +749,11 @@ public class NameProvider
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
-            newClassName = "C_" + (++NameProvider.uniqueStart) + "_" + className;
+            // don't rename anonymous inner classes
+            if (!cl.isInnerClass() || !Character.isDigit(className.charAt(0)))
+            {
+                newClassName = "C_" + (++NameProvider.uniqueStart) + "_" + className;
+            }
             cl.setOutput();
             return newClassName;
         }
@@ -770,7 +774,11 @@ public class NameProvider
                 {
                     if (NameProvider.uniqueStart > 0)
                     {
-                        newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + className;
+                        // don't rename anonymous inner classes
+                        if (!cl.isInnerClass() || !Character.isDigit(className.charAt(0)))
+                        {
+                            newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + className;
+                        }
                     }
                 }
             }

@@ -138,12 +138,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         {
             this.sep = ClassFile.SEP_INNER;
         }
-
-        // Do not obfuscate anonymous inner classes
-        if (isInnerClass && (name != null) && (name.length() > 0) && Character.isDigit(name.charAt(0)))
-        {
-            this.setOutName(this.getInName());
-        }
     }
 
     /**
