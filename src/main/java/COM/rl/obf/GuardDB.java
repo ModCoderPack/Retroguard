@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.zip.*;
 import java.security.*;
 
+import COM.rl.NameProvider;
 import COM.rl.obf.classfile.*;
 import COM.rl.util.*;
 import COM.rl.util.rfc822.*;
@@ -85,11 +86,6 @@ public class GuardDB implements ClassConstants
      * Remap strings in reflection?
      */
     private boolean enableMapClassString = false;
-
-    /**
-     * Repackage classes for size?
-     */
-    private boolean enableRepackage = false;
 
     /**
      * Produce SHA-1 manifest digests?
@@ -249,7 +245,8 @@ public class GuardDB implements ClassConstants
                         }
                         else if (ClassConstants.OPTION_Repackage.equals(entry.name))
                         {
-                            this.enableRepackage = true;
+                            // TODO repackage
+                            //NameProvider.repackage = true;
                         }
                         else if (ClassConstants.OPTION_Generic.equals(entry.name))
                         {
@@ -433,7 +430,7 @@ public class GuardDB implements ClassConstants
         }
 
         // Traverse the class tree, generating obfuscated names within package and class namespaces
-        this.classTree.generateNames(this.enableRepackage);
+        this.classTree.generateNames();
 
         // Resolve the polymorphic dependencies of each class, generating non-private method and field names for each namespace
         this.classTree.resolveClasses();

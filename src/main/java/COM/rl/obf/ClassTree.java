@@ -601,11 +601,13 @@ public class ClassTree implements NameMapper, ClassConstants
     /**
      * Traverse the class tree, generating obfuscated names within each namespace.
      * 
-     * @param enableRepackage
      * @throws ClassFileException
      */
-    public void generateNames(boolean enableRepackage) throws ClassFileException
+    public void generateNames() throws ClassFileException
     {
+        // TODO enableRepackage
+        boolean enableRepackage = true;
+
         // Repackage first, if requested
         // (need TreeItem.isFixed set properly, so must be done first)
         if (enableRepackage)
@@ -620,6 +622,7 @@ public class ClassTree implements NameMapper, ClassConstants
                 }
             });
         }
+
         // Now rename everything in the traditional way (no repackaging)
         this.walkTree(new TreeAction()
         {

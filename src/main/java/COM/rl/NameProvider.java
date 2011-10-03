@@ -49,8 +49,7 @@ public class NameProvider
 
     public static String[] parseCommandLine(String[] args)
     {
-        if ((args.length > 0)
-            && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch") || args[0].equalsIgnoreCase("-mojang")))
+        if ((args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
         {
             return NameProvider.parseNameSheetModeArgs(args);
         }
@@ -268,11 +267,6 @@ public class NameProvider
         else if (args[0].equalsIgnoreCase("-notch"))
         {
             NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
-        }
-        else if (args[0].equalsIgnoreCase("-mojang"))
-        {
-            NameProvider.currentMode = NameProvider.DEOBFUSCATION_MODE;
-            NameProvider.repackage = true;
         }
         else
         {
@@ -642,6 +636,10 @@ public class NameProvider
 
     public static String getNewPackageName(Pk pk)
     {
+        String packageName = pk.getInName();
+        String fullPackageName = pk.getFullInName();
+        String newPackageName = fullPackageName;
+
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
             pk.setOutput();
@@ -650,23 +648,21 @@ public class NameProvider
 
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
-            String packageName = "p_" + (++NameProvider.uniqueStart) + "_" + pk.getInName();
+            newPackageName = "p_" + (++NameProvider.uniqueStart) + "_" + packageName;
             pk.setOutput();
-            return packageName;
+            return newPackageName;
         }
 
-        String packageName = pk.getFullInName();
-        boolean known = NameProvider.packageNameLookup.containsKey(packageName);
+        boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
 
-        if (!NameProvider.isInProtectedPackage(packageName))
+        if (!NameProvider.isInProtectedPackage(fullPackageName))
         {
             if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
             {
-                if (NameProvider.packagesObf2Deobf.containsKey(pk.getFullInName()))
+                if (NameProvider.packagesObf2Deobf.containsKey(fullPackageName))
                 {
-                    String deobfName = NameProvider.packagesObf2Deobf.get(pk.getFullInName()).deobfName;
-                    packageName = deobfName;
-                    pk.setRepackageName(packageName);
+                    newPackageName = NameProvider.packagesObf2Deobf.get(fullPackageName).deobfName;
+                    pk.setRepackageName(newPackageName);
                 }
                 else
                 {
@@ -674,18 +670,17 @@ public class NameProvider
                     TreeItem parent = pk.getParent();
                     if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
-                        packageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-                        pk.setRepackageName(packageName);
+                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
+                        pk.setRepackageName(newPackageName);
                     }
                 }
             }
             else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
             {
-                if (NameProvider.packagesDeobf2Obf.containsKey(pk.getFullInName()))
+                if (NameProvider.packagesDeobf2Obf.containsKey(fullPackageName))
                 {
-                    String obfName = NameProvider.packagesDeobf2Obf.get(pk.getFullInName()).obfName;
-                    packageName = obfName;
-                    pk.setRepackageName(packageName);
+                    newPackageName = NameProvider.packagesDeobf2Obf.get(fullPackageName).obfName;
+                    pk.setRepackageName(newPackageName);
                 }
                 else
                 {
@@ -693,31 +688,29 @@ public class NameProvider
                     TreeItem parent = pk.getParent();
                     if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
-                        packageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-                        pk.setRepackageName(packageName);
+                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
+                        pk.setRepackageName(newPackageName);
                     }
                 }
             }
 
             if (NameProvider.repackage)
             {
-                packageName = ".";
-                pk.setRepackageName(packageName);
+                newPackageName = ".";
+                pk.setRepackageName(newPackageName);
             }
-
-            NameProvider.packageNameLookup.put(pk.getFullInName(), packageName);
+            
+            NameProvider.packageNameLookup.put(fullPackageName, newPackageName);
         }
 
-        pk.setOutName(packageName);
+        pk.setOutName(newPackageName);
 
-        String inName = pk.getFullInName(true);
-
-        if (!NameProvider.isInProtectedPackage(inName + "/") && !known)
+        if (!NameProvider.isInProtectedPackage(fullPackageName) && !known)
         {
             pk.setOutput();
         }
 
-        return packageName;
+        return newPackageName;
     }
 
     private static String getNewPackageName(String pkgName)
