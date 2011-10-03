@@ -215,16 +215,4 @@ abstract public class CpInfo implements ClassConstants
     {
         this.refCount = 0;
     }
-
-    /**
-     * Dump the content of the class file to the specified file (used for debugging).
-     * 
-     * @param pw
-     * @param cf
-     * @param index
-     */
-    public void dump(PrintWriter pw, ClassFile cf, int index)
-    {
-        // do nothing
-    }
 }

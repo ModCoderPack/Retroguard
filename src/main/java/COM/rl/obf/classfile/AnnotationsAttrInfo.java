@@ -121,21 +121,4 @@ abstract public class AnnotationsAttrInfo extends AttrInfo
             ai.remap(cf, nm);
         }
     }
-
-    /**
-     * Provide debugging dump of this object.
-     * 
-     * @param pw
-     * @param cf
-     */
-    @Override
-    public void dump(PrintWriter pw, ClassFile cf)
-    {
-        super.dump(pw, cf);
-        pw.println("u2numAnnotations : " + this.annotationTable.size());
-        for (AnnotationInfo ai : this.annotationTable)
-        {
-            ai.dump(pw, cf);
-        }
-    }
 }

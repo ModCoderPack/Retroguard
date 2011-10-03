@@ -251,15 +251,4 @@ public class MemberValueInfo
                 throw new ClassFileException("Illegal tag value in annotation attribute member_value structure: " + this.u1tag);
         }
     }
-
-    /**
-     * Provide debugging dump of this object.
-     * 
-     * @param pw
-     * @param cf
-     */
-    public void dump(PrintWriter pw, ClassFile cf)
-    {
-        pw.println("u1tag : " + this.u1tag);
-    }
 }

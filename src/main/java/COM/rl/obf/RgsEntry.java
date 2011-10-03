@@ -80,18 +80,4 @@ public class RgsEntry
     {
         return this.name;
     }
-
-    public String debugString()
-    {
-        return this.type.toString() + " "
-            + this.name + " "
-            + (this.descriptor != null ? this.descriptor + " " : "")
-            + (this.retainToPublic ? "public " : "")
-            + (this.retainToProtected ? "protected " : "")
-            + (this.retainPubProtOnly ? "pub_prot_only " : "")
-            + (this.retainFieldsOnly ? "field " : "")
-            + (this.retainMethodsOnly ? "method " : "")
-            + (this.retainAndClass ? "and_class " : "")
-            + (this.extendsName != null ? "extends " + this.extendsName : "");
-    }
 }

@@ -75,60 +75,11 @@ abstract public class PkCl extends TreeItem
     }
 
     /**
-     * Get a class by obfuscated name.
-     * 
-     * @param name
-     */
-    public Cl getObfClass(String name)
-    {
-        for (Cl cl : this.cls.values())
-        {
-            if (name.equals(cl.getOutName()))
-            {
-                return cl;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Get a {@code Collection<Cl>} of classes directly beneath this {@code PkCl}.
      */
     public Collection<Cl> getClasses()
     {
         return this.cls.values();
-    }
-
-    /**
-     * Get an {@code List<Cl>} of all classes (outer and inner) in the tree beneath this {@code PkCl}.
-     */
-    public List<Cl> getAllClassList()
-    {
-        return this.addAllClasses(new ArrayList<Cl>());
-    }
-
-    /**
-     * List classes and recursively compose a list of all inner classes.
-     * 
-     * @param allClasses
-     */
-    protected List<Cl> addAllClasses(List<Cl> allClasses)
-    {
-        for (Cl cl : this.cls.values())
-        {
-            allClasses.add(cl);
-            cl.addAllClasses(allClasses);
-        }
-
-        return allClasses;
-    }
-
-    /**
-     * Return number of classes.
-     */
-    public int getClassCount()
-    {
-        return this.cls.size();
     }
 
     /**

@@ -121,14 +121,6 @@ public class ClassTree implements NameMapper, ClassConstants
     }
 
     /**
-     * Return the root node.
-     */
-    public Pk getRoot()
-    {
-        return this.root;
-    }
-
-    /**
      * Update the path of the passed filename, if that path corresponds to a package.
      * 
      * @param inName

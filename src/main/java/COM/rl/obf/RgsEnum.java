@@ -114,14 +114,6 @@ public class RgsEnum
 
     // Class Methods ---------------------------------------------------------
     /**
-     * Return the internal default script file.
-     */
-    public static String getDefaultRgs()
-    {
-        return RgsEnum.DEFAULT_RGS;
-    }
-
-    /**
      * Translate a string access modifier from the script to bit flag
      * 
      * @param accessString

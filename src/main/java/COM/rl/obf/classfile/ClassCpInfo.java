@@ -111,15 +111,4 @@ public class ClassCpInfo extends CpInfo
     {
         dout.writeShort(this.u2nameIndex);
     }
-
-    /**
-     * Dump the content of the class file to the specified file (used for debugging).
-     * 
-     * @param pw
-     * @param cf
-     */
-    public void dump(PrintWriter pw, ClassFile cf)
-    {
-        pw.println("  Class: " + cf.getUtf8Debug(this.u2nameIndex));
-    }
 }

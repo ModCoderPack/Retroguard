@@ -134,58 +134,11 @@ public class Pk extends PkCl
     }
 
     /**
-     * Get a package level by obfuscated name.
-     * 
-     * @param name
-     */
-    public Pk getObfPackage(String name)
-    {
-        for (Pk pk : this.pks.values())
-        {
-            if (name.equals(pk.getOutName()))
-            {
-                return pk;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Get a package level by obfuscated repackage name.
-     * 
-     * @param name
-     */
-    public Pk getObfRepackage(String name)
-    {
-        for (Pk pk : this.pks.values())
-        {
-            if (name.equals(pk.getRepackageName()))
-            {
-                return pk;
-            }
-            Pk sub = pk.getObfRepackage(name);
-            if (sub != null)
-            {
-                return sub;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Get a {@code Collection<Pk>} of packages.
      */
     public Collection<Pk> getPackages()
     {
         return this.pks.values();
-    }
-
-    /**
-     * Return number of packages.
-     */
-    public int getPackageCount()
-    {
-        return this.pks.size();
     }
 
     /**

@@ -268,16 +268,4 @@ public class AttrInfo implements ClassConstants
     {
         // do nothing
     }
-
-    /**
-     * Provide debugging dump of this object.
-     * 
-     * @param pw
-     * @param cf
-     */
-    public void dump(PrintWriter pw, ClassFile cf)
-    {
-        pw.println("u2attrNameIndex : " + this.u2attrNameIndex + " " + this.cf.getUtf8Debug(this.u2attrNameIndex));
-        pw.println("u4attrLength : " + this.u4attrLength);
-    }
 }

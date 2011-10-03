@@ -149,41 +149,4 @@ abstract public class RefCpInfo extends CpInfo
         dout.writeShort(this.u2classIndex);
         dout.writeShort(this.u2nameAndTypeIndex);
     }
-
-    /**
-     * Dump the content of the class file to the specified file (used for debugging).
-     */
-    @Override
-    public void dump(PrintWriter pw, ClassFile cf, int index)
-    {
-        String cl = "";
-        try
-        {
-            ClassCpInfo clCp = (ClassCpInfo)cf.getCpEntry(this.u2classIndex);
-            if (clCp != null)
-            {
-                cl = cf.getUtf8Debug(clCp.getNameIndex());
-            }
-        }
-        catch (ClassFileException e)
-        {
-            cl = "[bad class: " + this.u2classIndex + "]";
-        }
-
-        String nameAndType = "";
-        try
-        {
-            NameAndTypeCpInfo ntCp = (NameAndTypeCpInfo)cf.getCpEntry(this.u2nameAndTypeIndex);
-            if (ntCp != null)
-            {
-                nameAndType = cf.getUtf8Debug(ntCp.getNameIndex()) + " " + cf.getUtf8Debug(ntCp.getDescriptorIndex());
-            }
-        }
-        catch (ClassFileException e)
-        {
-            nameAndType = "[bad nameAndType: " + this.u2classIndex + "]";
-        }
-
-        pw.println("  Ref " + Integer.toString(index) + ": " + cl + " " + nameAndType);
-    }
 }

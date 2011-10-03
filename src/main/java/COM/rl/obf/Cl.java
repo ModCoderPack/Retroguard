@@ -213,24 +213,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     }
 
     /**
-     * Get all methods with obfuscated name.
-     * 
-     * @param name
-     */
-    public List<Md> getObfMethods(String name)
-    {
-        List<Md> mdsMatch = new ArrayList<Md>();
-        for (Md md : this.mds.values())
-        {
-            if (name.equals(md.getOutName()))
-            {
-                mdsMatch.add(md);
-            }
-        }
-        return mdsMatch;
-    }
-
-    /**
      * Get a field by name.
      * 
      * @param name
@@ -1360,16 +1342,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
 
         /**
-         * Constructor
-         * 
-         * @param extClass
-         */
-        public ExtNameListUp(Class<?> extClass)
-        {
-            this.extClass = extClass;
-        }
-
-        /**
          * Get obfuscated method name from list, or null if no mapping exists.
          * 
          * @throws ClassFileException
@@ -1528,62 +1500,6 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             catch (NoSuchFieldException e)
             {
                 return null;
-            }
-        }
-    }
-
-    /**
-     * Walk class inheritance group taking action once only on each class.
-     * Must be called after setupNameListDowns() called for all classes.
-     * 
-     * @param ta
-     * @throws ClassFileException
-     */
-    public void walkGroup(TreeAction ta) throws ClassFileException
-    {
-        this.walkGroup(ta, this, new ArrayList<Cl>());
-    }
-
-    /**
-     * Walk class inheritance group taking action once only on each class.
-     * 
-     * @param ta
-     * @param cl
-     * @param done
-     * @throws ClassFileException
-     */
-    private void walkGroup(TreeAction ta, Cl cl, List<Cl> done) throws ClassFileException
-    {
-        if (!done.contains(cl))
-        {
-            // Take the action and mark this class as done
-            ta.classAction(cl);
-            done.add(cl);
-            // Traverse super class
-            Cl superCl = this.classTree.getCl(this.superClass);
-            // ignore external to JAR
-            if (superCl != null)
-            {
-                this.walkGroup(ta, superCl, done);
-            }
-            // Traverse super interfaces
-            for (String si : this.superInterfaces)
-            {
-                Cl interfaceItem = this.classTree.getCl(si);
-                // ignore external to JAR
-                if (interfaceItem != null)
-                {
-                    this.walkGroup(ta, interfaceItem, done);
-                }
-            }
-            // Traverse derived classes
-            for (NameListDown nameListDown : this.nameListDowns)
-            {
-                Cl subCl = (Cl)nameListDown;
-                if (subCl != null)
-                {
-                    this.walkGroup(ta, subCl, done);
-                }
             }
         }
     }

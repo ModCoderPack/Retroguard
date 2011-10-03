@@ -132,20 +132,4 @@ public class AnnotationInfo
             mvp.remap(cf, nm);
         }
     }
-
-    /**
-     * Provide debugging dump of this object.
-     * 
-     * @param pw
-     * @param cf
-     */
-    public void dump(PrintWriter pw, ClassFile cf)
-    {
-        pw.println("u2typeIndex : " + this.u2typeIndex + " " + cf.getUtf8Debug(this.u2typeIndex));
-        pw.println("u2numMemberValuePairs : " + this.memberValuePairTable.size());
-        for (MemberValuePairInfo mvp : this.memberValuePairTable)
-        {
-            mvp.dump(pw, cf);
-        }
-    }
 }

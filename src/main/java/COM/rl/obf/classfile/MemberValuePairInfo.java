@@ -114,16 +114,4 @@ public class MemberValuePairInfo
     {
         this.value.remap(cf, nm);
     }
-
-    /**
-     * Provide debugging dump of this object.
-     * 
-     * @param pw
-     * @param cf
-     */
-    public void dump(PrintWriter pw, ClassFile cf)
-    {
-        pw.println("u2memberNameIndex : " + this.u2memberNameIndex + " " + cf.getUtf8Debug(this.u2memberNameIndex));
-        this.value.dump(pw, cf);
-    }
 }

@@ -74,7 +74,6 @@ public class ClassFile implements ClassConstants
     private List<AttrInfo> attributes;
 
     private boolean isUnkAttrGone = false;
-    private boolean hasReflection = false;
     private CpInfo cpIdString = null;
 
 
@@ -387,7 +386,6 @@ public class ClassFile implements ClassConstants
         {
             this.attributes.add(AttrInfo.create(din, this, AttrSource.CLASS));
         }
-        this.checkReflection();
     }
 
     /**
@@ -405,37 +403,6 @@ public class ClassFile implements ClassConstants
         {
             this.cpIdString = null;
         }
-    }
-
-    /**
-     * Check for reflection methods and set flag
-     * 
-     * @throws ClassFileException
-     */
-    private boolean checkReflection() throws ClassFileException
-    {
-        // Need only check CONSTANT_Methodref entries of constant pool since methods belong to classes 'Class' and 'ClassLoader',
-        // not interfaces.
-        for (CpInfo cpInfo : this.constantPool)
-        {
-            if (cpInfo instanceof MethodrefCpInfo)
-            {
-                // Get the method class name, simple name and descriptor
-                MethodrefCpInfo entry = (MethodrefCpInfo)cpInfo;
-                ClassCpInfo classEntry = (ClassCpInfo)this.getCpEntry(entry.getClassIndex());
-                String className = this.getUtf8(classEntry.getNameIndex());
-                NameAndTypeCpInfo ntEntry = (NameAndTypeCpInfo)this.getCpEntry(entry.getNameAndTypeIndex());
-                String name = this.getUtf8(ntEntry.getNameIndex());
-                String descriptor = this.getUtf8(ntEntry.getDescriptorIndex());
-
-                // Check if this is Class.forName
-                if (className.equals("java/lang/Class") && ClassFile.CLASS_FORNAME_NAME_DESCRIPTOR.equals(name + descriptor))
-                {
-                    this.hasReflection = true;
-                }
-            }
-        }
-        return this.hasReflection;
     }
 
     /**
@@ -580,47 +547,6 @@ public class ClassFile implements ClassConstants
         }
 
         throw new ClassFileException("Not UTF8Info");
-    }
-
-    /**
-     * Lookup the UTF8 string in the constant pool. Used in debugging.
-     * 
-     * @param cpIndex
-     */
-    protected String getUtf8Debug(int cpIndex)
-    {
-        CpInfo utf8Entry = null;
-        try
-        {
-            utf8Entry = this.getCpEntry(cpIndex);
-        }
-        catch (ClassFileException e)
-        {
-            return "[bad Utf8: " + cpIndex + "]";
-        }
-        if (utf8Entry instanceof Utf8CpInfo)
-        {
-            Utf8CpInfo entry = (Utf8CpInfo)utf8Entry;
-            return entry.getString();
-        }
-
-        return "[bad Utf8: " + cpIndex + "]";
-    }
-
-    /**
-     * Does this class contain reflection methods?
-     */
-    public boolean hasReflection()
-    {
-        return this.hasReflection;
-    }
-
-    /**
-     * List methods which can break obfuscated code, and log to a {@code List<String>}.
-     */
-    public List<String> getDangerousMethods()
-    {
-        return this.listDangerMethods(new ArrayList<String>());
     }
 
     /**
@@ -772,14 +698,6 @@ public class ClassFile implements ClassConstants
     public void updateRefCount() throws ClassFileException
     {
         this.constantPool.updateRefCount();
-    }
-
-    /**
-     * Trim attributes from the classfile ('Code', 'Exceptions', 'ConstantValue' are preserved, all others are killed).
-     */
-    public void trimAttrs()
-    {
-        this.trimAttrsExcept(Collections.<String>emptyList());
     }
 
     /**
@@ -1133,137 +1051,6 @@ public class ClassFile implements ClassConstants
         for (AttrInfo at : this.attributes)
         {
             at.write(dout);
-        }
-    }
-
-    /**
-     * Dump the content of the class file to the specified file (used for debugging).
-     * 
-     * @param pw
-     */
-    public void dump(PrintWriter pw)
-    {
-        String className = null;
-        try
-        {
-            className = this.getName();
-        }
-        catch (ClassFileException e)
-        {
-            // ignore
-        }
-        if (className == null)
-        {
-            className = Integer.toHexString(this.u2thisClass) + ": (null)";
-        }
-        String superName = null;
-        try
-        {
-            superName = this.getSuper();
-            if (superName == null)
-            {
-                superName = "java/lang/Object";
-            }
-        }
-        catch (ClassFileException e1)
-        {
-            // ignore
-        }
-        if (superName == null)
-        {
-            superName = Integer.toHexString(this.u2superClass) + ": (null)";
-        }
-        pw.println("_____________________________________________________________________");
-        pw.println("CLASS: " + className);
-        pw.println("Magic: " + Integer.toHexString(this.u4magic));
-        pw.println("Minor version: " + Integer.toHexString(this.u2minorVersion));
-        pw.println("Major version: " + Integer.toHexString(this.u2majorVersion));
-        pw.println();
-        pw.println("CP length: " + Integer.toHexString(this.constantPool.length()));
-        for (ListIterator<CpInfo> iter = this.constantPool.listIterator(); iter.hasNext();)
-        {
-            int i = iter.nextIndex();
-            CpInfo cpInfo = iter.next();
-            if (cpInfo != null)
-            {
-                cpInfo.dump(pw, this, i);
-            }
-        }
-        pw.println("Access: " + Integer.toHexString(this.u2accessFlags));
-        pw.println("This class: " + className);
-        pw.println("Superclass: " + superName);
-        pw.println("Interfaces count: " + Integer.toHexString(this.u2interfaces.size()));
-        for (ListIterator<Integer> iter = this.u2interfaces.listIterator(); iter.hasNext();)
-        {
-            int i = iter.nextIndex();
-            int intf = iter.next();
-            CpInfo info = null;
-            try
-            {
-                info = this.getCpEntry(intf);
-            }
-            catch (ClassFileException e)
-            {
-                // ignore
-            }
-            ClassCpInfo clsInfo = (ClassCpInfo)info;
-            if (clsInfo == null)
-            {
-                pw.println("  Interface " + Integer.toHexString(i) + ": (null)");
-            }
-            else
-            {
-                pw.println("  Interface " + Integer.toHexString(i) + ": "
-                    + this.getUtf8Debug(clsInfo.getNameIndex()));
-            }
-        }
-        pw.println("Fields count: " + Integer.toHexString(this.fields.size()));
-        for (ListIterator<FieldInfo> iter = this.fields.listIterator(); iter.hasNext();)
-        {
-            int i = iter.nextIndex();
-            ClassItemInfo info = iter.next();
-            if (info == null)
-            {
-                pw.println("  Field " + Integer.toHexString(i) + ": (null)");
-            }
-            else
-            {
-                pw.println("  Field " + Integer.toHexString(i) + ": "
-                    + this.getUtf8Debug(info.getNameIndex()) + " "
-                    + this.getUtf8Debug(info.getDescriptorIndex()));
-                pw.println("    Attrs count: " + Integer.toHexString(info.attributes.size()));
-                for (AttrInfo at : info.attributes)
-                {
-                    at.dump(pw, this);
-                }
-            }
-        }
-        pw.println("Methods count: " + Integer.toHexString(this.methods.size()));
-        for (ListIterator<MethodInfo> iter = this.methods.listIterator(); iter.hasNext();)
-        {
-            int i = iter.nextIndex();
-            ClassItemInfo info = iter.next();
-            if (info == null)
-            {
-                pw.println("  Method " + Integer.toHexString(i) + ": (null)");
-            }
-            else
-            {
-                pw.println("  Method " + Integer.toHexString(i) + ": "
-                    + this.getUtf8Debug(info.getNameIndex()) + " "
-                    + this.getUtf8Debug(info.getDescriptorIndex()) + " "
-                    + Integer.toHexString(info.getAccessFlags()));
-                pw.println("    Attrs count: " + Integer.toHexString(info.attributes.size()));
-                for (AttrInfo at : info.attributes)
-                {
-                    at.dump(pw, this);
-                }
-            }
-        }
-        pw.println("Attrs count: " + Integer.toHexString(this.attributes.size()));
-        for (AttrInfo at : this.attributes)
-        {
-            at.dump(pw, this);
         }
     }
 }
