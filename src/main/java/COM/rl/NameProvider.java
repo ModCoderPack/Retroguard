@@ -118,7 +118,7 @@ public class NameProvider
                 {
                     defines[1] = line.substring(defines[0].length() + 1).trim();
                     defines[0] = defines[0].trim();
-                    
+
                     if (defines[0].equalsIgnoreCase("obf"))
                     {
                         File obfFile = new File(defines[1]);
@@ -367,7 +367,6 @@ public class NameProvider
                 }
             }
         }
-        
     }
 
     private static void readSRGFiles() throws IOException
@@ -376,14 +375,14 @@ public class NameProvider
         {
             for (File f : NameProvider.obfFiles)
             {
-                readSRGFile(f);
+                NameProvider.readSRGFile(f);
             }
         }
         else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
             for (File f : NameProvider.reobFiles)
             {
-                readSRGFile(f);
+                NameProvider.readSRGFile(f);
             }
         }
 
@@ -416,7 +415,7 @@ public class NameProvider
             NameProvider.fieldsDeobf2Obf.put(entry.deobfName, entry);
         }
     }
-    
+
     private static void readSRGFile(File f) throws IOException
     {
         List<String> lines = NameProvider.readAllLines(f);
@@ -425,19 +424,19 @@ public class NameProvider
         {
             if (line.startsWith("PK:"))
             {
-                addPackageLine(line);
+                NameProvider.addPackageLine(line);
             }
             else if (line.startsWith("CL:"))
             {
-                addClassLine(line);
+                NameProvider.addClassLine(line);
             }
             else if (line.startsWith("MD:"))
             {
-                addMethodLine(line);
+                NameProvider.addMethodLine(line);
             }
             else if (line.startsWith("FD:"))
             {
-                addFieldLine(line);
+                NameProvider.addFieldLine(line);
             }
         }
     }
@@ -663,7 +662,7 @@ public class NameProvider
             return newPackageName;
         }
 
-        //boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
+//        boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
 
         if (!NameProvider.isInProtectedPackage(fullPackageName))
         {
@@ -679,7 +678,7 @@ public class NameProvider
                     TreeItem parent = pk.getParent();
                     if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
-                        //newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
+//                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                     }
                 }
             }
@@ -695,7 +694,7 @@ public class NameProvider
                     TreeItem parent = pk.getParent();
                     if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
-                        //newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
+//                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                     }
                 }
             }
