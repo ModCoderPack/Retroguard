@@ -23,11 +23,8 @@ public class NameProvider
     public static boolean oldHash = false;
     public static boolean repackage = false;
 
-    private static File packagesFile = null;
-    private static File classesFile = null;
-    private static File methodsFile = null;
-    private static File fieldsFile = null;
-    private static File reobFile = null;
+    private static Set<File> obfFiles = new HashSet<File>();
+    private static Set<File> reobFiles = new HashSet<File>();
     private static File npLog = null;
     private static File roLog = null;
 
@@ -121,45 +118,83 @@ public class NameProvider
                 {
                     defines[1] = line.substring(defines[0].length() + 1).trim();
                     defines[0] = defines[0].trim();
-
-                    if (defines[0].equalsIgnoreCase("packages"))
+                    
+                    if (defines[0].equalsIgnoreCase("obf"))
                     {
-                        NameProvider.packagesFile = new File(defines[1]);
-                        if (!NameProvider.packagesFile.exists() || !NameProvider.packagesFile.isFile())
+                        File obfFile = new File(defines[1]);
+                        if (obfFile.isFile())
                         {
-                            NameProvider.packagesFile = null;
+                            NameProvider.obfFiles.add(obfFile);
+                        }
+                        else
+                        {
+                            System.err.println("ERROR: could not find obf file " + defines[1]);
+                            return null;
+                        }
+                    }
+                    else if (defines[0].equalsIgnoreCase("packages"))
+                    {
+                        File packagesFile = new File(defines[1]);
+                        if (packagesFile.isFile())
+                        {
+                            NameProvider.obfFiles.add(packagesFile);
+                        }
+                        else
+                        {
+                            System.err.println("ERROR: could not find packages file " + defines[1]);
+                            return null;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("classes"))
                     {
-                        NameProvider.classesFile = new File(defines[1]);
-                        if (!NameProvider.classesFile.exists() || !NameProvider.classesFile.isFile())
+                        File classesFile = new File(defines[1]);
+                        if (classesFile.isFile())
                         {
-                            NameProvider.classesFile = null;
+                            NameProvider.obfFiles.add(classesFile);
+                        }
+                        else
+                        {
+                            System.err.println("ERROR: could not find classes file " + defines[1]);
+                            return null;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("methods"))
                     {
-                        NameProvider.methodsFile = new File(defines[1]);
-                        if (!NameProvider.methodsFile.exists() || !NameProvider.methodsFile.isFile())
+                        File methodsFile = new File(defines[1]);
+                        if (methodsFile.isFile())
                         {
-                            NameProvider.methodsFile = null;
+                            NameProvider.obfFiles.add(methodsFile);
+                        }
+                        else
+                        {
+                            System.err.println("ERROR: could not find methods file " + defines[1]);
+                            return null;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("fields"))
                     {
-                        NameProvider.fieldsFile = new File(defines[1]);
-                        if (!NameProvider.fieldsFile.exists() || !NameProvider.fieldsFile.isFile())
+                        File fieldsFile = new File(defines[1]);
+                        if (fieldsFile.isFile())
                         {
-                            NameProvider.fieldsFile = null;
+                            NameProvider.obfFiles.add(fieldsFile);
+                        }
+                        else
+                        {
+                            System.err.println("ERROR: could not find fields file " + defines[1]);
+                            return null;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("reob"))
                     {
-                        NameProvider.reobFile = new File(defines[1]);
-                        if (!NameProvider.reobFile.exists() || !NameProvider.reobFile.isFile())
+                        File reobFile = new File(defines[1]);
+                        if (reobFile.isFile())
                         {
-                            NameProvider.reobFile = null;
+                            NameProvider.reobFiles.add(reobFile);
+                        }
+                        else
+                        {
+                            System.err.println("ERROR: could not find reob file " + defines[1]);
+                            return null;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("input"))
@@ -211,8 +246,8 @@ public class NameProvider
                         }
                         catch (NumberFormatException e)
                         {
-                            System.err.println("Invalid start index: " + args[4]);
-                            throw e;
+                            System.err.println("Invalid start index: " + defines[1]);
+                            return null;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("protectedpackage"))
@@ -300,72 +335,57 @@ public class NameProvider
 
     private static void initLogfiles() throws IOException
     {
+        File logFile = null;
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
-            if (NameProvider.npLog != null)
-            {
-                FileWriter writer = null;
-                try
-                {
-                    writer = new FileWriter(NameProvider.npLog);
-                }
-                finally
-                {
-                    if (writer != null)
-                    {
-                        try
-                        {
-                            writer.close();
-                        }
-                        catch (IOException e)
-                        {
-                            // ignore
-                        }
-                    }
-                }
-            }
+            logFile = NameProvider.npLog;
         }
         else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
         {
-            if (NameProvider.roLog != null)
+            logFile = NameProvider.roLog;
+        }
+
+        if (logFile != null)
+        {
+            FileWriter writer = null;
+            try
             {
-                FileWriter writer = null;
-                try
+                writer = new FileWriter(logFile);
+            }
+            finally
+            {
+                if (writer != null)
                 {
-                    writer = new FileWriter(NameProvider.roLog);
-                }
-                finally
-                {
-                    if (writer != null)
+                    try
                     {
-                        try
-                        {
-                            writer.close();
-                        }
-                        catch (IOException e)
-                        {
-                            // ignore
-                        }
+                        writer.close();
+                    }
+                    catch (IOException e)
+                    {
+                        // ignore
                     }
                 }
             }
         }
+        
     }
 
     private static void readSRGFiles() throws IOException
     {
-        if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+        if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
-            NameProvider.packagesFile = NameProvider.reobFile;
-            NameProvider.classesFile = NameProvider.reobFile;
-            NameProvider.methodsFile = NameProvider.reobFile;
-            NameProvider.fieldsFile = NameProvider.reobFile;
+            for (File f : NameProvider.obfFiles)
+            {
+                readSRGFile(f);
+            }
         }
-
-        NameProvider.readPackagesSRG();
-        NameProvider.readClassesSRG();
-        NameProvider.readMethodsSRG();
-        NameProvider.readFieldsSRG();
+        else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+        {
+            for (File f : NameProvider.reobFiles)
+            {
+                readSRGFile(f);
+            }
+        }
 
         NameProvider.updateAllXrefs();
     }
@@ -396,120 +416,109 @@ public class NameProvider
             NameProvider.fieldsDeobf2Obf.put(entry.deobfName, entry);
         }
     }
-
-    private static void readPackagesSRG() throws IOException
+    
+    private static void readSRGFile(File f) throws IOException
     {
-        if (NameProvider.packagesFile == null)
-        {
-            return;
-        }
-
-        List<String> lines = NameProvider.readAllLines(NameProvider.packagesFile);
+        List<String> lines = NameProvider.readAllLines(f);
 
         for (String line : lines)
         {
-            String[] lineParts = line.split(" ");
-            if ((lineParts.length != 3) || !lineParts[0].startsWith("PK:"))
+            if (line.startsWith("PK:"))
             {
-                continue;
+                addPackageLine(line);
             }
-
-            PackageEntry entry = new PackageEntry();
-            if (lineParts[1].equals("."))
+            else if (line.startsWith("CL:"))
             {
-                entry.obfName = "";
+                addClassLine(line);
             }
-            else
+            else if (line.startsWith("MD:"))
             {
-                entry.obfName = lineParts[1];
+                addMethodLine(line);
             }
-            if (lineParts[2].equals("."))
+            else if (line.startsWith("FD:"))
             {
-                entry.deobfName = "";
+                addFieldLine(line);
             }
-            else
-            {
-                entry.deobfName = lineParts[2];
-            }
-            NameProvider.packageDefs.add(entry);
         }
     }
 
-    private static void readClassesSRG() throws IOException
+    private static void addPackageLine(String line)
     {
-        if (NameProvider.classesFile == null)
+        String[] lineParts = line.split(" ");
+        if ((lineParts.length != 3) || !lineParts[0].startsWith("PK:"))
         {
+            // TODO add a warning on invalid lines
             return;
         }
 
-        List<String> lines = NameProvider.readAllLines(NameProvider.classesFile);
-
-        for (String line : lines)
+        PackageEntry entry = new PackageEntry();
+        if (lineParts[1].equals("."))
         {
-            String[] lineParts = line.split(" ");
-            if ((lineParts.length != 3) || !lineParts[0].startsWith("CL:"))
-            {
-                continue;
-            }
-
-            ClassEntry entry = new ClassEntry();
+            entry.obfName = "";
+        }
+        else
+        {
             entry.obfName = lineParts[1];
+        }
+        if (lineParts[2].equals("."))
+        {
+            entry.deobfName = "";
+        }
+        else
+        {
             entry.deobfName = lineParts[2];
-            NameProvider.classDefs.add(entry);
         }
+        NameProvider.packageDefs.add(entry);
     }
 
-    private static void readMethodsSRG() throws IOException
+    private static void addClassLine(String line)
     {
-        if (NameProvider.methodsFile == null)
+        String[] lineParts = line.split(" ");
+        if ((lineParts.length != 3) || !lineParts[0].startsWith("CL:"))
         {
+            // TODO add a warning on invalid lines
             return;
         }
 
-        List<String> lines = NameProvider.readAllLines(NameProvider.methodsFile);
-
-        for (String line : lines)
-        {
-            String[] lineParts = line.split(" ");
-            if ((lineParts.length < 4) || !lineParts[0].startsWith("MD:"))
-            {
-                continue;
-            }
-
-            MethodEntry entry = new MethodEntry();
-            entry.obfName = lineParts[1];
-            entry.obfDesc = lineParts[2];
-            entry.deobfName = lineParts[3];
-            if (lineParts.length > 4)
-            {
-                entry.deobfDesc = lineParts[4];
-            }
-            NameProvider.methodDefs.add(entry);
-        }
+        ClassEntry entry = new ClassEntry();
+        entry.obfName = lineParts[1];
+        entry.deobfName = lineParts[2];
+        NameProvider.classDefs.add(entry);
     }
 
-    private static void readFieldsSRG() throws IOException
+    private static void addMethodLine(String line)
     {
-        if (NameProvider.fieldsFile == null)
+        String[] lineParts = line.split(" ");
+        if ((lineParts.length < 4) || !lineParts[0].startsWith("MD:"))
         {
+            // TODO add a warning on invalid lines
             return;
         }
 
-        List<String> lines = NameProvider.readAllLines(NameProvider.fieldsFile);
-
-        for (String line : lines)
+        MethodEntry entry = new MethodEntry();
+        entry.obfName = lineParts[1];
+        entry.obfDesc = lineParts[2];
+        entry.deobfName = lineParts[3];
+        if (lineParts.length > 4)
         {
-            String[] lineParts = line.split(" ");
-            if ((lineParts.length != 3) || !lineParts[0].startsWith("FD:"))
-            {
-                continue;
-            }
-
-            FieldEntry entry = new FieldEntry();
-            entry.obfName = lineParts[1];
-            entry.deobfName = lineParts[2];
-            NameProvider.fieldDefs.add(entry);
+            entry.deobfDesc = lineParts[4];
         }
+        NameProvider.methodDefs.add(entry);
+    }
+
+    private static void addFieldLine(String line)
+    {
+        String[] lineParts = line.split(" ");
+        if ((lineParts.length != 3) || !lineParts[0].startsWith("FD:"))
+        {
+            // TODO add a warning on invalid lines
+            return;
+        }
+
+        FieldEntry entry = new FieldEntry();
+        entry.obfName = lineParts[1];
+        entry.deobfName = lineParts[2];
+        NameProvider.fieldDefs.add(entry);
     }
 
     private static List<String> readAllLines(File file) throws IOException
