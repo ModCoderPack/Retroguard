@@ -245,8 +245,7 @@ public class GuardDB implements ClassConstants
                         }
                         else if (ClassConstants.OPTION_Repackage.equals(entry.name))
                         {
-                            // TODO repackage
-                            //NameProvider.repackage = true;
+                            NameProvider.repackage = true;
                         }
                         else if (ClassConstants.OPTION_Generic.equals(entry.name))
                         {

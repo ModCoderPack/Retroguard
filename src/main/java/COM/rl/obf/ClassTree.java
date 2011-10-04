@@ -605,14 +605,10 @@ public class ClassTree implements NameMapper, ClassConstants
      */
     public void generateNames() throws ClassFileException
     {
-        // TODO enableRepackage
-        boolean enableRepackage = true;
-
-        // Repackage first, if requested
+        // Repackage first, if required
         // (need TreeItem.isFixed set properly, so must be done first)
-        if (enableRepackage)
+        if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
         {
-            // Generate single-level package names, unique across jar
             this.walkTree(new TreeAction()
             {
                 @Override

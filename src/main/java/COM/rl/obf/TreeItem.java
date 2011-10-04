@@ -465,7 +465,7 @@ public class TreeItem
         else
         {
             String s = this.parent.getFullOutName();
-            if (s.equals("") || ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) && (this instanceof Pk)))
+            if (s.equals(""))
             {
                 return this.getOutName();
             }

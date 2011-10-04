@@ -43,12 +43,6 @@ public class Pk extends PkCl
      */
     private Map<String, Pk> pks = new HashMap<String, Pk>();
 
-    /**
-     * Compact name for this package
-     */
-    private String repackageName = null;
-
-
     // Class Methods ---------------------------------------------------------
     /**
      * Create the root entry for a tree.
@@ -96,31 +90,6 @@ public class Pk extends PkCl
         {
             throw new RuntimeException("Internal error: the default package cannot have a parent");
         }
-    }
-
-    /**
-     * Set the repackage name of the entry.
-     * 
-     * @param repackageName
-     */
-    public void setRepackageName(String repackageName)
-    {
-        if (repackageName.equals("."))
-        {
-            this.repackageName = "";
-        }
-        else
-        {
-            this.repackageName = repackageName;
-        }
-    }
-
-    /**
-     * Return the repackage name of the entry.
-     */
-    public String getRepackageName()
-    {
-        return this.repackageName;
     }
 
     /**

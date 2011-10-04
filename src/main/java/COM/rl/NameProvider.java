@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 import COM.rl.obf.*;
+import COM.rl.obf.classfile.ClassFile;
 import COM.rl.obf.classfile.ClassFileException;
 
 public class NameProvider
@@ -638,7 +639,7 @@ public class NameProvider
     {
         String packageName = pk.getInName();
         String fullPackageName = pk.getFullInName();
-        String newPackageName = fullPackageName;
+        String newPackageName = null;
 
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
@@ -653,7 +654,7 @@ public class NameProvider
             return newPackageName;
         }
 
-        boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
+        //boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
 
         if (!NameProvider.isInProtectedPackage(fullPackageName))
         {
@@ -662,7 +663,6 @@ public class NameProvider
                 if (NameProvider.packagesObf2Deobf.containsKey(fullPackageName))
                 {
                     newPackageName = NameProvider.packagesObf2Deobf.get(fullPackageName).deobfName;
-                    pk.setRepackageName(newPackageName);
                 }
                 else
                 {
@@ -670,8 +670,7 @@ public class NameProvider
                     TreeItem parent = pk.getParent();
                     if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
-                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-                        pk.setRepackageName(newPackageName);
+                        //newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                     }
                 }
             }
@@ -680,7 +679,6 @@ public class NameProvider
                 if (NameProvider.packagesDeobf2Obf.containsKey(fullPackageName))
                 {
                     newPackageName = NameProvider.packagesDeobf2Obf.get(fullPackageName).obfName;
-                    pk.setRepackageName(newPackageName);
                 }
                 else
                 {
@@ -688,24 +686,18 @@ public class NameProvider
                     TreeItem parent = pk.getParent();
                     if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
                     {
-                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-                        pk.setRepackageName(newPackageName);
+                        //newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
                     }
                 }
             }
 
-            if (NameProvider.repackage)
+            if (newPackageName != null)
             {
-                newPackageName = ".";
-                pk.setRepackageName(newPackageName);
+                NameProvider.packageNameLookup.put(fullPackageName, newPackageName);
             }
-            
-            NameProvider.packageNameLookup.put(fullPackageName, newPackageName);
         }
 
-        pk.setOutName(newPackageName);
-
-        if (!NameProvider.isInProtectedPackage(fullPackageName) && !known)
+        if (!NameProvider.isInProtectedPackage(fullPackageName))
         {
             pk.setOutput();
         }
@@ -725,7 +717,7 @@ public class NameProvider
             return "";
         }
 
-        return pkgName + "/";
+        return pkgName + ClassFile.SEP_REGULAR;
     }
 
     public static String getNewClassName(Cl cl)
@@ -756,10 +748,7 @@ public class NameProvider
             if (NameProvider.classesObf2Deobf.containsKey(fullClassName))
             {
                 newClassName = NameProvider.classesObf2Deobf.get(fullClassName).deobfName;
-                if (!NameProvider.repackage)
-                {
-                    newClassName = NameProvider.getShortName(newClassName);
-                }
+                newClassName = NameProvider.getShortName(newClassName);
             }
             else
             {
@@ -781,10 +770,7 @@ public class NameProvider
             if (NameProvider.classesDeobf2Obf.containsKey(fullClassName))
             {
                 newClassName = NameProvider.classesDeobf2Obf.get(fullClassName).obfName;
-                if (!NameProvider.repackage)
-                {
-                    newClassName = NameProvider.getShortName(newClassName);
-                }
+                newClassName = NameProvider.getShortName(newClassName);
             }
         }
 
@@ -996,9 +982,9 @@ public class NameProvider
 
     private static String getShortName(String name)
     {
-        if ((name != null) && name.contains("/"))
+        if ((name != null) && name.contains(ClassFile.SEP_REGULAR))
         {
-            name = name.substring(name.lastIndexOf('/') + 1);
+            name = name.substring(name.lastIndexOf(ClassFile.SEP_REGULAR) + 1);
         }
 
         return name;

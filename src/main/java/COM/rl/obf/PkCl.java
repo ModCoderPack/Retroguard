@@ -43,6 +43,11 @@ abstract public class PkCl extends TreeItem
      */
     protected Map<String, Cl> cls = new HashMap<String, Cl>();
 
+    /**
+     * Compact name for this package
+     */
+    private String repackageName = null;
+
 
     // Class Methods ---------------------------------------------------------
 
@@ -165,6 +170,31 @@ abstract public class PkCl extends TreeItem
     public void generateNames() throws ClassFileException
     {
         PkCl.generateNames(this.cls);
+    }
+
+    /**
+     * Set the repackage name of the entry.
+     * 
+     * @param repackageName
+     */
+    public void setRepackageName(String repackageName)
+    {
+        if (repackageName.equals("."))
+        {
+            this.repackageName = "";
+        }
+        else
+        {
+            this.repackageName = repackageName;
+        }
+    }
+
+    /**
+     * Return the repackage name of the entry.
+     */
+    public String getRepackageName()
+    {
+        return this.repackageName;
     }
 
     /**
