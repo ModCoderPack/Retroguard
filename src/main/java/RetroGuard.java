@@ -56,15 +56,14 @@ public class RetroGuard
             if ((args.length > 0) && (args[0].equalsIgnoreCase("-help") || args[0].equalsIgnoreCase("--help")))
             {
                 RetroGuard.showUsage();
-                System.exit(-1);
+                System.exit(1);
             }
 
             // hook into the command line parameters
             args = NameProvider.parseCommandLine(args);
             if (args == null)
             {
-                RetroGuard.showUsage();
-                System.exit(-1);
+                System.exit(1);
             }
             else
             {
@@ -86,15 +85,14 @@ public class RetroGuard
         catch (IllegalArgumentException e)
         {
             System.err.println();
-            System.err.println("Problem: " + (e.getMessage() != null ? e.getMessage() : ""));
-            RetroGuard.showUsage();
-            System.exit(-1);
+            System.err.println("ERROR: " + (e.getMessage() != null ? e.getMessage() : "Unknown"));
+            System.exit(1);
         }
         catch (Exception e)
         {
             System.err.println();
             System.err.println("RetroGuard error: " + e.toString());
-            System.exit(-1);
+            System.exit(1);
         }
     }
 
