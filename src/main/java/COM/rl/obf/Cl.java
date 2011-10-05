@@ -954,6 +954,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     md.setOutName(theOutName);
+                    md.setFromScriptMap();
                     if (theOutName.equals(theInName))
                     {
                         NameProvider.log("# Method " + fullInName + " unchanged from name maker");
@@ -1018,6 +1019,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 if (theOutName != null)
                 {
                     fd.setOutName(theOutName);
+                    fd.setFromScriptMap();
                     if (theOutName.equals(theInName))
                     {
                         NameProvider.log("# Field " + fullInName + " unchanged from name maker");

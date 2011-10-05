@@ -169,6 +169,7 @@ public class Pk extends PkCl
             {
                 this.setRepackageName(theOutName);
                 this.setOutName(this.getInName());
+                this.setFromScriptMap();
                 String fullOutName = this.getFullOutName(true);
                 if (fullOutName.equals(fullInName))
                 {

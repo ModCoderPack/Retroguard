@@ -224,6 +224,7 @@ abstract public class PkCl extends TreeItem
                 if (theOutName != null)
                 {
                     ti.setOutName(theOutName);
+                    ti.setFromScriptMap();
                     String fullOutName = ti.getFullOutName(true);
                     if (fullOutName.equals(fullInName))
                     {
