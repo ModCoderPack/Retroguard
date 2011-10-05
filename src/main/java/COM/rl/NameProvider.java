@@ -64,8 +64,7 @@ public class NameProvider
         }
         catch (NumberFormatException e)
         {
-            System.err.println("ERROR: Invalid start index: " + args[4]);
-            throw e;
+            throw new IllegalArgumentException("Invalid start index: " + args[4]);
         }
 
         NameProvider.uniqueStart = idx;
@@ -87,12 +86,24 @@ public class NameProvider
             return null;
         }
 
+        if (args[0].equalsIgnoreCase("-searge"))
+        {
+            NameProvider.currentMode = NameProvider.DEOBFUSCATION_MODE;
+        }
+        else if (args[0].equalsIgnoreCase("-notch"))
+        {
+            NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
+        }
+        else
+        {
+            return null;
+        }
+
         String configFileName = args[1];
         File configFile = new File(configFileName);
         if (!configFile.exists() || !configFile.isFile())
         {
-            System.err.println("ERROR: could not find config file " + configFileName);
-            return null;
+            throw new IllegalArgumentException("Could not find config file " + configFileName);
         }
 
         String reobinput = null;
@@ -128,8 +139,7 @@ public class NameProvider
                         }
                         else
                         {
-                            System.err.println("ERROR: could not find obf file " + defines[1]);
-                            return null;
+                            throw new IllegalArgumentException("Could not find obf file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("packages"))
@@ -141,8 +151,7 @@ public class NameProvider
                         }
                         else
                         {
-                            System.err.println("ERROR: could not find packages file " + defines[1]);
-                            return null;
+                            throw new IllegalArgumentException("Could not find packages file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("classes"))
@@ -154,8 +163,7 @@ public class NameProvider
                         }
                         else
                         {
-                            System.err.println("ERROR: could not find classes file " + defines[1]);
-                            return null;
+                            throw new IllegalArgumentException("Could not find classes file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("methods"))
@@ -167,8 +175,7 @@ public class NameProvider
                         }
                         else
                         {
-                            System.err.println("ERROR: could not find methods file " + defines[1]);
-                            return null;
+                            throw new IllegalArgumentException("Could not find methods file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("fields"))
@@ -180,8 +187,7 @@ public class NameProvider
                         }
                         else
                         {
-                            System.err.println("ERROR: could not find fields file " + defines[1]);
-                            return null;
+                            throw new IllegalArgumentException("Could not find fields file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("reob"))
@@ -193,8 +199,11 @@ public class NameProvider
                         }
                         else
                         {
-                            System.err.println("ERROR: could not find reob file " + defines[1]);
-                            return null;
+                            // only warn about reob file if we are in reob mode
+                            if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+                            {
+                                throw new IllegalArgumentException("Could not find reob file " + defines[1]);
+                            }
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("input"))
@@ -246,8 +255,7 @@ public class NameProvider
                         }
                         catch (NumberFormatException e)
                         {
-                            System.err.println("Invalid start index: " + defines[1]);
-                            return null;
+                            throw new IllegalArgumentException("Invalid start index: " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("protectedpackage"))
@@ -294,19 +302,6 @@ public class NameProvider
             {
                 // ignore
             }
-        }
-
-        if (args[0].equalsIgnoreCase("-searge"))
-        {
-            NameProvider.currentMode = NameProvider.DEOBFUSCATION_MODE;
-        }
-        else if (args[0].equalsIgnoreCase("-notch"))
-        {
-            NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
-        }
-        else
-        {
-            return null;
         }
 
         if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
