@@ -557,9 +557,24 @@ public class NameProvider
 
     public static void log(String text)
     {
-        if (!NameProvider.quiet)
+        NameProvider.log(text, false);
+    }
+
+    public static void errorLog(String text)
+    {
+        NameProvider.log(text, true);
+    }
+
+    public static void log(String text, boolean error)
+    {
+        if (!NameProvider.quiet && !error)
         {
             System.out.println(text);
+        }
+
+        if (error)
+        {
+            System.err.println(text);
         }
 
         File log = null;
@@ -633,7 +648,7 @@ public class NameProvider
         }
         else
         {
-            NameProvider.log("# Warning: trying to rename unknown type " + ti.getFullInName());
+            NameProvider.errorLog("# Warning: trying to rename unknown type " + ti.getFullInName());
         }
         return null;
     }
@@ -657,9 +672,9 @@ public class NameProvider
             return newPackageName;
         }
 
-//        boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
+        boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
 
-        if (!NameProvider.isInProtectedPackage(fullPackageName))
+        if (!NameProvider.isInProtectedPackage(fullPackageName) && !known)
         {
             if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
             {
@@ -765,6 +780,16 @@ public class NameProvider
                             newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + className;
                         }
                     }
+                    else
+                    {
+                        // only warn if we have some other class mappings
+                        // stops spaming every single class when only repackaging
+                        if (NameProvider.classesObf2Deobf.size() > 0)
+                        {
+                            NameProvider.errorLog("# Warning: unknown class " + className
+                                + " in " + cl.getParent().getFullOutName());
+                        }
+                    }
                 }
             }
         }
@@ -788,8 +813,9 @@ public class NameProvider
     public static String getNewMethodName(Md md) throws ClassFileException
     {
         String methodName = md.getInName();
+        String methodDescriptor = md.getDescriptor();
         String fullMethodName = md.getFullInName();
-        String methodNameKey = fullMethodName + md.getDescriptor();
+        String methodNameKey = fullMethodName + methodDescriptor;
         String newMethodName = null;
 
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
@@ -819,6 +845,15 @@ public class NameProvider
                     if (NameProvider.uniqueStart > 0)
                     {
                         newMethodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
+                    }
+                    else
+                    {
+                        // only warn if we know the parent class
+                        if (md.getParent().isFromScriptMap())
+                        {
+                            NameProvider.errorLog("# Warning: unknown method " + methodName + " " + methodDescriptor
+                                + " in " + md.getParent().getFullOutName());
+                        }
                     }
                 }
             }
@@ -950,6 +985,15 @@ public class NameProvider
                     if (NameProvider.uniqueStart > 0)
                     {
                         newFieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fieldName;
+                    }
+                    else
+                    {
+                        // only warn if we know the parent class
+                        if (fd.getParent().isFromScriptMap())
+                        {
+                            NameProvider.errorLog("# Warning: unknown field " + fieldName
+                                + " in " + fd.getParent().getFullOutName());
+                        }
                     }
                 }
             }
