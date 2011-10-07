@@ -96,103 +96,78 @@ public class ClassFile implements ClassConstants
     }
 
     /**
-     * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
-     * Class.forName() method returns .
+     * Parse a method descriptor into a list of parameter names and a return type, in same format as the
+     * Class.forName() method returns.
      * 
      * @param descriptor
      * @throws ClassFileException
      */
-    public static List<String> parseDescriptor(String descriptor) throws ClassFileException
+    public static List<String> parseMethodDescriptor(String descriptor) throws ClassFileException
     {
-        return ClassFile.parseDescriptor(descriptor, false, true);
-    }
-
-    /**
-     * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, optionally in same format
-     * as the Class.forName() method returns .
-     * 
-     * @param descriptor
-     * @param isDisplay
-     * @throws ClassFileException
-     */
-    public static List<String> parseDescriptor(String descriptor, boolean isDisplay) throws ClassFileException
-    {
-        return ClassFile.parseDescriptor(descriptor, isDisplay, true);
-    }
-
-    /**
-     * Parse a method or field descriptor into a list of parameter names (for methods) and a return type, in same format as the
-     * Class.forName() method returns .
-     * 
-     * @param descriptor
-     * @param isDisplay
-     * @param doTranslate
-     * @throws ClassFileException
-     */
-    public static List<String> parseDescriptor(String descriptor, boolean isDisplay, boolean doTranslate) throws ClassFileException
-    {
-        // Check for field descriptor
+        String descriptorPart = descriptor;
         List<String> names = new ArrayList<String>();
-        if (descriptor.charAt(0) != '(')
+        if (descriptorPart.charAt(0) != '(')
         {
-            names.add(descriptor);
+            throw new ClassFileException("Illegal method descriptor: " + descriptor);
         }
-        else
+
+        descriptorPart = descriptorPart.substring(1);
+        String type = "";
+        boolean foundParamEnd = false;
+        int returnParamCnt = 0;
+        while (descriptorPart.length() > 0)
         {
-            // Method descriptor
-            descriptor = descriptor.substring(1);
-            String type = "";
-            while (descriptor.length() > 0)
+            switch (descriptorPart.charAt(0))
             {
-                switch (descriptor.charAt(0))
-                {
-                    case '[':
-                        type = type + "[";
-                        descriptor = descriptor.substring(1);
-                        break;
+                case '[':
+                    type = type + "[";
+                    descriptorPart = descriptorPart.substring(1);
+                    break;
 
-                    case 'B':
-                    case 'C':
-                    case 'D':
-                    case 'F':
-                    case 'I':
-                    case 'J':
-                    case 'S':
-                    case 'Z':
-                    case 'V':
-                        names.add(type + descriptor.substring(0, 1));
-                        descriptor = descriptor.substring(1);
-                        type = "";
-                        break;
-
-                    case ')':
-                        descriptor = descriptor.substring(1);
-                        break;
-
-                    case 'L':
+                case 'B':
+                case 'C':
+                case 'D':
+                case 'F':
+                case 'I':
+                case 'J':
+                case 'S':
+                case 'Z':
+                case 'V':
+                    names.add(ClassFile.translateType(type + descriptorPart.substring(0, 1)));
+                    descriptorPart = descriptorPart.substring(1);
+                    type = "";
+                    if (foundParamEnd)
                     {
-                        int pos = descriptor.indexOf(';') + 1;
-                        names.add(type + descriptor.substring(0, pos));
-                        descriptor = descriptor.substring(pos);
-                        type = "";
-                        break;
+                        returnParamCnt++;
                     }
+                    break;
 
-                    default:
-                        throw new ClassFileException("Illegal field or method descriptor: " + descriptor);
+                case ')':
+                    descriptorPart = descriptorPart.substring(1);
+                    foundParamEnd = true;
+                    break;
+
+                case 'L':
+                {
+                    int pos = descriptorPart.indexOf(';') + 1;
+                    names.add(ClassFile.translateType(type + descriptorPart.substring(0, pos)));
+                    descriptorPart = descriptorPart.substring(pos);
+                    type = "";
+                    if (foundParamEnd)
+                    {
+                        returnParamCnt++;
+                    }
+                    break;
                 }
+
+                default:
+                    throw new ClassFileException("Illegal method descriptor: " + descriptor);
             }
         }
 
-        if (doTranslate)
+        if (returnParamCnt != 1)
         {
-            // Translate the names from JVM to Class.forName() format.
-            List<String> translatedNames = new ArrayList<String>();
-            for (String name : names)
-            {
-                translatedNames.add(ClassFile.translateType(name, isDisplay));
-            }
-            return translatedNames;
+            throw new ClassFileException("Illegal method descriptor: " + descriptor);
         }
 
         return names;
@@ -202,26 +177,16 @@ public class ClassFile implements ClassConstants
      * Translate a type specifier from the internal JVM convention to the Class.forName() one.
      * 
      * @param inName
-     * @param isDisplay
      * @throws ClassFileException
      */
-    public static String translateType(String inName, boolean isDisplay) throws ClassFileException
+    public static String translateType(String inName) throws ClassFileException
     {
         String outName = null;
         switch (inName.charAt(0))
         {
             case '[':
                 // For array types, Class.forName() inconsistently uses the internal type name but with '/' --> '.'
-                if (!isDisplay)
-                {
-                    // return the Class.forName() form
-                    outName = ClassFile.translate(inName);
-                }
-                else
-                {
-                    // return the pretty display form
-                    outName = ClassFile.translateType(inName.substring(1), true) + "[]";
-                }
+                outName = ClassFile.translate(inName);
                 break;
 
             case 'B':

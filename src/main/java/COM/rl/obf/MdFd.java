@@ -39,8 +39,6 @@ abstract public class MdFd extends TreeItem
     // Fields ----------------------------------------------------------------
     private String descriptor = null;
     private boolean isOverride = false;
-    protected String returnType = null;
-    protected List<String> paramTypes = null;
 
 
     // Class Methods ---------------------------------------------------------
@@ -68,10 +66,6 @@ abstract public class MdFd extends TreeItem
             throw new RuntimeException("Internal error: method/field must have name and descriptor, "
                 + "and have Class or Interface as parent");
         }
-
-        List<String> fullTypes = ClassFile.parseDescriptor(this.getDescriptor(), true);
-        this.returnType = fullTypes.get(fullTypes.size() - 1);
-        this.paramTypes = fullTypes.subList(0, fullTypes.size() - 1);
 
         // Disallow obfuscation of 'Synthetic' methods
         if (isSynthetic)
