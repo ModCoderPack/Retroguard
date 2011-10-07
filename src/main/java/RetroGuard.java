@@ -88,6 +88,12 @@ public class RetroGuard
             System.err.println("ERROR: " + (e.getMessage() != null ? e.getMessage() : "Unknown"));
             System.exit(1);
         }
+        catch (IOException e)
+        {
+            System.err.println();
+            System.err.println("ERROR: " + (e.getMessage() != null ? e.getMessage() : "Unknown"));
+            System.exit(1);
+        }
         catch (Exception e)
         {
             System.err.println();

@@ -201,9 +201,8 @@ abstract public class PkCl extends TreeItem
      * Generate unique obfuscated names for a given namespace.
      * 
      * @param hash
-     * @throws ClassFileException
      */
-    protected static void generateNames(Map<String, ? extends TreeItem> hash) throws ClassFileException
+    protected static void generateNames(Map<String, ? extends TreeItem> hash)
     {
         for (TreeItem ti : hash.values())
         {

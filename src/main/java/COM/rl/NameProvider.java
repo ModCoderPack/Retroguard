@@ -28,13 +28,8 @@ public class NameProvider
     private static File npLog = null;
     private static File roLog = null;
 
-    private static List<String> protectedPackages = new ArrayList<String>();
+    private static Set<String> protectedPackages = new HashSet<String>();
     private static Map<String, String> packageNameLookup = new HashMap<String, String>();
-
-    private static List<PackageEntry> packageDefs = new ArrayList<PackageEntry>();
-    private static List<ClassEntry> classDefs = new ArrayList<ClassEntry>();
-    private static List<MethodEntry> methodDefs = new ArrayList<MethodEntry>();
-    private static List<FieldEntry> fieldDefs = new ArrayList<FieldEntry>();
 
     private static Map<String, PackageEntry> packagesObf2Deobf = new HashMap<String, PackageEntry>();
     private static Map<String, PackageEntry> packagesDeobf2Obf = new HashMap<String, PackageEntry>();
@@ -45,7 +40,7 @@ public class NameProvider
     private static Map<String, FieldEntry> fieldsObf2Deobf = new HashMap<String, FieldEntry>();
     private static Map<String, FieldEntry> fieldsDeobf2Obf = new HashMap<String, FieldEntry>();
 
-    public static String[] parseCommandLine(String[] args)
+    public static String[] parseCommandLine(String[] args) throws IOException
     {
         if ((args.length > 0) && (args[0].equalsIgnoreCase("-searge") || args[0].equalsIgnoreCase("-notch")))
         {
@@ -64,7 +59,7 @@ public class NameProvider
         }
         catch (NumberFormatException e)
         {
-            throw new IllegalArgumentException("Invalid start index: " + args[4]);
+            throw new NumberFormatException("Invalid start index: " + args[4]);
         }
 
         NameProvider.uniqueStart = idx;
@@ -79,7 +74,7 @@ public class NameProvider
         return newArgs;
     }
 
-    private static String[] parseNameSheetModeArgs(String[] args)
+    private static String[] parseNameSheetModeArgs(String[] args) throws IOException
     {
         if (args.length < 2)
         {
@@ -103,7 +98,7 @@ public class NameProvider
         File configFile = new File(configFileName);
         if (!configFile.exists() || !configFile.isFile())
         {
-            throw new IllegalArgumentException("Could not find config file " + configFileName);
+            throw new FileNotFoundException("Could not find config file " + configFileName);
         }
 
         String reobinput = null;
@@ -139,7 +134,7 @@ public class NameProvider
                         }
                         else
                         {
-                            throw new IllegalArgumentException("Could not find obf file " + defines[1]);
+                            throw new FileNotFoundException("Could not find obf file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("packages"))
@@ -151,7 +146,7 @@ public class NameProvider
                         }
                         else
                         {
-                            throw new IllegalArgumentException("Could not find packages file " + defines[1]);
+                            throw new FileNotFoundException("Could not find packages file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("classes"))
@@ -163,7 +158,7 @@ public class NameProvider
                         }
                         else
                         {
-                            throw new IllegalArgumentException("Could not find classes file " + defines[1]);
+                            throw new FileNotFoundException("Could not find classes file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("methods"))
@@ -175,7 +170,7 @@ public class NameProvider
                         }
                         else
                         {
-                            throw new IllegalArgumentException("Could not find methods file " + defines[1]);
+                            throw new FileNotFoundException("Could not find methods file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("fields"))
@@ -187,7 +182,7 @@ public class NameProvider
                         }
                         else
                         {
-                            throw new IllegalArgumentException("Could not find fields file " + defines[1]);
+                            throw new FileNotFoundException("Could not find fields file " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("reob"))
@@ -202,7 +197,7 @@ public class NameProvider
                             // only warn about reob file if we are in reob mode
                             if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
                             {
-                                throw new IllegalArgumentException("Could not find reob file " + defines[1]);
+                                throw new FileNotFoundException("Could not find reob file " + defines[1]);
                             }
                         }
                     }
@@ -255,7 +250,7 @@ public class NameProvider
                         }
                         catch (NumberFormatException e)
                         {
-                            throw new IllegalArgumentException("Invalid start index: " + defines[1]);
+                            throw new NumberFormatException("Invalid start index: " + defines[1]);
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("protectedpackage"))
@@ -280,10 +275,6 @@ public class NameProvider
                     }
                 }
             }
-        }
-        catch (IOException e)
-        {
-            return null;
         }
         finally
         {
@@ -315,15 +306,8 @@ public class NameProvider
             return null;
         }
 
-        try
-        {
-            NameProvider.initLogfiles();
-            NameProvider.readSRGFiles();
-        }
-        catch (IOException e)
-        {
-            return null;
-        }
+        NameProvider.initLogfiles();
+        NameProvider.readSRGFiles();
 
         return newArgs;
     }
@@ -380,69 +364,58 @@ public class NameProvider
                 NameProvider.readSRGFile(f);
             }
         }
-
-        NameProvider.updateAllXrefs();
-    }
-
-    private static void updateAllXrefs()
-    {
-        for (PackageEntry entry : NameProvider.packageDefs)
-        {
-            NameProvider.packagesObf2Deobf.put(entry.obfName, entry);
-            NameProvider.packagesDeobf2Obf.put(entry.deobfName, entry);
-        }
-
-        for (ClassEntry entry : NameProvider.classDefs)
-        {
-            NameProvider.classesObf2Deobf.put(entry.obfName, entry);
-            NameProvider.classesDeobf2Obf.put(entry.deobfName, entry);
-        }
-
-        for (MethodEntry entry : NameProvider.methodDefs)
-        {
-            NameProvider.methodsObf2Deobf.put(entry.obfName + entry.obfDesc, entry);
-            NameProvider.methodsDeobf2Obf.put(entry.deobfName + entry.deobfDesc, entry);
-        }
-
-        for (FieldEntry entry : NameProvider.fieldDefs)
-        {
-            NameProvider.fieldsObf2Deobf.put(entry.obfName, entry);
-            NameProvider.fieldsDeobf2Obf.put(entry.deobfName, entry);
-        }
     }
 
     private static void readSRGFile(File f) throws IOException
     {
         List<String> lines = NameProvider.readAllLines(f);
 
+        int line_number = 1;
         for (String line : lines)
         {
-            if (line.startsWith("PK:"))
+            line = line.trim();
+            if (line.length() > 0)
             {
-                NameProvider.addPackageLine(line);
+                try
+                {
+                    if (line.startsWith("PK: "))
+                    {
+                        NameProvider.addPackageLine(line);
+                    }
+                    else if (line.startsWith("CL: "))
+                    {
+                        NameProvider.addClassLine(line);
+                    }
+                    else if (line.startsWith("MD: "))
+                    {
+                        NameProvider.addMethodLine(line);
+                    }
+                    else if (line.startsWith("FD: "))
+                    {
+                        NameProvider.addFieldLine(line);
+                    }
+                    else if (!line.startsWith("#"))
+                    {
+                        throw new IllegalArgumentException("Invalid line");
+                    }
+                }
+                catch (IllegalArgumentException e)
+                {
+                    throw new IllegalArgumentException("in file " + f.getName() + " line " + line_number + "\n\t"
+                        + (e.getMessage() != null ? e.getMessage() : "") + "\n\t" + line);
+                }
             }
-            else if (line.startsWith("CL:"))
-            {
-                NameProvider.addClassLine(line);
-            }
-            else if (line.startsWith("MD:"))
-            {
-                NameProvider.addMethodLine(line);
-            }
-            else if (line.startsWith("FD:"))
-            {
-                NameProvider.addFieldLine(line);
-            }
+
+            line_number++;
         }
     }
 
     private static void addPackageLine(String line)
     {
         String[] lineParts = line.split(" ");
-        if ((lineParts.length != 3) || !lineParts[0].startsWith("PK:"))
+        if (lineParts.length != 3)
         {
-            // TODO add a warning on invalid lines
-            return;
+            throw new IllegalArgumentException("Invalid package line");
         }
 
         PackageEntry entry = new PackageEntry();
@@ -462,57 +435,130 @@ public class NameProvider
         {
             entry.deobfName = lineParts[2];
         }
-        NameProvider.packageDefs.add(entry);
+
+        PackageEntry oldEntry;
+        oldEntry = NameProvider.packagesObf2Deobf.put(entry.obfName, entry);
+        if (oldEntry != null)
+        {
+            throw new IllegalArgumentException("Duplicate deobf package with " + oldEntry);
+        }
+        oldEntry = NameProvider.packagesDeobf2Obf.put(entry.deobfName, entry);
+        if ((NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE) && (oldEntry != null))
+        {
+            throw new IllegalArgumentException("Duplicate reobf package with " + oldEntry);
+        }
     }
 
     private static void addClassLine(String line)
     {
         String[] lineParts = line.split(" ");
-        if ((lineParts.length != 3) || !lineParts[0].startsWith("CL:"))
+        if (lineParts.length != 3)
         {
-            // TODO add a warning on invalid lines
-            return;
+            throw new IllegalArgumentException("Invalid class line");
         }
 
         ClassEntry entry = new ClassEntry();
         entry.obfName = lineParts[1];
         entry.deobfName = lineParts[2];
-        NameProvider.classDefs.add(entry);
+
+        ClassEntry oldEntry;
+        oldEntry = NameProvider.classesObf2Deobf.put(entry.obfName, entry);
+        if (oldEntry != null)
+        {
+            throw new IllegalArgumentException("Duplicate deobf class with " + oldEntry);
+        }
+        oldEntry = NameProvider.classesDeobf2Obf.put(entry.deobfName, entry);
+        if ((NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE) && (oldEntry != null))
+        {
+            throw new IllegalArgumentException("Duplicate reobf class with " + oldEntry);
+        }
     }
 
     private static void addMethodLine(String line)
     {
         String[] lineParts = line.split(" ");
-        if ((lineParts.length < 4) || !lineParts[0].startsWith("MD:"))
+        if (lineParts.length != 5)
         {
-            // TODO add a warning on invalid lines
-            return;
+            if (lineParts.length == 4)
+            {
+                if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+                {
+                    throw new IllegalArgumentException("Missing method descriptor for reobf");
+                }
+            }
+            else
+            {
+                throw new IllegalArgumentException("Invalid method line");
+            }
         }
 
         MethodEntry entry = new MethodEntry();
         entry.obfName = lineParts[1];
         entry.obfDesc = lineParts[2];
         entry.deobfName = lineParts[3];
-        if (lineParts.length > 4)
+        if (lineParts.length == 5)
         {
             entry.deobfDesc = lineParts[4];
         }
-        NameProvider.methodDefs.add(entry);
+        else
+        {
+            entry.deobfDesc = lineParts[2];
+        }
+
+        try
+        {
+            ClassFile.parseMethodDescriptor(entry.obfDesc);
+        }
+        catch (ClassFileException e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        try
+        {
+            ClassFile.parseMethodDescriptor(entry.deobfDesc);
+        }
+        catch (ClassFileException e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        MethodEntry oldEntry;
+        oldEntry = NameProvider.methodsObf2Deobf.put(entry.obfName + entry.obfDesc, entry);
+        if (oldEntry != null)
+        {
+            throw new IllegalArgumentException("Duplicate deobf method with " + oldEntry);
+        }
+        oldEntry = NameProvider.methodsDeobf2Obf.put(entry.deobfName + entry.deobfDesc, entry);
+        if ((NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE) && (oldEntry != null))
+        {
+            throw new IllegalArgumentException("Duplicate reobf method with " + oldEntry);
+        }
     }
 
     private static void addFieldLine(String line)
     {
         String[] lineParts = line.split(" ");
-        if ((lineParts.length != 3) || !lineParts[0].startsWith("FD:"))
+        if (lineParts.length != 3)
         {
-            // TODO add a warning on invalid lines
-            return;
+            throw new IllegalArgumentException("Invalid field line");
         }
 
         FieldEntry entry = new FieldEntry();
         entry.obfName = lineParts[1];
         entry.deobfName = lineParts[2];
-        NameProvider.fieldDefs.add(entry);
+
+        FieldEntry oldEntry;
+        oldEntry = NameProvider.fieldsObf2Deobf.put(entry.obfName, entry);
+        if (oldEntry != null)
+        {
+            throw new IllegalArgumentException("Duplicate deobf field with " + oldEntry);
+        }
+        oldEntry = NameProvider.fieldsDeobf2Obf.put(entry.deobfName, entry);
+        if ((NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE) && (oldEntry != null))
+        {
+            throw new IllegalArgumentException("Duplicate reobf field with " + oldEntry);
+        }
     }
 
     private static List<String> readAllLines(File file) throws IOException
@@ -628,7 +674,7 @@ public class NameProvider
         }
     }
 
-    public static String getNewTreeItemName(TreeItem ti) throws ClassFileException
+    public static String getNewTreeItemName(TreeItem ti)
     {
         if (ti instanceof Pk)
         {
@@ -810,7 +856,7 @@ public class NameProvider
         return newClassName;
     }
 
-    public static String getNewMethodName(Md md) throws ClassFileException
+    public static String getNewMethodName(Md md)
     {
         String methodName = md.getInName();
         String methodDescriptor = md.getDescriptor();
@@ -867,80 +913,87 @@ public class NameProvider
             }
             else
             {
-                Cl cls = (Cl)md.getParent();
-                Iterator<Cl> children = cls.getDownClasses();
-
-                Md tmpMd = new Md(cls, md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
-
-                String tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
-
-                boolean goingDown = false;
-                do
+                try
                 {
-                    tmpMd.setParent(cls);
-                    tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
-                    if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
-                    {
-                        newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
-                        newMethodName = NameProvider.getShortName(newMethodName);
-                        break;
-                    }
+                    Cl cls = (Cl)md.getParent();
+                    Iterator<Cl> children = cls.getDownClasses();
 
-                    boolean found = false;
-                    try
+                    Md tmpMd = new Md(cls, md.isSynthetic(), md.getInName(), md.getDescriptor(), md.getModifiers());
+
+                    String tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
+
+                    boolean goingDown = false;
+                    do
                     {
-                        for (Cl iface : cls.getSuperInterfaces())
+                        tmpMd.setParent(cls);
+                        tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
+                        if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
                         {
-                            tmpMd.setParent(iface);
-                            tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
-                            if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
-                            {
-                                newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
-                                newMethodName = NameProvider.getShortName(newMethodName);
-                                found = true;
-                            }
+                            newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
+                            newMethodName = NameProvider.getShortName(newMethodName);
+                            break;
                         }
-                    }
-                    catch (ClassFileException e)
-                    {
-                        // ignore
-                    }
 
-                    if (found)
-                    {
-                        break;
-                    }
-
-                    if (!goingDown)
-                    {
+                        boolean found = false;
                         try
                         {
-                            cls = cls.getSuperCl();
+                            for (Cl iface : cls.getSuperInterfaces())
+                            {
+                                tmpMd.setParent(iface);
+                                tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
+                                if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
+                                {
+                                    newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
+                                    newMethodName = NameProvider.getShortName(newMethodName);
+                                    found = true;
+                                }
+                            }
                         }
                         catch (ClassFileException e)
                         {
                             // ignore
-                            cls = null;
                         }
 
-                        if (cls == null)
+                        if (found)
                         {
-                            goingDown = true;
+                            break;
                         }
-                    }
 
-                    if (goingDown)
-                    {
-                        if (children.hasNext())
+                        if (!goingDown)
                         {
-                            cls = children.next();
+                            try
+                            {
+                                cls = cls.getSuperCl();
+                            }
+                            catch (ClassFileException e)
+                            {
+                                // ignore
+                                cls = null;
+                            }
+
+                            if (cls == null)
+                            {
+                                goingDown = true;
+                            }
                         }
-                        else
+
+                        if (goingDown)
                         {
-                            cls = null;
+                            if (children.hasNext())
+                            {
+                                cls = children.next();
+                            }
+                            else
+                            {
+                                cls = null;
+                            }
                         }
-                    }
-                } while (cls != null);
+                    } while (cls != null);
+                }
+                catch (ClassFileException e1)
+                {
+                    // ignore
+                }
             }
         }
 
@@ -1063,12 +1116,126 @@ class PackageEntry
 {
     public String obfName;
     public String deobfName;
+
+    @Override
+    public String toString()
+    {
+        return "PK: " + this.obfName + " " + this.deobfName;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + ((this.deobfName == null) ? 0 : this.deobfName.hashCode());
+        result = (prime * result) + ((this.obfName == null) ? 0 : this.obfName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        PackageEntry other = (PackageEntry)obj;
+        if (this.deobfName == null)
+        {
+            if (other.deobfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.deobfName.equals(other.deobfName))
+        {
+            return false;
+        }
+        if (this.obfName == null)
+        {
+            if (other.obfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.obfName.equals(other.obfName))
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
 class ClassEntry
 {
     public String obfName;
     public String deobfName;
+
+    @Override
+    public String toString()
+    {
+        return "CL: " + this.obfName + " " + this.deobfName;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + ((this.deobfName == null) ? 0 : this.deobfName.hashCode());
+        result = (prime * result) + ((this.obfName == null) ? 0 : this.obfName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        ClassEntry other = (ClassEntry)obj;
+        if (this.deobfName == null)
+        {
+            if (other.deobfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.deobfName.equals(other.deobfName))
+        {
+            return false;
+        }
+        if (this.obfName == null)
+        {
+            if (other.obfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.obfName.equals(other.obfName))
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
 class MethodEntry
@@ -1077,10 +1244,148 @@ class MethodEntry
     public String obfDesc;
     public String deobfName;
     public String deobfDesc;
+
+    @Override
+    public String toString()
+    {
+        return "MD: " + this.obfName + " " + this.obfDesc + " " + this.deobfName + " " + this.deobfDesc;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + ((this.deobfDesc == null) ? 0 : this.deobfDesc.hashCode());
+        result = (prime * result) + ((this.deobfName == null) ? 0 : this.deobfName.hashCode());
+        result = (prime * result) + ((this.obfDesc == null) ? 0 : this.obfDesc.hashCode());
+        result = (prime * result) + ((this.obfName == null) ? 0 : this.obfName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        MethodEntry other = (MethodEntry)obj;
+        if (this.deobfDesc == null)
+        {
+            if (other.deobfDesc != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.deobfDesc.equals(other.deobfDesc))
+        {
+            return false;
+        }
+        if (this.deobfName == null)
+        {
+            if (other.deobfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.deobfName.equals(other.deobfName))
+        {
+            return false;
+        }
+        if (this.obfDesc == null)
+        {
+            if (other.obfDesc != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.obfDesc.equals(other.obfDesc))
+        {
+            return false;
+        }
+        if (this.obfName == null)
+        {
+            if (other.obfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.obfName.equals(other.obfName))
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
 class FieldEntry
 {
     public String obfName;
     public String deobfName;
+
+    @Override
+    public String toString()
+    {
+        return "FL: " + this.obfName + " " + this.deobfName;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + ((this.deobfName == null) ? 0 : this.deobfName.hashCode());
+        result = (prime * result) + ((this.obfName == null) ? 0 : this.obfName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        FieldEntry other = (FieldEntry)obj;
+        if (this.deobfName == null)
+        {
+            if (other.deobfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.deobfName.equals(other.deobfName))
+        {
+            return false;
+        }
+        if (this.obfName == null)
+        {
+            if (other.obfName != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.obfName.equals(other.obfName))
+        {
+            return false;
+        }
+        return true;
+    }
 }
