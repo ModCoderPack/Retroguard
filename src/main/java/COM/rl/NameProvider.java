@@ -88,6 +88,9 @@ public class NameProvider
         else if (args[0].equalsIgnoreCase("-notch"))
         {
             NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
+            
+            // repackage mode required when reobfing
+            NameProvider.repackage = true;
         }
         else
         {
@@ -739,11 +742,20 @@ public class NameProvider
 
             if (newFullPackageName != null)
             {
-                newPackageName = NameProvider.getShortName(newFullPackageName);
-
-                if (NameProvider.repackage)
+                // always repackage the default package
+                if (fullPackageName.equals(""))
                 {
+                    newPackageName = newFullPackageName;
                     repackageName = newFullPackageName;
+                }
+                else
+                {
+                    newPackageName = NameProvider.getShortName(newFullPackageName);
+
+                    if (NameProvider.repackage)
+                    {
+                        repackageName = newFullPackageName;
+                    }
                 }
 
                 if (repackageName != null)
