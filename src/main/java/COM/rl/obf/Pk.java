@@ -169,6 +169,16 @@ public class Pk extends PkCl
             return repackageName;
         }
 
+        // for top level packages we ignore the default package name
+        TreeItem parentTreeItem = this.parent;
+        if (parentTreeItem != null)
+        {
+            if (parentTreeItem.parent == null)
+            {
+                return this.getOutName();
+            }
+        }
+
         return super.getFullOutName();
     }
 }

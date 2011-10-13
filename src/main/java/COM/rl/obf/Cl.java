@@ -1506,6 +1506,9 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         }
     }
 
+    /**
+     * Construct and return the full obfuscated name of the entry.
+     */
     @Override
     public String getFullOutName()
     {
@@ -1516,23 +1519,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             return this.joinName(repackageName, this.getOutName());
         }
 
-        String clName = super.getFullOutName();
-
-        if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
-        {
-            if (this.parent != null)
-            {
-                if (this.parent.parent == null)
-                {
-                    if (this.parent instanceof Pk)
-                    {
-                        return this.joinName(this.parent.getFullOutName(), clName);
-                    }
-                }
-            }
-        }
-
-        return clName;
+        return super.getFullOutName();
     }
 
     public Iterator<Cl> getDownClasses()

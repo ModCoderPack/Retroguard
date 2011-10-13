@@ -456,10 +456,6 @@ public class TreeItem
     {
         if (this.parent == null)
         {
-            return "";
-        }
-        else if (this.parent.parent == null)
-        {
             return this.getOutName();
         }
 
