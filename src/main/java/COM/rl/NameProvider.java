@@ -88,7 +88,7 @@ public class NameProvider
         else if (args[0].equalsIgnoreCase("-notch"))
         {
             NameProvider.currentMode = NameProvider.REOBFUSCATION_MODE;
-            
+
             // repackage mode required when reobfing
             NameProvider.repackage = true;
         }
@@ -758,12 +758,26 @@ public class NameProvider
                     }
                 }
 
+                if (packageName.equals(newPackageName))
+                {
+                    newPackageName = null;
+                }
+
+                if (packageName.equals(repackageName))
+                {
+                    repackageName = null;
+                }
+
                 if (repackageName != null)
                 {
                     pk.setRepackageName(repackageName);
                 }
 
                 NameProvider.packageNameLookup.put(fullPackageName, newFullPackageName);
+            }
+            else
+            {
+                NameProvider.packageNameLookup.put(fullPackageName, fullPackageName);
             }
 
             pk.setOutput();
@@ -1070,9 +1084,29 @@ public class NameProvider
 
     private static String getShortName(String name)
     {
-        if ((name != null) && name.contains(ClassFile.SEP_REGULAR))
+        if (name != null)
         {
-            name = name.substring(name.lastIndexOf(ClassFile.SEP_REGULAR) + 1);
+            if (name.contains(ClassFile.SEP_REGULAR))
+            {
+                name = name.substring(name.lastIndexOf(ClassFile.SEP_REGULAR) + 1);
+            }
+        }
+
+        return name;
+    }
+
+    private static String getPackageName(String name)
+    {
+        if (name != null)
+        {
+            if (name.contains(ClassFile.SEP_REGULAR))
+            {
+                name = name.substring(0, name.lastIndexOf(ClassFile.SEP_REGULAR));
+            }
+            else
+            {
+                name = "";
+            }
         }
 
         return name;
