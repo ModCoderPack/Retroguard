@@ -157,37 +157,6 @@ public class Pk extends PkCl
     }
 
     /**
-     * Generate unique-across-run obfuscated repackage name.
-     */
-    public void repackageName()
-    {
-        String fullInName = this.getFullInName(true);
-        if ((NameProvider.currentMode != NameProvider.CLASSIC_MODE) || (!this.isFixed()))
-        {
-            String theOutName = NameProvider.getNewPackageName(this);
-            if (theOutName != null)
-            {
-                this.setRepackageName(theOutName);
-                this.setOutName(this.getInName());
-                this.setFromScriptMap();
-                String fullOutName = this.getFullOutName(true);
-                if (fullOutName.equals(fullInName))
-                {
-                    NameProvider.log("# Repackage " + fullInName + " unchanged from name maker");
-                }
-                else
-                {
-                    NameProvider.log("# Repackage " + fullInName + " renamed to " + fullOutName + " from name maker");
-                }
-            }
-            else
-            {
-                NameProvider.log("# Repackage " + fullInName + " null from name maker");
-            }
-        }
-    }
-
-    /**
      * Construct and return the full obfuscated name of the entry.
      */
     @Override

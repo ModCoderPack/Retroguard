@@ -605,21 +605,12 @@ public class ClassTree implements NameMapper, ClassConstants
      */
     public void generateNames() throws ClassFileException
     {
-        // Repackage first, if required
-        // (need TreeItem.isFixed set properly, so must be done first)
-        if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
-        {
-            this.walkTree(new TreeAction()
-            {
-                @Override
-                public void packageAction(Pk pk)
-                {
-                    pk.repackageName();
-                }
-            });
-        }
+        // Rename default package
+        Map<String, Pk> rootMap = new HashMap<String, Pk>();
+        rootMap.put("", this.root);
+        PkCl.generateNames(rootMap);
 
-        // Now rename everything in the traditional way (no repackaging)
+        // Rename everything else
         this.walkTree(new TreeAction()
         {
             @Override
