@@ -723,65 +723,67 @@ public class NameProvider
             return newPackageName;
         }
 
-        if (!NameProvider.isInProtectedPackage(fullPackageName))
+        if (NameProvider.isInProtectedPackage(fullPackageName))
         {
-            if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
+            return null;
+        }
+
+        if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
+        {
+            if (NameProvider.packagesObf2Deobf.containsKey(fullPackageName))
             {
-                if (NameProvider.packagesObf2Deobf.containsKey(fullPackageName))
-                {
-                    newFullPackageName = NameProvider.packagesObf2Deobf.get(fullPackageName).deobfName;
-                }
+                newFullPackageName = NameProvider.packagesObf2Deobf.get(fullPackageName).deobfName;
             }
-            else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+        }
+        else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+        {
+            if (NameProvider.packagesDeobf2Obf.containsKey(fullPackageName))
             {
-                if (NameProvider.packagesDeobf2Obf.containsKey(fullPackageName))
-                {
-                    newFullPackageName = NameProvider.packagesDeobf2Obf.get(fullPackageName).obfName;
-                }
+                newFullPackageName = NameProvider.packagesDeobf2Obf.get(fullPackageName).obfName;
             }
+        }
 
-            if (newFullPackageName != null)
+        if (newFullPackageName != null)
+        {
+            // always repackage the default package
+            if (fullPackageName.equals(""))
             {
-                // always repackage the default package
-                if (fullPackageName.equals(""))
-                {
-                    newPackageName = newFullPackageName;
-                    repackageName = newFullPackageName;
-                }
-                else
-                {
-                    newPackageName = NameProvider.getShortName(newFullPackageName);
-
-                    if (NameProvider.repackage)
-                    {
-                        repackageName = newFullPackageName;
-                    }
-                }
-
-                if (packageName.equals(newPackageName))
-                {
-                    newPackageName = null;
-                }
-
-                if (packageName.equals(repackageName))
-                {
-                    repackageName = null;
-                }
-
-                if (repackageName != null)
-                {
-                    pk.setRepackageName(repackageName);
-                }
-
-                NameProvider.packageNameLookup.put(fullPackageName, newFullPackageName);
+                newPackageName = newFullPackageName;
+                repackageName = newFullPackageName;
             }
             else
             {
-                NameProvider.packageNameLookup.put(fullPackageName, fullPackageName);
+                newPackageName = NameProvider.getShortName(newFullPackageName);
+
+                if (NameProvider.repackage)
+                {
+                    repackageName = newFullPackageName;
+                }
             }
 
-            pk.setOutput();
+            if (packageName.equals(newPackageName))
+            {
+                newPackageName = null;
+            }
+
+            if (packageName.equals(repackageName))
+            {
+                repackageName = null;
+            }
+
+            if (repackageName != null)
+            {
+                pk.setRepackageName(repackageName);
+            }
+
+            NameProvider.packageNameLookup.put(fullPackageName, newFullPackageName);
         }
+        else
+        {
+            NameProvider.packageNameLookup.put(fullPackageName, fullPackageName);
+        }
+
+        pk.setOutput();
 
         return newPackageName;
     }
@@ -809,6 +811,11 @@ public class NameProvider
             return newClassName;
         }
 
+        if (NameProvider.isInProtectedPackage(fullClassName))
+        {
+            return null;
+        }
+
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
             if (NameProvider.classesObf2Deobf.containsKey(fullClassName))
@@ -818,25 +825,22 @@ public class NameProvider
             }
             else
             {
-                if (!NameProvider.isInProtectedPackage(fullClassName))
+                if (NameProvider.uniqueStart > 0)
                 {
-                    if (NameProvider.uniqueStart > 0)
+                    // don't rename anonymous inner classes
+                    if (!cl.isInnerClass() || !Character.isDigit(className.charAt(0)))
                     {
-                        // don't rename anonymous inner classes
-                        if (!cl.isInnerClass() || !Character.isDigit(className.charAt(0)))
-                        {
-                            newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + className;
-                        }
+                        newClassName = "C_" + (NameProvider.uniqueStart++) + "_" + className;
                     }
-                    else
+                }
+                else
+                {
+                    // only warn if we have some other class mappings
+                    // stops spaming every single class when only repackaging
+                    if (NameProvider.classesObf2Deobf.size() > 0)
                     {
-                        // only warn if we have some other class mappings
-                        // stops spaming every single class when only repackaging
-                        if (NameProvider.classesObf2Deobf.size() > 0)
-                        {
-                            NameProvider.errorLog("# Warning: unknown class " + className
-                                + " in " + cl.getParent().getFullOutName());
-                        }
+                        NameProvider.errorLog("# Warning: unknown class " + className
+                            + " in " + cl.getParent().getFullOutName());
                     }
                 }
             }
@@ -850,10 +854,7 @@ public class NameProvider
             }
         }
 
-        if (!NameProvider.isInProtectedPackage(fullClassName))
-        {
-            cl.setOutput();
-        }
+        cl.setOutput();
 
         return newClassName;
     }
@@ -879,6 +880,11 @@ public class NameProvider
             return newMethodName;
         }
 
+        if (NameProvider.isInProtectedPackage(fullMethodName))
+        {
+            return null;
+        }
+
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
             if (NameProvider.methodsObf2Deobf.containsKey(methodNameKey))
@@ -888,20 +894,17 @@ public class NameProvider
             }
             else
             {
-                if (!NameProvider.isInProtectedPackage(fullMethodName))
+                if (NameProvider.uniqueStart > 0)
                 {
-                    if (NameProvider.uniqueStart > 0)
+                    newMethodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
+                }
+                else
+                {
+                    // only warn if we know the parent class
+                    if (md.getParent().isFromScriptMap())
                     {
-                        newMethodName = "func_" + (NameProvider.uniqueStart++) + "_" + methodName;
-                    }
-                    else
-                    {
-                        // only warn if we know the parent class
-                        if (md.getParent().isFromScriptMap())
-                        {
-                            NameProvider.errorLog("# Warning: unknown method " + methodName + " " + methodDescriptor
-                                + " in " + md.getParent().getFullOutName());
-                        }
+                        NameProvider.errorLog("# Warning: unknown method " + methodName + " " + methodDescriptor
+                            + " in " + md.getParent().getFullOutName());
                     }
                 }
             }
@@ -999,10 +1002,7 @@ public class NameProvider
             }
         }
 
-        if (!NameProvider.isInProtectedPackage(fullMethodName))
-        {
-            md.setOutput();
-        }
+        md.setOutput();
 
         return newMethodName;
     }
@@ -1026,6 +1026,11 @@ public class NameProvider
             return newFieldName;
         }
 
+        if (NameProvider.isInProtectedPackage(fullFieldName))
+        {
+            return null;
+        }
+
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
         {
             if (NameProvider.fieldsObf2Deobf.containsKey(fullFieldName))
@@ -1035,20 +1040,17 @@ public class NameProvider
             }
             else
             {
-                if (!NameProvider.isInProtectedPackage(fullFieldName))
+                if (NameProvider.uniqueStart > 0)
                 {
-                    if (NameProvider.uniqueStart > 0)
+                    newFieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fieldName;
+                }
+                else
+                {
+                    // only warn if we know the parent class
+                    if (fd.getParent().isFromScriptMap())
                     {
-                        newFieldName = "field_" + (NameProvider.uniqueStart++) + "_" + fieldName;
-                    }
-                    else
-                    {
-                        // only warn if we know the parent class
-                        if (fd.getParent().isFromScriptMap())
-                        {
-                            NameProvider.errorLog("# Warning: unknown field " + fieldName
-                                + " in " + fd.getParent().getFullOutName());
-                        }
+                        NameProvider.errorLog("# Warning: unknown field " + fieldName
+                            + " in " + fd.getParent().getFullOutName());
                     }
                 }
             }
@@ -1062,10 +1064,7 @@ public class NameProvider
             }
         }
 
-        if (!NameProvider.isInProtectedPackage(fullFieldName))
-        {
-            fd.setOutput();
-        }
+        fd.setOutput();
 
         return newFieldName;
     }
