@@ -462,19 +462,12 @@ public class TreeItem
         {
             return this.getOutName();
         }
-        else
-        {
-            String s = this.parent.getFullOutName();
-            if (s.equals(""))
-            {
-                return this.getOutName();
-            }
-            return s + this.sep + this.getOutName();
-        }
+
+        return this.joinName(this.parent.getFullOutName(), this.getOutName());
     }
 
     /**
-     * Construct and return the full modified name of the entry.
+     * Construct and return the full modified name of the entry, optionally using . for default package
      * 
      * @param output
      *            replace default package with .
@@ -489,6 +482,19 @@ public class TreeItem
         }
 
         return s;
+    }
+
+    /**
+     * Construct full name from parent and own name, using seperator if required
+     */
+    public String joinName(String parentName, String name)
+    {
+        if (parentName.equals(""))
+        {
+            return name;
+        }
+
+        return parentName + this.sep + this.getOutName();
     }
 
     /**

@@ -1509,42 +1509,30 @@ public class Cl extends PkCl implements NameListUp, NameListDown
     @Override
     public String getFullOutName()
     {
-        if (this.getRepackageName() == null)
+        String repackageName = this.getRepackageName();
+
+        if (repackageName != null)
         {
-            // TODO clean this up
+            return this.joinName(repackageName, this.getOutName());
+        }
 
-            String clName = super.getFullOutName();
+        String clName = super.getFullOutName();
 
-            if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
+        if (NameProvider.currentMode != NameProvider.CLASSIC_MODE)
+        {
+            if (this.parent != null)
             {
-                if (this.parent != null)
+                if (this.parent.parent == null)
                 {
-                    if (this.parent.parent == null)
+                    if (this.parent instanceof Pk)
                     {
-                        if (this.parent instanceof Pk)
-                        {
-                            String pkName = this.parent.getFullOutName();
-
-                            if (pkName.equals(""))
-                            {
-                                return clName;
-                            }
-
-                            return pkName + this.sep + clName;
-                        }
+                        return this.joinName(this.parent.getFullOutName(), clName);
                     }
                 }
             }
-
-            return clName;
         }
 
-        if (this.getRepackageName() == "")
-        {
-            return this.getOutName();
-        }
-
-        return this.getRepackageName() + this.sep + this.getOutName();
+        return clName;
     }
 
     public Iterator<Cl> getDownClasses()

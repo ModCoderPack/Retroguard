@@ -758,7 +758,7 @@ public class NameProvider
             if (newPackageName != null)
             {
                 NameProvider.packageNameLookup.put(fullPackageName, newPackageName);
-                
+
                 pk.setRepackageName(newPackageName);
             }
         }

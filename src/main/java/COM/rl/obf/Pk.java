@@ -162,11 +162,13 @@ public class Pk extends PkCl
     @Override
     public String getFullOutName()
     {
-        if (this.getRepackageName() == null)
+        String repackageName = this.getRepackageName();
+
+        if (repackageName != null)
         {
-            return super.getFullOutName();
+            return repackageName;
         }
 
-        return this.getRepackageName();
+        return super.getFullOutName();
     }
 }
