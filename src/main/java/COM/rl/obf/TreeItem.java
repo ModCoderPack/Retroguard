@@ -414,21 +414,10 @@ public class TreeItem
     {
         if (this.parent == null)
         {
-            return "";
-        }
-        else if (this.parent.parent == null)
-        {
             return this.getInName();
         }
-        else
-        {
-            String s = this.parent.getFullInName();
-            if (s.equals(""))
-            {
-                return this.getInName();
-            }
-            return s + this.sep + this.getInName();
-        }
+
+        return this.joinName(this.parent.getFullInName(), this.getInName());
     }
 
     /**
@@ -490,7 +479,7 @@ public class TreeItem
             return name;
         }
 
-        return parentName + this.sep + this.getOutName();
+        return parentName + this.sep + name;
     }
 
     /**
