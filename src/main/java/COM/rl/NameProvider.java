@@ -703,7 +703,9 @@ public class NameProvider
     {
         String packageName = pk.getInName();
         String fullPackageName = pk.getFullInName();
+        String newFullPackageName = null;
         String newPackageName = null;
+        String repackageName = null;
 
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
@@ -718,72 +720,44 @@ public class NameProvider
             return newPackageName;
         }
 
-        boolean known = NameProvider.packageNameLookup.containsKey(fullPackageName);
-
-        if (!NameProvider.isInProtectedPackage(fullPackageName) && !known)
+        if (!NameProvider.isInProtectedPackage(fullPackageName))
         {
             if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
             {
                 if (NameProvider.packagesObf2Deobf.containsKey(fullPackageName))
                 {
-                    newPackageName = NameProvider.packagesObf2Deobf.get(fullPackageName).deobfName;
-                }
-                else
-                {
-                    // check if parent got remapped
-                    TreeItem parent = pk.getParent();
-                    if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
-                    {
-//                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-                    }
+                    newFullPackageName = NameProvider.packagesObf2Deobf.get(fullPackageName).deobfName;
                 }
             }
             else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
             {
                 if (NameProvider.packagesDeobf2Obf.containsKey(fullPackageName))
                 {
-                    newPackageName = NameProvider.packagesDeobf2Obf.get(fullPackageName).obfName;
-                }
-                else
-                {
-                    // check if parent got remapped
-                    TreeItem parent = pk.getParent();
-                    if ((parent != null) && (parent instanceof Pk) && (parent.getParent() != null))
-                    {
-//                        newPackageName = NameProvider.getNewPackageName(parent.getFullOutName()) + pk.getOutName();
-                    }
+                    newFullPackageName = NameProvider.packagesDeobf2Obf.get(fullPackageName).obfName;
                 }
             }
 
-            if (newPackageName != null)
+            if (newFullPackageName != null)
             {
-                NameProvider.packageNameLookup.put(fullPackageName, newPackageName);
+                newPackageName = NameProvider.getShortName(newFullPackageName);
 
-                pk.setRepackageName(newPackageName);
+                if (NameProvider.repackage)
+                {
+                    repackageName = newFullPackageName;
+                }
+
+                if (repackageName != null)
+                {
+                    pk.setRepackageName(repackageName);
+                }
+
+                NameProvider.packageNameLookup.put(fullPackageName, newFullPackageName);
             }
-        }
 
-        if (!NameProvider.isInProtectedPackage(fullPackageName))
-        {
             pk.setOutput();
         }
 
         return newPackageName;
-    }
-
-    private static String getNewPackageName(String pkgName)
-    {
-        if (NameProvider.packageNameLookup.containsKey(pkgName))
-        {
-            pkgName = NameProvider.packageNameLookup.get(pkgName);
-        }
-
-        if (pkgName.equals(""))
-        {
-            return "";
-        }
-
-        return pkgName + ClassFile.SEP_REGULAR;
     }
 
     public static String getNewClassName(Cl cl)
@@ -1337,7 +1311,7 @@ class FieldEntry
     @Override
     public String toString()
     {
-        return "FL: " + this.obfName + " " + this.deobfName;
+        return "FD: " + this.obfName + " " + this.deobfName;
     }
 
     @Override
