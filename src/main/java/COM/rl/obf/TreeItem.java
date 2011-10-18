@@ -432,7 +432,7 @@ public class TreeItem
             return this.getInName();
         }
 
-        return this.joinName(this.parent.getFullInName(), this.getInName());
+        return TreeItem.joinName(this.parent.getFullInName(), this.sep, this.getInName());
     }
 
     /**
@@ -463,7 +463,7 @@ public class TreeItem
             return this.getOutName();
         }
 
-        return this.joinName(this.parent.getFullOutName(), this.getOutName());
+        return TreeItem.joinName(this.parent.getFullOutName(), this.sep, this.getOutName());
     }
 
     /**
@@ -487,14 +487,14 @@ public class TreeItem
     /**
      * Construct full name from parent and own name, using seperator if required
      */
-    public String joinName(String parentName, String name)
+    public static String joinName(String parentName, String sep, String name)
     {
         if (parentName.equals(""))
         {
             return name;
         }
 
-        return parentName + this.sep + name;
+        return parentName + sep + name;
     }
 
     /**

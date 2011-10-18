@@ -1516,7 +1516,7 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         if (repackageName != null)
         {
-            return this.joinName(repackageName, this.getOutName());
+            return TreeItem.joinName(repackageName, this.sep, this.getOutName());
         }
 
         return super.getFullOutName();
