@@ -697,7 +697,7 @@ public class NameProvider
         }
         else
         {
-            NameProvider.errorLog("# Warning: trying to rename unknown type " + ti.getFullInName());
+            NameProvider.errorLog("# Warning: trying to rename unknown type " + ti.getFullInName(true));
         }
         return null;
     }
@@ -792,7 +792,9 @@ public class NameProvider
     {
         String className = cl.getInName();
         String fullClassName = cl.getFullInName();
+        String newFullClassName = null;
         String newClassName = null;
+        String newRepackageName = null;
 
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
         {
@@ -820,8 +822,7 @@ public class NameProvider
         {
             if (NameProvider.classesObf2Deobf.containsKey(fullClassName))
             {
-                newClassName = NameProvider.classesObf2Deobf.get(fullClassName).deobfName;
-                newClassName = NameProvider.getShortName(newClassName);
+                newFullClassName = NameProvider.classesObf2Deobf.get(fullClassName).deobfName;
             }
             else
             {
@@ -849,8 +850,32 @@ public class NameProvider
         {
             if (NameProvider.classesDeobf2Obf.containsKey(fullClassName))
             {
-                newClassName = NameProvider.classesDeobf2Obf.get(fullClassName).obfName;
-                newClassName = NameProvider.getShortName(newClassName);
+                newFullClassName = NameProvider.classesDeobf2Obf.get(fullClassName).obfName;
+            }
+        }
+
+        if (newFullClassName != null)
+        {
+            newClassName = NameProvider.getShortName(newFullClassName);
+
+            if (NameProvider.repackage)
+            {
+                newRepackageName = newFullClassName;
+            }
+            
+            if (className.equals(newClassName))
+            {
+                newClassName = null;
+            }
+            
+            if (fullClassName.equals(newRepackageName))
+            {
+                newRepackageName = null;
+            }
+
+            if (newRepackageName != null)
+            {
+                cl.setRepackageName(newRepackageName);
             }
         }
 
@@ -1088,23 +1113,6 @@ public class NameProvider
             if (name.contains(ClassFile.SEP_REGULAR))
             {
                 name = name.substring(name.lastIndexOf(ClassFile.SEP_REGULAR) + 1);
-            }
-        }
-
-        return name;
-    }
-
-    private static String getPackageName(String name)
-    {
-        if (name != null)
-        {
-            if (name.contains(ClassFile.SEP_REGULAR))
-            {
-                name = name.substring(0, name.lastIndexOf(ClassFile.SEP_REGULAR));
-            }
-            else
-            {
-                name = "";
             }
         }
 
