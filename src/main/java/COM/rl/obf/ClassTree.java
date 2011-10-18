@@ -1321,15 +1321,15 @@ public class ClassTree implements NameMapper, ClassConstants
                 @Override
                 public void packageAction(Pk pk)
                 {
-                    if (!pk.isFromScript() && (pk.getFullInName().length() > 0))
+                    if (!pk.isFromScript())
                     {
                         if (pk.getRepackageName() != null)
                         {
-                            log.println(RgsEntryType.REPACKAGE_MAP + " " + pk.getFullInName() + " " + pk.getRepackageName());
+                            log.println(RgsEntryType.REPACKAGE_MAP + " " + pk.getFullInName(true) + " " + pk.getRepackageName(true));
                         }
                         else
                         {
-                            log.println(RgsEntryType.PACKAGE_MAP + " " + pk.getFullInName() + " " + pk.getOutName());
+                            log.println(RgsEntryType.PACKAGE_MAP + " " + pk.getFullInName(true) + " " + pk.getOutName(true));
                         }
                     }
                 }

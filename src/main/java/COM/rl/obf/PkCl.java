@@ -198,6 +198,21 @@ abstract public class PkCl extends TreeItem
     }
 
     /**
+     * Return the repackage name of the entry.
+     */
+    public String getRepackageName(boolean output)
+    {
+        String s = this.repackageName;
+
+        if (output && s.equals(""))
+        {
+            s = ".";
+        }
+
+        return s;
+    }
+
+    /**
      * Generate unique obfuscated names for a given namespace.
      * 
      * @param hash

@@ -306,6 +306,21 @@ public class TreeItem
     }
 
     /**
+     * Return the output name of the entry, obfuscated or original.
+     */
+    public String getOutName(boolean output)
+    {
+        String s = this.getOutName();
+
+        if (output && s.equals(""))
+        {
+            s = ".";
+        }
+
+        return s;
+    }
+
+    /**
      * Return the obfuscated name of the entry.
      */
     public String getObfName()
