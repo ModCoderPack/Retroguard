@@ -760,11 +760,6 @@ public class NameProvider
                 }
             }
 
-            if (packageName.equals(newPackageName))
-            {
-                newPackageName = null;
-            }
-
             if (packageName.equals(repackageName))
             {
                 repackageName = null;
@@ -854,11 +849,6 @@ public class NameProvider
             if (NameProvider.repackage)
             {
                 newRepackageName = newFullClassName;
-            }
-
-            if (className.equals(newClassName))
-            {
-                newClassName = null;
             }
 
             if (fullClassName.equals(newRepackageName))
