@@ -1057,9 +1057,22 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Md md = this.getMethod(name, descriptor);
-        if ((md != null) && !Modifier.isPrivate(md.access))
+        if (md != null)
         {
-            return md.getOutName();
+            if (NameProvider.fixShadowed)
+            {
+                if (!Modifier.isPrivate(md.access) && !Modifier.isStatic(md.access) && !Modifier.isFinal(md.access))
+                {
+                    return md.getOutName();
+                }
+            }
+            else
+            {
+                if (!Modifier.isPrivate(md.access))
+                {
+                    return md.getOutName();
+                }
+            }
         }
 
         return null;
@@ -1085,9 +1098,22 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Md md = this.getMethod(name, descriptor);
-        if ((md != null) && !Modifier.isPrivate(md.access))
+        if (md != null)
         {
-            return md.getObfName();
+            if (NameProvider.fixShadowed)
+            {
+                if (!Modifier.isPrivate(md.access) && !Modifier.isStatic(md.access) && !Modifier.isFinal(md.access))
+                {
+                    return md.getObfName();
+                }
+            }
+            else
+            {
+                if (!Modifier.isPrivate(md.access))
+                {
+                    return md.getObfName();
+                }
+            }
         }
 
         return null;
@@ -1113,9 +1139,22 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Fd fd = this.getField(name);
-        if ((fd != null) && !Modifier.isPrivate(fd.access))
+        if (fd != null)
         {
-            return fd.getOutName();
+            if (NameProvider.fixShadowed)
+            {
+                if (!Modifier.isPrivate(fd.access) && !Modifier.isStatic(fd.access) && !Modifier.isFinal(fd.access))
+                {
+                    return fd.getOutName();
+                }
+            }
+            else
+            {
+                if (!Modifier.isPrivate(fd.access))
+                {
+                    return fd.getOutName();
+                }
+            }
         }
 
         return null;
@@ -1141,9 +1180,22 @@ public class Cl extends PkCl implements NameListUp, NameListDown
 
         // Check self
         Fd fd = this.getField(name);
-        if ((fd != null) && !Modifier.isPrivate(fd.access))
+        if (fd != null)
         {
-            return fd.getObfName();
+            if (NameProvider.fixShadowed)
+            {
+                if (!Modifier.isPrivate(fd.access) && !Modifier.isStatic(fd.access) && !Modifier.isFinal(fd.access))
+                {
+                    return fd.getObfName();
+                }
+            }
+            else
+            {
+                if (!Modifier.isPrivate(fd.access))
+                {
+                    return fd.getObfName();
+                }
+            }
         }
 
         return null;
@@ -1370,9 +1422,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 for (Method md : allMethods)
                 {
                     int modifiers = md.getModifiers();
-                    if (!Modifier.isPrivate(modifiers))
+                    if (NameProvider.fixShadowed)
                     {
-                        this.methods.add(md);
+                        if (!Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers))
+                        {
+                            this.methods.add(md);
+                        }
+
+                    }
+                    else
+                    {
+                        if (!Modifier.isPrivate(modifiers))
+                        {
+                            this.methods.add(md);
+                        }
                     }
                 }
             }
@@ -1433,9 +1496,19 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             {
                 // Field must be public or protected
                 int modifiers = field.getModifiers();
-                if (!Modifier.isPrivate(modifiers))
+                if (NameProvider.fixShadowed)
                 {
-                    return name;
+                    if (!Modifier.isPrivate(modifiers) && !Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers))
+                    {
+                        return name;
+                    }
+                }
+                else
+                {
+                    if (!Modifier.isPrivate(modifiers))
+                    {
+                        return name;
+                    }
                 }
             }
 

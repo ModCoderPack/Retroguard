@@ -22,6 +22,7 @@ public class NameProvider
     public static boolean quiet = false;
     public static boolean oldHash = false;
     public static boolean repackage = false;
+    public static boolean fixShadowed = false;
 
     private static Set<File> obfFiles = new HashSet<File>();
     private static Set<File> reobFiles = new HashSet<File>();
@@ -273,6 +274,14 @@ public class NameProvider
                         if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
                         {
                             NameProvider.oldHash = true;
+                        }
+                    }
+                    else if (defines[0].equalsIgnoreCase("fixshadowed"))
+                    {
+                        String value = defines[1].substring(0, 1);
+                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        {
+                            NameProvider.fixShadowed = true;
                         }
                     }
                 }
