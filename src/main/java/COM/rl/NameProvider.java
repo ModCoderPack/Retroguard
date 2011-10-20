@@ -882,6 +882,7 @@ public class NameProvider
         String methodDescriptor = md.getDescriptor();
         String fullMethodName = md.getFullInName();
         String methodNameKey = fullMethodName + methodDescriptor;
+        String newFullMethodName = null;
         String newMethodName = null;
 
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
@@ -906,8 +907,7 @@ public class NameProvider
         {
             if (NameProvider.methodsObf2Deobf.containsKey(methodNameKey))
             {
-                newMethodName = NameProvider.methodsObf2Deobf.get(methodNameKey).deobfName;
-                newMethodName = NameProvider.getShortName(newMethodName);
+                newFullMethodName = NameProvider.methodsObf2Deobf.get(methodNameKey).deobfName;
             }
             else
             {
@@ -930,8 +930,7 @@ public class NameProvider
         {
             if (NameProvider.methodsDeobf2Obf.containsKey(methodNameKey))
             {
-                newMethodName = NameProvider.methodsDeobf2Obf.get(methodNameKey).obfName;
-                newMethodName = NameProvider.getShortName(newMethodName);
+                newFullMethodName = NameProvider.methodsDeobf2Obf.get(methodNameKey).obfName;
             }
             else
             {
@@ -951,8 +950,7 @@ public class NameProvider
                         tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
                         if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
                         {
-                            newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
-                            newMethodName = NameProvider.getShortName(newMethodName);
+                            newFullMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
                             break;
                         }
 
@@ -965,8 +963,7 @@ public class NameProvider
                                 tmpMethodKey = tmpMd.getFullInName() + tmpMd.getDescriptor();
                                 if (NameProvider.methodsDeobf2Obf.containsKey(tmpMethodKey))
                                 {
-                                    newMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
-                                    newMethodName = NameProvider.getShortName(newMethodName);
+                                    newFullMethodName = NameProvider.methodsDeobf2Obf.get(tmpMethodKey).obfName;
                                     found = true;
                                 }
                             }
@@ -1019,6 +1016,11 @@ public class NameProvider
             }
         }
 
+        if (newFullMethodName != null)
+        {
+            newMethodName = NameProvider.getShortName(newFullMethodName);
+        }
+
         md.setOutput();
 
         return newMethodName;
@@ -1028,6 +1030,7 @@ public class NameProvider
     {
         String fieldName = fd.getInName();
         String fullFieldName = fd.getFullInName();
+        String newFullFieldName = null;
         String newFieldName = null;
 
         if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
@@ -1052,8 +1055,7 @@ public class NameProvider
         {
             if (NameProvider.fieldsObf2Deobf.containsKey(fullFieldName))
             {
-                newFieldName = NameProvider.fieldsObf2Deobf.get(fullFieldName).deobfName;
-                newFieldName = NameProvider.getShortName(newFieldName);
+                newFullFieldName = NameProvider.fieldsObf2Deobf.get(fullFieldName).deobfName;
             }
             else
             {
@@ -1076,9 +1078,13 @@ public class NameProvider
         {
             if (NameProvider.fieldsDeobf2Obf.containsKey(fullFieldName))
             {
-                newFieldName = NameProvider.fieldsDeobf2Obf.get(fullFieldName).obfName;
-                newFieldName = NameProvider.getShortName(newFieldName);
+                newFullFieldName = NameProvider.fieldsDeobf2Obf.get(fullFieldName).obfName;
             }
+        }
+
+        if (newFullFieldName != null)
+        {
+            newFieldName = NameProvider.getShortName(newFullFieldName);
         }
 
         fd.setOutput();
