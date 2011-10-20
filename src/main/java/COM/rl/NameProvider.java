@@ -29,7 +29,6 @@ public class NameProvider
     private static File roLog = null;
 
     private static Set<String> protectedPackages = new HashSet<String>();
-    private static Map<String, String> packageNameLookup = new HashMap<String, String>();
 
     private static Map<String, PackageEntry> packagesObf2Deobf = new HashMap<String, PackageEntry>();
     private static Map<String, PackageEntry> packagesDeobf2Obf = new HashMap<String, PackageEntry>();
@@ -775,12 +774,6 @@ public class NameProvider
             {
                 pk.setRepackageName(repackageName);
             }
-
-            NameProvider.packageNameLookup.put(fullPackageName, newFullPackageName);
-        }
-        else
-        {
-            NameProvider.packageNameLookup.put(fullPackageName, fullPackageName);
         }
 
         pk.setOutput();
@@ -862,12 +855,12 @@ public class NameProvider
             {
                 newRepackageName = newFullClassName;
             }
-            
+
             if (className.equals(newClassName))
             {
                 newClassName = null;
             }
-            
+
             if (fullClassName.equals(newRepackageName))
             {
                 newRepackageName = null;
