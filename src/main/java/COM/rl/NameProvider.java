@@ -23,6 +23,7 @@ public class NameProvider
     public static boolean oldHash = false;
     public static boolean repackage = true;
     public static boolean fixShadowed = false;
+    public static boolean multipass = false;
 
     private static Set<File> obfFiles = new HashSet<File>();
     private static Set<File> reobFiles = new HashSet<File>();
@@ -290,6 +291,14 @@ public class NameProvider
                         if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
                         {
                             NameProvider.repackage = false;
+                        }
+                    }
+                    else if (defines[0].equalsIgnoreCase("multipass"))
+                    {
+                        String value = defines[1].substring(0, 1);
+                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        {
+                            NameProvider.multipass = true;
                         }
                     }
                 }
@@ -754,7 +763,15 @@ public class NameProvider
                 Md md = null;
                 try
                 {
-                    md = classTree.getMd(mdEntry.obfName, mdEntry.obfDesc);
+                    if (NameProvider.multipass)
+                    {
+                        md = (Md)classTree.retainMethodMap(mdEntry.obfName, mdEntry.obfDesc,
+                            NameProvider.getShortName(mdEntry.deobfName));
+                    }
+                    else
+                    {
+                        md = classTree.getMd(mdEntry.obfName, mdEntry.obfDesc);
+                    }
                 }
                 catch (ClassFileException e)
                 {
@@ -775,7 +792,14 @@ public class NameProvider
                 Fd fd = null;
                 try
                 {
-                    fd = classTree.getFd(fdEntry.obfName);
+                    if (NameProvider.multipass)
+                    {
+                        fd = (Fd)classTree.retainFieldMap(fdEntry.obfName, NameProvider.getShortName(fdEntry.deobfName));
+                    }
+                    else
+                    {
+                        fd = classTree.getFd(fdEntry.obfName);
+                    }
                 }
                 catch (ClassFileException e)
                 {
@@ -841,7 +865,15 @@ public class NameProvider
                 Md md = null;
                 try
                 {
-                    md = classTree.getMd(mdEntry.deobfName, mdEntry.deobfDesc);
+                    if (NameProvider.multipass)
+                    {
+                        md = (Md)classTree.retainMethodMap(mdEntry.deobfName, mdEntry.deobfDesc,
+                            NameProvider.getShortName(mdEntry.obfName));
+                    }
+                    else
+                    {
+                        md = classTree.getMd(mdEntry.deobfName, mdEntry.deobfDesc);
+                    }
                 }
                 catch (ClassFileException e)
                 {
@@ -862,7 +894,14 @@ public class NameProvider
                 Fd fd = null;
                 try
                 {
-                    fd = classTree.getFd(fdEntry.deobfName);
+                    if (NameProvider.multipass)
+                    {
+                        fd = (Fd)classTree.retainFieldMap(fdEntry.deobfName, NameProvider.getShortName(fdEntry.obfName));
+                    }
+                    else
+                    {
+                        fd = classTree.getFd(fdEntry.deobfName);
+                    }
                 }
                 catch (ClassFileException e)
                 {
