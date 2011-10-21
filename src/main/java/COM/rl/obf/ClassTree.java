@@ -227,15 +227,15 @@ public class ClassTree implements NameMapper, ClassConstants
             Cl cl = (Cl)ti;
 
             // Add the class's methods to the database
-            for (int i = 0; i < cf.getMethodCount(); i++)
+            for (MethodInfo mi : cf.getMethods())
             {
-                cl.addMethod(cf, cf.getMethod(i));
+                cl.addMethod(cf, mi);
             }
 
             // Add the class's fields to the database
-            for (int i = 0; i < cf.getFieldCount(); i++)
+            for (FieldInfo fi : cf.getFields())
             {
-                cl.addField(cf, cf.getField(i));
+                cl.addField(cf, fi);
             }
 
             // Add warnings about class

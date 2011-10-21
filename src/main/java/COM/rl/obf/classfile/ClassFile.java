@@ -437,39 +437,19 @@ public class ClassFile implements ClassConstants
     }
 
     /**
-     * Return number of methods in class.
+     * Return all methods in class.
      */
-    public int getMethodCount()
+    public List<MethodInfo> getMethods()
     {
-        return this.methods.size();
+        return this.methods;
     }
 
     /**
-     * Return i'th method in class.
-     * 
-     * @param i
+     * Return all fields in class.
      */
-    public MethodInfo getMethod(int i)
+    public List<FieldInfo> getFields()
     {
-        return this.methods.get(i);
-    }
-
-    /**
-     * Return number of fields in class.
-     */
-    public int getFieldCount()
-    {
-        return this.fields.size();
-    }
-
-    /**
-     * Return i'th field in class.
-     * 
-     * @param i
-     */
-    public FieldInfo getField(int i)
-    {
-        return this.fields.get(i);
+        return this.fields;
     }
 
     /**
