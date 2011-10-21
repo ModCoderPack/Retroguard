@@ -969,6 +969,29 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     NameProvider.log("# Method " + fullInName + " null from name maker");
                 }
             }
+            else
+            {
+                if (md.isFromScriptMap())
+                {
+                    String theOutName = md.getOutName();
+                    if (theOutName.equals(theInName))
+                    {
+                        NameProvider.log("# Method " + fullInName + " unchanged from ScriptMap");
+                    }
+                    else
+                    {
+                        NameProvider.log("# Method " + fullInName + " renamed to " + theOutName + " from ScriptMap");
+                    }
+                }
+                else if (md.isFromScript())
+                {
+                    NameProvider.log("# Method " + fullInName + " fixed from Script");
+                }
+                else
+                {
+                    NameProvider.log("# Method " + fullInName + " fixed");
+                }
+            }
         }
         nextField:
         for (Fd fd : this.fds.values())
@@ -1032,6 +1055,29 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                 else
                 {
                     NameProvider.log("# Field " + fullInName + " null from name maker");
+                }
+            }
+            else
+            {
+                if (fd.isFromScriptMap())
+                {
+                    String theOutName = fd.getOutName();
+                    if (theOutName.equals(theInName))
+                    {
+                        NameProvider.log("# Field " + fullInName + " unchanged from ScriptMap");
+                    }
+                    else
+                    {
+                        NameProvider.log("# Field " + fullInName + " renamed to " + theOutName + " from ScriptMap");
+                    }
+                }
+                else if (fd.isFromScript())
+                {
+                    NameProvider.log("# Field " + fullInName + " fixed from Script");
+                }
+                else
+                {
+                    NameProvider.log("# Field " + fullInName + " fixed");
                 }
             }
         }

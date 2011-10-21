@@ -587,15 +587,32 @@ public class ClassTree implements NameMapper, ClassConstants
      */
     private static void retainItemMap(TreeItem item, String obfName)
     {
-        if (!item.isFixed())
+        if (item.isFixed())
         {
-            item.setOutName(obfName);
-            item.setFromScriptMap();
+            if (obfName.equals(""))
+            {
+                obfName = ".";
+            }
+            if (item.isFromScriptMap())
+            {
+                NameProvider.errorLog("# Trying to remap " + item.getFullInName(true) + " = " + item.getOutName(true)
+                    + " to " + obfName + " fixed by ScriptMap");
+            }
+            else if (item.isFromScript())
+            {
+                NameProvider.errorLog("# Trying to remap " + item.getFullInName(true) + " = " + item.getOutName(true)
+                    + " to " + obfName + " fixed by Script");
+            }
+            else
+            {
+                NameProvider.errorLog("# Trying to remap " + item.getFullInName(true) + " = " + item.getOutName(true)
+                    + " to " + obfName);
+            }
+            return;
         }
-        else
-        {
-            NameProvider.log("# Trying to map fixed " + item.getFullInName() + " = " + item.getFullOutName() + " to " + obfName);
-        }
+
+        item.setOutName(obfName);
+        item.setFromScriptMap();
     }
 
     /**
