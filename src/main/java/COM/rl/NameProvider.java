@@ -723,6 +723,10 @@ public class NameProvider
                 {
                     NameProvider.errorLog("# Warning: package " + pkEntry.obfName + " not found in JAR");
                 }
+                else
+                {
+                    pk.setOutput();
+                }
             }
             for (ClassEntry clEntry : NameProvider.classesObf2Deobf.values())
             {
@@ -739,6 +743,10 @@ public class NameProvider
                 if (cl == null)
                 {
                     NameProvider.errorLog("# Warning: class " + clEntry.obfName + " not found in JAR");
+                }
+                else
+                {
+                    cl.setOutput();
                 }
             }
             for (MethodEntry mdEntry : NameProvider.methodsObf2Deobf.values())
@@ -757,6 +765,10 @@ public class NameProvider
                 {
                     NameProvider.errorLog("# Warning: method " + mdEntry.obfName + " not found in JAR");
                 }
+                else
+                {
+                    md.setOutput();
+                }
             }
             for (FieldEntry fdEntry : NameProvider.fieldsObf2Deobf.values())
             {
@@ -773,6 +785,10 @@ public class NameProvider
                 if (fd == null)
                 {
                     NameProvider.errorLog("# Warning: field " + fdEntry.obfName + " not found in JAR");
+                }
+                else
+                {
+                    fd.setOutput();
                 }
             }
         }
@@ -794,6 +810,10 @@ public class NameProvider
                 {
                     NameProvider.errorLog("# Warning: package " + pkEntry.deobfName + " not found in JAR");
                 }
+                else
+                {
+                    pk.setOutput();
+                }
             }
             for (ClassEntry clEntry : NameProvider.classesDeobf2Obf.values())
             {
@@ -810,6 +830,10 @@ public class NameProvider
                 if (cl == null)
                 {
                     NameProvider.errorLog("# Warning: class " + clEntry.deobfName + " not found in JAR");
+                }
+                else
+                {
+                    cl.setOutput();
                 }
             }
             for (MethodEntry mdEntry : NameProvider.methodsDeobf2Obf.values())
@@ -828,6 +852,10 @@ public class NameProvider
                 {
                     NameProvider.errorLog("# Warning: method " + mdEntry.deobfName + " not found in JAR");
                 }
+                else
+                {
+                    md.setOutput();
+                }
             }
             for (FieldEntry fdEntry : NameProvider.fieldsDeobf2Obf.values())
             {
@@ -844,6 +872,10 @@ public class NameProvider
                 if (fd == null)
                 {
                     NameProvider.errorLog("# Warning: field " + fdEntry.deobfName + " not found in JAR");
+                }
+                else
+                {
+                    fd.setOutput();
                 }
             }
         }
