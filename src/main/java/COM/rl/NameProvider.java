@@ -693,6 +693,162 @@ public class NameProvider
         }
     }
 
+    public static void retainFromSRG(ClassTree classTree)
+    {
+        if (NameProvider.currentMode == NameProvider.CHANGE_NOTHING_MODE)
+        {
+            return;
+        }
+
+        if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
+        {
+            return;
+        }
+
+        if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
+        {
+            for (PackageEntry pkEntry : NameProvider.packagesObf2Deobf.values())
+            {
+                Pk pk = null;
+                try
+                {
+                    pk = classTree.getPk(pkEntry.obfName);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (pk == null)
+                {
+                    NameProvider.errorLog("# Warning: package " + pkEntry.obfName + " not found in JAR");
+                }
+            }
+            for (ClassEntry clEntry : NameProvider.classesObf2Deobf.values())
+            {
+                Cl cl = null;
+                try
+                {
+                    cl = classTree.getCl(clEntry.obfName);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (cl == null)
+                {
+                    NameProvider.errorLog("# Warning: class " + clEntry.obfName + " not found in JAR");
+                }
+            }
+            for (MethodEntry mdEntry : NameProvider.methodsObf2Deobf.values())
+            {
+                Md md = null;
+                try
+                {
+                    md = classTree.getMd(mdEntry.obfName, mdEntry.obfDesc);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (md == null)
+                {
+                    NameProvider.errorLog("# Warning: method " + mdEntry.obfName + " not found in JAR");
+                }
+            }
+            for (FieldEntry fdEntry : NameProvider.fieldsObf2Deobf.values())
+            {
+                Fd fd = null;
+                try
+                {
+                    fd = classTree.getFd(fdEntry.obfName);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (fd == null)
+                {
+                    NameProvider.errorLog("# Warning: field " + fdEntry.obfName + " not found in JAR");
+                }
+            }
+        }
+        else if (NameProvider.currentMode == NameProvider.REOBFUSCATION_MODE)
+        {
+            for (PackageEntry pkEntry : NameProvider.packagesDeobf2Obf.values())
+            {
+                Pk pk = null;
+                try
+                {
+                    pk = classTree.getPk(pkEntry.deobfName);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (pk == null)
+                {
+                    NameProvider.errorLog("# Warning: package " + pkEntry.deobfName + " not found in JAR");
+                }
+            }
+            for (ClassEntry clEntry : NameProvider.classesDeobf2Obf.values())
+            {
+                Cl cl = null;
+                try
+                {
+                    cl = classTree.getCl(clEntry.deobfName);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (cl == null)
+                {
+                    NameProvider.errorLog("# Warning: class " + clEntry.deobfName + " not found in JAR");
+                }
+            }
+            for (MethodEntry mdEntry : NameProvider.methodsDeobf2Obf.values())
+            {
+                Md md = null;
+                try
+                {
+                    md = classTree.getMd(mdEntry.deobfName, mdEntry.deobfDesc);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (md == null)
+                {
+                    NameProvider.errorLog("# Warning: method " + mdEntry.deobfName + " not found in JAR");
+                }
+            }
+            for (FieldEntry fdEntry : NameProvider.fieldsDeobf2Obf.values())
+            {
+                Fd fd = null;
+                try
+                {
+                    fd = classTree.getFd(fdEntry.deobfName);
+                }
+                catch (ClassFileException e)
+                {
+                    // ignore
+                }
+
+                if (fd == null)
+                {
+                    NameProvider.errorLog("# Warning: field " + fdEntry.deobfName + " not found in JAR");
+                }
+            }
+        }
+    }
+
     public static String getNewTreeItemName(TreeItem ti)
     {
         if (ti instanceof Pk)
