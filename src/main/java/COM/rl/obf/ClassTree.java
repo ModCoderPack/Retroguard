@@ -496,14 +496,14 @@ public class ClassTree implements NameMapper, ClassConstants
      * @param obfName
      * @throws ClassFileException
      */
-    public void retainPackageMap(String name, String obfName) throws ClassFileException
+    public TreeItem retainPackageMap(String name, String obfName) throws ClassFileException
     {
         Pk pk = this.getPk(name);
         if (pk == null)
         {
             throw new ClassFileException("PackageNotFound");
         }
-        ClassTree.retainItemMap(pk, obfName);
+        return ClassTree.retainItemMap(pk, obfName);
     }
 
     /**
@@ -513,7 +513,7 @@ public class ClassTree implements NameMapper, ClassConstants
      * @param obfName
      * @throws ClassFileException
      */
-    public void retainRepackageMap(String name, String obfName) throws ClassFileException
+    public TreeItem retainRepackageMap(String name, String obfName) throws ClassFileException
     {
         Pk pk = this.getPk(name);
         if (pk == null)
@@ -525,6 +525,7 @@ public class ClassTree implements NameMapper, ClassConstants
             pk.setRepackageName(obfName);
             pk.setOutName(pk.getInName());
         }
+        return pk;
     }
 
     /**
@@ -534,14 +535,14 @@ public class ClassTree implements NameMapper, ClassConstants
      * @param obfName
      * @throws ClassFileException
      */
-    public void retainClassMap(String name, String obfName) throws ClassFileException
+    public TreeItem retainClassMap(String name, String obfName) throws ClassFileException
     {
         Cl cl = this.getCl(name);
         if (cl == null)
         {
             throw new ClassFileException("ClassNotFound");
         }
-        ClassTree.retainItemMap(cl, obfName);
+        return ClassTree.retainItemMap(cl, obfName);
     }
 
     /**
@@ -552,14 +553,14 @@ public class ClassTree implements NameMapper, ClassConstants
      * @param obfName
      * @throws ClassFileException
      */
-    public void retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
+    public TreeItem retainMethodMap(String name, String descriptor, String obfName) throws ClassFileException
     {
         Md md = this.getMd(name, descriptor);
         if (md == null)
         {
             throw new ClassFileException("MethodNotFound");
         }
-        ClassTree.retainItemMap(md, obfName);
+        return ClassTree.retainItemMap(md, obfName);
     }
 
     /**
@@ -569,14 +570,14 @@ public class ClassTree implements NameMapper, ClassConstants
      * @param obfName
      * @throws ClassFileException
      */
-    public void retainFieldMap(String name, String obfName) throws ClassFileException
+    public TreeItem retainFieldMap(String name, String obfName) throws ClassFileException
     {
         Fd fd = this.getFd(name);
         if (fd == null)
         {
             throw new ClassFileException("FieldNotFound");
         }
-        ClassTree.retainItemMap(fd, obfName);
+        return ClassTree.retainItemMap(fd, obfName);
     }
 
     /**
@@ -585,7 +586,7 @@ public class ClassTree implements NameMapper, ClassConstants
      * @param item
      * @param obfName
      */
-    private static void retainItemMap(TreeItem item, String obfName)
+    private static TreeItem retainItemMap(TreeItem item, String obfName)
     {
         if (item.isFixed())
         {
@@ -608,11 +609,12 @@ public class ClassTree implements NameMapper, ClassConstants
                 NameProvider.errorLog("# Trying to remap " + item.getFullInName(true) + " = " + item.getOutName(true)
                     + " to " + obfName);
             }
-            return;
+            return item;
         }
 
         item.setOutName(obfName);
         item.setFromScriptMap();
+        return item;
     }
 
     /**

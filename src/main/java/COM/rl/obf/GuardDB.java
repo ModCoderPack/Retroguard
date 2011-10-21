@@ -398,7 +398,7 @@ public class GuardDB implements ClassConstants
                     + " (" + (e.getMessage() != null ? e.getMessage() : "") + ")");
             }
         }
-        
+
         NameProvider.retainFromSRG(this.classTree);
     }
 
