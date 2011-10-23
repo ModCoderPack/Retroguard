@@ -131,7 +131,7 @@ public class NameProvider
                     defines[1] = line.substring(defines[0].length() + 1).trim();
                     defines[0] = defines[0].trim();
 
-                    if (defines[0].equalsIgnoreCase("obf"))
+                    if (defines[0].equalsIgnoreCase("deob"))
                     {
                         File obfFile = new File(defines[1]);
                         if (obfFile.isFile())
