@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 import COM.rl.obf.*;
+import COM.rl.obf.classfile.ClassConstants;
 import COM.rl.obf.classfile.ClassFile;
 import COM.rl.obf.classfile.ClassFileException;
 
@@ -712,6 +713,23 @@ public class NameProvider
         if (NameProvider.currentMode == NameProvider.CLASSIC_MODE)
         {
             return;
+        }
+
+        for (String pkg : NameProvider.protectedPackages)
+        {
+            try
+            {
+                classTree.retainClass(pkg + "/**", false, true, false, false, false, null, false,
+                    0, 0);
+                classTree.retainMethod(pkg + "/**", "*", false, null, false,
+                    ClassConstants.ACC_PRIVATE, ClassConstants.ACC_PRIVATE);
+                classTree.retainField(pkg + "/**", "*", false, null, false,
+                    ClassConstants.ACC_PRIVATE, ClassConstants.ACC_PRIVATE);
+            }
+            catch (ClassFileException e)
+            {
+                // ignore
+            }
         }
 
         if (NameProvider.currentMode == NameProvider.DEOBFUSCATION_MODE)
