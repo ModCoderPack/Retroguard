@@ -242,16 +242,16 @@ abstract public class PkCl extends TreeItem
                     String fullOutName = ti.getFullOutName(true);
                     if (fullOutName.equals(fullInName))
                     {
-                        NameProvider.log("# " + thisType + " " + fullInName + " unchanged from name maker");
+                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " unchanged from name maker");
                     }
                     else
                     {
-                        NameProvider.log("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker");
+                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker");
                     }
                 }
                 else
                 {
-                    NameProvider.log("# " + thisType + " " + fullInName + " null from name maker");
+                    NameProvider.verboseLog("# " + thisType + " " + fullInName + " null from name maker");
                 }
             }
             else if (ti.isFixed())
@@ -261,20 +261,20 @@ abstract public class PkCl extends TreeItem
                     String fullOutName = ti.getFullOutName(true);
                     if (fullOutName.equals(fullInName))
                     {
-                        NameProvider.log("# " + thisType + " " + fullInName + " unchanged from ScriptMap");
+                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " unchanged from ScriptMap");
                     }
                     else
                     {
-                        NameProvider.log("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from ScriptMap");
+                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from ScriptMap");
                     }
                 }
                 else if (ti.isFromScript())
                 {
-                    NameProvider.log("# " + thisType + " " + fullInName + " fixed from Script");
+                    NameProvider.verboseLog("# " + thisType + " " + fullInName + " fixed from Script");
                 }
                 else
                 {
-                    NameProvider.log("# " + thisType + " " + fullInName + " fixed");
+                    NameProvider.verboseLog("# " + thisType + " " + fullInName + " fixed");
                 }
             }
         }

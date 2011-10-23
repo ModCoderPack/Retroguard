@@ -921,11 +921,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         md.setOutName(theOutName);
                         if (theOutName.equals(theInName))
                         {
-                            NameProvider.log("# Method " + fullInName + " unchanged from derived class");
+                            NameProvider.verboseLog("# Method " + fullInName + " unchanged from derived class");
                         }
                         else
                         {
-                            NameProvider.log("# Method " + fullInName + " renamed to " + theOutName + " from derived class");
+                            NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName + " from derived class");
                         }
                         continue nextMethod;
                     }
@@ -940,11 +940,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         md.setIsOverride();
                         if (theOutName.equals(theInName))
                         {
-                            NameProvider.log("# Method " + fullInName + " unchanged from super class");
+                            NameProvider.verboseLog("# Method " + fullInName + " unchanged from super class");
                         }
                         else
                         {
-                            NameProvider.log("# Method " + fullInName + " renamed to " + theOutName + " from super class");
+                            NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName + " from super class");
                         }
                         continue nextMethod;
                     }
@@ -957,16 +957,16 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     md.setFromScriptMap();
                     if (theOutName.equals(theInName))
                     {
-                        NameProvider.log("# Method " + fullInName + " unchanged from name maker");
+                        NameProvider.verboseLog("# Method " + fullInName + " unchanged from name maker");
                     }
                     else
                     {
-                        NameProvider.log("# Method " + fullInName + " renamed to " + theOutName + " from name maker");
+                        NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName + " from name maker");
                     }
                 }
                 else
                 {
-                    NameProvider.log("# Method " + fullInName + " null from name maker");
+                    NameProvider.verboseLog("# Method " + fullInName + " null from name maker");
                 }
             }
             else
@@ -976,20 +976,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     String theOutName = md.getOutName();
                     if (theOutName.equals(theInName))
                     {
-                        NameProvider.log("# Method " + fullInName + " unchanged from ScriptMap");
+                        NameProvider.verboseLog("# Method " + fullInName + " unchanged from ScriptMap");
                     }
                     else
                     {
-                        NameProvider.log("# Method " + fullInName + " renamed to " + theOutName + " from ScriptMap");
+                        NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName + " from ScriptMap");
                     }
                 }
                 else if (md.isFromScript())
                 {
-                    NameProvider.log("# Method " + fullInName + " fixed from Script");
+                    NameProvider.verboseLog("# Method " + fullInName + " fixed from Script");
                 }
                 else
                 {
-                    NameProvider.log("# Method " + fullInName + " fixed");
+                    NameProvider.verboseLog("# Method " + fullInName + " fixed");
                 }
             }
         }
@@ -1009,11 +1009,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         fd.setOutName(theOutName);
                         if (theOutName.equals(theInName))
                         {
-                            NameProvider.log("# Field " + fullInName + " unchanged from derived class");
+                            NameProvider.verboseLog("# Field " + fullInName + " unchanged from derived class");
                         }
                         else
                         {
-                            NameProvider.log("# Field " + fullInName + " renamed to " + theOutName + " from derived class");
+                            NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName + " from derived class");
                         }
                         continue nextField;
                     }
@@ -1028,11 +1028,11 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                         fd.setIsOverride();
                         if (theOutName.equals(theInName))
                         {
-                            NameProvider.log("# Field " + fullInName + " unchanged from super class");
+                            NameProvider.verboseLog("# Field " + fullInName + " unchanged from super class");
                         }
                         else
                         {
-                            NameProvider.log("# Field " + fullInName + " renamed to " + theOutName + " from super class");
+                            NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName + " from super class");
                         }
                         continue nextField;
                     }
@@ -1045,16 +1045,16 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     fd.setFromScriptMap();
                     if (theOutName.equals(theInName))
                     {
-                        NameProvider.log("# Field " + fullInName + " unchanged from name maker");
+                        NameProvider.verboseLog("# Field " + fullInName + " unchanged from name maker");
                     }
                     else
                     {
-                        NameProvider.log("# Field " + fullInName + " renamed to " + theOutName + " from name maker");
+                        NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName + " from name maker");
                     }
                 }
                 else
                 {
-                    NameProvider.log("# Field " + fullInName + " null from name maker");
+                    NameProvider.verboseLog("# Field " + fullInName + " null from name maker");
                 }
             }
             else
@@ -1064,20 +1064,20 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                     String theOutName = fd.getOutName();
                     if (theOutName.equals(theInName))
                     {
-                        NameProvider.log("# Field " + fullInName + " unchanged from ScriptMap");
+                        NameProvider.verboseLog("# Field " + fullInName + " unchanged from ScriptMap");
                     }
                     else
                     {
-                        NameProvider.log("# Field " + fullInName + " renamed to " + theOutName + " from ScriptMap");
+                        NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName + " from ScriptMap");
                     }
                 }
                 else if (fd.isFromScript())
                 {
-                    NameProvider.log("# Field " + fullInName + " fixed from Script");
+                    NameProvider.verboseLog("# Field " + fullInName + " fixed from Script");
                 }
                 else
                 {
-                    NameProvider.log("# Field " + fullInName + " fixed");
+                    NameProvider.verboseLog("# Field " + fullInName + " fixed");
                 }
             }
         }

@@ -25,6 +25,7 @@ public class NameProvider
     public static boolean repackage = true;
     public static boolean fixShadowed = true;
     public static boolean multipass = true;
+    public static boolean verbose = false;
 
     private static Set<File> obfFiles = new HashSet<File>();
     private static Set<File> reobFiles = new HashSet<File>();
@@ -300,6 +301,14 @@ public class NameProvider
                         if (value.equalsIgnoreCase("0") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("n"))
                         {
                             NameProvider.multipass = false;
+                        }
+                    }
+                    else if (defines[0].equalsIgnoreCase("verbose"))
+                    {
+                        String value = defines[1].substring(0, 1);
+                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        {
+                            NameProvider.verbose = true;
                         }
                     }
                 }
@@ -632,16 +641,26 @@ public class NameProvider
 
     public static void log(String text)
     {
-        NameProvider.log(text, false);
+        NameProvider.log(text, false, false);
     }
 
     public static void errorLog(String text)
     {
-        NameProvider.log(text, true);
+        NameProvider.log(text, true, false);
     }
 
-    public static void log(String text, boolean error)
+    public static void verboseLog(String text)
     {
+        NameProvider.log(text, false, true);
+    }
+
+    public static void log(String text, boolean error, boolean verbose)
+    {
+        if (!NameProvider.verbose && verbose)
+        {
+            return;
+        }
+        
         if (!NameProvider.quiet && !error)
         {
             System.out.println(text);
