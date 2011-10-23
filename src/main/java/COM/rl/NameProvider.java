@@ -23,8 +23,8 @@ public class NameProvider
     public static boolean quiet = false;
     public static boolean oldHash = false;
     public static boolean repackage = true;
-    public static boolean fixShadowed = false;
-    public static boolean multipass = false;
+    public static boolean fixShadowed = true;
+    public static boolean multipass = true;
 
     private static Set<File> obfFiles = new HashSet<File>();
     private static Set<File> reobFiles = new HashSet<File>();
@@ -281,9 +281,9 @@ public class NameProvider
                     else if (defines[0].equalsIgnoreCase("fixshadowed"))
                     {
                         String value = defines[1].substring(0, 1);
-                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        if (value.equalsIgnoreCase("0") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("n"))
                         {
-                            NameProvider.fixShadowed = true;
+                            NameProvider.fixShadowed = false;
                         }
                     }
                     else if (defines[0].equalsIgnoreCase("incremental"))
@@ -297,9 +297,9 @@ public class NameProvider
                     else if (defines[0].equalsIgnoreCase("multipass"))
                     {
                         String value = defines[1].substring(0, 1);
-                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        if (value.equalsIgnoreCase("0") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("n"))
                         {
-                            NameProvider.multipass = true;
+                            NameProvider.multipass = false;
                         }
                     }
                 }
