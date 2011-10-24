@@ -35,7 +35,7 @@ package org.objectweb.asm.signature;
  * @author Thomas Hallgren
  * @author Eric Bruneton
  */
-public class SignatureWriter implements SignatureVisitor
+public class SignatureWriter extends SignatureVisitor
 {
 
     /**
@@ -64,6 +64,7 @@ public class SignatureWriter implements SignatureVisitor
      */
     public SignatureWriter()
     {
+        super(0);
     }
 
     // ------------------------------------------------------------------------
