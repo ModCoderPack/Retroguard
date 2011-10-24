@@ -660,7 +660,7 @@ public class NameProvider
         {
             return;
         }
-        
+
         if (!NameProvider.quiet && !error)
         {
             System.out.println(text);

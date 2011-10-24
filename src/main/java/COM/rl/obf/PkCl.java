@@ -246,7 +246,8 @@ abstract public class PkCl extends TreeItem
                     }
                     else
                     {
-                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from name maker");
+                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " renamed to "
+                            + fullOutName + " from name maker");
                     }
                 }
                 else
@@ -265,7 +266,8 @@ abstract public class PkCl extends TreeItem
                     }
                     else
                     {
-                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " renamed to " + fullOutName + " from ScriptMap");
+                        NameProvider.verboseLog("# " + thisType + " " + fullInName + " renamed to "
+                            + fullOutName + " from ScriptMap");
                     }
                 }
                 else if (ti.isFromScript())
