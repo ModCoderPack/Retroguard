@@ -912,41 +912,83 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             String fullInName = md.getFullInName();
             if (!md.isFixed())
             {
-                // Check for name reservation via derived classes
-                for (NameListDown nl : this.nameListDowns)
+                // if we are a private or static or final method then dont check our children for a name
+                boolean checkDown = true;
+                if (NameProvider.fixShadowed)
                 {
-                    String theOutName = nl.getMethodObfNameDown(this, theInName, theInDesc);
-                    if (theOutName != null)
+                    if (Modifier.isPrivate(md.access) || Modifier.isStatic(md.access) || Modifier.isFinal(md.access))
                     {
-                        md.setOutName(theOutName);
-                        if (theOutName.equals(theInName))
-                        {
-                            NameProvider.verboseLog("# Method " + fullInName + " unchanged from derived class");
-                        }
-                        else
-                        {
-                            NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName + " from derived class");
-                        }
-                        continue nextMethod;
+                        checkDown = false;
                     }
                 }
-                // Check for name reservation via super classes
-                for (NameListUp nl : this.nameListUps)
+                else
                 {
-                    String theOutName = nl.getMethodOutNameUp(theInName, theInDesc);
-                    if (theOutName != null)
+                    if (Modifier.isPrivate(md.access))
                     {
-                        md.setOutName(theOutName);
-                        md.setIsOverride();
-                        if (theOutName.equals(theInName))
+                        checkDown = false;
+                    }
+                }
+
+                if (checkDown)
+                {
+                    // Check for name reservation via derived classes
+                    for (NameListDown nl : this.nameListDowns)
+                    {
+                        String theOutName = nl.getMethodObfNameDown(this, theInName, theInDesc);
+                        if (theOutName != null)
                         {
-                            NameProvider.verboseLog("# Method " + fullInName + " unchanged from super class");
+                            md.setOutName(theOutName);
+                            if (theOutName.equals(theInName))
+                            {
+                                NameProvider.verboseLog("# Method " + fullInName + " unchanged from derived class");
+                            }
+                            else
+                            {
+                                NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName
+                                    + " from derived class");
+                            }
+                            continue nextMethod;
                         }
-                        else
+                    }
+                }
+                // if we are a private or static method then dont check our parents for a name
+                boolean checkUp = true;
+                if (NameProvider.fixShadowed)
+                {
+                    if (Modifier.isPrivate(md.access) || Modifier.isStatic(md.access))
+                    {
+                        checkUp = false;
+                    }
+                }
+                else
+                {
+                    if (Modifier.isPrivate(md.access))
+                    {
+                        checkUp = false;
+                    }
+                }
+
+                if (checkUp)
+                {
+                    // Check for name reservation via super classes
+                    for (NameListUp nl : this.nameListUps)
+                    {
+                        String theOutName = nl.getMethodOutNameUp(theInName, theInDesc);
+                        if (theOutName != null)
                         {
-                            NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName + " from super class");
+                            md.setOutName(theOutName);
+                            md.setIsOverride();
+                            if (theOutName.equals(theInName))
+                            {
+                                NameProvider.verboseLog("# Method " + fullInName + " unchanged from super class");
+                            }
+                            else
+                            {
+                                NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName
+                                    + " from super class");
+                            }
+                            continue nextMethod;
                         }
-                        continue nextMethod;
                     }
                 }
                 // If no other restrictions, obfuscate it
@@ -1000,41 +1042,82 @@ public class Cl extends PkCl implements NameListUp, NameListDown
             String fullInName = fd.getFullInName();
             if (!fd.isFixed())
             {
-                // Check for name reservation via derived classes
-                for (NameListDown nl : this.nameListDowns)
+                // if we are a private or static or final field then dont check our children for a name
+                boolean checkDown = true;
+                if (NameProvider.fixShadowed)
                 {
-                    String theOutName = nl.getFieldObfNameDown(this, theInName);
-                    if (theOutName != null)
+                    if (Modifier.isPrivate(fd.access) || Modifier.isStatic(fd.access) || Modifier.isFinal(fd.access))
                     {
-                        fd.setOutName(theOutName);
-                        if (theOutName.equals(theInName))
-                        {
-                            NameProvider.verboseLog("# Field " + fullInName + " unchanged from derived class");
-                        }
-                        else
-                        {
-                            NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName + " from derived class");
-                        }
-                        continue nextField;
+                        checkDown = false;
                     }
                 }
-                // Check for name reservation via super classes
-                for (NameListUp nl : this.nameListUps)
+                else
                 {
-                    String theOutName = nl.getFieldOutNameUp(theInName);
-                    if (theOutName != null)
+                    if (Modifier.isPrivate(fd.access))
                     {
-                        fd.setOutName(theOutName);
-                        fd.setIsOverride();
-                        if (theOutName.equals(theInName))
+                        checkDown = false;
+                    }
+                }
+                if (checkDown)
+                {
+                    // Check for name reservation via derived classes
+                    for (NameListDown nl : this.nameListDowns)
+                    {
+                        String theOutName = nl.getFieldObfNameDown(this, theInName);
+                        if (theOutName != null)
                         {
-                            NameProvider.verboseLog("# Field " + fullInName + " unchanged from super class");
+                            fd.setOutName(theOutName);
+                            if (theOutName.equals(theInName))
+                            {
+                                NameProvider.verboseLog("# Field " + fullInName + " unchanged from derived class");
+                            }
+                            else
+                            {
+                                NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName
+                                    + " from derived class");
+                            }
+                            continue nextField;
                         }
-                        else
+                    }
+                }
+
+                // if we are a private or static field then dont check our parents for a name
+                boolean checkUp = true;
+                if (NameProvider.fixShadowed)
+                {
+                    if (Modifier.isPrivate(fd.access) || Modifier.isStatic(fd.access) || Modifier.isFinal(fd.access))
+                    {
+                        checkDown = false;
+                    }
+                }
+                else
+                {
+                    if (Modifier.isPrivate(fd.access))
+                    {
+                        checkDown = false;
+                    }
+                }
+                if (checkUp)
+                {
+                    // Check for name reservation via super classes
+                    for (NameListUp nl : this.nameListUps)
+                    {
+                        String theOutName = nl.getFieldOutNameUp(theInName);
+                        if (theOutName != null)
                         {
-                            NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName + " from super class");
+                            fd.setOutName(theOutName);
+                            fd.setIsOverride();
+                            if (theOutName.equals(theInName))
+                            {
+                                NameProvider.verboseLog("# Field " + fullInName + " unchanged from super class");
+                            }
+                            else
+                            {
+                                NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName
+                                    + " from super class");
+                            }
+                            continue nextField;
                         }
-                        continue nextField;
                     }
                 }
                 // If no other restrictions, obfuscate it
