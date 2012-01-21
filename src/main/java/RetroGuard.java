@@ -53,10 +53,19 @@ public class RetroGuard
         // Check arg-list for validity
         try
         {
-            if ((args.length > 0) && (args[0].equalsIgnoreCase("-help") || args[0].equalsIgnoreCase("--help")))
+            if (args.length > 0)
             {
-                RetroGuard.showUsage();
-                System.exit(1);
+                if (args[0].equalsIgnoreCase("-help") || args[0].equalsIgnoreCase("--help"))
+                {
+                    RetroGuard.showUsage();
+                    System.exit(0);
+                }
+
+                if (args[0].equalsIgnoreCase("-version") || args[0].equalsIgnoreCase("--version"))
+                {
+                    RetroGuard.showVersion();
+                    System.exit(0);
+                }
             }
 
             // hook into the command line parameters
@@ -122,5 +131,10 @@ public class RetroGuard
         System.err.println("Usage: java RetroGuard -notch [CONFIG-FILE]");
         System.err.println("  where CONFIG-FILE is the config file (default: '"
             + NameProvider.DEFAULT_CFG_FILE_NAME + "')");
+    }
+
+    private static void showVersion()
+    {
+        System.err.println(Version.getVersionComment());
     }
 }
