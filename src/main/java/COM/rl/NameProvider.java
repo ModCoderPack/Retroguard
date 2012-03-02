@@ -26,6 +26,7 @@ public class NameProvider
     public static boolean fixShadowed = true;
     public static boolean multipass = true;
     public static boolean verbose = false;
+    public static boolean fullMap = false;
 
     private static Set<File> obfFiles = new HashSet<File>();
     private static Set<File> reobFiles = new HashSet<File>();
@@ -309,6 +310,14 @@ public class NameProvider
                         if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
                         {
                             NameProvider.verbose = true;
+                        }
+                    }
+                    else if (defines[0].equalsIgnoreCase("fullmap"))
+                    {
+                        String value = defines[1].substring(0, 1);
+                        if (value.equalsIgnoreCase("1") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("y"))
+                        {
+                            NameProvider.fullMap = true;
                         }
                     }
                 }

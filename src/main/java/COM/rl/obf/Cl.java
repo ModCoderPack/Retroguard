@@ -947,6 +947,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                                 NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName
                                     + " from derived class");
                             }
+                            if (NameProvider.fullMap)
+                            {
+                                md.setOutput();
+                            }
                             continue nextMethod;
                         }
                     }
@@ -986,6 +990,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                             {
                                 NameProvider.verboseLog("# Method " + fullInName + " renamed to " + theOutName
                                     + " from super class");
+                            }
+                            if (NameProvider.fullMap)
+                            {
+                                md.setOutput();
                             }
                             continue nextMethod;
                         }
@@ -1076,6 +1084,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                                 NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName
                                     + " from derived class");
                             }
+                            if (NameProvider.fullMap)
+                            {
+                                fd.setOutput();
+                            }
                             continue nextField;
                         }
                     }
@@ -1115,6 +1127,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
                             {
                                 NameProvider.verboseLog("# Field " + fullInName + " renamed to " + theOutName
                                     + " from super class");
+                            }
+                            if (NameProvider.fullMap)
+                            {
+                                fd.setOutput();
                             }
                             continue nextField;
                         }
