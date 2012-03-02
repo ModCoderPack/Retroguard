@@ -594,7 +594,11 @@ public class ClassTree implements NameMapper, ClassConstants
             {
                 obfName = ".";
             }
-            if (item.isFromScriptMap())
+            if (obfName.equals(item.getOutName(true)))
+            {
+                // Don't bother with warning if we are mapping to the same name
+            }
+            else if (item.isFromScriptMap())
             {
                 NameProvider.errorLog("# Trying to remap " + item.getFullInName(true) + " = " + item.getOutName(true)
                     + " to " + obfName + " fixed by ScriptMap");
