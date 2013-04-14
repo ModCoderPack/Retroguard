@@ -107,6 +107,11 @@ public class ClassTree implements NameMapper, ClassConstants
             }
             list.add(simpleName);
         }
+        //Fix: Add empty name if the end of the string is a inner class notation
+        if (!nameOrig.equals("") && nameOrig.charAt(nameOrig.length() - 1) == ClassTree.CLASS_LEVEL)
+        {
+            list.add(new SimpleName("").setAsClass());
+        }
         return list;
     }
 

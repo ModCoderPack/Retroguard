@@ -130,9 +130,10 @@ public class Cl extends PkCl implements NameListUp, NameListDown
         this.superInterfaces = superInterfaces;
         this.isInnerClass = isInnerClass;
         this.access = access;
-        if ((parent == null) || "".equals(name))
+        //Fix: Names are only needed if they do not have a parent.
+        if ((parent == null) && "".equals(name))
         {
-            throw new RuntimeException("Internal error: class must have parent and name");
+            throw new RuntimeException("Internal error: class must have parent if name is empty");
         }
         if (parent instanceof Cl)
         {

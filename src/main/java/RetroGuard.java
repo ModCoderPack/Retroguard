@@ -95,18 +95,21 @@ public class RetroGuard
         {
             System.err.println();
             System.err.println("ERROR: " + (e.getMessage() != null ? e.getMessage() : "Unknown"));
+            e.printStackTrace(System.err);
             System.exit(1);
         }
         catch (IOException e)
         {
             System.err.println();
             System.err.println("ERROR: " + (e.getMessage() != null ? e.getMessage() : "Unknown"));
+            e.printStackTrace(System.err);
             System.exit(1);
         }
         catch (Exception e)
         {
             System.err.println();
             System.err.println("RetroGuard error: " + e.toString());
+            e.printStackTrace(System.err);
             System.exit(1);
         }
     }
