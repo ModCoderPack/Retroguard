@@ -36,6 +36,8 @@ public class Version
         + "based on RetroGuard v" + Version.ORIG_VERSION + " by Retrologic Systems - www.retrologic.com";
 
     public static final boolean isLite = true;
+    
+    private static String classIdentifier = RETROGUARD_CLASS_ID;
 
 
     // Class Methods ---------------------------------------------------------
@@ -60,7 +62,16 @@ public class Version
      */
     public static String getClassIdString()
     {
-        return Version.RETROGUARD_CLASS_ID;
+        return Version.classIdentifier;
+    }
+
+    /**
+     * Set the current class ID string.
+     * @param value New ID string value
+     */
+    public static void setClassIdString(String value)
+    {
+        Version.classIdentifier = value;
     }
 
     /**

@@ -320,6 +320,11 @@ public class NameProvider
                             NameProvider.fullMap = true;
                         }
                     }
+                    //Used to change the class identifier, useful when  obfuscating to srg names.
+                    else if (defines[0].equalsIgnoreCase("identifier"))
+                    {
+                        Version.setClassIdString(defines[1].trim());
+                    }
                 }
             }
         }
