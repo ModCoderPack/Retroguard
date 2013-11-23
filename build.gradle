@@ -1,0 +1,104 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'fatjar'
+apply plugin: 'maven'
+
+group = 'de.oceanlabs.mcp'
+version = '3.6.5-SNAPSHOT'
+targetCompatibility = '1.6'
+sourceCompatibility = '1.6'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest.attributes('Main-Class': 'RetroGuard')
+}
+fatJar {
+    classifier 'fatjar'
+    manifest.attributes('Main-Class': 'RetroGuard')
+}
+
+artifacts {
+    archives jar
+    archives fatJar
+}
+
+dependencies {
+    compile 'org.ow2.asm:asm-debug-all:4.1'
+    compile 'net.sf.jopt-simple:jopt-simple:4.5'
+    compile 'com.google.code.gson:gson:2.2.4'
+}
+configurations { deployJars }
+uploadArchives {
+    repositories {
+        add project.repositories.mavenLocal()
+    }
+    repositories.mavenDeployer {
+        configuration = configurations.deployJars
+
+        if (project.hasProperty("filesmaven")) {
+            logger.info('Publishing to files server')
+            repository(url: project.filesmaven.url) {
+                authentication(userName: project.filesmaven.username, privateKey: project.filesmaven.key)
+            }
+        } else {
+            logger.info('Publishing to repo folder')
+            repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
+        }
+
+        pom {
+            groupId = project.group
+            version = project.version
+            artifactId = project.archivesBaseName
+        }
+        pom.project {
+            name project.archivesBaseName
+            packaging 'jar'
+            description 'The GPL version of the RetroGuard library. Modified by the MCP team'
+            url 'https://github.com/ModCoderPack/Retroguard'
+
+            scm {
+                url 'https://github.com/ModCoderPack/Retroguard'
+                connection 'scm:git:git://github.com/ModCoderPack/Retroguard.git'
+                developerConnection 'scm:git:git@github.com:ModCoderPack/Retroguard.git'
+            }
+
+            issueManagement {
+                system 'github'
+                url 'https://github.com/ModCoderPack/Retroguard/issues'
+            }
+
+            licenses {
+                license {
+                    name 'GNU GENERAL PUBLIC LICENSE'
+                    url 'http://www.retrologic.com/rg-gnu-gpl.html'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'Fesh0r'
+                    name 'Fesh0r'
+                    roles { role 'developer' }
+                }
+                developer {
+                    id 'Searge'
+                    name 'Searge'
+                    roles { role 'developer' }
+                }
+            }
+        }
+    }
+}
