@@ -28,7 +28,7 @@ package COM.rl.obf;
 public class Version
 {
     // Constants -------------------------------------------------------------
-    private static final String REL_VERSION = "3.6.5";
+    private static final String REL_VERSION = "3.6.6";
     private static final String ORIG_VERSION = "2.3.1";
     private static final String RETROGUARD_CLASS_ID = "RGMCP";
     private static final String RETROGUARD_REL_JAR_COMMENT = "Obfuscation by RetroGuard MCP";
