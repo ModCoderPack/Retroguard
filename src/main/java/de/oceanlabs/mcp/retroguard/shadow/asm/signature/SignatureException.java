@@ -1,4 +1,4 @@
-package org.objectweb.asm.signature;
+package de.oceanlabs.mcp.retroguard.shadow.asm.signature;
 
 public class SignatureException extends Exception
 {
