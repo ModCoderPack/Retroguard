@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.objectweb.asm.signature;
+package de.oceanlabs.mcp.retroguard.shadow.asm.signature;
 
 /**
  * A visitor to visit a generic signature. The methods of this interface must be called in one of the three following orders (the

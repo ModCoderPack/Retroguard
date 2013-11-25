@@ -23,8 +23,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.objectweb.asm.signature.*;
-
+import de.oceanlabs.mcp.retroguard.shadow.asm.signature.*;
 import COM.rl.MapSignatureAdapter;
 import COM.rl.NameProvider;
 import COM.rl.obf.classfile.*;
