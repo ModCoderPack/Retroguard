@@ -1141,6 +1141,11 @@ public class NameProvider
         {
             newClassName = NameProvider.getShortName(newFullClassName);
 
+            if (newClassName != null && newClassName.contains(ClassFile.SEP_INNER))
+            {
+                newClassName = newClassName.substring(newClassName.lastIndexOf(ClassFile.SEP_INNER) + 1);
+            }
+
             if (NameProvider.repackage)
             {
                 newRepackageName = newFullClassName;
