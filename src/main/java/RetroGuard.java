@@ -20,9 +20,9 @@
 import java.io.*;
 import java.util.*;
 
-import COM.rl.NameProvider;
-import COM.rl.obf.*;
-import COM.rl.obf.classfile.ClassFile;
+import COM_.rl.NameProvider;
+import COM_.rl.obf.*;
+import COM_.rl.obf.classfile.ClassFile;
 
 /**
  * Main class for obfuscator package. Calls through to packaged implementation class.
