@@ -1189,7 +1189,7 @@ public class NameProvider
             return newMethodName;
         }
 
-        if (NameProvider.isInProtectedPackage(fullMethodName))
+        if (NameProvider.isInProtectedPackage(md.getParent().getFullInName()))
         {
             return null;
         }
@@ -1255,7 +1255,7 @@ public class NameProvider
             return newFieldName;
         }
 
-        if (NameProvider.isInProtectedPackage(fullFieldName))
+        if (NameProvider.isInProtectedPackage(fd.getParent().getFullInName()))
         {
             return null;
         }
@@ -1305,7 +1305,7 @@ public class NameProvider
     {
         for (String pkg : NameProvider.protectedPackages)
         {
-            if (fullInName.startsWith(pkg))
+            if (fullInName.startsWith(pkg + "/"))
             {
                 return true;
             }

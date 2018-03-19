@@ -1,19 +1,20 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
     }
 }
 
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'fatjar'
 apply plugin: 'maven'
 
 group = 'de.oceanlabs.mcp'
-version = '3.6.6'
+version = '3.6.7'
 targetCompatibility = '1.6'
 sourceCompatibility = '1.6'
 
@@ -24,14 +25,14 @@ repositories {
 jar {
     manifest.attributes('Main-Class': 'RetroGuard')
 }
-fatJar {
+shadowJar {
     classifier 'fatjar'
     manifest.attributes('Main-Class': 'RetroGuard')
 }
 
 artifacts {
     archives jar
-    archives fatJar
+    archives shadowJar
 }
 
 dependencies {
