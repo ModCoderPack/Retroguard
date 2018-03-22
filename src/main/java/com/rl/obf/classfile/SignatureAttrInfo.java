@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * Representation of an attribute.
- * 
+ *
  * @author Mark Welsh
  */
 public class SignatureAttrInfo extends AttrInfo
@@ -42,7 +42,7 @@ public class SignatureAttrInfo extends AttrInfo
     // Instance Methods ------------------------------------------------------
     /**
      * Constructor
-     * 
+     *
      * @param cf
      * @param attrNameIndex
      * @param attrLength
@@ -63,7 +63,7 @@ public class SignatureAttrInfo extends AttrInfo
 
     /**
      * Check for Utf8 references in the 'info' data to the constant pool and mark them.
-     * 
+     *
      * @throws ClassFileException
      */
     @Override
@@ -74,7 +74,7 @@ public class SignatureAttrInfo extends AttrInfo
 
     /**
      * Read the data following the header.
-     * 
+     *
      * @throws IOException
      * @throws ClassFileException
      */
@@ -86,7 +86,7 @@ public class SignatureAttrInfo extends AttrInfo
 
     /**
      * Export data following the header to a DataOutput stream.
-     * 
+     *
      * @throws IOException
      * @throws ClassFileException
      */
@@ -98,7 +98,7 @@ public class SignatureAttrInfo extends AttrInfo
 
     /**
      * Do necessary name remapping.
-     * 
+     *
      * @throws ClassFileException
      */
     @Override

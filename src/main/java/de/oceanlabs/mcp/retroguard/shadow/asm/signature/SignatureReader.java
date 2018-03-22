@@ -32,7 +32,7 @@ package de.oceanlabs.mcp.retroguard.shadow.asm.signature;
 /**
  * A type signature parser to make a signature visitor visit an existing
  * signature.
- * 
+ *
  * @author Thomas Hallgren
  * @author Eric Bruneton
  */
@@ -46,7 +46,7 @@ public class SignatureReader
 
     /**
      * Constructs a {@link SignatureReader} for the given signature.
-     * 
+     *
      * @param signature
      *            A <i>ClassSignature</i>, <i>MethodTypeSignature</i>, or <i>FieldTypeSignature</i>.
      */
@@ -120,7 +120,7 @@ public class SignatureReader
      * constructor (see {@link #SignatureReader(String) SignatureReader}).
      * This method is intended to be called on a {@link SignatureReader} that was created using a <i>ClassSignature</i> (such as
      * the {@code signature} parameter of the {@code ClassVisitor.visit} method).
-     * 
+     *
      * @param v
      *            the visitor that must visit this signature.
      */
@@ -134,7 +134,7 @@ public class SignatureReader
      * constructor (see {@link #SignatureReader(String) SignatureReader}).
      * This method is intended to be called on a {@link SignatureReader} that was created using a <i>MethodTypeSignature</i>
      * (such as the {@code signature} parameter of the {@code ClassVisitor.visitMethod} method).
-     * 
+     *
      * @param v
      *            the visitor that must visit this signature.
      */
@@ -149,7 +149,7 @@ public class SignatureReader
      * This method is intended to be called on a {@link SignatureReader} that was created using a <i>FieldTypeSignature</i>, such
      * as the {@code signature} parameter of the {@code ClassVisitor.visitField} or {@code MethodVisitor.visitLocalVariable}
      * methods.
-     * 
+     *
      * @param v
      *            the visitor that must visit this signature.
      */
@@ -160,7 +160,7 @@ public class SignatureReader
 
     /**
      * Parses a field type signature and makes the given visitor visit it.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be parsed.
      * @param pos
@@ -202,6 +202,7 @@ public class SignatureReader
                 start = pos;
                 visited = false;
                 inner = false;
+                String currentName = "";
                 while (true)
                 {
                     switch (c = signature.charAt(pos++))
@@ -213,12 +214,14 @@ public class SignatureReader
                                 name = signature.substring(start, pos - 1);
                                 if (inner)
                                 {
+                                    name = fixProguardInnerName(name, currentName);
                                     v.visitInnerClassType(name);
                                 }
                                 else
                                 {
                                     v.visitClassType(name);
                                 }
+                                currentName += name + "$";
                             }
                             if (c == ';')
                             {
@@ -234,12 +237,14 @@ public class SignatureReader
                             name = signature.substring(start, pos - 1);
                             if (inner)
                             {
+                                name = fixProguardInnerName(name, currentName);
                                 v.visitInnerClassType(name);
                             }
                             else
                             {
                                 v.visitClassType(name);
                             }
+                            currentName += name + "$";
                             visited = true;
                             top:
                             while (true)
@@ -271,5 +276,15 @@ public class SignatureReader
             default:
                 throw new SignatureException("Invalid signature '" + signature + "'");
         }
+    }
+
+    //Proguard has a bug where it will output the full obfed name where it should output the inner.
+    //Making signatures like: Lfoo.foo$bar; instead of Lfoo.bar;
+    //We need to detect and fix this, by checking if it contains a $ {which is invalid}
+    private static String fixProguardInnerName(String name, String outer)
+    {
+        if (outer.isEmpty())
+            return name; //Not an inner
+        return !name.startsWith(outer) ? name : name.substring(outer.length());
     }
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.rl;
 
@@ -156,11 +156,14 @@ public class MapSignatureAdapter extends SignatureVisitor
     @Override
     public void visitInnerClassType(String name) throws SignatureException
     {
-        this.currentClassName += "." + name;
+        this.currentClassName += "$" + name; //Signatures use . for inner classes, but we map them using $.
         String newName = null;
         try
         {
             newName = this.nm.mapClass(this.currentClassName);
+            if (newName.indexOf('$') == -1)
+                throw new SignatureException("Remaped inner class does not fit java inner class naming format: " + this.currentClassName + " -> " + newName);
+            newName = newName.substring(newName.lastIndexOf('$') + 1);
         }
         catch (ClassFileException e)
         {
@@ -185,7 +188,7 @@ public class MapSignatureAdapter extends SignatureVisitor
     public SignatureVisitor visitTypeArgument(char wildcard) throws SignatureException
     {
         this.sv.visitTypeArgument(wildcard);
-        return this;
+        return new MapSignatureAdapter(this.sv, this.nm); //We need to return a new instance so that our current class doesn't get tainted by nested types.
     }
 
     /**
