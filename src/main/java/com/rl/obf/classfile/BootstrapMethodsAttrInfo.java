@@ -77,7 +77,7 @@ public class BootstrapMethodsAttrInfo extends AttrInfo
     private List<BootStrapMethod> parseBSM()
     {
         short length = this.readAsUnsignedShort(this.info, 0);
-        List<BootStrapMethod> ret = new ArrayList<>();
+        List<BootStrapMethod> ret = new ArrayList<BootStrapMethod>();
         int i = 2;
         for (int bsmCount = 0; bsmCount < length; bsmCount++)
         {

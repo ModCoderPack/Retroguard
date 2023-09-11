@@ -23,7 +23,7 @@ import java.util.List;
 public class BootStrapMethod
 {
     private short factory;
-    private final List<Short> bsmArgs = new ArrayList<>();
+    private final List<Short> bsmArgs = new ArrayList<Short>();
 
     public void setFactory(final short factory)
     {
