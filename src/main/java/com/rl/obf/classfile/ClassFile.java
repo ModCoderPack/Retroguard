@@ -59,7 +59,6 @@ public class ClassFile implements ClassConstants
     private static final String LOG_DANGER_CLASSLOADER_PRE = "     Your class ";
     private static final String LOG_DANGER_CLASSLOADER_MID = " calls the java/lang/ClassLoader method ";
 
-
     // Fields ----------------------------------------------------------------
     private int u4magic;
     private int u2minorVersion;
@@ -74,7 +73,6 @@ public class ClassFile implements ClassConstants
     private List<AttrInfo> attributes;
 
     private CpInfo cpIdString = null;
-
 
     // Class Methods ---------------------------------------------------------
     /**
@@ -273,7 +271,6 @@ public class ClassFile implements ClassConstants
     {
         return this.u2majorVersion;
     }
-
 
     // Instance Methods ------------------------------------------------------
     /**
@@ -760,6 +757,102 @@ public class ClassFile implements ClassConstants
                         newNameTypeInfo.getDescriptorIndex()));
                 }
             }
+            else if (cpInfo instanceof MethodTypeCpInfo)
+            {
+                MethodTypeCpInfo mtInfo = (MethodTypeCpInfo)cpInfo;
+                String desc = this.getUtf8(mtInfo.getDescriptorIndex());
+                String remapDesc = nm.mapDescriptor(desc);
+
+                if (!remapDesc.equals(desc))
+                {
+                    mtInfo.setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, mtInfo.getDescriptorIndex()));
+                }
+            }
+            else if (cpInfo instanceof InvokeDynamicCpInfo)
+            {
+                InvokeDynamicCpInfo idc = (InvokeDynamicCpInfo)cpInfo;
+                List<BootStrapMethod> bsm = null;
+                for (AttrInfo attr : this.attributes)
+                {
+                    if (attr instanceof BootstrapMethodsAttrInfo)
+                    {
+                        bsm = ((BootstrapMethodsAttrInfo)attr).getBSM();
+                        break;
+                    }
+                }
+
+                if (bsm != null)
+                {
+                    do
+                    {
+                        BootStrapMethod b = bsm.get(idc.getBootstrapMethodAttrIndex());
+                        CpInfo _factory = this.getCpEntry(b.getFactory());
+                        if (_factory instanceof MethodHandleCpInfo)
+                        {
+                            MethodHandleCpInfo factory = (MethodHandleCpInfo)_factory;
+                            final String clsName = factory.getClassName(this);
+                            final String name = factory.getName(this);
+                            if (clsName.equals("java/lang/invoke/LambdaMetafactory") && name.equals("metafactory"))
+                            {
+                                break;
+                            }
+                            throw new UnsupportedOperationException(
+                                String.format("RetroGuard doesn't support this CallSite factory: %s#%s", clsName, name));
+                        }
+                    }
+                    while (false);
+                }
+                else
+                {
+                    throw new IllegalArgumentException("RetroGuard can't find any BootStrapMethod at given class");
+                }
+
+                final int ntIndex = idc.getNameAndTypeIndex();
+                final NameAndTypeCpInfo nameTypeInfo = (NameAndTypeCpInfo)this.getCpEntry(ntIndex);
+                final String ref = this.getUtf8(nameTypeInfo.getNameIndex());
+                final String desc = this.getUtf8(nameTypeInfo.getDescriptorIndex());
+
+                final String[] arr = desc.split("L");
+                final String className = arr[arr.length - 1].split(";")[0];
+                final String remapName = nm.mapMethod(className, ref, desc);
+                final String remapDesc = nm.mapDescriptor(desc);
+
+                // If a remap is required, make a new N&T (increment ref count on 'name' and
+                // 'descriptor', decrement original
+                // N&T's ref count, set new N&T ref count to 1), remap new N&T's utf's
+                if (!remapName.equals(ref) || !remapDesc.equals(desc))
+                {
+                    // Get the new N&T guy
+                    NameAndTypeCpInfo newNameTypeInfo;
+                    if (nameTypeInfo.getRefCount() == 1)
+                    {
+                        newNameTypeInfo = nameTypeInfo;
+                    }
+                    else
+                    {
+                        // Create the new N&T info
+                        newNameTypeInfo = (NameAndTypeCpInfo)nameTypeInfo.clone();
+
+                        // Adjust its reference counts of its utf's
+                        this.getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
+                        this.getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
+
+                        // Append it to the Constant Pool, and point the RefCpInfo entry to the new N&T
+                        // data
+                        idc.setNameAndTypeIndex(this.constantPool.addEntry(newNameTypeInfo));
+
+                        // Adjust reference counts from RefCpInfo
+                        newNameTypeInfo.incRefCount();
+                        nameTypeInfo.decRefCount();
+                    }
+
+                    // Remap the 'name' and 'descriptor' utf's in N&T
+                    newNameTypeInfo.setNameIndex(this.constantPool.remapUtf8To(remapName, newNameTypeInfo.getNameIndex()));
+                    newNameTypeInfo
+                        .setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, newNameTypeInfo.getDescriptorIndex()));
+                }
+            }
+
         }
 
         // Remap all class references to Utf

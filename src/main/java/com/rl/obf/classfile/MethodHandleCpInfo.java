@@ -14,14 +14,11 @@ public class MethodHandleCpInfo extends CpInfo
 {
     // Constants -------------------------------------------------------------
 
-
     // Fields ----------------------------------------------------------------
     private int u1referenceKind;
     private int u2referenceIndex;
 
-
     // Class Methods ---------------------------------------------------------
-
 
     // Instance Methods ------------------------------------------------------
     /**
@@ -96,5 +93,17 @@ public class MethodHandleCpInfo extends CpInfo
     {
         dout.writeByte(this.u1referenceKind);
         dout.writeShort(this.u2referenceIndex);
+    }
+
+    /**
+     * Return the method's string class name.
+     * 
+     * @param cf
+     * @throws ClassFileException
+     */
+    public String getClassName(final ClassFile cf) throws ClassFileException
+    {
+        final RefCpInfo refCpInfo = (RefCpInfo)cf.getCpEntry(this.u2referenceIndex);
+        return refCpInfo.getClassName(cf);
     }
 }
