@@ -661,6 +661,17 @@ public class ClassFile implements ClassConstants
         // Go through all of class's fields and methods mapping 'name' and 'descriptor' references
         ClassCpInfo cls = (ClassCpInfo)this.getCpEntry(this.u2thisClass);
         String thisClassName = this.getUtf8(cls.getNameIndex());
+
+        List<BootStrapMethod> bsm = null;
+        for (AttrInfo attr : this.attributes)
+        {
+            if (attr instanceof BootstrapMethodsAttrInfo)
+            {
+                bsm = ((BootstrapMethodsAttrInfo)attr).getBSM();
+                break;
+            }
+        }
+
         for (FieldInfo fd : this.fields)
         {
             // Remap field 'name', unless it is 'Synthetic'
@@ -771,16 +782,6 @@ public class ClassFile implements ClassConstants
             else if (cpInfo instanceof InvokeDynamicCpInfo)
             {
                 InvokeDynamicCpInfo idc = (InvokeDynamicCpInfo)cpInfo;
-                List<BootStrapMethod> bsm = null;
-                for (AttrInfo attr : this.attributes)
-                {
-                    if (attr instanceof BootstrapMethodsAttrInfo)
-                    {
-                        bsm = ((BootstrapMethodsAttrInfo)attr).getBSM();
-                        break;
-                    }
-                }
-
                 if (bsm != null)
                 {
                     do
