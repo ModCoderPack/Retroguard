@@ -793,8 +793,61 @@ public class ClassFile implements ClassConstants
                             MethodHandleCpInfo factory = (MethodHandleCpInfo)_factory;
                             final String clsName = factory.getClassName(this);
                             final String name = factory.getName(this);
+                            // remap LambdaMetafactory#metafactory based one
                             if (clsName.equals("java/lang/invoke/LambdaMetafactory") && name.equals("metafactory"))
                             {
+                                // b.getArguments().get(0) <=> MethodType samMethodType (3rd argument of the bootstrap method)
+                                // https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html
+                                MethodTypeCpInfo mtcp = (MethodTypeCpInfo)this.constantPool.getCpEntry(b.getArguments().get(0));
+                                final String desc = this.getUtf8(mtcp.getDescriptorIndex()); // method descriptor for actual method
+
+                                final int ntIndex = idc.getNameAndTypeIndex();
+                                final NameAndTypeCpInfo nameTypeInfo = (NameAndTypeCpInfo)this.getCpEntry(ntIndex);
+                                final String ref = this.getUtf8(nameTypeInfo.getNameIndex());
+                                final String ntDesc = this.getUtf8(nameTypeInfo.getDescriptorIndex()); // return descriptor
+
+                                final String[] arr = ntDesc.split("L");
+                                final String className = arr[arr.length - 1].split(";")[0];
+                                // CAUTION: 3rd argument must be a method descriptor *for an actual method*, not lambda expression's one
+                                final String remapName = nm.mapMethod(className, ref, desc);
+                                final String remapNtDesc = nm.mapDescriptor(ntDesc); // method descriptor *for the lambda expression*
+
+                                // If a remap is required, make a new N&T (increment ref count on 'name' and
+                                // 'descriptor', decrement original
+                                // N&T's ref count, set new N&T ref count to 1), remap new N&T's utf's
+                                if (!remapName.equals(ref) || !remapNtDesc.equals(ntDesc))
+                                {
+                                    // Get the new N&T guy
+                                    NameAndTypeCpInfo newNameTypeInfo;
+                                    if (nameTypeInfo.getRefCount() == 1)
+                                    {
+                                        newNameTypeInfo = nameTypeInfo;
+                                    }
+                                    else
+                                    {
+                                        // Create the new N&T info
+                                        newNameTypeInfo = (NameAndTypeCpInfo)nameTypeInfo.clone();
+
+                                        // Adjust its reference counts of its utf's
+                                        this.getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
+                                        this.getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
+
+                                        // Append it to the Constant Pool, and point the RefCpInfo entry to the new N&T
+                                        // data
+                                        idc.setNameAndTypeIndex(this.constantPool.addEntry(newNameTypeInfo));
+
+                                        // Adjust reference counts from RefCpInfo
+                                        newNameTypeInfo.incRefCount();
+                                        nameTypeInfo.decRefCount();
+                                    }
+
+                                    // Remap the 'name' and 'descriptor' utf's in N&T
+                                    newNameTypeInfo
+                                        .setNameIndex(this.constantPool.remapUtf8To(remapName, newNameTypeInfo.getNameIndex()));
+                                    newNameTypeInfo
+                                        .setDescriptorIndex(
+                                            this.constantPool.remapUtf8To(remapNtDesc, newNameTypeInfo.getDescriptorIndex()));
+                                }
                                 break;
                             }
                             throw new UnsupportedOperationException(
@@ -806,51 +859,6 @@ public class ClassFile implements ClassConstants
                 else
                 {
                     throw new IllegalArgumentException("RetroGuard can't find any BootStrapMethod at given class");
-                }
-
-                final int ntIndex = idc.getNameAndTypeIndex();
-                final NameAndTypeCpInfo nameTypeInfo = (NameAndTypeCpInfo)this.getCpEntry(ntIndex);
-                final String ref = this.getUtf8(nameTypeInfo.getNameIndex());
-                final String desc = this.getUtf8(nameTypeInfo.getDescriptorIndex());
-
-                final String[] arr = desc.split("L");
-                final String className = arr[arr.length - 1].split(";")[0];
-                final String remapName = nm.mapMethod(className, ref, desc);
-                final String remapDesc = nm.mapDescriptor(desc);
-
-                // If a remap is required, make a new N&T (increment ref count on 'name' and
-                // 'descriptor', decrement original
-                // N&T's ref count, set new N&T ref count to 1), remap new N&T's utf's
-                if (!remapName.equals(ref) || !remapDesc.equals(desc))
-                {
-                    // Get the new N&T guy
-                    NameAndTypeCpInfo newNameTypeInfo;
-                    if (nameTypeInfo.getRefCount() == 1)
-                    {
-                        newNameTypeInfo = nameTypeInfo;
-                    }
-                    else
-                    {
-                        // Create the new N&T info
-                        newNameTypeInfo = (NameAndTypeCpInfo)nameTypeInfo.clone();
-
-                        // Adjust its reference counts of its utf's
-                        this.getCpEntry(newNameTypeInfo.getNameIndex()).incRefCount();
-                        this.getCpEntry(newNameTypeInfo.getDescriptorIndex()).incRefCount();
-
-                        // Append it to the Constant Pool, and point the RefCpInfo entry to the new N&T
-                        // data
-                        idc.setNameAndTypeIndex(this.constantPool.addEntry(newNameTypeInfo));
-
-                        // Adjust reference counts from RefCpInfo
-                        newNameTypeInfo.incRefCount();
-                        nameTypeInfo.decRefCount();
-                    }
-
-                    // Remap the 'name' and 'descriptor' utf's in N&T
-                    newNameTypeInfo.setNameIndex(this.constantPool.remapUtf8To(remapName, newNameTypeInfo.getNameIndex()));
-                    newNameTypeInfo
-                        .setDescriptorIndex(this.constantPool.remapUtf8To(remapDesc, newNameTypeInfo.getDescriptorIndex()));
                 }
             }
 
