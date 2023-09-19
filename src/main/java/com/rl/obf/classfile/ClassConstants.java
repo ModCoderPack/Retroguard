@@ -88,6 +88,8 @@ public interface ClassConstants
     public static final String ATTR_EnclosingMethod = "EnclosingMethod";
     public static final String ATTR_StackMapTable = "StackMapTable";
     public static final String ATTR_BootstrapMethods = "BootstrapMethods";
+    public static final String ATTR_NestMembers = "NestMembers";
+    public static final String ATTR_NestHost = "NestHost";
 
     /**
      * List of known attributes
@@ -113,6 +115,8 @@ public interface ClassConstants
         ClassConstants.ATTR_EnclosingMethod,
         ClassConstants.ATTR_StackMapTable,
         ClassConstants.ATTR_BootstrapMethods,
+        ClassConstants.ATTR_NestHost,
+        ClassConstants.ATTR_NestMembers,
     };
 
     /**
@@ -127,6 +131,8 @@ public interface ClassConstants
         ClassConstants.ATTR_Synthetic,
         ClassConstants.ATTR_StackMapTable,
         ClassConstants.ATTR_BootstrapMethods,
+        ClassConstants.ATTR_NestHost,
+        ClassConstants.ATTR_NestMembers,
     };
 
 

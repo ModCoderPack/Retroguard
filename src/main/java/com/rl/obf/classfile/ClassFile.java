@@ -850,6 +850,11 @@ public class ClassFile implements ClassConstants
                                 }
                                 break;
                             }
+                            else if (clsName.equals("java/lang/invoke/StringConcatFactory") && name.equals("makeConcatWithConstants"))
+                            {
+                                // do nothing
+                                break;
+                            }
                             throw new UnsupportedOperationException(
                                 String.format("RetroGuard doesn't support this CallSite factory: %s#%s", clsName, name));
                         }

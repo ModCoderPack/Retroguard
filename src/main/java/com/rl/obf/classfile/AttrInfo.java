@@ -139,6 +139,14 @@ public class AttrInfo implements ClassConstants
         {
             ai = new BootstrapMethodsAttrInfo(cf, attrNameIndex, attrLength);
         }
+        else if (attrName.equals(ClassConstants.ATTR_NestHost))
+        {
+            ai = new NestHostAttrInfo(cf, attrNameIndex, attrLength);
+        }
+        else if (attrName.equals(ClassConstants.ATTR_NestMembers))
+        {
+            ai = new NestMembersAttrInfo(cf, attrNameIndex, attrLength);
+        }
         else
         {
             ai = new AttrInfo(cf, attrNameIndex, attrLength);
