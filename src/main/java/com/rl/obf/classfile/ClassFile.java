@@ -808,9 +808,11 @@ public class ClassFile implements ClassConstants
 
                                 final String[] arr = ntDesc.split("L");
                                 final String className = arr[arr.length - 1].split(";")[0];
-                                // CAUTION: 3rd argument must be a method descriptor *for an actual method*, not lambda expression's one
+                                // CAUTION: 3rd argument must be a method descriptor *for an actual method*, not lambda expression's
+                                // one
                                 final String remapName = nm.mapMethod(className, ref, desc);
-                                final String remapNtDesc = nm.mapDescriptor(ntDesc); // method descriptor *for the lambda expression*
+                                final String remapNtDesc = nm.mapDescriptor(ntDesc); // method descriptor *for the lambda
+                                                                                     // expression*
 
                                 // If a remap is required, make a new N&T (increment ref count on 'name' and
                                 // 'descriptor', decrement original
@@ -850,7 +852,13 @@ public class ClassFile implements ClassConstants
                                 }
                                 break;
                             }
-                            else if (clsName.equals("java/lang/invoke/StringConcatFactory") && name.equals("makeConcatWithConstants"))
+                            else if (clsName.equals("java/lang/invoke/StringConcatFactory")
+                                && name.equals("makeConcatWithConstants"))
+                            {
+                                // do nothing
+                                break;
+                            }
+                            else if (clsName.equals("java/lang/runtime/ObjectMethods") && name.equals("bootstrap"))
                             {
                                 // do nothing
                                 break;
