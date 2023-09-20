@@ -36,7 +36,7 @@ public class AttrInfo implements ClassConstants
     // Fields ----------------------------------------------------------------
     private int u2attrNameIndex;
     private int u4attrLength;
-    protected byte info[];
+    private byte info[];
     protected AttrSource source;
 
     protected ClassFile cf;
@@ -155,6 +155,7 @@ public class AttrInfo implements ClassConstants
         ai.readInfo(din);
         return ai;
     }
+
 
     // Instance Methods ------------------------------------------------------
     /**
