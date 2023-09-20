@@ -22,25 +22,25 @@ import java.util.List;
 
 public class BootStrapMethod
 {
-    private short factory;
-    private final List<Short> bsmArgs = new ArrayList<Short>();
+    private int factory;
+    private final List<Integer> bsmArgs = new ArrayList<Integer>();
 
-    public void setFactory(final short factory)
+    public void setFactory(final int factory)
     {
         this.factory = factory;
     }
 
-    public void addArgument(final short arg)
+    public void addArgument(final int arg)
     {
         this.bsmArgs.add(arg);
     }
 
-    public List<Short> getArguments()
+    public List<Integer> getArguments()
     {
         return Collections.unmodifiableList(this.bsmArgs);
     }
 
-    public short getFactory()
+    public int getFactory()
     {
         return this.factory;
     }

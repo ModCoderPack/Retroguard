@@ -51,53 +51,43 @@ public class BootstrapMethodsAttrInfo extends AttrInfo
     @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        super.readInfo(din);
-        this.bsmList = this.parseBSM();
-    }
-
-    /**
-     * Read byte data as an unsigned short value
-     * 
-     * @param arr byte array
-     * @param pos target position in given array
-     * @return parsed short value
-     */
-    private short readAsUnsignedShort(final byte[] arr, final int pos)
-    {
-        final int x1 = Byte.toUnsignedInt(arr[pos]);
-        final int x2 = Byte.toUnsignedInt(arr[pos + 1]);
-        return (short) (x1 * 256 + x2);
-    }
-
-    /**
-     * Parse BootStrapMethods
-     * 
-     * @return parsed data
-     */
-    private List<BootStrapMethod> parseBSM()
-    {
-        short length = this.readAsUnsignedShort(this.info, 0);
-        List<BootStrapMethod> ret = new ArrayList<BootStrapMethod>();
-        int i = 2;
+        int length = din.readUnsignedShort();
+        this.bsmList = new ArrayList<BootStrapMethod>(length);
         for (int bsmCount = 0; bsmCount < length; bsmCount++)
         {
             BootStrapMethod bsm = new BootStrapMethod();
-            short factory = this.readAsUnsignedShort(this.info, i);
+            int factory = din.readUnsignedShort();
             bsm.setFactory(factory);
-            i += 2;
-            short argCount = this.readAsUnsignedShort(this.info, i);
-            i += 2;
+            int argCount = din.readUnsignedShort();
             for (int j = 0; j < argCount; j++)
             {
-                short argId = this.readAsUnsignedShort(this.info, i);
-                i += 2;
-                bsm.addArgument(argId);
+                bsm.addArgument(din.readUnsignedShort());
             }
-            ret.add(bsm);
+            this.bsmList.add(bsm);
         }
-        return ret;
     }
-    
+
+    /**
+     * Export data following the header to a DataOutput stream; over-ride this in sub-classes.
+     * 
+     * @param dout
+     * @throws IOException
+     * @throws ClassFileException
+     */
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
+    {
+        dout.writeShort(this.bsmList.size());
+        for (BootStrapMethod bsm : this.bsmList)
+        {
+            dout.writeShort(bsm.getFactory());
+            List<Integer> args = bsm.getArguments();
+            dout.writeShort(args.size());
+            for (int arg : args)
+            {
+                dout.writeShort(arg);
+            }
+        }
+    }
 
     /**
      * The getter of BootStrapMethods

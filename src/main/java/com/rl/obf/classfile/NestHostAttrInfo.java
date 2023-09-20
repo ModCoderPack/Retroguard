@@ -1,17 +1,31 @@
+/**
+ * RetroGuard -- an obfuscation package for Java classfiles.
+ *
+ * Copyright (c) 1998-2006 Mark Welsh (markw@retrologic.com)
+ * 
+ * This class was created by r3qu13m (r3qu13m.minecraft@gmail.com)
+ *
+ * This program can be redistributed and/or modified under the terms of the
+ * Version 2 of the GNU General Public License as published by the Free
+ * Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
 package com.rl.obf.classfile;
 
 import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class NestHostAttrInfo extends AttrInfo
 {
     // Constants -------------------------------------------------------------
 
     // Fields ----------------------------------------------------------------
-    private short indexHostClass;
+    private int indexHostClass;
 
     // Class Methods ---------------------------------------------------------
 
@@ -44,24 +58,20 @@ public class NestHostAttrInfo extends AttrInfo
      * @throws IOException
      * @throws ClassFileException
      */
-    @Override
     protected void readInfo(DataInput din) throws IOException, ClassFileException
     {
-        super.readInfo(din);
-        this.indexHostClass = this.readAsUnsignedShort(this.info, 0);
+        this.indexHostClass = din.readUnsignedShort();
     }
 
     /**
-     * Read byte data as an unsigned short value
+     * Export data following the header to a DataOutput stream; over-ride this in sub-classes.
      * 
-     * @param arr byte array
-     * @param pos target position in given array
-     * @return parsed short value
+     * @param dout
+     * @throws IOException
+     * @throws ClassFileException
      */
-    private short readAsUnsignedShort(final byte[] arr, final int pos)
+    public void writeInfo(DataOutput dout) throws IOException, ClassFileException
     {
-        final int x1 = Byte.toUnsignedInt(arr[pos]);
-        final int x2 = Byte.toUnsignedInt(arr[pos + 1]);
-        return (short)(x1 * 256 + x2);
+        dout.writeShort(indexHostClass);
     }
 }
